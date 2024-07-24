@@ -1,1 +1,4 @@
-pnpm run lint
+pnpm lint
+
+echo "🚚 finished linting.."
+echo "✔ check branch before push"
