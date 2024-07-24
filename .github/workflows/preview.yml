@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Vercel CLI
 
-        run: npm install --global vercel@latest
+        run: npm install --global vercel@latest && npm install --global pnpm
 
       - name: Get Vercel Environment Variables
 
