@@ -1,33 +1,48 @@
-name: Deploy to Vercel on Merge
+name: Deploy
 
 on:
   push:
-    branches:
-      - develop
+    branches: ['develop']
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
+
+    container: pandoc/latex
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Install mustache (to update the date)
+
+        run: apk add ruby && gem install mustache
+
+      - name: creates output
+
+        run: sh ./build.sh
+
+      - name: Pushes to another repository
+
+        id: push_directory
+
+        uses: cpina/github-action-push-to-another-repository@main
+
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
+
         with:
-          node-version: '18'
+          source-directory: 'output'
 
-      - name: Install dependencies
-        run: pnpm install
+          destination-github-username: Kbomi16
 
-      - name: Build project
-        run: pnpm run build
+          destination-repository-name: trip.zip
 
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.API_TOKEN_GITHUB }}
-          vercel-args: '--prod'
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          user-email: ${{ secrets.EMAIL }}
+
+          commit-message: ${{ github.event.commits[0].message }}
+
+          target-branch: main
+
+      - name: Test get variable exported by push-to-another-repository
+
+        run: echo $DESTINATION_CLONED_DIRECTORY
