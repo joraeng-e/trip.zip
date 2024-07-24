@@ -2,47 +2,32 @@ name: Deploy
 
 on:
   push:
-    branches: ['develop']
+    branches:
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    container: pandoc/latex
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Install mustache (to update the date)
-
-        run: apk add ruby && gem install mustache
-
-      - name: creates output
-
-        run: sh ./build.sh
-
-      - name: Pushes to another repository
-
-        id: push_directory
-
-        uses: cpina/github-action-push-to-another-repository@develop
-
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.AUTO_ACTIONS }}
-
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          source-directory: 'output'
+          node-version: '18'
 
-          destination-github-username: Kbomi16
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-          destination-repository-name: trip.zip
+      - name: Install dependencies
+        run: pnpm install
 
-          user-email: ${{ secrets.EMAIL }}
+      - name: Build project
+        run: pnpm run build
 
-          commit-message: ${{ github.event.commits[0].message }}
-
-          target-branch: develop
-
-      - name: Test get variable exported by push-to-another-repository
-
-        run: echo $DESTINATION_CLONED_DIRECTORY
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel --token=$VERCEL_TOKEN --prod
