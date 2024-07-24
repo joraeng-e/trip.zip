@@ -1,0 +1,9 @@
+current_branch=$(git branch --show-current)
+
+restricted_branches="^(main|master|develop/.+)$"
+
+if [[ $current_branch =~ $restricted_branches ]]; then
+  echo "❌ You cannot push on a restricted branch: $current_branch.."
+  echo "❌ Not allowed via pre-push hook.."
+  exit 1
+fi
