@@ -3,14 +3,12 @@
     "next",
     "next/core-web-vitals",
     "prettier",
-    "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended",
     "eslint:recommended"
   ],
-  "plugins": ["prettier", "import"],
+  "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-undef": "off",
     "spaced-comment": "off",
     "tailwindcss/classnames-order": "off"
   }
