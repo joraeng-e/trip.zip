@@ -1,37 +1,17 @@
-name: Deploy
-
+name: Deploy to vercel on merge
 on:
   push:
     branches:
-      - develop
-
+      - main
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - uses: amondnet/vercel-action@v20
         with:
-          node-version: '18'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build project
-        run: pnpm run build
-
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          # Ensure pnpm is in PATH
-          echo "$(npm bin -g)" >> $GITHUB_PATH
-          vercel build --token=$VERCEL_TOKEN
-          vercel --token=$VERCEL_TOKEN --prod
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.API_TOKEN_GITHUB }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
