@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <main className="flex h-2 w-3 text-ellipsis text-stone-300">
+    <main className="basicContainer text-xl-bold text-custom-orange-200">
       메인페이지
     </main>
   );
