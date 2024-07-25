@@ -31,6 +31,12 @@ const classNamesFn = (...args: ClassNamesArgs): string => {
   return classes.join(' ');
 };
 
+/**
+ * 조건부 className을 생성하는 함수입니다.
+ *
+ * @param {...ClassNamesArgs} args - 문자열 혹은 객체
+ * @returns {string} - 생성된 className 문자열
+ */
 const classNames = memoize(classNamesFn);
 
 export default classNames;
