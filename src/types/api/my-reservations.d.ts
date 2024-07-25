@@ -3,7 +3,7 @@ import type { ReservationStatus } from '@trip.zip-api';
 declare module '@trip.zip-api' {
   // 내 예약 리스트 조회
   export type GetMyReservationsResponse = {
-    cursorId: number;
+    cursorId: number | null;
     reservations: {
       id: number;
       teamId: string;
@@ -56,7 +56,7 @@ declare module '@trip.zip-api' {
   };
 
   export type PostReviewResponse = {
-    deletedAt: string;
+    deletedAt: string | null;
     updatedAt: string;
     createdAt: string;
     content: string;

@@ -3,7 +3,7 @@ import type { Category, ReservationStatus } from '@trip.zip-api';
 declare module '@trip.zip-api' {
   // 체험 리스트 조회
   export type GetActivitiesResponse = {
-    cursorId: number;
+    cursorId: number | null;
     totalCount: number;
     activities: {
       id: number;
