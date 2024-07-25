@@ -13,3 +13,13 @@
 * {
   font-family: 'Pretendard-Regular';
 }
+
+@layer components {
+  .basicContainer {
+    @apply mx-auto w-full max-w-[1200px];
+  }
+
+  .flexCenter {
+    @apply flex items-center justify-center;
+  }
+}
