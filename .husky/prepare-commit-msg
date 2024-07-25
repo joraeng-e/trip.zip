@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo 'wait add jira issue number we found from branch name'
+
+BRANCH_NAME=$(git symbolic-ref -q HEAD)
+BRANCH_NAME=${BRANCH_NAME##refs/heads/} # Remove everything before the last /
+ISSUE_TICKET=$(echo "$BRANCH_NAME" | awk -F- '{print $1"-"$2}')
+
+#Check if ISSUE_TICKET is not empty
+if [ -n "$ISSUE_TICKET" ]; then
+  # Output extracted Jira 이슈 티켓 번호
+  echo "Extracted Jira 이슈 티켓 번호: $ISSUE_TICKET"
+
+  # Read the commit message from the temporary file
+  COMMIT_MSG_FILE=$1
+  COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
+
+  # Extract gitmoji and message body
+  GITMOJI=$(echo "$COMMIT_MSG" | awk '{print $1}')
+  COMMIT_MSG_BODY=$(echo "$COMMIT_MSG" | cut -d ' ' -f2-)
+
+  # Convert the label part of the commit message to lowercase
+  LOWERCASE_LABEL=$(echo "$COMMIT_MSG_BODY" | awk -F: '{print tolower($1)}')
+  MESSAGE_BODY=$(echo "$COMMIT_MSG_BODY" | cut -d ':' -f2-)
+
+  # Construct the new commit message
+  NEW_COMMIT_MSG="$GITMOJI $ISSUE_TICKET-$LOWERCASE_LABEL:$MESSAGE_BODY"
+
+  # Write the new commit message to the file
+  echo "$NEW_COMMIT_MSG" > "$COMMIT_MSG_FILE"
+fi
