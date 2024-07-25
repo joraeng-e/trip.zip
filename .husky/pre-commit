@@ -3,8 +3,8 @@
 
 pnpm lint
 
-echo "🚚 finished linting.."
-echo "✔ check branch before push"
+echo "🚚 Finished linting.."
+echo "✔ Check branch before push"
 
 current_branch=$(git branch --show-current)
 
