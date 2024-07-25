@@ -1,24 +1,22 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "createDefaultProgram": true
   },
   "extends": [
     "next",
     "next/core-web-vitals",
-    "prettier",
-    "plugin:tailwindcss/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
-  "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": "error",
     "spaced-comment": "off",
-    "tailwindcss/classnames-order": "off"
-  }
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
+  },
+  "ignorePatterns": ["next.config.mjs", "postcss.config.mjs"]
 }
