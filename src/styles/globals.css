@@ -15,11 +15,11 @@
 }
 
 @layer components {
-  .basicContainer {
+  .basic-container {
     @apply mx-auto w-full max-w-[1200px];
   }
 
-  .flexCenter {
+  .flex-center {
     @apply flex items-center justify-center;
   }
 }
