@@ -16,7 +16,7 @@
 
 @layer components {
   .basic-container {
-    @apply mx-auto w-full max-w-[1200px];
+    @apply max-w-1200 mx-auto w-full px-16;
   }
 
   .flex-center {
