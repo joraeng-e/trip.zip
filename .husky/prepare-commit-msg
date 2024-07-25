@@ -16,10 +16,17 @@ if [ -n "$ISSUE_TICKET" ]; then
   COMMIT_MSG_FILE=$1
   COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
 
-  # Prepend Jira issue ticket number to the commit message after gitmoji
-  # Assume the gitmoji is the first word in the commit message
+  # Extract gitmoji and message body
   GITMOJI=$(echo "$COMMIT_MSG" | awk '{print $1}')
   COMMIT_MSG_BODY=$(echo "$COMMIT_MSG" | cut -d ' ' -f2-)
 
-  echo "$GITMOJI $ISSUE_TICKET-$COMMIT_MSG_BODY" > "$COMMIT_MSG_FILE"
+  # Convert the label part of the commit message to lowercase
+  LOWERCASE_LABEL=$(echo "$COMMIT_MSG_BODY" | awk -F: '{print tolower($1)}')
+  MESSAGE_BODY=$(echo "$COMMIT_MSG_BODY" | cut -d ':' -f2-)
+
+  # Construct the new commit message
+  NEW_COMMIT_MSG="$GITMOJI $ISSUE_TICKET-$LOWERCASE_LABEL: $MESSAGE_BODY"
+
+  # Write the new commit message to the file
+  echo "$NEW_COMMIT_MSG" > "$COMMIT_MSG_FILE"
 fi
