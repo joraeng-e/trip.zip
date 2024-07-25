@@ -1,9 +1,17 @@
 import type { Config } from 'tailwindcss';
 
-const px0_10 = { ...Array.from(Array(11)).map((_, i) => `${i}px`) };
-const px0_100 = { ...Array.from(Array(101)).map((_, i) => `${i}px`) };
-const px0_200 = { ...Array.from(Array(201)).map((_, i) => `${i}px`) };
-const px0_2000 = { ...Array.from(Array(2001)).map((_, i) => `${i}px`) };
+const px0_10 = Object.fromEntries(
+  Array.from(Array(11)).map((_, i) => [`${i}`, `${i}px`]),
+);
+const px0_100 = Object.fromEntries(
+  Array.from(Array(101)).map((_, i) => [`${i}`, `${i}px`]),
+);
+const px0_200 = Object.fromEntries(
+  Array.from(Array(201)).map((_, i) => [`${i}`, `${i}px`]),
+);
+const px0_2000 = Object.fromEntries(
+  Array.from(Array(2001)).map((_, i) => [`${i}`, `${i}px`]),
+);
 
 const config: Config = {
   content: [
