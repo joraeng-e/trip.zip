@@ -18,5 +18,5 @@
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-unused-vars": "warn"
   },
-  "ignorePatterns": ["next.config.mjs", "postcss.config.mjs"]
+  "ignorePatterns": ["next.config.mjs", "postcss.config.mjs", "jest.config.js"]
 }
