@@ -1,3 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
 pnpm lint
 
 echo "🚚 finished linting.."
@@ -5,10 +8,10 @@ echo "✔ check branch before push"
 
 current_branch=$(git branch --show-current)
 
-restricted_branches="^(main|master|develop/.+)$"
+restricted_branches="^(main|develop/.+)$"
 
 if [[ $current_branch =~ $restricted_branches ]]; then
-  echo "❌ You cannot commit on a restricted branch: $current_branch.."
-  echo "❌ Not allowed via pre-commit hook.."
+  echo "❌ You cannot push on a restricted branch: $current_branch.."
+  echo "❌ Not allowed via pre-push hook.."
   exit 1
 fi

@@ -55,8 +55,8 @@ importers:
         specifier: ^3.17.4
         version: 3.17.4(tailwindcss@3.4.6(ts-node@10.9.1(@types/node@20.14.11)(typescript@5.5.4)))
       husky:
-        specifier: ^9.1.1
-        version: 9.1.1
+        specifier: ^8.0.0
+        version: 8.0.3
       postcss:
         specifier: ^8.4.39
         version: 8.4.39
@@ -1395,9 +1395,9 @@ packages:
     resolution: {integrity: sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==}
     engines: {node: '>=8.12.0'}
 
-  husky@9.1.1:
-    resolution: {integrity: sha512-fCqlqLXcBnXa/TJXmT93/A36tJsjdJkibQ1MuIiFyCCYUlpYpIaj2mv1w+3KR6Rzu1IC3slFTje5f6DUp2A2rg==}
-    engines: {node: '>=18'}
+  husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
     hasBin: true
 
   iconv-lite@0.4.24:
@@ -4204,7 +4204,7 @@ snapshots:
 
   human-signals@1.1.1: {}
 
-  husky@9.1.1: {}
+  husky@8.0.3: {}
 
   iconv-lite@0.4.24:
     dependencies:
