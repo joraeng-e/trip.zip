@@ -4,8 +4,8 @@
 echo 'wait add jira issue number we found from branch name'
 
 BRANCH_NAME=$(git symbolic-ref -q HEAD)
-BRANCH_NAME=${BRANCH_NAME##/} # Remove everything before the last /
-ISSUE_TICKET=$(echo "$BRANCH_NAME" | sed -n 's/^([A-Z]-[0-9])-(.)$/\1/p')
+BRANCH_NAME=${BRANCH_NAME##refs/heads/} # Remove everything before the last /
+ISSUE_TICKET=$(echo "$BRANCH_NAME" | sed -n 's/^([A-Z]+-[0-9]+).*/\1/')
 
 Check if ISSUE_TICKET is not empty
 if [ -n "$ISSUE_TICKET" ]; then
