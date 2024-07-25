@@ -25,7 +25,7 @@ if [ -n "$ISSUE_TICKET" ]; then
   MESSAGE_BODY=$(echo "$COMMIT_MSG_BODY" | cut -d ':' -f2-)
 
   # Construct the new commit message
-  NEW_COMMIT_MSG="$GITMOJI $ISSUE_TICKET-$LOWERCASE_LABEL: $MESSAGE_BODY"
+  NEW_COMMIT_MSG="$GITMOJI $ISSUE_TICKET-$LOWERCASE_LABEL:$MESSAGE_BODY"
 
   # Write the new commit message to the file
   echo "$NEW_COMMIT_MSG" > "$COMMIT_MSG_FILE"
