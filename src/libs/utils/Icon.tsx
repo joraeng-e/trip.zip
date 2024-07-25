@@ -7,6 +7,7 @@ import InstagramIcon from '@/../../public/icon/instagramIcon.svg';
 import KebabIcon from '@/../../public/icon/kebabIcon.svg';
 import MinusTimeIcon from '@/../../public/icon/minusTimeIcon.svg';
 import NotificationIcon from '@/../../public/icon/notificationIcon.svg';
+import PaperPlaneIcon from '@/../../public/icon/paperPlane.svg';
 import PasswordOffIcon from '@/../../public/icon/passwordOffIcon.svg';
 import PasswordOnIcon from '@/../../public/icon/passwordOnIcon.svg';
 import PlusTimeIcon from '@/../../public/icon/plusTimeIcon.svg';
@@ -40,4 +41,5 @@ export {
   StarOffIcon,
   StarOnIcon,
   XIcon,
+  PaperPlaneIcon,
 };
