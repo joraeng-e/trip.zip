@@ -1,6 +1,4 @@
-import passwordOffIcon from '@/../public/icon/passwordOffIcon.svg';
-import passwordOnIcon from '@/../public/icon/passwordOnIcon.svg';
-import Image from 'next/image';
+import { PasswordOffIcon, PasswordOnIcon } from '@/libs/utils/Icon';
 import React, { useState } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
@@ -88,14 +86,21 @@ export default function Input({
             {...register}
             className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && 'border-red-400'}`}
           />
-          <Image
-            src={isVisibilityIcon ? passwordOffIcon : passwordOnIcon}
-            width={24}
-            height={24}
-            alt="비밀번호 가시성 토글"
-            className="absolute right-20 top-42 cursor-pointer"
-            onClick={togglePasswordVisibility}
-          />
+          {isVisibilityIcon ? (
+            <PasswordOffIcon
+              width={24}
+              height={24}
+              className="absolute right-20 top-42 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            />
+          ) : (
+            <PasswordOnIcon
+              width={24}
+              height={24}
+              className="absolute right-20 top-42 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            />
+          )}
         </>
       ) : null}
       {error && (
