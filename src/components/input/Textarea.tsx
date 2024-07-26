@@ -30,7 +30,8 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
  * @property {UseFormRegisterReturn} register - react-hook-form의 register 함수 반환값
  * @property {FieldError} [error] - 텍스트영역의 에러 정보 (선택적)
  * @property {string} [maxWidth='640px'] - (반응형을 위한)입력 필드 컨테이너의 최대 너비. 기본값 640px
- * @property {string} [height='346px'] - (반응형을 위한)입력 필드의 높이. 기본값 200px
+ * @property {string} [height='346px'] - (반응형을 위한)입력 필드의 높이. 기본값 346px
+ * @author 김보미
  */
 
 type TextareaProps = {
