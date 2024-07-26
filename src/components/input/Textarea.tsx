@@ -30,7 +30,7 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
  * @property {UseFormRegisterReturn} register - react-hook-form의 register 함수 반환값
  * @property {FieldError} [error] - 텍스트영역의 에러 정보 (선택적)
  * @property {string} [maxWidth='640px'] - (반응형을 위한)입력 필드 컨테이너의 최대 너비. 기본값 640px
- * @property {string} [maxHeight='346px'] - (반응형을 위한)입력 필드의 최대 높이. 기본값 200px
+ * @property {string} [height='346px'] - (반응형을 위한)입력 필드의 높이. 기본값 200px
  */
 
 type TextareaProps = {
@@ -40,7 +40,7 @@ type TextareaProps = {
   register: UseFormRegisterReturn;
   error?: FieldError;
   maxWidth?: string;
-  maxHeight?: string;
+  height?: string;
 };
 
 export default function Textarea({
@@ -50,7 +50,7 @@ export default function Textarea({
   register,
   error,
   maxWidth = '640px',
-  maxHeight = '346px',
+  height = '346px',
 }: TextareaProps) {
   return (
     <div
@@ -63,7 +63,7 @@ export default function Textarea({
         placeholder={placeholder}
         {...register}
         className={`resize-none rounded-md border-2 p-16 outline-none focus:border-custom-green-200 ${error && 'border-red-400'}`}
-        style={{ maxHeight: maxHeight }}
+        style={{ height: height }}
       />
       {error && (
         <p className="pl-8 text-xs-regular text-custom-red-200">
