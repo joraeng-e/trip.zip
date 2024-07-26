@@ -152,7 +152,6 @@ export async function postReservations({
   activityId,
   data,
 }: {
-  teamId: string;
   activityId: number;
   data: PostReservationsRequest;
 }): Promise<PostReservationsResponse> {
