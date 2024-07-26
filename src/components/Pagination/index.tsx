@@ -1,3 +1,5 @@
+import useDeviceState from '@/hooks/useDeviceState';
+import Device from '@/libs/constants/Device';
 import { createContext, useContext, useState } from 'react';
 
 import { NextButton, PageList, PrevButton } from './Buttons';
@@ -6,12 +8,14 @@ interface PaginationContextType {
   totalPages: number;
   currentPage: number;
   handleCurrentPage: (page: number) => void;
+  deviceState: Device;
 }
 
 const PaginationContext = createContext<PaginationContextType>({
   totalPages: 1,
   currentPage: 1,
   handleCurrentPage: () => {},
+  deviceState: Device.Mobile,
 });
 
 export const usePaginationContext = () => {
@@ -30,12 +34,34 @@ interface Props {
   initialPage?: number;
 }
 
+/**
+ * @example
+ * ```tsx
+ * export default function PaginationExample() {
+ *  const onPageChange = (page: number) => {
+ *    console.log({ page });
+ *  }
+ *
+ *  return (
+ *    <>
+ *      <Pagination onPageChange={onPageChange} totalPages={10} />
+ *    </>
+ *  )
+ * }
+ * ```
+ *
+ * @property {function} onPageChange - 현재 페이지가 변경되었을 때 실행될 함수
+ * @property {number} totalPages - 전체 페이지 개수
+ * @property {number} initialPage - 컴포넌트 마운트 시 페이지
+ * @author 천권희
+ */
 export default function Pagination({
   onPageChange,
   totalPages,
   initialPage = 1,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const deviceState = useDeviceState();
 
   const handleCurrentPage = (page: number) => {
     setCurrentPage(page);
@@ -46,6 +72,7 @@ export default function Pagination({
     totalPages,
     currentPage,
     handleCurrentPage,
+    deviceState,
   };
 
   return (

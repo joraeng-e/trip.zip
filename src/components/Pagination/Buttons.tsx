@@ -1,13 +1,14 @@
+import Device from '@/libs/constants/Device';
+import { PaginationArrowLeft, PaginationArrowRight } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
-import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 
 import { usePaginationContext } from '.';
 
-// TODO: svg 컴포넌트로 변경(disabled 스타일 추가)
 export function PrevButton() {
-  const [disabled, setDisabled] = useState(false);
-  const { handleCurrentPage, currentPage } = usePaginationContext();
+  const { handleCurrentPage, currentPage, deviceState } =
+    usePaginationContext();
+  const [disabled, setDisabled] = useState(currentPage === 1);
 
   const handlePrevClick = () => {
     if (currentPage === 1) return;
@@ -25,19 +26,19 @@ export function PrevButton() {
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
       onClick={handlePrevClick}
     >
-      <Image
-        src={'/icon/paginationArrowLeft.svg'}
-        width={21}
-        height={21}
-        alt="prev"
+      <PaginationArrowLeft
+        width={deviceState === Device.Mobile ? 15 : 21}
+        height={deviceState === Device.Mobile ? 15 : 21}
+        fill={disabled ? '#A1A1A1' : '#0B3B2D'}
       />
     </button>
   );
 }
 
 export function NextButton() {
-  const [disabled, setDisabled] = useState(false);
-  const { handleCurrentPage, currentPage, totalPages } = usePaginationContext();
+  const { handleCurrentPage, currentPage, totalPages, deviceState } =
+    usePaginationContext();
+  const [disabled, setDisabled] = useState(currentPage === totalPages);
 
   const handleNextClick = () => {
     if (currentPage === totalPages) return;
@@ -55,11 +56,10 @@ export function NextButton() {
       onClick={handleNextClick}
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
     >
-      <Image
-        src={'/icon/paginationArrowRight.svg'}
-        width={21}
-        height={21}
-        alt="prev"
+      <PaginationArrowRight
+        width={deviceState === Device.Mobile ? 15 : 21}
+        height={deviceState === Device.Mobile ? 15 : 21}
+        fill={disabled ? '#A1A1A1' : '#0B3B2D'}
       />
     </button>
   );

@@ -6,6 +6,8 @@ import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
 import MinusTimeIcon from '/public/icon/minusTimeIcon.svg';
 import NotificationIcon from '/public/icon/notificationIcon.svg';
+import PaginationArrowLeft from '/public/icon/paginationArrowLeft.svg';
+import PaginationArrowRight from '/public/icon/paginationArrowRight.svg';
 import PaperPlaneIcon from '/public/icon/paperPlane.svg';
 import PasswordOffIcon from '/public/icon/passwordOffIcon.svg';
 import PasswordOnIcon from '/public/icon/passwordOnIcon.svg';
@@ -42,4 +44,6 @@ export {
   StarOnIcon,
   XIcon,
   PaperPlaneIcon,
+  PaginationArrowLeft,
+  PaginationArrowRight,
 };

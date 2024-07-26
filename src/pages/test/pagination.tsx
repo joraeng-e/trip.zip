@@ -1,6 +1,6 @@
 import Pagination from '@/components/Pagination';
 
-export default function Test() {
+export default function PaginationTest() {
   const onPageChange = (page: number) => {
     console.log({ page });
   };
