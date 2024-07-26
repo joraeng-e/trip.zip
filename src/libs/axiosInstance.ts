@@ -9,7 +9,11 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken')?.replace(/"/gi, '');
 
     if (accessToken) {
-      config.headers['Content-Type'] = 'application/json';
+      if (config.headers['Content-Type'] === 'multipart/form-data') {
+        config.headers['Content-Type'] = 'multipart/form-data';
+      } else {
+        config.headers['Content-Type'] = 'application/json';
+      }
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
