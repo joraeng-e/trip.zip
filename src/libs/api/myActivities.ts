@@ -98,7 +98,7 @@ export async function getMyActivitiesReservedSchedule({
 
     return response.data;
   } catch (error) {
-    console.error('getReservedSchedule 함수에서 오류 발생:', error);
+    console.error('getMyActivitiesReservedSchedule 함수에서 오류 발생:', error);
     throw error;
   }
 }
@@ -172,7 +172,7 @@ export async function patchMyActivitiesReservation({
 }
 
 // 내 체험 삭제
-export async function deleteMyActivity({ activityId }: { activityId: number }) {
+export async function deleteMyActivity(activityId: number) {
   try {
     await axiosInstance.delete(`/my-activities/${activityId}`);
   } catch (error) {

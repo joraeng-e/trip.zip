@@ -63,11 +63,9 @@ export async function getActivities({
 }
 
 // 체험 등록
-export async function postActivities({
-  data,
-}: {
-  data: PostActivitiesRequest;
-}): Promise<PostActivitiesResponse> {
+export async function postActivities(
+  data: PostActivitiesRequest,
+): Promise<PostActivitiesResponse> {
   try {
     const response = await axiosInstance.post<PostActivitiesResponse>(
       `/activities`,
@@ -168,11 +166,9 @@ export async function postReservations({
 }
 
 // 체험 이미지 url 생성
-export async function postActivityImage({
-  imageFile,
-}: {
-  imageFile: File;
-}): Promise<PostActivitiesImageResponse> {
+export async function postActivityImage(
+  imageFile: File,
+): Promise<PostActivitiesImageResponse> {
   try {
     const formData = new FormData();
     formData.append('image', imageFile);
