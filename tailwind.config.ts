@@ -29,6 +29,8 @@ const config: Config = {
       spacing: px0_200,
       maxWidth: px0_2000,
       maxHeight: px0_2000,
+      width: px0_2000,
+      height: px0_2000,
       colors: {
         'custom-gray': {
           100: '#FAFAFA',
