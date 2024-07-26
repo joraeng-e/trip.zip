@@ -36,7 +36,7 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
  * @property {string} placeholder - 입력 필드의 플레이스홀더 텍스트
  * @property {UseFormRegisterReturn} register - react-hook-form의 register 함수 반환값
  * @property {FieldError} [error] - 입력 필드의 에러 정보
- * @property {string} [maxWidth='640'] - (반응형을 위한)입력 필드 컨테이너의 최대 너비. 기본값 640px
+ * @property {string} [maxWidth='640px'] - (반응형을 위한)입력 필드 컨테이너의 최대 너비. 기본값 640px
  * @author 김보미
  */
 
