@@ -2,6 +2,18 @@ import { PaperPlaneIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { DetailedHTMLProps, PropsWithChildren } from 'react';
 
+/**
+ * 버튼 공용 컴포넌트입니다.
+ *
+ * @param {Object} props - 컴포넌트의 속성들.
+ * @param {'activeButton' | 'inactiveButton' | 'disabledButton'} [props.variant='activeButton'] - 버튼의 상태를 지정합니다.
+ * @param {boolean} [props.icon=false] - 비행기 아이콘을 포함할지 여부를 지정합니다.
+ * @param {string} [props.className=''] - 사용자 측에서 추가적인 스타일을 지정합니다.
+ * @param {React.ReactNode} props.children - 버튼의 자식 요소로, 보통 버튼 텍스트가 포함됩니다.
+ * @param {Object} rest - 기타 버튼 속성들로, `React.ButtonHTMLAttributes<HTMLButtonElement>`가 허용하는 모든 속성을 포함합니다.
+ *
+ */
+
 interface ButtonProps
   extends PropsWithChildren<
     DetailedHTMLProps<
