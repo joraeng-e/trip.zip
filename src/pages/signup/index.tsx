@@ -1,10 +1,9 @@
 import Input from '@/components/input/Input';
 import Textarea from '@/components/input/Textarea';
+import { schema } from '@/libs/utils/schema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-import { schema } from './_utils/schema';
 
 type FormData = {
   email: string;
