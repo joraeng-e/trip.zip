@@ -19,6 +19,7 @@
     "vercel": "^35.1.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "6.1.5",
     "@testing-library/react": "14.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
