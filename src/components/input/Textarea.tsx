@@ -29,6 +29,7 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
  * @property {string} placeholder - 텍스트영역의 플레이스홀더 텍스트
  * @property {UseFormRegisterReturn} register - react-hook-form의 register 함수 반환값
  * @property {FieldError} [error] - 텍스트영역의 에러 정보 (선택적)
+ * @property {string} [maxWidth='640'] - (반응형을 위한)입력 필드 컨테이너의 최대 너비. 기본값 640px
  */
 
 type TextareaProps = {
@@ -37,6 +38,7 @@ type TextareaProps = {
   placeholder: string;
   register: UseFormRegisterReturn;
   error?: FieldError;
+  maxWidth?: string;
 };
 
 export default function Textarea({
@@ -45,9 +47,13 @@ export default function Textarea({
   placeholder,
   register,
   error,
+  maxWidth = '640',
 }: TextareaProps) {
   return (
-    <div className="relative flex w-full max-w-[640px] flex-col gap-2">
+    <div
+      className={`relative flex w-full flex-col gap-2`}
+      style={{ maxWidth: maxWidth }}
+    >
       <label htmlFor={name}>{label}</label>
       <textarea
         id={name}
