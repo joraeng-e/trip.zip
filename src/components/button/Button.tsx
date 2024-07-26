@@ -38,7 +38,7 @@ export default function Button({
     },
     disabledButton: {
       baseClassName:
-        'w-full h-full md:text-xl flex-center cursor-not-allowed rounded-full bg-gray-300 py-7 text-center font-semibold text-custom-gray-100 hover:shadow-gray-400 shadow-lg hover:shadow-md md:py-11',
+        'w-full h-full md:text-xl flex-center cursor-not-allowed rounded-full bg-[#444444] py-7 text-center font-semibold text-custom-gray-100 hover:shadow-gray-400 shadow-lg hover:shadow-md md:py-11',
       whileHover: {
         backgroundImage: 'linear-gradient(90deg, #787878 0%, #444444 100%)',
       },
