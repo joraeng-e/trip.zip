@@ -90,7 +90,11 @@ export default function Input({
           />
         </>
       ) : null}
-      {error && <p className="text-red-400">{error.message}</p>}
+      {error && (
+        <p className="pl-8 text-xs-regular text-custom-red-200">
+          {error.message}
+        </p>
+      )}
     </div>
   );
 }

@@ -55,7 +55,11 @@ export default function Textarea({
         {...register}
         className={`h-346 resize-none rounded-md border-2 p-16 outline-none focus:border-custom-green-200 ${error && 'border-red-400'}`}
       />
-      {error && <p className="text-red-400">{error.message}</p>}
+      {error && (
+        <p className="pl-8 text-xs-regular text-custom-red-200">
+          {error.message}
+        </p>
+      )}
     </div>
   );
 }

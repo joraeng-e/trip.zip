@@ -1,4 +1,5 @@
-import Input from '@/components/inputs/Input';
+import Input from '@/components/input/Input';
+import Textarea from '@/components/input/Textarea';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -8,6 +9,7 @@ import { schema } from './schema';
 type FormData = {
   email: string;
   password: string;
+  price: number;
 };
 
 export default function Signup() {
@@ -39,6 +41,21 @@ export default function Signup() {
         type="password"
         placeholder="비밀번호를 입력해주세요"
         register={register('password')}
+        error={errors.password}
+      />
+      <Input
+        label="가격"
+        name="price"
+        type="number"
+        placeholder="가격을 입력해주세요"
+        register={register('price')}
+        error={errors.password}
+      />
+      <Textarea
+        label="내용"
+        name="content"
+        placeholder="내용을 입력해주세요"
+        register={register('price')}
         error={errors.password}
       />
       {/* <Input
