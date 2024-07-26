@@ -34,7 +34,7 @@ export default function Signup() {
         placeholder="이메일을 입력해주세요"
         register={register('email')}
         error={errors.email}
-        maxWidth="500"
+        maxWidth="500px"
       />
       <Input
         label="비밀번호"

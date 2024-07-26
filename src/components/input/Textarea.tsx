@@ -47,7 +47,7 @@ export default function Textarea({
   placeholder,
   register,
   error,
-  maxWidth = '640',
+  maxWidth = '640px',
 }: TextareaProps) {
   return (
     <div

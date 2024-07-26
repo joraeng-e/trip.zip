@@ -57,7 +57,7 @@ export default function Input({
   placeholder,
   register,
   error,
-  maxWidth = '640',
+  maxWidth = '640px',
 }: InputProps) {
   const [isVisibilityIcon, setIsVisibilityIcon] = useState(false);
 
