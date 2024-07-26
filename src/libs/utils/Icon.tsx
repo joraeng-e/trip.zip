@@ -1,43 +1,45 @@
-import xIcon from '/public/icon/XIcon.svg';
-import bedIcon from '/public/icon/bedIcon.svg';
-import calendarIcon from '/public/icon/calendarIcon.svg';
-import deleteIcon from '/public/icon/deleteIcon.svg';
-import facebookIcon from '/public/icon/facebookIcon.svg';
-import instagramIcon from '/public/icon/instagramIcon.svg';
-import kebabIcon from '/public/icon/kebabIcon.svg';
-import minusTimeIcon from '/public/icon/minusTimeIcon.svg';
-import notificationIcon from '/public/icon/notificationIcon.svg';
-import passwordOffIcon from '/public/icon/passwordOffIcon.svg';
-import passwordOnIcon from '/public/icon/passwordOnIcon.svg';
-import plusTimeIcon from '/public/icon/plusTimeIcon.svg';
-import profileAccountIcon from '/public/icon/profileAccountIcon.svg';
-import profileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
-import profileChecklistICon from '/public/icon/profileChecklistICon.svg';
-import profileCogIcon from '/public/icon/profileCogIcon.svg';
-import starOffIcon from '/public/icon/starOffIcon.svg';
-import starOnIcon from '/public/icon/starOnIcon.svg';
-import twitterIcon from '/public/icon/twitterIcon.svg';
-import youtubeIcon from '/public/icon/youtubeIcon.svg';
+import BedIcon from '/public/icon/bedIcon.svg';
+import CalendarIcon from '/public/icon/calendarIcon.svg';
+import DeleteIcon from '/public/icon/deleteIcon.svg';
+import FacebookIcon from '/public/icon/facebookIcon.svg';
+import InstagramIcon from '/public/icon/instagramIcon.svg';
+import KebabIcon from '/public/icon/kebabIcon.svg';
+import MinusTimeIcon from '/public/icon/minusTimeIcon.svg';
+import NotificationIcon from '/public/icon/notificationIcon.svg';
+import PaperPlaneIcon from '/public/icon/paperPlane.svg';
+import PasswordOffIcon from '/public/icon/passwordOffIcon.svg';
+import PasswordOnIcon from '/public/icon/passwordOnIcon.svg';
+import PlusTimeIcon from '/public/icon/plusTimeIcon.svg';
+import ProfileAccountIcon from '/public/icon/profileAccountIcon.svg';
+import ProfileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
+import ProfileChecklistIcon from '/public/icon/profileChecklistICon.svg';
+import ProfileCogIcon from '/public/icon/profileCogIcon.svg';
+import StarOffIcon from '/public/icon/starOffIcon.svg';
+import StarOnIcon from '/public/icon/starOnIcon.svg';
+import TwitterIcon from '/public/icon/twitterIcon.svg';
+import XIcon from '/public/icon/xIcon.svg';
+import YoutubeIcon from '/public/icon/youtubeIcon.svg';
 
 export {
-  bedIcon,
-  calendarIcon,
-  deleteIcon,
-  youtubeIcon,
-  facebookIcon,
-  instagramIcon,
-  twitterIcon,
-  kebabIcon,
-  minusTimeIcon,
-  plusTimeIcon,
-  notificationIcon,
-  passwordOffIcon,
-  passwordOnIcon,
-  profileAccountIcon,
-  profileCalendarIcon,
-  profileChecklistICon,
-  profileCogIcon,
-  starOffIcon,
-  starOnIcon,
-  xIcon,
+  BedIcon,
+  CalendarIcon,
+  DeleteIcon,
+  YoutubeIcon,
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+  KebabIcon,
+  MinusTimeIcon,
+  PlusTimeIcon,
+  NotificationIcon,
+  PasswordOffIcon,
+  PasswordOnIcon,
+  ProfileAccountIcon,
+  ProfileCalendarIcon,
+  ProfileChecklistIcon,
+  ProfileCogIcon,
+  StarOffIcon,
+  StarOnIcon,
+  XIcon,
+  PaperPlaneIcon,
 };
