@@ -4,6 +4,7 @@ import {
   TwitterIcon,
   YoutubeIcon,
 } from '@/libs/utils/Icon';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -11,18 +12,35 @@ export default function Footer() {
       <div className="flex-center flex-col gap-24 md:flex-row md:justify-between">
         <div className="flex-center w-full gap-12 md:basis-1/2 md:justify-between lg:basis-1/2 [&_>div]:text-[#676767]">
           <div>
-            <p className="whitespace-nowrap">@codeit - 2024</p>
+            <Link href="https://github.com/joraeng-e/trip.zip">
+              <p>@Joraeng-e</p>
+            </Link>
           </div>
           <div className="flex gap-12 md:gap-30">
-            <p className="whitespace-nowrap">Privacy Policy</p>
-            <p>FAQ</p>
+            <Link href="/privacy-policy">
+              <p className="whitespace-nowrap">Privacy Policy</p>
+            </Link>
+            <Link href="/faq">
+              <p>FAQ</p>
+            </Link>
           </div>
         </div>
         <div className="flex-center gap-12">
-          <FacebookIcon />
-          <TwitterIcon className="h-20 w-20 rounded-md bg-white" />
-          <YoutubeIcon />
-          <InstagramIcon />
+          <Link href="https://www.facebook.com">
+            <FacebookIcon aria-label="페이스북" />
+          </Link>
+          <Link href="https://x.com">
+            <TwitterIcon
+              aria-label="트위터"
+              className="h-20 w-20 rounded-md bg-white"
+            />
+          </Link>
+          <Link href="https://www.youtube.com">
+            <YoutubeIcon aria-label="유튜브" />
+          </Link>
+          <Link href="https://www.instagram.com">
+            <InstagramIcon aria-label="인스타그램" />
+          </Link>
         </div>
       </div>
     </div>
