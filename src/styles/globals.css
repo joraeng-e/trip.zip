@@ -16,7 +16,10 @@
 
 @layer components {
   .basic-container {
-    @apply max-w-1200 mx-auto w-full px-16;
+    @apply mx-auto w-full max-w-1200 px-16;
+  }
+  .page-container {
+    @apply mx-auto mt-100 w-full max-w-1200 px-16;
   }
 
   .flex-center {
