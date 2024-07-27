@@ -6,13 +6,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { usePaginationContext } from '.';
 
 export function PrevButton() {
-  const { handleCurrentPage, currentPage, deviceState } =
+  const { updateCurrentPage, currentPage, deviceState } =
     usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === 1);
 
   const handlePrevClick = () => {
     if (currentPage === 1) return;
-    handleCurrentPage(currentPage - 1);
+    updateCurrentPage(currentPage - 1);
   };
 
   useEffect(() => {
@@ -36,13 +36,13 @@ export function PrevButton() {
 }
 
 export function NextButton() {
-  const { handleCurrentPage, currentPage, totalPages, deviceState } =
+  const { updateCurrentPage, currentPage, totalPages, deviceState } =
     usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === totalPages);
 
   const handleNextClick = () => {
     if (currentPage === totalPages) return;
-    handleCurrentPage(currentPage + 1);
+    updateCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
@@ -94,32 +94,31 @@ export function PageList() {
   return (
     <>
       {pageNumbers.map((page) => (
-        <PageItem key={page} number={page} />
+        <PageItem key={page} page={page} />
       ))}
     </>
   );
 }
 
-function PageItem({ number }: { number: number }) {
-  const { currentPage, handleCurrentPage } = usePaginationContext();
+function PageItem({ page }: { page: number }) {
+  const { currentPage, updateCurrentPage } = usePaginationContext();
 
-  const handleNumberClick = () => {
-    handleCurrentPage(number);
+  const handlePageItemClick = () => {
+    updateCurrentPage(page);
   };
 
   const classnames = classNames(
     'flex items-center justify-center rounded-[15px] size-40 md:size-55',
     {
-      'bg-custom-green-200 text-white hover:bg-[#0b553e]':
-        currentPage === number,
+      'bg-custom-green-200 text-white hover:bg-[#0b553e]': currentPage === page,
       'bg-white hover:bg-gray-100 border border-custom-green-200':
-        currentPage !== number,
+        currentPage !== page,
     },
   );
 
   return (
-    <button type="button" className={classnames} onClick={handleNumberClick}>
-      {number}
+    <button type="button" className={classnames} onClick={handlePageItemClick}>
+      {page}
     </button>
   );
 }

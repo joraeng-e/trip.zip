@@ -7,14 +7,14 @@ import { NextButton, PageList, PrevButton } from './Buttons';
 interface PaginationContextType {
   totalPages: number;
   currentPage: number;
-  handleCurrentPage: (page: number) => void;
+  updateCurrentPage: (page: number) => void;
   deviceState: Device;
 }
 
 const PaginationContext = createContext<PaginationContextType>({
   totalPages: 1,
   currentPage: 1,
-  handleCurrentPage: () => {},
+  updateCurrentPage: () => {},
   deviceState: Device.Mobile,
 });
 
@@ -38,13 +38,13 @@ interface Props {
  * @example
  * ```tsx
  * export default function PaginationExample() {
- *  const onPageChange = (page: number) => {
+ *  const handlePageChange = (page: number) => {
  *    console.log({ page });
  *  }
  *
  *  return (
  *    <>
- *      <Pagination onPageChange={onPageChange} totalPages={10} />
+ *      <Pagination onPageChange={handlePageChange} totalPages={10} />
  *    </>
  *  )
  * }
@@ -63,7 +63,7 @@ export default function Pagination({
   const [currentPage, setCurrentPage] = useState(initialPage);
   const deviceState = useDeviceState();
 
-  const handleCurrentPage = (page: number) => {
+  const updateCurrentPage = (page: number) => {
     setCurrentPage(page);
     onPageChange?.(page);
   };
@@ -71,7 +71,7 @@ export default function Pagination({
   const contextValue = {
     totalPages,
     currentPage,
-    handleCurrentPage,
+    updateCurrentPage,
     deviceState,
   };
 
