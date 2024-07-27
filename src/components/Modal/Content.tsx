@@ -52,14 +52,14 @@ export default function ModalContent(props: ModalContentProps) {
             <div
               style={{
                 top: position.y,
-                left: position.x,
+                left: position.x - 100,
               }}
-              className={`absolute h-auto w-auto bg-white p-10 ${className}`}
+              className={`absolute h-400 w-400 rounded-xl bg-custom-green-100 px-20 py-24 shadow-lg ${className}`}
             >
               {icon && (
                 <XIcon
                   onClick={handleClose}
-                  className="absolute right-4 top-4 cursor-pointer"
+                  className="absolute right-20 top-20 cursor-pointer"
                 />
               )}
               {children}
