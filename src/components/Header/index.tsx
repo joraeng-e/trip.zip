@@ -28,7 +28,7 @@ export default function Header() {
       className={`fixed top-0 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'}`}
     >
       <div className="basic-container flex items-center justify-between">
-        <Link href="/">
+        <Link href="/" aria-label="메인페이지로 이동">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
         {/* {isLogin ? <LoggedInHeader /> : <LoggedOutHeader />} */}

@@ -8,7 +8,7 @@ import tripzipFavicon from '/public/logo/tripzipFavicon.png';
 export default function LoggedInHeader() {
   return (
     <div className="flex items-center gap-16">
-      <div className="cursor-pointer">
+      <div className="cursor-pointer" aria-label="알림">
         <NotificationIcon />
       </div>
       <Link href="/mypage" className="flex items-center gap-6 border-l-2 pl-16">
