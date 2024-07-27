@@ -1,16 +1,17 @@
-import { DetailedHTMLProps, PropsWithChildren, useEffect, useRef } from 'react';
+import { ModalProps } from '@/types/modaltype';
+import { DetailedHTMLProps, useEffect, useRef } from 'react';
 
 import { useModalContext } from './Root';
 
 export interface ModalTriggerProps
-  extends PropsWithChildren,
+  extends ModalProps,
     DetailedHTMLProps<
       React.ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     > {}
 
 export default function ModalTrigger(props: ModalTriggerProps) {
-  const { children, ...buttonElementProps } = props;
+  const { children, className, ...buttonElementProps } = props;
   const {
     open: currentOpenState,
     handleOpenChange,
@@ -36,6 +37,7 @@ export default function ModalTrigger(props: ModalTriggerProps) {
       {...buttonElementProps}
       onClick={handleClickTrigger}
       ref={triggerRef}
+      className={`${className}`}
     >
       {children}
     </button>
