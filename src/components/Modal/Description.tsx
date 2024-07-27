@@ -3,9 +3,5 @@ import { ModalProps } from '@/types/modaltype';
 export default function ModalDescription(props: ModalProps) {
   const { children, className } = props;
 
-  return (
-    <p className={`mt-4 rounded bg-blue-500 px-4 py-2 text-white ${className}`}>
-      {children}
-    </p>
-  );
+  return <p className={`my-16 text-2lg-medium ${className}`}>{children}</p>;
 }
