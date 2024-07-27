@@ -23,7 +23,15 @@ interface ButtonProps
  * @param {string} [props.className=''] - 사용자 측에서 추가적인 스타일을 지정합니다.
  * @param {React.ReactNode} props.children - 버튼의 자식 요소로, 보통 버튼 텍스트가 포함됩니다.
  * @param {Object} rest - 기타 버튼 속성들로, `React.ButtonHTMLAttributes<HTMLButtonElement>`가 허용하는 모든 속성을 포함합니다.
- *
+ * @example       
+ *    <Button 
+        variant="activeButton" 
+        icon={true} 
+        className="w-100 h-120" 
+        onClick={() => alert('Button Clicked!')}
+      >
+        클릭하기
+      </Button>
  */
 
 export default function Button({
@@ -65,7 +73,6 @@ export default function Button({
       className={`${baseClassName} ${className}`}
       whileHover={whileHover}
       transition={{ duration: 0.3 }}
-      whileTap={{ scale: 1.0 }}
     >
       <button className={variant} {...rest}>
         {children}
