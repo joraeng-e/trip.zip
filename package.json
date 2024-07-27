@@ -14,6 +14,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "axios": "^1.7.2",
+    "framer-motion": "^11.3.17",
     "next": "14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
