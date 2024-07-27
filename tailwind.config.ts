@@ -64,6 +64,13 @@ const config: Config = {
           300: '#0085FF',
         },
       },
+      flexCenter: {
+        '.flex-center': {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      },
     },
     fontSize: {
       '3xl-bold': ['32px', { lineHeight: '46px', fontWeight: 'bold' }],
