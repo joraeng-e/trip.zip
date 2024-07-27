@@ -2,7 +2,6 @@ import { PasswordOffIcon, PasswordOnIcon } from '@/libs/utils/Icon';
 import React, { useState } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
-
 type PasswordInputProps = {
   name: string;
   placeholder: string;
@@ -48,14 +47,14 @@ export default function PasswordInput({
         className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && 'border-red-400'}`}
       />
       {isVisibilityIcon ? (
-        <PasswordOffIcon
+        <PasswordOnIcon
           width={24}
           height={24}
           className="absolute right-20 top-42 cursor-pointer"
           onClick={togglePasswordVisibility}
         />
       ) : (
-        <PasswordOnIcon
+        <PasswordOffIcon
           width={24}
           height={24}
           className="absolute right-20 top-42 cursor-pointer"
