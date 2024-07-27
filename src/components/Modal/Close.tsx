@@ -1,23 +1,52 @@
-import { PropsWithChildren } from 'react';
+import { ModalProps } from '@/types/modaltype';
 
+import Button from '../button';
 import { useModalContext } from './Root';
 
-export default function ModalClose(props: PropsWithChildren) {
-  const { children } = props;
+interface ModalCloseProps extends ModalProps {
+  confirm?: boolean;
+  onConfirm?: () => void;
+}
+
+export default function ModalClose(props: ModalCloseProps) {
+  const { children, confirm, onConfirm, className } = props;
   const { handleOpenChange } = useModalContext();
 
-  const handleClickButton = () => {
+  const handleCloseClick = () => {
+    if (handleOpenChange) {
+      handleOpenChange(false);
+    }
+  };
+
+  const handleConfirmClick = () => {
+    if (onConfirm) {
+      onConfirm();
+    }
     if (handleOpenChange) {
       handleOpenChange(false);
     }
   };
 
   return (
-    <button
-      onClick={handleClickButton}
-      className="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
-    >
-      {children}
-    </button>
+    <>
+      <div className="flex justify-end gap-10 pt-10">
+        {confirm && (
+          <Button
+            variant="inactiveButton"
+            className={`h-120 w-50 ${className}`}
+            onClick={handleCloseClick}
+          >
+            아니오
+          </Button>
+        )}
+        <Button
+          variant="activeButton"
+          className={`h-120 w-50 ${className}`}
+          onClick={handleConfirmClick}
+        >
+          {children}
+        </Button>
+      </div>
+    </>
   );
 }
