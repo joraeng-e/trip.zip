@@ -11,7 +11,7 @@ export default function LoggedInHeader() {
       <div className="cursor-pointer">
         <NotificationIcon />
       </div>
-      <Link href="/myPage" className="flex items-center gap-6 border-l-2 pl-16">
+      <Link href="/mypage" className="flex items-center gap-6 border-l-2 pl-16">
         <div className="h-40 w-40 overflow-hidden rounded-full border">
           <Image src={tripzipFavicon} alt="trip.zip" className="object-cover" />
         </div>
