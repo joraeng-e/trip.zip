@@ -1,4 +1,3 @@
-import Device from '@/libs/constants/device';
 import { PaginationArrowLeft, PaginationArrowRight } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import { useCallback, useEffect, useState } from 'react';
@@ -6,8 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { usePaginationContext } from '.';
 
 export function PrevButton() {
-  const { updateCurrentPage, currentPage, deviceState } =
-    usePaginationContext();
+  const { updateCurrentPage, currentPage } = usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === 1);
 
   const handlePrevClick = () => {
@@ -26,18 +24,19 @@ export function PrevButton() {
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
       onClick={handlePrevClick}
     >
-      <PaginationArrowLeft
-        width={deviceState === Device.Mobile ? 15 : 21}
-        height={deviceState === Device.Mobile ? 15 : 21}
-        fill={disabled ? '#A1A1A1' : '#0B3B2D'}
-      />
+      <div className="size-15 md:size-21">
+        <PaginationArrowLeft
+          width="100%"
+          height="100%"
+          fill={disabled ? '#A1A1A1' : '#0B3B2D'}
+        />
+      </div>
     </button>
   );
 }
 
 export function NextButton() {
-  const { updateCurrentPage, currentPage, totalPages, deviceState } =
-    usePaginationContext();
+  const { updateCurrentPage, currentPage, totalPages } = usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === totalPages);
 
   const handleNextClick = () => {
@@ -56,11 +55,13 @@ export function NextButton() {
       onClick={handleNextClick}
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
     >
-      <PaginationArrowRight
-        width={deviceState === Device.Mobile ? 15 : 21}
-        height={deviceState === Device.Mobile ? 15 : 21}
-        fill={disabled ? '#A1A1A1' : '#0B3B2D'}
-      />
+      <div className="size-15 md:size-21">
+        <PaginationArrowRight
+          width="100%"
+          height="100%"
+          fill={disabled ? '#A1A1A1' : '#0B3B2D'}
+        />
+      </div>
     </button>
   );
 }
