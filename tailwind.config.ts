@@ -29,6 +29,8 @@ const config: Config = {
       spacing: px0_200,
       maxWidth: px0_2000,
       maxHeight: px0_2000,
+      width: px0_2000,
+      height: px0_2000,
       colors: {
         'custom-gray': {
           100: '#FAFAFA',
@@ -60,6 +62,13 @@ const config: Config = {
           100: '#E5F3FF',
           200: '#2EB4FF',
           300: '#0085FF',
+        },
+      },
+      flexCenter: {
+        '.flex-center': {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
       },
     },
