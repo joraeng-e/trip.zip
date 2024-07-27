@@ -5,3 +5,4 @@ dist
 !.eslintrc.js
 !.prettierrc.js
 *.css
+coverage
