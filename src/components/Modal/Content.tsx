@@ -1,17 +1,22 @@
 import { XIcon } from '@/libs/utils/Icon';
 import { ModalProps } from '@/types/modaltype';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useModalContext } from './Root';
 
 interface ModalContentProps extends ModalProps {
-  Icon?: boolean;
+  icon?: boolean;
+  popover?: boolean;
 }
 
 export default function ModalContent(props: ModalContentProps) {
-  const { children, Icon, className } = props;
-  const { open: currentOpenState, handleOpenChange } = useModalContext();
+  const { children, icon, popover, className } = props;
+  const {
+    open: currentOpenState,
+    handleOpenChange,
+    trigger,
+  } = useModalContext();
   const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleClickOverlay = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -28,24 +33,56 @@ export default function ModalContent(props: ModalContentProps) {
     }
   };
 
+  const position = useMemo(() => {
+    if (!trigger?.current) {
+      return { x: 0, y: 0 };
+    }
+    const rect = trigger.current.getBoundingClientRect();
+    return {
+      x: rect.x,
+      y: rect.y + rect.height,
+    };
+  }, [trigger?.current]);
+
   const renderPortal = () => {
     if (currentOpenState) {
       return createPortal(
-        <div
-          ref={overlayRef}
-          className={`fixed inset-0 -z-50 flex items-center justify-center bg-gray-500/30 ${className}`}
-          onClick={handleClickOverlay}
-        >
-          <div
-            className={`rounded-10 first-line:bg-grayscale-50 relative z-50 mx-2 flex h-auto w-[335px] flex-col bg-white p-[20px] shadow-lg md:w-[395px] ${className}`}
-          >
-            {Icon && (
-              <button onClick={handleClose} className="absolute right-4 top-4">
-                <XIcon />
-              </button>
-            )}
-            {children}
-          </div>
+        <div>
+          {popover ? (
+            <div
+              style={{
+                top: position.y,
+                left: position.x,
+              }}
+              className={`absolute h-auto w-auto bg-white p-10 ${className}`}
+            >
+              {icon && (
+                <XIcon
+                  onClick={handleClose}
+                  className="absolute right-4 top-4 cursor-pointer"
+                />
+              )}
+              {children}
+            </div>
+          ) : (
+            <div
+              ref={overlayRef}
+              className={`fixed inset-0 flex items-center justify-center bg-custom-black/70`}
+              onClick={handleClickOverlay}
+            >
+              <div
+                className={`min-w-300 relative z-50 h-auto w-auto flex-col rounded-lg bg-custom-gray-100 p-20 ${className}`}
+              >
+                {icon && (
+                  <XIcon
+                    onClick={handleClose}
+                    className="absolute right-20 top-20 cursor-pointer"
+                  />
+                )}
+                {children}
+              </div>
+            </div>
+          )}
         </div>,
         document.body,
       );
