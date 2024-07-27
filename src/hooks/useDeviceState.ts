@@ -1,4 +1,4 @@
-import Device from '@/libs/constants/devices';
+import Device from '@/libs/constants/device';
 import { useEffect, useState } from 'react';
 
 const MIN_TABLET_WIDTH = 768;
