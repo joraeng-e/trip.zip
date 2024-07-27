@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
+import LoggedInHeader from './_components/LoggedInHeader';
+import LoggedOutHeader from './_components/LoggedOutHeader';
 import tripZip from '/public/logo/tripZip.png';
 
 export default function Header() {
@@ -19,6 +21,8 @@ export default function Header() {
 
   const isHeaderScrollValid = scrollPosition === 0;
 
+  // const isLogin = getCookie('isLogin');
+
   return (
     <header
       className={`fixed top-0 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'}`}
@@ -27,20 +31,8 @@ export default function Header() {
         <Link href="/">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
-        <div className="flex gap-16">
-          <Link
-            href="login"
-            className="transition-all duration-500 hover:text-custom-green-200 hover:underline hover:decoration-custom-green-200 hover:decoration-2 hover:underline-offset-4 hover:transition-all"
-          >
-            로그인
-          </Link>
-          <Link
-            href="signup"
-            className="transition-all duration-500 hover:text-custom-green-200 hover:underline hover:decoration-custom-green-200 hover:decoration-2 hover:underline-offset-4 hover:transition-all"
-          >
-            회원가입
-          </Link>
-        </div>
+        {/* {isLogin ? <LoggedInHeader /> : <LoggedOutHeader />} */}
+        <LoggedOutHeader />
       </div>
     </header>
   );
