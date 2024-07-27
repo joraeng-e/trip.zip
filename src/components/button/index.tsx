@@ -74,7 +74,10 @@ export default function Button({
       whileHover={whileHover}
       transition={{ duration: 0.3 }}
     >
-      <button className={variant} {...rest}>
+      <button
+        className={variant === 'disabledButton' ? 'cursor-not-allowed' : ''}
+        {...rest}
+      >
         {children}
       </button>
       {hasICon && <PaperPlaneIcon width={25} height={25} className="ml-6" />}

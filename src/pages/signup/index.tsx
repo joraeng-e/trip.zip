@@ -1,6 +1,6 @@
 import Button from '@/components/button';
 import Input from '@/components/input/Input';
-import { schema } from '@/libs/utils/schema';
+import { authSchema } from '@/libs/utils/authSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,8 +9,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormData = {
   email: string;
+  nickname: string;
   password: string;
-  price: number;
+  confirmPassword: string;
 };
 
 export default function Signup() {
@@ -18,8 +19,9 @@ export default function Signup() {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(authSchema),
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -48,14 +50,16 @@ export default function Signup() {
             placeholder="이메일을 입력해 주세요"
             register={register('email')}
             error={errors.email}
+            onBlur={() => trigger('email')}
           />
           <Input
             label="닉네임"
             name="nickname"
             type="text"
             placeholder="닉네임을 입력해 주세요"
-            register={register('password')}
-            error={errors.password}
+            register={register('nickname')}
+            error={errors.nickname}
+            onBlur={() => trigger('nickname')}
           />
           <Input
             label="비밀번호"
@@ -64,14 +68,16 @@ export default function Signup() {
             placeholder="8자 이상 입력해 주세요"
             register={register('password')}
             error={errors.password}
+            onBlur={() => trigger('password')}
           />
           <Input
             label="비밀번호 확인"
-            name="password"
+            name="confirmPassword"
             type="password"
             placeholder="비밀번호를 한번 더 입력해 주세요"
-            register={register('password')}
-            error={errors.password}
+            register={register('confirmPassword')}
+            error={errors.confirmPassword}
+            onBlur={() => trigger('confirmPassword')}
           />
           <Button type="submit" className="rounded-md" variant="disabledButton">
             회원가입 하기
