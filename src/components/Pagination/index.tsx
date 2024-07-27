@@ -1,5 +1,5 @@
 import useDeviceState from '@/hooks/useDeviceState';
-import Device from '@/libs/constants/Device';
+import Device from '@/libs/constants/devices';
 import { createContext, useContext, useState } from 'react';
 
 import { NextButton, PageList, PrevButton } from './Buttons';

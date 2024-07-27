@@ -1,4 +1,4 @@
-import Device from '@/libs/constants/Device';
+import Device from '@/libs/constants/devices';
 import { PaginationArrowLeft, PaginationArrowRight } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import { useCallback, useEffect, useState } from 'react';
