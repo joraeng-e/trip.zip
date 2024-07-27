@@ -33,7 +33,7 @@ export default function ModalClose(props: ModalCloseProps) {
         {confirm && (
           <Button
             variant="inactiveButton"
-            className={`h-120 w-50 ${className}`}
+            className={`h-40 w-80 rounded-md ${className}`}
             onClick={handleCloseClick}
           >
             아니오
@@ -41,7 +41,7 @@ export default function ModalClose(props: ModalCloseProps) {
         )}
         <Button
           variant="activeButton"
-          className={`h-120 w-50 ${className}`}
+          className={`h-40 w-80 rounded-md ${className}`}
           onClick={handleConfirmClick}
         >
           {children}
