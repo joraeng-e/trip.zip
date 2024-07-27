@@ -9,18 +9,19 @@ export function PrevButton() {
   const [disabled, setDisabled] = useState(currentPage === 1);
 
   const handlePrevClick = () => {
-    if (currentPage === 1) return;
+    if (currentPage <= 1) return;
     updateCurrentPage(currentPage - 1);
   };
 
   useEffect(() => {
-    setDisabled(currentPage === 1);
+    setDisabled(currentPage <= 1);
   }, [currentPage]);
 
   return (
     <button
       type="button"
       disabled={disabled}
+      aria-label="prev"
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
       onClick={handlePrevClick}
     >
@@ -40,18 +41,19 @@ export function NextButton() {
   const [disabled, setDisabled] = useState(currentPage === totalPages);
 
   const handleNextClick = () => {
-    if (currentPage === totalPages) return;
+    if (currentPage >= totalPages) return;
     updateCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
-    setDisabled(currentPage === totalPages);
+    setDisabled(currentPage >= totalPages);
   }, [currentPage]);
 
   return (
     <button
       type="button"
       disabled={disabled}
+      aria-label="next"
       onClick={handleNextClick}
       className="flex size-40 items-center justify-center rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
     >

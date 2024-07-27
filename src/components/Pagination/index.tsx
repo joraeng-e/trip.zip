@@ -8,11 +8,7 @@ interface PaginationContextType {
   updateCurrentPage: (page: number) => void;
 }
 
-const PaginationContext = createContext<PaginationContextType>({
-  totalPages: 1,
-  currentPage: 1,
-  updateCurrentPage: () => {},
-});
+const PaginationContext = createContext<PaginationContextType | null>(null);
 
 export const usePaginationContext = () => {
   const context = useContext(PaginationContext);
@@ -57,7 +53,11 @@ export default function Pagination({
   totalPages,
   initialPage = 1,
 }: Props) {
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (totalPages < initialPage) return totalPages;
+    if (initialPage <= 0) return 1;
+    return initialPage;
+  });
 
   const updateCurrentPage = (page: number) => {
     setCurrentPage(page);
