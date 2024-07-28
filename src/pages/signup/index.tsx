@@ -28,23 +28,26 @@ export default function Signup() {
     mode: 'all',
   });
 
-  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>(
-    // postUser,
-    {
-      onSuccess: (data: RegisterResponse) => {
-        console.log('회원가입 성공', data);
-        // TODO: 모달 띄우기
-      },
-      onError: (error: Error) => {
-        console.error('회원가입 실패', error);
-      },
+  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
+    mutationFn: postUser,
+    onSuccess: (data: RegisterResponse) => {
+      console.log('회원가입 성공', data);
+      // TODO: 모달 띄우기
     },
-  );
+    onError: (error: Error) => {
+      console.error('회원가입 실패', error);
+    },
+  });
 
   // confirmPassword를 제외하고 폼 제출
   const onSubmit: SubmitHandler<FormData> = ({ confirmPassword, ...data }) => {
-    console.log('폼 제출', data);
-    mutation.mutate(data);
+    const registerData: RegisterRequest = {
+      email: data.email,
+      nickname: data.nickname,
+      password: data.password,
+    };
+    console.log('폼 제출', registerData);
+    mutation.mutate(registerData);
   };
 
   return (
