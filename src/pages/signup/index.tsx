@@ -1,7 +1,10 @@
 import Button from '@/components/button';
 import Input from '@/components/input/Input';
+import { postUser } from '@/libs/api/user';
 import { authSchema } from '@/libs/utils/authSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
+import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -18,14 +21,30 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     trigger,
   } = useForm<FormData>({
     resolver: yupResolver(authSchema),
+    mode: 'all',
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>(
+    // postUser,
+    {
+      onSuccess: (data: RegisterResponse) => {
+        console.log('회원가입 성공', data);
+        // TODO: 모달 띄우기
+      },
+      onError: (error: Error) => {
+        console.error('회원가입 실패', error);
+      },
+    },
+  );
+
+  // confirmPassword를 제외하고 폼 제출
+  const onSubmit: SubmitHandler<FormData> = ({ confirmPassword, ...data }) => {
     console.log('폼 제출', data);
+    mutation.mutate(data);
   };
 
   return (
@@ -79,7 +98,11 @@ export default function Signup() {
             error={errors.confirmPassword}
             onBlur={() => trigger('confirmPassword')}
           />
-          <Button type="submit" className="rounded-md" variant="disabledButton">
+          <Button
+            type="submit"
+            className="rounded-md"
+            variant={isValid ? 'activeButton' : 'disabledButton'}
+          >
             회원가입 하기
           </Button>
         </form>

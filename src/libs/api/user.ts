@@ -10,13 +10,10 @@ import {
 import axiosInstance from '../axiosInstance';
 
 // 회원가입
-export async function postUser({
-  userData,
-}: {
-  userData: RegisterRequest;
-}): Promise<RegisterResponse> {
+export async function postUser(
+  userData: RegisterRequest,
+): Promise<RegisterResponse> {
   try {
-    // POST 요청
     const response = await axiosInstance.post<RegisterResponse>(
       `/users`,
       userData,
