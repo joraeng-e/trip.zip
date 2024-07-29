@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import LoggedInHeader from './_components/LoggedInHeader';
 import LoggedOutHeader from './_components/LoggedOutHeader';
+import tripZip from '/public/logo/tripzip.png';
 
 export default function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -28,12 +29,7 @@ export default function Header() {
     >
       <div className="basic-container flex items-center justify-between">
         <Link href="/" aria-label="메인페이지로 이동">
-          <Image
-            src="/logo/tripzip.png"
-            alt="trip.zip"
-            width={130}
-            height={20}
-          />
+          <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
         {/* {isLogin ? <LoggedInHeader /> : <LoggedOutHeader />} */}
         <LoggedOutHeader />

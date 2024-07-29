@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
+import tripZip from '/public/logo/tripzip.png';
+
 type FormData = {
   email: string;
   nickname: string;
@@ -62,12 +64,7 @@ export default function Signup() {
     <div className="page-container">
       <div className="flex flex-col items-center justify-center">
         <Link href="/" aria-label="메인페이지로 이동">
-          <Image
-            src="/logo/tripzip.png"
-            alt="trip.zip"
-            width={300}
-            height={20}
-          />
+          <Image src={tripZip} alt="trip.zip" width={300} height={20} />
         </Link>
         <form
           onSubmit={handleSubmit(onSubmit)}
