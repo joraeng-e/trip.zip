@@ -19,7 +19,7 @@ const whileHover = {
 
 export default function ProfileSideBar() {
   return (
-    <div className="flex h-432 w-344 flex-col items-center justify-center gap-8 rounded-xl border-2 md:h-432 md:w-384">
+    <div className="flex h-432 w-344 flex-col items-center justify-center gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
