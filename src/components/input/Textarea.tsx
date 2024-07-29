@@ -7,6 +7,7 @@ type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   error?: FieldError;
   maxWidth?: string;
   height?: string;
+  onBlur?: () => void;
 };
 
 /**
@@ -36,6 +37,7 @@ type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
  *   placeholder="내용을 입력해주세요"
  *   register={register('content')}
  *   error={errors.content}
+ *  onBlur={() => trigger('content')}
  * />
  *
  * @author 김보미
@@ -47,6 +49,7 @@ export default function Textarea({
   error,
   maxWidth = '640px',
   height = '346px',
+  onBlur,
   ...props
 }: TextareaProps) {
   const { name, placeholder } = props;
@@ -58,6 +61,7 @@ export default function Textarea({
         id={name}
         placeholder={placeholder}
         {...register}
+        onBlur={onBlur}
         className={`resize-none rounded-md border-2 p-16 outline-none focus:border-custom-green-200 ${error ? 'border-red-400' : ''}`}
         style={{ height }}
         {...props}
