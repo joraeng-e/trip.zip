@@ -79,7 +79,12 @@ export default function Button({
       transition={{ duration: 0.3 }}
       {...(rest as MotionProps)}
     >
-      {children}
+      <button
+        className={variant === 'disabledButton' ? 'cursor-not-allowed' : ''}
+        {...rest}
+      >
+        {children}
+      </button>
       {hasICon && <PaperPlaneIcon width={25} height={25} className="ml-6" />}
     </motion.button>
   );
