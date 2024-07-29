@@ -5,5 +5,9 @@ export default function ActivitiesLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="mx-16 md:mx-24 xl:mx-[360px]">{children}</div>;
+  return (
+    <div className="relative -top-57 mx-16 overflow-visible md:mx-24 xl:m-auto xl:w-[1200px]">
+      {children}
+    </div>
+  );
 }

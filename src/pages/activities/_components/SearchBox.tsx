@@ -2,10 +2,11 @@ import { BedIcon } from '@/libs/utils/Icon';
 
 export default function SearchBox() {
   return (
-    <div className="relative -top-57 rounded-[16px] bg-white px-24 py-16 shadow-xl md:px-24 md:py-35">
+    <div className="rounded-[16px] bg-white px-24 py-16 shadow-xl md:px-24 md:py-35">
       <h1 className="text-16 font-bold leading-26 text-nomad-black md:text-20 md:leading-32">
         무엇을 체험하고 싶으신가요?
       </h1>
+
       <div className="mt-15 flex h-56 gap-12 md:mt-20">
         <div className="relative flex-grow">
           <label
