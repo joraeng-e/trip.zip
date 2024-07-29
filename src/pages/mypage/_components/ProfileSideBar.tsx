@@ -19,11 +19,11 @@ const whileHover = {
 
 export default function ProfileSideBar() {
   return (
-    <div className="flex h-432 w-344 flex-col items-center justify-center gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
+    <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
-          className="absolute bottom-0 right-10 flex h-44 w-44 cursor-pointer items-center justify-center rounded-full bg-custom-green-200"
+          className="flex-center absolute bottom-0 right-10 h-44 w-44 cursor-pointer rounded-full bg-custom-green-200"
           whileHover={whileHover}
         >
           <Pencil />
