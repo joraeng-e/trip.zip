@@ -37,6 +37,7 @@ export default function Signup() {
       // TODO: 모달 띄우기
       document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
       document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
+
       router.push('/');
     },
     onError: (error: Error) => {

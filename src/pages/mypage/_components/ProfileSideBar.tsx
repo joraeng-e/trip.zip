@@ -6,7 +6,9 @@ import {
   ProfileChecklistIcon,
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
+import { deleteCookie } from '@/libs/utils/cookie';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const textGroupStyle =
@@ -18,8 +20,17 @@ const whileHover = {
 };
 
 export default function ProfileSideBar() {
+  const router = useRouter();
+
+  const logout = () => {
+    deleteCookie('accessToken');
+    deleteCookie('refreshToken');
+    deleteCookie('isLogin');
+    router.push('/');
+  };
+
   return (
-    <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
+    <div className="flex-center h-fit w-344 flex-col gap-8 rounded-xl border-2 px-10 py-20 shadow-lg md:w-384">
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
@@ -45,6 +56,9 @@ export default function ProfileSideBar() {
         <div className={textGroupStyle}>
           <ProfileCalendarIcon className={svgStyle} />
           <p>예약 현황</p>
+        </div>
+        <div className={textGroupStyle} onClick={logout}>
+          <p>로그아웃</p>
         </div>
       </div>
     </div>
