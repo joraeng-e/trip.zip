@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import type { ReactElement, ReactNode } from 'react';
+import React from 'react';
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
    * ```
    */
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
+
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+          },
+        },
+      }),
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
