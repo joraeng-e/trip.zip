@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const authSchema = yup.object().shape({
+export const signupSchema = yup.object().shape({
   email: yup
     .string()
     .email('이메일 형식으로 작성해 주세요.')
