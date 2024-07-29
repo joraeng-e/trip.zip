@@ -25,6 +25,10 @@
   .flex-center {
     @apply flex items-center justify-center;
   }
+
+  .basic-input {
+    @apply h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200;
+  }
 }
 
 /* input number일 때 화살표 없애기 */
