@@ -1,3 +1,5 @@
+import Button from '@/components/button';
+
 declare global {
   interface Window {
     daum: any;
@@ -10,7 +12,7 @@ interface IAddress {
 }
 
 export default function Address() {
-  const onClickAddr = () => {
+  const onClickAddress = () => {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
         oncomplete: function (data: IAddress) {
@@ -33,17 +35,37 @@ export default function Address() {
   };
 
   return (
-    <>
+    <div>
+      <div className="flex-center">
+        <input
+          id="zipNumber"
+          type="text"
+          readOnly
+          className="basic-input w-100"
+          placeholder="우편번호"
+        />
+        <Button
+          className="w-100"
+          variant="activeButton"
+          onClick={onClickAddress}
+        >
+          검색
+        </Button>
+      </div>
       <input
         id="address"
         type="text"
         readOnly
-        onClick={onClickAddr}
+        onClick={onClickAddress}
         className="basic-input"
+        placeholder="도로명 주소를 검색해주세요"
       />
-      <button onClick={onClickAddr}>검색</button>
-      <input id="zipNumber" type="text" readOnly className="basic-input" />
-      <input id="addressDetail" type="text" className="basic-input" />
-    </>
+      <input
+        id="addressDetail"
+        type="text"
+        className="basic-input"
+        placeholder="상세 주소를 입력해주세요"
+      />
+    </div>
   );
 }
