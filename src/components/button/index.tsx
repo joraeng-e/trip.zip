@@ -1,11 +1,15 @@
 import { PaperPlaneIcon } from '@/libs/utils/Icon';
-import { motion } from 'framer-motion';
-import { DetailedHTMLProps, PropsWithChildren } from 'react';
+import { MotionProps, motion } from 'framer-motion';
+import {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  PropsWithChildren,
+} from 'react';
 
 interface ButtonProps
   extends PropsWithChildren<
     DetailedHTMLProps<
-      React.ButtonHTMLAttributes<HTMLButtonElement>,
+      ButtonHTMLAttributes<HTMLButtonElement>,
       HTMLButtonElement
     >
   > {
@@ -26,7 +30,7 @@ interface ButtonProps
  * @example       
  *    <Button 
         variant="activeButton" 
-        icon={true} 
+        hasICon={true} 
         className="w-100 h-120" 
         onClick={() => alert('Button Clicked!')}
       >
@@ -69,10 +73,11 @@ export default function Button({
     variantStyles[variant] || variantStyles.activeButton;
 
   return (
-    <motion.div
+    <motion.button
       className={`${baseClassName} ${className}`}
       whileHover={whileHover}
       transition={{ duration: 0.3 }}
+      {...(rest as MotionProps)}
     >
       <button
         className={variant === 'disabledButton' ? 'cursor-not-allowed' : ''}
@@ -81,6 +86,6 @@ export default function Button({
         {children}
       </button>
       {hasICon && <PaperPlaneIcon width={25} height={25} className="ml-6" />}
-    </motion.div>
+    </motion.button>
   );
 }
