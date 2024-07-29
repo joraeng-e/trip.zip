@@ -1,3 +1,4 @@
+import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/button';
 import Input from '@/components/input/Input';
 import { postUser } from '@/libs/api/user';
@@ -10,8 +11,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-import tripZip from '/public/logo/tripzip.png';
 
 type FormData = {
   email: string;

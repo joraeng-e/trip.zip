@@ -1,10 +1,10 @@
+import tripZip from '@/../public/logo/tripZip.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import LoggedInHeader from './_components/LoggedInHeader';
 import LoggedOutHeader from './_components/LoggedOutHeader';
-import tripZip from '/public/logo/tripzip.png';
 
 export default function Header() {
   const [scrollPosition, setScrollPosition] = useState(0);
