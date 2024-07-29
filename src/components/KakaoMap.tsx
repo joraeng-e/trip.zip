@@ -13,6 +13,34 @@ interface KakaoMapProps {
   address: string;
 }
 
+/**
+ * @example
+ * ```tsx
+ * import KakaoMap from '@/components/KakaoMap';
+ * import DaumPostcode, { Address } from 'react-daum-postcode';
+ * 
+ * export default function ModalEx() {
+ *   const [address, setAddress] = useState<string>('');
+ * 
+ *   const handleAddressSelect = (e: Address) => {
+ *     setAddress(e.address);
+ *   };
+ *  
+ *  return (
+ *    <>
+        <div className="h-500 w-500">
+          <KakaoMap address={address} />
+        </div>
+        <DaumPostcode onComplete={handleAddressSelect}></DaumPostcode>
+ *    </>
+ *  )
+ * }
+ * ```
+ * @param {string} address - 원하는 주소를 넣어주세요. daumpostcode 사용 시 도로명 주소로 자동으로 넣어집니다.
+ * 
+ * @author 배영준
+ */
+
 export default function KakaoMap({ address }: KakaoMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
 
