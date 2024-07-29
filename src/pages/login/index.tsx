@@ -35,6 +35,8 @@ export default function Signup() {
     onSuccess: (data: LoginResponse) => {
       console.log('로그인 성공', data);
       // TODO: 모달 띄우기
+      document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
+      document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
       router.push('/');
     },
     onError: (error: Error) => {
