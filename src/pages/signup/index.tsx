@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -28,14 +29,22 @@ export default function Signup() {
     mode: 'all',
   });
 
+  const router = useRouter();
+
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: postUser,
     onSuccess: (data: RegisterResponse) => {
       console.log('회원가입 성공', data);
       // TODO: 모달 띄우기
+      router.push('/');
     },
     onError: (error: Error) => {
-      console.error('회원가입 실패', error);
+      if (error.message === '중복된 이메일입니다.') {
+        alert('중복된 이메일입니다.');
+        // TODO: alert 대신 모달 띄우기
+      } else {
+        console.error('회원가입 실패', error);
+      }
     },
   });
 
@@ -46,7 +55,6 @@ export default function Signup() {
       nickname: data.nickname,
       password: data.password,
     };
-    console.log('폼 제출', registerData);
     mutation.mutate(registerData);
   };
 
