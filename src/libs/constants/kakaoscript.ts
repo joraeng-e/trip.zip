@@ -1,1 +1,1 @@
-export const kakaoscript = `//dapi.kakao.com/v2/maps/sdk.js?appkey=b89ff2565658129d4c11ec14915247de&autoload=false&libraries=services`;
+export const kakaoscript = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_JS_KEY}&autoload=false&libraries=services`;
