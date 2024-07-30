@@ -1,13 +1,10 @@
-import Dropdown from '@/components/Dropdown';
-import Header from '@/components/Header';
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function Home() {
   const [selected, setSelected] = useState('number0');
 
   return (
     <div>
-      <Header />
       <main className="page-container bg-gray-500">
         <button className="flex-center h-35 rounded-full border-2 px-10 text-24">
           버튼
