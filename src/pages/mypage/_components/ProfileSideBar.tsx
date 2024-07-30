@@ -1,3 +1,4 @@
+import { useTabContext } from '@/context/TabContext';
 import {
   BaseProfile,
   Pencil,
@@ -18,6 +19,8 @@ const whileHover = {
 };
 
 export default function ProfileSideBar() {
+  const { setActiveTab } = useTabContext();
+
   return (
     <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
       <div className="relative">
@@ -30,19 +33,28 @@ export default function ProfileSideBar() {
         </motion.div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
-        <div className={textGroupStyle}>
+        <div className={textGroupStyle} onClick={() => setActiveTab('info')}>
           <ProfileAccountIcon className={svgStyle} />
           <p>내 정보</p>
         </div>
-        <div className={textGroupStyle}>
+        <div
+          className={textGroupStyle}
+          onClick={() => setActiveTab('reservationList')}
+        >
           <ProfileChecklistIcon className={svgStyle} />
           <p>예약 내역</p>
         </div>
-        <div className={textGroupStyle}>
+        <div
+          className={textGroupStyle}
+          onClick={() => setActiveTab('myActivities')}
+        >
           <ProfileCogIcon className={svgStyle} />
           <p>내 체험 관리</p>
         </div>
-        <div className={textGroupStyle}>
+        <div
+          className={textGroupStyle}
+          onClick={() => setActiveTab('reservationState')}
+        >
           <ProfileCalendarIcon className={svgStyle} />
           <p>예약 현황</p>
         </div>
