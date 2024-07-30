@@ -2,7 +2,7 @@ import { RoundStar } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Activity } from '..';
+import type { Activity } from './type';
 
 export function ActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;

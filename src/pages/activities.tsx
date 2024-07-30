@@ -1,26 +1,13 @@
 import Pagination from '@/components/Pagination';
-import { Category } from '@trip.zip-api';
-
-import { ActivityCard, PopularActivityCard } from './_components/Cards';
-import Carousel from './_components/Carousel';
-import CategoryMenu from './_components/CategoryMenu';
-import ActivitiesLayout from './_components/Layout';
-import SearchBox from './_components/SearchBox';
-
-export interface Activity {
-  id: number;
-  userId: number;
-  title: string;
-  description: string;
-  category: Category;
-  price: number;
-  address: string;
-  bannerImageUrl: string;
-  rating: number;
-  reviewCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import {
+  ActivityCard,
+  PopularActivityCard,
+} from '@/components/activities/Cards';
+import Carousel from '@/components/activities/Carousel';
+import CategoryMenu from '@/components/activities/CategoryMenu';
+import ActivitiesLayout from '@/components/activities/Layout';
+import SearchBox from '@/components/activities/SearchBox';
+import { Activity } from '@/components/activities/type';
 
 const MOCK_POPULAR_ACTIVITY: Activity = {
   id: 1,
