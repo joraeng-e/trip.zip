@@ -27,7 +27,7 @@ export default function ProfileSideBar() {
   const { activeTab, setActiveTab } = useTabContext();
 
   return (
-    <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
+    <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 bg-white shadow-lg md:h-432 md:w-384">
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
