@@ -37,7 +37,7 @@ export function PaginationSlide2() {
   return (
     <SlideContainer>
       <div className="absolute inset-0 z-10 text-white">
-        <div className="relative ml-24 mt-74 text-right md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
+        <div className="relative mr-24 mt-74 text-right md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
           <h1 className="text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80">
             위워크에서 <br />
             코딩하기
