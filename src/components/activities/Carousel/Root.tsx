@@ -83,13 +83,13 @@ export default function CarouselRoot({ children }: { children: ReactNode }) {
     };
   }, [currentIndex, isTransitioning]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateCurrentSlide((prevIndex) => prevIndex + 1);
-    }, 5000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     updateCurrentSlide((prevIndex) => prevIndex + 1);
+  //   }, 5000);
 
-    return () => clearInterval(interval);
-  }, [updateCurrentSlide]);
+  //   return () => clearInterval(interval);
+  // }, [updateCurrentSlide]);
 
   const contextValue = {
     currentIndex,
