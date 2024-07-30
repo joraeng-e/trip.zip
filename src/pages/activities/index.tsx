@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 import DateTime from './DateTime';
+import ImageUpload from './ImageUpload';
 import Address from './address';
 
 export default function PostActivities() {
@@ -33,6 +34,7 @@ export default function PostActivities() {
         <h3 className="text-2xl-bold">예약 가능한 시간대</h3>
         <DateTime />
         <h3 className="text-2xl-bold">배너 이미지</h3>
+        <ImageUpload />
         <h3>소개 이미지</h3>
         <p className="">*이미지는 최대 4개까지 등록 가능합니다.</p>
       </div>

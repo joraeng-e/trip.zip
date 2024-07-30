@@ -11,6 +11,7 @@ import PaginationArrowRight from '/public/icon/paginationArrowRight.svg';
 import PaperPlaneIcon from '/public/icon/paperPlane.svg';
 import PasswordOffIcon from '/public/icon/passwordOffIcon.svg';
 import PasswordOnIcon from '/public/icon/passwordOnIcon.svg';
+import PlusIcon from '/public/icon/plusIcon.svg';
 import PlusTimeIcon from '/public/icon/plusTimeIcon.svg';
 import ProfileAccountIcon from '/public/icon/profileAccountIcon.svg';
 import ProfileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
@@ -46,4 +47,5 @@ export {
   PaperPlaneIcon,
   PaginationArrowLeft,
   PaginationArrowRight,
+  PlusIcon,
 };

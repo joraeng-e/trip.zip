@@ -42,7 +42,7 @@ export default function DateTime() {
             className="basic-input w-119"
             value={date}
             min={todayDate}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(event) => setDate(event.target.value)}
           />
         </div>
         <div>
@@ -52,7 +52,7 @@ export default function DateTime() {
             type="time"
             className="basic-input w-79"
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={(event) => setStartTime(event.target.value)}
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ export default function DateTime() {
             type="time"
             className="basic-input w-79"
             value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
+            onChange={(event) => setEndTime(event.target.value)}
           />
         </div>
         <button onClick={handleAddEntry}>
