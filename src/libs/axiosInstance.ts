@@ -48,7 +48,7 @@ instance.interceptors.response.use(
         });
         const { accessToken } = response.data;
 
-        setCookie('accessToken', accessToken, 1); // 1일 동안 유효
+        setCookie('accessToken', accessToken, 0.0208);
 
         instance.defaults.headers.common['Authorization'] =
           `Bearer ${accessToken}`;
@@ -59,6 +59,7 @@ instance.interceptors.response.use(
         console.error('토큰 갱신 실패:', error);
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
+        alert('다시 로그인해주세요.');
       }
     }
     alert(`ERROR: ${error.response.data.message}`);

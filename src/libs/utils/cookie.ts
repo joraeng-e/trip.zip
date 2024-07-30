@@ -2,7 +2,7 @@
 export function setCookie(name: string, value: string, days: number) {
   if (typeof document !== 'undefined') {
     const expires = days
-      ? `; expires=${new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString()}`
+      ? `; expires=${new Date(Date.now() + days * 30 * 60 * 1000).toUTCString()}`
       : '';
     document.cookie = `${name}=${value}${expires}; path=/`;
   }
