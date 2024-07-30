@@ -22,7 +22,7 @@ const Item: React.FC<ItemProps> = ({ children, value, ...rest }) => {
     <li
       {...rest}
       style={{ height: itemHeight }}
-      className="flex-center flex h-auto w-full justify-between rounded-lg py-3 hover:bg-custom-gray-300"
+      className="flex-center flex h-auto w-full cursor-pointer justify-between rounded-lg py-3 hover:bg-custom-gray-300"
       onClick={onSelect}
     >
       <span className="w-full text-center">{children || value}</span>

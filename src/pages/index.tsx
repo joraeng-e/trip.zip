@@ -1,26 +1,14 @@
-import Dropdown from '@/components/Dropdown';
-import React, { useState } from 'react';
+import React from 'react';
 
 export default function Home() {
-  const [value, setValue] = useState('');
-
   return (
     <div>
-      <div className="mx-50 my-200">
-        <Dropdown
-          selected={value}
-          setSelected={setValue}
-          width={120}
-          height={51}
-        >
-          <Dropdown.Button />
-          <Dropdown.Body>
-            <Dropdown.Item value="첫번째" />
-            <Dropdown.Item value="두번째" />
-            <Dropdown.Item value="세번째" />
-          </Dropdown.Body>
-        </Dropdown>
-      </div>
+      <main className="page-container bg-gray-500">
+        <button className="flex-center h-35 rounded-full border-2 px-10 text-24">
+          버튼
+        </button>
+        <div className="text-xl-bold text-custom-orange-200"></div>
+      </main>
     </div>
   );
 }
