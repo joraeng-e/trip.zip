@@ -1,9 +1,12 @@
 import { useCarouselContext } from './Root';
 
 export function PrevButton() {
-  const { currentIndex, updateCurrentSlide } = useCarouselContext();
+  const { currentIndex, totalSlides, updateCurrentSlide } =
+    useCarouselContext();
 
-  const handlePrevClick = () => {};
+  const handlePrevClick = () => {
+    updateCurrentSlide(currentIndex === 0 ? totalSlides - 1 : currentIndex - 1);
+  };
 
   return (
     <button type="button" onClick={handlePrevClick}>
@@ -13,9 +16,12 @@ export function PrevButton() {
 }
 
 export function NextButton() {
-  const { currentIndex, updateCurrentSlide } = useCarouselContext();
+  const { currentIndex, totalSlides, updateCurrentSlide } =
+    useCarouselContext();
 
-  const handleNextClick = () => {};
+  const handleNextClick = () => {
+    updateCurrentSlide(currentIndex === totalSlides - 1 ? 0 : currentIndex + 1);
+  };
 
   return (
     <button type="button" onClick={handleNextClick}>
