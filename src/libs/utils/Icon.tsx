@@ -11,6 +11,7 @@ import PaginationArrowRight from '/public/icon/paginationArrowRight.svg';
 import PaperPlaneIcon from '/public/icon/paperPlane.svg';
 import PasswordOffIcon from '/public/icon/passwordOffIcon.svg';
 import PasswordOnIcon from '/public/icon/passwordOnIcon.svg';
+import Pencil from '/public/icon/pencil.svg';
 import PlusIcon from '/public/icon/plusIcon.svg';
 import PlusTimeIcon from '/public/icon/plusTimeIcon.svg';
 import ProfileAccountIcon from '/public/icon/profileAccountIcon.svg';
@@ -22,6 +23,7 @@ import StarOnIcon from '/public/icon/starOnIcon.svg';
 import TwitterIcon from '/public/icon/twitterIcon.svg';
 import XIcon from '/public/icon/xIcon.svg';
 import YoutubeIcon from '/public/icon/youtubeIcon.svg';
+import BaseProfile from '/public/imgs/baseProfile.svg';
 
 export {
   BedIcon,
@@ -37,6 +39,7 @@ export {
   NotificationIcon,
   PasswordOffIcon,
   PasswordOnIcon,
+  Pencil,
   ProfileAccountIcon,
   ProfileCalendarIcon,
   ProfileChecklistIcon,
@@ -48,4 +51,5 @@ export {
   PaginationArrowLeft,
   PaginationArrowRight,
   PlusIcon,
+  BaseProfile,
 };

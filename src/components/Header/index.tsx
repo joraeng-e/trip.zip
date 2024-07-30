@@ -1,3 +1,4 @@
+import tripZip from '@/../public/logo/tripZip.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -28,12 +29,7 @@ export default function Header() {
     >
       <div className="basic-container flex items-center justify-between">
         <Link href="/" aria-label="메인페이지로 이동">
-          <Image
-            src="/logo/tripzip.png"
-            alt="trip.zip"
-            width={130}
-            height={20}
-          />
+          <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
         {/* {isLogin ? <LoggedInHeader /> : <LoggedOutHeader />} */}
         <LoggedOutHeader />
