@@ -7,7 +7,9 @@ import {
   ProfileChecklistIcon,
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
+import { deleteCookie } from '@/libs/utils/cookie';
 import { motion } from 'framer-motion';
+import router from 'next/router';
 import React from 'react';
 
 const baseTextStyle =
@@ -25,6 +27,13 @@ const whileHover = {
 
 export default function ProfileSideBar() {
   const { activeTab, setActiveTab } = useTabContext();
+
+  const logout = () => {
+    deleteCookie('accessToken');
+    deleteCookie('refreshToken');
+    deleteCookie('isLogin');
+    router.push('/');
+  };
 
   return (
     <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 bg-white shadow-lg md:h-432 md:w-384">
@@ -73,6 +82,9 @@ export default function ProfileSideBar() {
             className={`${activeTab === 'reservationState' ? svgActiveStyle : svgStyle}`}
           />
           <p>예약 현황</p>
+        </div>
+        <div className={baseTextStyle} onClick={logout}>
+          <p>로그아웃</p>
         </div>
       </div>
     </div>
