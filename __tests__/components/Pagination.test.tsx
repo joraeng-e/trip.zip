@@ -1,4 +1,6 @@
-import Pagination, { usePaginationContext } from '@/components/Pagination';
+import Pagination, {
+  usePaginationContext,
+} from '@/components/commons/Pagination';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 describe('Pagination Component', () => {

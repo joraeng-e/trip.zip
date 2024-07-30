@@ -1,11 +1,11 @@
 import tripZip from '@/../public/logo/tripZip.png';
-import Button from '@/components/buttons';
-import Input from '@/components/inputs/Input';
-import { postLogin } from '@/libs/api/auth';
-import { loginSchema } from '@/libs/utils/schemas/loginSchema';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input/Input';
+import { postUser } from '@/libs/api/user';
+import { signupSchema } from '@/libs/utils/schemas/signupSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
-import { LoginResponse } from '@trip.zip-api';
+import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormData = {
   email: string;
+  nickname: string;
   password: string;
+  confirmPassword: string;
 };
 
 export default function Signup() {
@@ -24,36 +26,37 @@ export default function Signup() {
     formState: { errors, isValid },
     trigger,
   } = useForm<FormData>({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(signupSchema),
     mode: 'all',
   });
 
   const router = useRouter();
 
-  const mutation = useMutation<LoginResponse, Error, FormData>({
-    mutationFn: postLogin,
-    onSuccess: (data: LoginResponse) => {
-      console.log('로그인 성공', data);
+  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
+    mutationFn: postUser,
+    onSuccess: (data: RegisterResponse) => {
+      console.log('회원가입 성공', data);
       // TODO: 모달 띄우기
-      document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
-      document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
-
       router.push('/');
     },
     onError: (error: Error) => {
-      if (error.message === '존재하지 않는 유저입니다.') {
-        alert('존재하지 않는 유저입니다.');
+      if (error.message === '중복된 이메일입니다.') {
+        alert('중복된 이메일입니다.');
         // TODO: alert 대신 모달 띄우기
-      } else if (error.message === '비밀번호가 일치하지 않습니다.') {
-        alert('비밀번호가 일치하지 않습니다.');
       } else {
-        console.error('로그인 실패', error);
+        console.error('회원가입 실패', error);
       }
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    mutation.mutate(data);
+  // confirmPassword를 제외하고 폼 제출
+  const onSubmit: SubmitHandler<FormData> = ({ confirmPassword, ...data }) => {
+    const registerData: RegisterRequest = {
+      email: data.email,
+      nickname: data.nickname,
+      password: data.password,
+    };
+    mutation.mutate(registerData);
   };
 
   return (
@@ -76,29 +79,47 @@ export default function Signup() {
             onBlur={() => trigger('email')}
           />
           <Input
+            label="닉네임"
+            name="nickname"
+            type="text"
+            placeholder="닉네임을 입력해 주세요"
+            register={register('nickname')}
+            error={errors.nickname}
+            onBlur={() => trigger('nickname')}
+          />
+          <Input
             label="비밀번호"
             name="password"
             type="password"
-            placeholder="비밀번호를 입력해 주세요"
+            placeholder="8자 이상 입력해 주세요"
             register={register('password')}
             error={errors.password}
             onBlur={() => trigger('password')}
+          />
+          <Input
+            label="비밀번호 확인"
+            name="confirmPassword"
+            type="password"
+            placeholder="비밀번호를 한번 더 입력해 주세요"
+            register={register('confirmPassword')}
+            error={errors.confirmPassword}
+            onBlur={() => trigger('confirmPassword')}
           />
           <Button
             type="submit"
             className="rounded-md"
             variant={isValid ? 'activeButton' : 'disabledButton'}
           >
-            로그인 하기
+            회원가입 하기
           </Button>
         </form>
         <div className="text-md mt-20 flex gap-8">
-          <p>회원이 아니신가요?</p>
+          <p>회원이신가요?</p>
           <Link
-            href="/signup"
+            href="login"
             className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
           >
-            회원가입하기
+            로그인하기
           </Link>
         </div>
       </div>

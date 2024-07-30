@@ -1,4 +1,3 @@
-import Pagination from '@/components/Pagination';
 import {
   ActivityCard,
   PopularActivityCard,
@@ -8,6 +7,7 @@ import CategoryMenu from '@/components/activities/CategoryMenu';
 import ActivitiesLayout from '@/components/activities/Layout';
 import SearchBox from '@/components/activities/SearchBox';
 import { Activity } from '@/components/activities/type';
+import Pagination from '@/components/commons/Pagination';
 
 const MOCK_POPULAR_ACTIVITY: Activity = {
   id: 1,
