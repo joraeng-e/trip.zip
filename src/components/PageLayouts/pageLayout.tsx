@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
 import Header from '../Header';
-import Footer from '../footer';
+import Footer from '../footers';
 
 type LayoutProps = {
   children: ReactNode;
