@@ -1,6 +1,6 @@
 import tripZip from '@/../public/logo/tripZip.png';
-import Button from '@/components/button';
-import Input from '@/components/input/Input';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input/Input';
 import { postLogin } from '@/libs/api/auth';
 import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
