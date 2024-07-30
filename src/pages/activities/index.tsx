@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 import DateTime from './DateTime';
-import ImageUpload from './ImageUpload';
+import ImageUploader from './ImageUpload';
 import Address from './address';
 
 export default function PostActivities() {
@@ -24,19 +24,23 @@ export default function PostActivities() {
           등록하기
         </Button>
       </div>
-      <div className="flex flex-col gap-24">
-        <Input label="제목" name="title" type="text" placeholder="제목" />
+      <div className="flex flex-col gap-24 [&>h3]:text-2xl-bold">
+        <Input name="title" type="text" placeholder="제목" />
         <p>카테고리</p>
-        <Textarea label="내용" name="content" placeholder="설명" />
-        <Input label="가격" name="price" type="number" placeholder="가격" />
+        <Textarea name="content" placeholder="설명" />
+        <h3>가격</h3>
+        <Input name="price" type="number" placeholder="가격" />
         <h3>주소</h3>
         <Address />
         <h3 className="text-2xl-bold">예약 가능한 시간대</h3>
         <DateTime />
         <h3 className="text-2xl-bold">배너 이미지</h3>
-        <ImageUpload />
+        <ImageUploader maxImages={1} label="배너 이미지 등록" />
         <h3>소개 이미지</h3>
-        <p className="">*이미지는 최대 4개까지 등록 가능합니다.</p>
+        <ImageUploader maxImages={4} label="소개 이미지 등록" />
+        <p className="text-custom-gray-800">
+          *이미지는 최대 4개까지 등록 가능합니다.
+        </p>
       </div>
     </div>
   );
