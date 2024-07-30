@@ -3,6 +3,9 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
+import Header from '../Header';
+import Footer from '../footer';
+
 type LayoutProps = {
   children: ReactNode;
   showHeader?: boolean;
@@ -34,6 +37,11 @@ export default function Layout({
     if (!result) router.push('/login');
   }
 
-  return <>{children}</>;
-  // Todo : header, footer 완성되는 대로 추가하기
+  return (
+    <>
+      {showHeader && <Header />}
+      {children}
+      {showFooter && <Footer />}
+    </>
+  );
 }

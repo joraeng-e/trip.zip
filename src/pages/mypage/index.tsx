@@ -1,14 +1,13 @@
+import Info from '@/components/mypage/Info';
 import { MenuToggle } from '@/components/mypage/MenuToggle';
+import MyActivities from '@/components/mypage/MyActivities';
+import ProfileSideBar from '@/components/mypage/ProfileSideBar';
+import ReservationList from '@/components/mypage/ReservationList';
+import ReservationState from '@/components/mypage/ReservationState';
 import { TabProvider, useTabContext } from '@/context/TabContext';
 import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { motion, useCycle } from 'framer-motion';
 import React from 'react';
-
-import Info from '../../components/mypage/Info';
-import MyActivities from '../../components/mypage/MyActivities';
-import ProfileSideBar from '../../components/mypage/ProfileSideBar';
-import ReservationList from '../../components/mypage/ReservationList';
-import ReservationState from '../../components/mypage/ReservationState';
 
 const sidebar = {
   open: (height = 1000) => ({

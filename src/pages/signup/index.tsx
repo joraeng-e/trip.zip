@@ -2,7 +2,7 @@ import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/button';
 import Input from '@/components/input/Input';
 import { postUser } from '@/libs/api/user';
-import { authSchema } from '@/libs/utils/authSchema';
+import { signupSchema } from '@/libs/utils/schemas/signupSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
@@ -26,7 +26,7 @@ export default function Signup() {
     formState: { errors, isValid },
     trigger,
   } = useForm<FormData>({
-    resolver: yupResolver(authSchema),
+    resolver: yupResolver(signupSchema),
     mode: 'all',
   });
 

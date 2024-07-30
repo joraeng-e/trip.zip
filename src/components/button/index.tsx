@@ -55,7 +55,7 @@ export default function Button({
     },
     inactiveButton: {
       baseClassName:
-        'w-full h-full border-2 border-nomad-black md:text-xl flex-center cursor-pointer rounded-full bg-white py-7 text-center font-semibold text-nomad-black shadow-lg hover:shadow-gray-400 hover:shadow-md md:py-11',
+        'w-full h-full ring-2 ring-inset ring-nomad-black md:text-xl flex-center cursor-pointer rounded-full bg-white py-7 text-center font-semibold text-nomad-black shadow-lg hover:shadow-gray-400 hover:shadow-md md:py-11',
       whileHover: {
         backgroundImage: 'linear-gradient(90deg, #112211 0%, #ffffff 100%)',
       },

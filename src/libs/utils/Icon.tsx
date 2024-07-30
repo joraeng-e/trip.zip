@@ -17,6 +17,7 @@ import ProfileAccountIcon from '/public/icon/profileAccountIcon.svg';
 import ProfileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
 import ProfileChecklistIcon from '/public/icon/profileChecklistICon.svg';
 import ProfileCogIcon from '/public/icon/profileCogIcon.svg';
+import RoundStar from '/public/icon/roundStar.svg';
 import StarOffIcon from '/public/icon/starOffIcon.svg';
 import StarOnIcon from '/public/icon/starOnIcon.svg';
 import TwitterIcon from '/public/icon/twitterIcon.svg';
@@ -50,4 +51,5 @@ export {
   PaginationArrowLeft,
   PaginationArrowRight,
   BaseProfile,
+  RoundStar,
 };
