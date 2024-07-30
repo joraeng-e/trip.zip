@@ -7,7 +7,7 @@ const Path: React.FC<PathProps> = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#fff"
+    stroke="#000"
     strokeLinecap="round"
     {...props}
   />
@@ -18,7 +18,10 @@ type MenuToggleProps = {
 };
 
 export const MenuToggle = ({ toggle }: MenuToggleProps) => (
-  <button onClick={toggle} className="absolute left-28 mb-20 cursor-pointer">
+  <button
+    onClick={toggle}
+    className="absolute left-29 top-100 mb-20 cursor-pointer"
+  >
     <svg width="23" height="23" viewBox="0 0 23 23">
       <Path
         variants={{

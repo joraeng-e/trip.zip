@@ -1,6 +1,7 @@
 import { useTabContext } from '@/context/TabContext';
 import {
   BaseProfile,
+  Logout,
   Pencil,
   ProfileAccountIcon,
   ProfileCalendarIcon,
@@ -36,7 +37,12 @@ export default function ProfileSideBar() {
   };
 
   return (
-    <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 bg-white shadow-lg md:h-432 md:w-384">
+    <motion.div
+      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-384"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
@@ -83,10 +89,14 @@ export default function ProfileSideBar() {
           />
           <p>예약 현황</p>
         </div>
-        <div className={baseTextStyle} onClick={logout}>
+        <div
+          className={`${baseTextStyle} ${textGroupStyle} border-t-2 text-black`}
+          onClick={logout}
+        >
+          <Logout className="h-20 w-20" />
           <p>로그아웃</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
