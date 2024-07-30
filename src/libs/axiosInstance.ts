@@ -1,12 +1,14 @@
 import axios from 'axios';
 
+import { deleteCookie, getCookie, setCookie } from './utils/cookie';
+
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 instance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('accessToken')?.replace(/"/gi, '');
+    const accessToken = getCookie('accessToken');
 
     if (accessToken) {
       if (config.headers['Content-Type'] === 'multipart/form-data') {
@@ -35,21 +37,18 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage
-          .getItem('refreshToken')
-          ?.replace(/"/gi, '');
+        const refreshToken = getCookie('refreshToken');
 
         if (!refreshToken) {
           throw new Error('리프레시 토큰이 없습니다.');
         }
 
-        // 새로운 accessToken 요청
         const response = await instance.post('/auth/refresh-token', {
           refreshToken: refreshToken,
         });
         const { accessToken } = response.data;
 
-        localStorage.setItem('accessToken', accessToken);
+        setCookie('accessToken', accessToken, 0.0208);
 
         instance.defaults.headers.common['Authorization'] =
           `Bearer ${accessToken}`;
@@ -58,6 +57,9 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (error) {
         console.error('토큰 갱신 실패:', error);
+        deleteCookie('accessToken');
+        deleteCookie('refreshToken');
+        alert('다시 로그인해주세요.');
       }
     }
     alert(`ERROR: ${error.response.data.message}`);

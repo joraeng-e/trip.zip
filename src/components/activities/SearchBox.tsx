@@ -1,6 +1,6 @@
 import { BedIcon } from '@/libs/utils/Icon';
 
-import Button from '../button';
+import Button from '../commons/Button';
 
 export default function SearchBox() {
   return (

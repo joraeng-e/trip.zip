@@ -1,5 +1,5 @@
-import Header from '@/components/Header';
-import KakaoMap from '@/components/KakaoMap';
+import Header from '@/components/commons/Header';
+import KakaoMap from '@/components/commons/KakaoMap';
 import React, { useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import { Address } from 'react-daum-postcode';
