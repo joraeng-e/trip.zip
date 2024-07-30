@@ -1,11 +1,10 @@
+import Info from '@/components/mypage/Info';
+import MyActivities from '@/components/mypage/MyActivities';
+import ProfileSideBar from '@/components/mypage/ProfileSideBar';
+import ReservationList from '@/components/mypage/ReservationList';
+import ReservationState from '@/components/mypage/ReservationState';
 import { TabProvider, useTabContext } from '@/context/TabContext';
 import React from 'react';
-
-import Info from './_components/Info';
-import MyActivities from './_components/MyActivities';
-import ProfileSideBar from './_components/ProfileSideBar';
-import ReservationList from './_components/ReservationList';
-import ReservationState from './_components/ReservationState';
 
 function Mypage() {
   const { activeTab } = useTabContext();
