@@ -1,4 +1,5 @@
 import tripZip from '@/../public/logo/tripZip.png';
+import { isLogin } from '@/libs/utils/cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -21,8 +22,6 @@ export default function Header() {
 
   const isHeaderScrollValid = scrollPosition === 0;
 
-  // const isLogin = getCookie('isLogin');
-
   return (
     <header
       className={`sticky top-0 z-50 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'}`}
@@ -31,8 +30,7 @@ export default function Header() {
         <Link href="/" aria-label="메인페이지로 이동">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
-        {/* {isLogin ? <LoggedInHeader /> : <LoggedOutHeader />} */}
-        <LoggedOutHeader />
+        {isLogin() ? <LoggedInHeader /> : <LoggedOutHeader />}
       </div>
     </header>
   );
