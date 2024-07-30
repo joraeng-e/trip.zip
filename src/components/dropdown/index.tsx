@@ -1,17 +1,28 @@
-import {
+import React, {
   Dispatch,
-  PropsWithChildren,
+  ReactNode,
   SetStateAction,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from 'react';
 
+import Body from './DropdownBody';
+import Button from './DropdownButton';
+import Item from './DropdownItem';
+
+type DropdownProps = {
+  children: ReactNode;
+  selected: string;
+  setSelected: Dispatch<SetStateAction<string>>;
+};
+
 type DropdownContextProps = {
   toggleDropdown: () => void;
-  handleSelect: Dispatch<SetStateAction<string>>;
-  selected: string;
   isOpen: boolean;
+  handleSelect: (value: string) => void;
+  selected: string;
 };
 
 const DropdownContext = createContext<DropdownContextProps | undefined>(
@@ -26,25 +37,31 @@ export const useDropdownContext = () => {
   return context;
 };
 
-export default function DropdownRoot(
-  props: PropsWithChildren<Record<string, never>>,
-) {
-  const { children } = props;
+export default function Dropdown({
+  children,
+  selected,
+  setSelected,
+}: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState('');
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
+  const handleSelect = useCallback((value: string) => setSelected(value), []);
 
   return (
     <DropdownContext.Provider
       value={{
         toggleDropdown,
-        handleSelect: setSelected,
-        selected,
         isOpen,
+        handleSelect,
+        selected,
       }}
     >
       {children}
     </DropdownContext.Provider>
   );
 }
+
+Dropdown.Button = Button;
+Dropdown.Body = Body;
+Dropdown.Item = Item;
