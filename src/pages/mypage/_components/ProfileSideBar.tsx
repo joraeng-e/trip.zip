@@ -10,16 +10,21 @@ import {
 import { motion } from 'framer-motion';
 import React from 'react';
 
+const baseTextStyle =
+  'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold transition-all';
 const textGroupStyle =
-  'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold text-gray-400 transition-all hover:bg-custom-green-100 hover:text-nomad-black';
+  'text-gray-400 hover:bg-custom-green-100 hover:text-nomad-black ';
+const activeStyle = 'bg-custom-green-100 text-nomad-black';
+
 const svgStyle = 'fill-gray-400 transition-all group-hover:fill-nomad-black';
+const svgActiveStyle = 'fill-nomad-black';
 
 const whileHover = {
   backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
 };
 
 export default function ProfileSideBar() {
-  const { setActiveTab } = useTabContext();
+  const { activeTab, setActiveTab } = useTabContext();
 
   return (
     <div className="flex-center h-432 w-344 flex-col gap-8 rounded-xl border-2 shadow-lg md:h-432 md:w-384">
@@ -33,29 +38,40 @@ export default function ProfileSideBar() {
         </motion.div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
-        <div className={textGroupStyle} onClick={() => setActiveTab('info')}>
-          <ProfileAccountIcon className={svgStyle} />
+        <div
+          className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
+          onClick={() => setActiveTab('info')}
+        >
+          <ProfileAccountIcon
+            className={`${activeTab === 'info' ? svgActiveStyle : svgStyle}`}
+          />
           <p>내 정보</p>
         </div>
         <div
-          className={textGroupStyle}
+          className={`${baseTextStyle} ${activeTab === 'reservationList' ? activeStyle : textGroupStyle}`}
           onClick={() => setActiveTab('reservationList')}
         >
-          <ProfileChecklistIcon className={svgStyle} />
+          <ProfileChecklistIcon
+            className={`${activeTab === 'reservationList' ? svgActiveStyle : svgStyle}`}
+          />
           <p>예약 내역</p>
         </div>
         <div
-          className={textGroupStyle}
+          className={`${baseTextStyle} ${activeTab === 'myActivities' ? activeStyle : textGroupStyle}`}
           onClick={() => setActiveTab('myActivities')}
         >
-          <ProfileCogIcon className={svgStyle} />
+          <ProfileCogIcon
+            className={`${activeTab === 'myActivities' ? svgActiveStyle : svgStyle}`}
+          />
           <p>내 체험 관리</p>
         </div>
         <div
-          className={textGroupStyle}
+          className={`${baseTextStyle} ${activeTab === 'reservationState' ? activeStyle : textGroupStyle}`}
           onClick={() => setActiveTab('reservationState')}
         >
-          <ProfileCalendarIcon className={svgStyle} />
+          <ProfileCalendarIcon
+            className={`${activeTab === 'reservationState' ? svgActiveStyle : svgStyle}`}
+          />
           <p>예약 현황</p>
         </div>
       </div>
