@@ -10,7 +10,7 @@ function SlideContainer({ children }: { children: ReactNode }) {
 export function PaginationSlide1() {
   return (
     <SlideContainer>
-      <span className="absolute left-1/2 top-1/2 z-10 text-60 text-white">
+      <span className="absolute left-1/2 top-1/2 z-10 text-100 text-white">
         1
       </span>
 
@@ -27,7 +27,7 @@ export function PaginationSlide1() {
 export function PaginationSlide2() {
   return (
     <SlideContainer>
-      <span className="absolute left-1/2 top-1/2 z-10 text-60 text-white">
+      <span className="absolute left-1/2 top-1/2 z-10 text-100 text-white">
         2
       </span>
 
@@ -44,7 +44,7 @@ export function PaginationSlide2() {
 export function PaginationSlide3() {
   return (
     <SlideContainer>
-      <span className="absolute left-1/2 top-1/2 z-10 text-60 text-white">
+      <span className="absolute left-1/2 top-1/2 z-10 text-100 text-white">
         3
       </span>
 

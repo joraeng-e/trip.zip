@@ -1,3 +1,5 @@
+import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
+
 import { useCarouselContext } from './Root';
 
 export function PrevButton() {
@@ -9,8 +11,12 @@ export function PrevButton() {
   };
 
   return (
-    <button type="button" onClick={handlePrevClick}>
-      prev
+    <button
+      type="button"
+      className="absolute left-24 top-1/2 z-10 size-32 -translate-y-1/2 transform rounded-full bg-slate-100 pr-4 opacity-25 hover:opacity-40 md:size-48 xl:size-60"
+      onClick={handlePrevClick}
+    >
+      <ArrowLeft width="100%" height="100%" />
     </button>
   );
 }
@@ -24,8 +30,12 @@ export function NextButton() {
   };
 
   return (
-    <button type="button" onClick={handleNextClick}>
-      next
+    <button
+      type="button"
+      className="absolute right-24 top-1/2 z-10 size-32 -translate-y-1/2 transform rounded-full bg-slate-100 pl-4 opacity-25 hover:opacity-40 md:size-48 xl:size-60 xl:pl-6"
+      onClick={handleNextClick}
+    >
+      <ArrowRight width="100%" height="100%" />
     </button>
   );
 }

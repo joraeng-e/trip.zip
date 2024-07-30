@@ -10,12 +10,12 @@ import React, {
 } from 'react';
 
 import { NextButton, PrevButton } from './Control';
+import CarouselDots from './Dots';
 
 interface CarouselContextType {
   currentIndex: number;
   totalSlides: number;
   updateCurrentSlide: (slideIndex: number) => void;
-  isTransitioning: boolean;
 }
 
 const CarouselContext = createContext<CarouselContextType | null>(null);
@@ -32,63 +32,75 @@ export default function CarouselRoot({ children }: { children: ReactNode }) {
   const childrenArray = useMemo(() => Children.toArray(children), [children]);
   const totalSlides = childrenArray.length + 2;
   const [currentIndex, setCurrentIndex] = useState(1);
-
   const [isTransitioning, setIsTransitioning] = useState(false);
+
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  const updateCurrentSlide = (slideIndex: number) => {
+  const updateCurrentSlide = (
+    slideIndex: number | ((prevIndex: number) => number),
+  ) => {
     if (isTransitioning) return;
 
     setIsTransitioning(true);
-    setCurrentIndex(slideIndex);
+    setCurrentIndex((prevIndex) =>
+      typeof slideIndex === 'number' ? slideIndex : slideIndex(prevIndex),
+    );
   };
 
   useEffect(() => {
     if (!isTransitioning) return;
 
     const handleTransitionEnd = () => {
-      if (sliderRef.current) {
-        sliderRef.current.style.transition = 'none';
-        if (currentIndex === 0) {
-          sliderRef.current.style.transform = `translateX(-${childrenArray.length * 100}%)`;
-          setCurrentIndex(childrenArray.length);
-        } else if (currentIndex === totalSlides - 1) {
-          sliderRef.current.style.transform = 'translateX(-100%)';
-          setCurrentIndex(1);
-        }
-        setTimeout(() => {
-          if (sliderRef.current) {
-            sliderRef.current.style.transition = 'transform 500ms ease-in-out';
-          }
-          setIsTransitioning(false);
-        }, 50); // Ensures transition gets re-enabled
+      if (!sliderRef.current) return;
+
+      sliderRef.current.style.transition = 'none';
+      if (currentIndex === 0) {
+        sliderRef.current.style.transform = `translateX(-${childrenArray.length * 100}%)`;
+        setCurrentIndex(childrenArray.length);
+      } else if (currentIndex === totalSlides - 1) {
+        sliderRef.current.style.transform = 'translateX(-100%)';
+        setCurrentIndex(1);
       }
+
+      setTimeout(() => {
+        if (!sliderRef.current) return;
+
+        sliderRef.current.style.transition = 'transform 500ms ease-in-out';
+        setIsTransitioning(false);
+      }, 50);
     };
 
-    if (sliderRef.current) {
-      sliderRef.current.addEventListener('transitionend', handleTransitionEnd);
-      return () => {
-        if (sliderRef.current) {
-          sliderRef.current.removeEventListener(
-            'transitionend',
-            handleTransitionEnd,
-          );
-        }
-      };
-    }
-  }, [currentIndex, isTransitioning, totalSlides, childrenArray.length]);
+    if (!sliderRef.current) return;
+    sliderRef.current.addEventListener('transitionend', handleTransitionEnd);
+
+    return () => {
+      if (!sliderRef.current) return;
+
+      sliderRef.current.removeEventListener(
+        'transitionend',
+        handleTransitionEnd,
+      );
+    };
+  }, [currentIndex, isTransitioning]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateCurrentSlide((prevIndex) => prevIndex + 1);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [updateCurrentSlide]);
 
   const contextValue = {
     currentIndex,
     totalSlides,
     updateCurrentSlide,
-    isTransitioning,
   };
 
   return (
     <CarouselContext.Provider value={contextValue}>
-      <PrevButton />
       <div className="relative h-240 overflow-hidden md:h-550">
+        <PrevButton />
         <div
           ref={sliderRef}
           className="whitespace-nowrap transition-transform duration-500 ease-in-out"
@@ -106,8 +118,10 @@ export default function CarouselRoot({ children }: { children: ReactNode }) {
 
           <div className="inline-block w-full">{childrenArray[0]}</div>
         </div>
+        <NextButton />
+
+        <CarouselDots />
       </div>
-      <NextButton />
     </CarouselContext.Provider>
   );
 }
