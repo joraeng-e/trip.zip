@@ -22,12 +22,13 @@ export default function Activites() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [category, setCategory] = useState<string | undefined>(undefined);
+  const [keyword, setKeyword] = useState<string | undefined>(undefined);
   const deviceState = useDeviceState();
 
   const { data } = useQuery({
     queryKey: [
       'activities',
-      { page, pageSize: PAGE_SIZE_BY_DEVICE[deviceState], category },
+      { page, pageSize: PAGE_SIZE_BY_DEVICE[deviceState], category, keyword },
     ],
     queryFn: () =>
       getActivities({
@@ -35,6 +36,7 @@ export default function Activites() {
         page,
         size: PAGE_SIZE_BY_DEVICE[deviceState],
         category,
+        keyword,
       }),
   });
 
@@ -51,6 +53,10 @@ export default function Activites() {
     setCategory(category);
   };
 
+  const handleKeyword = (keyword: string) => {
+    setKeyword(keyword);
+  };
+
   useEffect(() => {
     if (!data) return;
 
@@ -62,7 +68,7 @@ export default function Activites() {
     <>
       <Carousel />
       <ActivitiesLayout>
-        <SearchBox />
+        <SearchBox handleKeyword={handleKeyword} />
         <div className="mt-24 md:mt-18 xl:mt-32">
           <h1 className="mb-16 text-18 font-semibold text-nomad-black md:text-36">
             🔥인기 체험
