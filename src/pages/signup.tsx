@@ -1,6 +1,7 @@
 import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
+import Modal from '@/components/commons/Modal';
 import { postUser } from '@/libs/api/user';
 import { signupSchema } from '@/libs/utils/schemas/signupSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +10,7 @@ import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormData = {
@@ -18,6 +19,14 @@ type FormData = {
   password: string;
   confirmPassword: string;
 };
+
+interface ApiError extends Error {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function Signup() {
   const {
@@ -30,21 +39,21 @@ export default function Signup() {
     mode: 'all',
   });
 
+  const [modalMessage, setModalMessage] = useState('');
   const router = useRouter();
 
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: postUser,
     onSuccess: (data: RegisterResponse) => {
       console.log('회원가입 성공', data);
-      // TODO: 모달 띄우기
-      router.push('/');
     },
-    onError: (error: Error) => {
-      if (error.message === '중복된 이메일입니다.') {
-        alert('중복된 이메일입니다.');
-        // TODO: alert 대신 모달 띄우기
-      } else {
-        console.error('회원가입 실패', error);
+    onError: (error: ApiError) => {
+      if (error.response && error.response.data) {
+        if (error.response.data.message === '중복된 이메일입니다.') {
+          setModalMessage('이미 사용중인 이메일입니다.');
+        } else {
+          console.error('회원가입 실패', error);
+        }
       }
     },
   });
@@ -57,6 +66,12 @@ export default function Signup() {
       password: data.password,
     };
     mutation.mutate(registerData);
+    setModalMessage('가입이 완료되었습니다!');
+  };
+
+  const resetModalMessage = () => {
+    router.push('/login');
+    setModalMessage('');
   };
 
   return (
@@ -105,13 +120,23 @@ export default function Signup() {
             error={errors.confirmPassword}
             onBlur={() => trigger('confirmPassword')}
           />
-          <Button
-            type="submit"
-            className="rounded-md"
-            variant={isValid ? 'activeButton' : 'disabledButton'}
-          >
-            회원가입 하기
-          </Button>
+          <Modal.Root>
+            <Modal.Trigger>
+              <Button
+                type="submit"
+                className="rounded-md"
+                variant={isValid ? 'activeButton' : 'disabledButton'}
+              >
+                회원가입 하기
+              </Button>
+            </Modal.Trigger>
+            <Modal.Content>
+              <Modal.Description className="py-20 text-center">
+                {modalMessage}
+              </Modal.Description>
+              <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
+            </Modal.Content>
+          </Modal.Root>
         </form>
         <div className="text-md mt-20 flex gap-8">
           <p>회원이신가요?</p>
