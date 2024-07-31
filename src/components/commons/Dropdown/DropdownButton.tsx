@@ -13,10 +13,10 @@ export default function Button({ ...rest }) {
     <button
       {...rest}
       style={{
-        width: width,
+        maxWidth: width,
         height: height,
       }}
-      className={`flex-center min-h-41 min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-20 pr-12 outline-none`}
+      className={`flex-center min-h-41 w-full min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-20 pr-12 outline-none`}
       onClick={toggleDropdown}
     >
       <span>{selected}</span>
