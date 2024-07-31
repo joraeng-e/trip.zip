@@ -1,8 +1,15 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 
 type TabContextType = {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  setActiveTab: Dispatch<SetStateAction<string>>;
 };
 
 export const TabContext = createContext<TabContextType | undefined>(undefined);

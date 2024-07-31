@@ -90,7 +90,7 @@ export default function ProfileSideBar() {
           <p>예약 현황</p>
         </div>
         <div
-          className={`${baseTextStyle} ${textGroupStyle} border-t-2 text-black`}
+          className={`text-black ${baseTextStyle} border-t-2 hover:bg-custom-green-100`}
           onClick={logout}
         >
           <Logout className="h-20 w-20" />

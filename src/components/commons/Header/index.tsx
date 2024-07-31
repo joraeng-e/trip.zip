@@ -20,18 +20,20 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    checkLoginState();
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [router.pathname]);
+  }, []);
 
   const isHeaderScrollValid = scrollPosition === 0;
 
   const checkLoginState = () => {
     setLoggedIn(isLogin);
   };
+
+  useEffect(() => {
+    checkLoginState();
+  }, [router.pathname]);
 
   return (
     <header
