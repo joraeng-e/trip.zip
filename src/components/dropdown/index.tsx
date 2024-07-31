@@ -1,3 +1,4 @@
+import useClickOutside from '@/hooks/useClickOutside';
 import React, {
   Dispatch,
   ReactNode,
@@ -5,6 +6,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useRef,
   useState, // ReactElement,
   // useEffect,
   // useLayoutEffect,
@@ -80,6 +82,9 @@ export default function Dropdown({
 
   const handleSelect = useCallback((value: string) => setSelected(value), []);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useClickOutside(dropdownRef, toggleDropdown);
+
   // Todo : Items 요소 중 첫번째 요소의 value 자동으로 기본값으로 설정 해보고 싶었는데 실패했습니다.. 조금 더 연구해보고 구현 해볼게요!
   // useLayoutEffect(() => {
   //   if (!selected) {
@@ -104,7 +109,7 @@ export default function Dropdown({
         height,
       }}
     >
-      {children}
+      <div ref={dropdownRef}>{children}</div>
     </DropdownContext.Provider>
   );
 }
