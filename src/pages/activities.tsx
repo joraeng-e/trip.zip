@@ -66,7 +66,12 @@ export default function Activites() {
 
   return (
     <>
-      <Carousel />
+      <Carousel.Root>
+        <Carousel.Slide1 />
+        <Carousel.Slide2 />
+        <Carousel.Slide3 />
+      </Carousel.Root>
+
       <ActivitiesLayout>
         <SearchBox handleKeyword={handleKeyword} />
         <div className="mt-24 md:mt-18 xl:mt-32">

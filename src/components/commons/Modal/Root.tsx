@@ -14,10 +14,8 @@ export interface ModalRootProps extends PropsWithChildren {
 }
 interface ModalContextProps extends Pick<ModalRootProps, 'open'> {
   handleOpenChange?: (open?: boolean) => void;
-  trigger: RefObject<HTMLButtonElement> | undefined;
-  setTrigger: Dispatch<
-    SetStateAction<RefObject<HTMLButtonElement> | undefined>
-  >;
+  trigger: RefObject<HTMLDivElement> | undefined;
+  setTrigger: Dispatch<SetStateAction<RefObject<HTMLDivElement> | undefined>>;
 }
 const ModalContext = createContext<ModalContextProps>({
   open: undefined,
@@ -38,7 +36,7 @@ export default function ModalRoot(props: ModalRootProps) {
   const { children, open: openProp = false, onOpenChange } = props;
   const [open, setOpen] = useState<boolean | undefined>(openProp);
   const [trigger, setTrigger] = useState<
-    RefObject<HTMLButtonElement> | undefined
+    RefObject<HTMLDivElement> | undefined
   >();
   const handleOpenChange = (currentOpen?: boolean) => {
     console.log({ currentOpen });
