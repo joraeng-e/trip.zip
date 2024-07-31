@@ -1,7 +1,7 @@
 import { RoundStar } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 
 import type { Activity } from './type';
 
@@ -9,7 +9,7 @@ export function ActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
   const [imageSrc, setImageSrc] = useState(bannerImageUrl);
 
-  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = () => {
     setImageSrc('/imgs/no-img.png');
   };
 
@@ -48,7 +48,7 @@ export function PopularActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
   const [imageSrc, setImageSrc] = useState(bannerImageUrl);
 
-  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = () => {
     setImageSrc('/imgs/no-img.png');
   };
 
@@ -62,7 +62,7 @@ export function PopularActivityCard({ data }: { data: Activity }) {
         alt="banner"
         fill
         onError={handleImageError}
-        className="absolute -z-10 rounded-[20px] brightness-75 filter"
+        className="absolute -z-10 rounded-[20px] object-cover brightness-75 filter"
       />
 
       <div className="mt-48 flex items-center gap-5 text-14 font-semibold leading-24 md:mt-174">

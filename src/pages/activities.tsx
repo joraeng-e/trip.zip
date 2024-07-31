@@ -10,7 +10,7 @@ import Dropdown from '@/components/commons/Dropdown';
 import Pagination from '@/components/commons/Pagination';
 import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const PAGE_SIZE_BY_DEVICE = {
@@ -19,27 +19,42 @@ const PAGE_SIZE_BY_DEVICE = {
   PC: 8,
 };
 
+const API_SORT_VALUE = {
+  최신순: 'latest',
+  '가격이 낮은 순': 'price_asc',
+  '가격이 높은 순': 'price_desc',
+} as const;
+
+type SortOptions = keyof typeof API_SORT_VALUE;
+
 export default function Activites() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [keyword, setKeyword] = useState<string | undefined>(undefined);
-  const [sort, setSort] = useState('latest');
+  const [sort, setSort] = useState('최신순');
   const deviceState = useDeviceState();
 
   const { data } = useQuery({
     queryKey: [
       'activities',
-      { page, pageSize: PAGE_SIZE_BY_DEVICE[deviceState], category, keyword },
+      {
+        page,
+        pageSize: PAGE_SIZE_BY_DEVICE[deviceState],
+        category,
+        keyword,
+        sort,
+      },
     ],
     queryFn: () =>
       getActivities({
-        sort: 'latest',
+        sort: API_SORT_VALUE[sort as SortOptions],
         page,
         size: PAGE_SIZE_BY_DEVICE[deviceState],
         category,
         keyword,
       }),
+    placeholderData: keepPreviousData,
   });
 
   const { data: popularActivitiesData } = useQuery({
@@ -65,10 +80,6 @@ export default function Activites() {
     const pageSize = PAGE_SIZE_BY_DEVICE[deviceState];
     setTotalPages(Math.ceil(data.totalCount / pageSize));
   }, [deviceState, data]);
-
-  useEffect(() => {
-    console.log(sort);
-  }, [sort]);
 
   return (
     <>
@@ -108,33 +119,29 @@ export default function Activites() {
             <div className="flex justify-between gap-12">
               <CategoryMenu handleCategoryClick={handleCategoryClick} />
 
-              {/* <div className="flex-shrink-0">
-                <Dropdown
-                  selected={sort}
-                  setSelected={setSort}
-                  width={150}
-                  height={41}
-                >
-                  <Dropdown.Button />
-                  <Dropdown.Body>
-                    <Dropdown.Item value="최신 순">
-                      <span className="text-14 text-custom-gray-800">
-                        최신 순
-                      </span>
-                    </Dropdown.Item>
-                    <Dropdown.Item value="가격이 낮은 순">
-                      <span className="text-14 text-custom-gray-800">
-                        가격이 낮은 순
-                      </span>
-                    </Dropdown.Item>
-                    <Dropdown.Item value="가격이 높은 순">
-                      <span className="text-14 text-custom-gray-800">
-                        가격이 높은 순
-                      </span>
-                    </Dropdown.Item>
-                  </Dropdown.Body>
-                </Dropdown>
-              </div> */}
+              <Dropdown
+                selected={sort}
+                setSelected={setSort}
+                width={150}
+                height={41}
+              >
+                <Dropdown.Button />
+                <Dropdown.Body>
+                  <Dropdown.Item value="최신순">
+                    <span className="text-14 text-custom-gray-800">최신순</span>
+                  </Dropdown.Item>
+                  <Dropdown.Item value="가격이 낮은 순">
+                    <span className="text-14 text-custom-gray-800">
+                      가격이 낮은 순
+                    </span>
+                  </Dropdown.Item>
+                  <Dropdown.Item value="가격이 높은 순">
+                    <span className="text-14 text-custom-gray-800">
+                      가격이 높은 순
+                    </span>
+                  </Dropdown.Item>
+                </Dropdown.Body>
+              </Dropdown>
             </div>
 
             <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">

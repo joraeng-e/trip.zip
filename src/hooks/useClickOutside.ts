@@ -10,7 +10,7 @@ type ClickOutsideHandler = (event: MouseEvent | TouchEvent) => void;
  * ```
  * /index.tsx
  * const dropdownRef = useRef<HTMLDivElement>(null);
- * useClickOutside(dropdownRef, () => setIsOpen(false));
+ * useClickOutside(dropdownRef, "() => setIsOpen(false)");
  *
  * <DropdownContext.provider>
  *  <div ref={dropDownRef}>
