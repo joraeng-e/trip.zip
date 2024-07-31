@@ -51,7 +51,7 @@ export default function PasswordInput({
         placeholder={placeholder}
         {...register}
         onBlur={handleBlur}
-        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && 'animate-vibration border-red-400'} ${isVibrating && 'animate-vibration'}`}
+        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && isVibrating ? 'animate-vibration border-red-400' : ''}`}
       />
       {isVisibilityIcon ? (
         <PasswordOnIcon
