@@ -13,7 +13,7 @@ export default function CarouselDots() {
         const classnames = classNames(
           'h-6 md:h-8 rounded-full transition-all duration-300',
           {
-            'w-24 md:w-32 bg-blue-500': isActive,
+            'w-24 md:w-32 bg-custom-green-200': isActive,
             'w-6 md:w-8 bg-gray-300': !isActive,
           },
         );

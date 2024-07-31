@@ -86,7 +86,7 @@ export default function CarouselRoot({ children }: { children: ReactNode }) {
   useEffect(() => {
     const interval = setInterval(() => {
       updateCurrentSlide((prevIndex) => prevIndex + 1);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [updateCurrentSlide]);
