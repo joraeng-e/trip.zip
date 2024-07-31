@@ -1,6 +1,7 @@
 import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
+import Modal from '@/components/commons/Modal';
 import { postLogin } from '@/libs/api/auth';
 import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,13 +10,21 @@ import { LoginResponse } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormData = {
   email: string;
   password: string;
 };
+
+interface ApiError extends Error {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 export default function Signup() {
   const {
@@ -28,32 +37,40 @@ export default function Signup() {
     mode: 'all',
   });
 
+  const [modalMessage, setModalMessage] = useState('');
   const router = useRouter();
 
   const mutation = useMutation<LoginResponse, Error, FormData>({
     mutationFn: postLogin,
     onSuccess: (data: LoginResponse) => {
       console.log('로그인 성공', data);
-      // TODO: 모달 띄우기
+      setModalMessage('로그인 완료!');
       document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
       document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
 
       router.push('/');
     },
-    onError: (error: Error) => {
-      if (error.message === '존재하지 않는 유저입니다.') {
-        alert('존재하지 않는 유저입니다.');
-        // TODO: alert 대신 모달 띄우기
-      } else if (error.message === '비밀번호가 일치하지 않습니다.') {
-        alert('비밀번호가 일치하지 않습니다.');
-      } else {
-        console.error('로그인 실패', error);
+    onError: (error: ApiError) => {
+      if (error.response && error.response.data) {
+        if (error.response.data.message === '존재하지 않는 유저입니다.') {
+          setModalMessage('존재하지 않는 유저입니다.');
+        } else if (
+          error.response.data.message === '비밀번호가 일치하지 않습니다.'
+        ) {
+          setModalMessage('비밀번호가 일치하지 않습니다.');
+        } else {
+          console.error('로그인 실패', error);
+        }
       }
     },
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     mutation.mutate(data);
+  };
+
+  const resetModalMessage = () => {
+    setModalMessage('');
   };
 
   return (
@@ -84,13 +101,33 @@ export default function Signup() {
             error={errors.password}
             onBlur={() => trigger('password')}
           />
-          <Button
-            type="submit"
-            className="rounded-md"
-            variant={isValid ? 'activeButton' : 'disabledButton'}
-          >
-            로그인 하기
-          </Button>
+          {modalMessage ? (
+            <Modal.Root>
+              <Modal.Trigger>
+                <Button
+                  type="submit"
+                  className="rounded-md"
+                  variant={isValid ? 'activeButton' : 'disabledButton'}
+                >
+                  로그인 하기
+                </Button>
+              </Modal.Trigger>
+              <Modal.Content>
+                <Modal.Description className="py-20 text-center">
+                  {modalMessage}
+                </Modal.Description>
+                <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
+              </Modal.Content>
+            </Modal.Root>
+          ) : (
+            <Button
+              type="submit"
+              className="rounded-md"
+              variant={isValid ? 'activeButton' : 'disabledButton'}
+            >
+              로그인 하기
+            </Button>
+          )}
         </form>
         <div className="text-md mt-20 flex gap-8">
           <p>회원이 아니신가요?</p>
