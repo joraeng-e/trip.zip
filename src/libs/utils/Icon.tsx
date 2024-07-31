@@ -1,3 +1,5 @@
+import ArrowLeft from '/public/icon/arrowLeft.svg';
+import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
@@ -56,4 +58,6 @@ export {
   PlusIcon,
   BaseProfile,
   RoundStar,
+  ArrowLeft,
+  ArrowRight,
 };
