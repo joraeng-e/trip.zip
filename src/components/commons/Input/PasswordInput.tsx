@@ -39,6 +39,7 @@ export default function PasswordInput({
 
   const handleBlur = () => {
     if (onBlur) onBlur();
+    if (!error) return;
     setIsVibrating(true);
     setTimeout(() => setIsVibrating(false), 300);
   };
