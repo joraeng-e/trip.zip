@@ -38,6 +38,9 @@ export default function Signup() {
   });
 
   const [modalMessage, setModalMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
+
   const router = useRouter();
 
   const mutation = useMutation<LoginResponse, Error, FormData>({
@@ -45,10 +48,10 @@ export default function Signup() {
     onSuccess: (data: LoginResponse) => {
       console.log('로그인 성공', data);
       setModalMessage('로그인 완료!');
+      setIsModalOpen(true);
+      setIsSuccessMessage(true);
       document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
       document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
-
-      router.push('/');
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
@@ -61,6 +64,8 @@ export default function Signup() {
         } else {
           console.error('로그인 실패', error);
         }
+        setIsModalOpen(true);
+        setIsSuccessMessage(false);
       }
     },
   });
@@ -71,6 +76,8 @@ export default function Signup() {
 
   const resetModalMessage = () => {
     setModalMessage('');
+    setIsModalOpen(false);
+    if (isSuccessMessage) router.push('/activities');
   };
 
   return (
@@ -101,17 +108,8 @@ export default function Signup() {
             error={errors.password}
             onBlur={() => trigger('password')}
           />
-          {modalMessage ? (
-            <Modal.Root>
-              <Modal.Trigger>
-                <Button
-                  type="submit"
-                  className="rounded-md"
-                  variant={isValid ? 'activeButton' : 'disabledButton'}
-                >
-                  로그인 하기
-                </Button>
-              </Modal.Trigger>
+          {modalMessage && (
+            <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
               <Modal.Content>
                 <Modal.Description className="py-20 text-center">
                   {modalMessage}
@@ -119,15 +117,14 @@ export default function Signup() {
                 <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
               </Modal.Content>
             </Modal.Root>
-          ) : (
-            <Button
-              type="submit"
-              className="rounded-md"
-              variant={isValid ? 'activeButton' : 'disabledButton'}
-            >
-              로그인 하기
-            </Button>
           )}
+          <Button
+            type="submit"
+            className="rounded-md"
+            variant={isValid ? 'activeButton' : 'disabledButton'}
+          >
+            로그인 하기
+          </Button>
         </form>
         <div className="text-md mt-20 flex gap-8">
           <p>회원이 아니신가요?</p>

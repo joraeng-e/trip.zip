@@ -40,12 +40,18 @@ export default function Signup() {
   });
 
   const [modalMessage, setModalMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
+
   const router = useRouter();
 
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: postUser,
     onSuccess: (data: RegisterResponse) => {
       console.log('회원가입 성공', data);
+      setModalMessage('가입이 완료되었습니다!');
+      setIsModalOpen(true);
+      setIsSuccessMessage(true);
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
@@ -54,6 +60,8 @@ export default function Signup() {
         } else {
           console.error('회원가입 실패', error);
         }
+        setIsModalOpen(true);
+        setIsSuccessMessage(false);
       }
     },
   });
@@ -66,12 +74,12 @@ export default function Signup() {
       password: data.password,
     };
     mutation.mutate(registerData);
-    setModalMessage('가입이 완료되었습니다!');
   };
 
   const resetModalMessage = () => {
-    router.push('/login');
     setModalMessage('');
+    setIsModalOpen(false);
+    if (isSuccessMessage) router.push('/login');
   };
 
   return (
@@ -120,23 +128,23 @@ export default function Signup() {
             error={errors.confirmPassword}
             onBlur={() => trigger('confirmPassword')}
           />
-          <Modal.Root>
-            <Modal.Trigger>
-              <Button
-                type="submit"
-                className="rounded-md"
-                variant={isValid ? 'activeButton' : 'disabledButton'}
-              >
-                회원가입 하기
-              </Button>
-            </Modal.Trigger>
-            <Modal.Content>
-              <Modal.Description className="py-20 text-center">
-                {modalMessage}
-              </Modal.Description>
-              <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
-            </Modal.Content>
-          </Modal.Root>
+          {modalMessage && (
+            <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <Modal.Content>
+                <Modal.Description className="py-20 text-center">
+                  {modalMessage}
+                </Modal.Description>
+                <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
+              </Modal.Content>
+            </Modal.Root>
+          )}
+          <Button
+            type="submit"
+            className="rounded-md"
+            variant={isValid ? 'activeButton' : 'disabledButton'}
+          >
+            회원가입 하기
+          </Button>
         </form>
         <div className="text-md mt-20 flex gap-8">
           <p>회원이신가요?</p>
