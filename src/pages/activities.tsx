@@ -19,13 +19,23 @@ const PAGE_SIZE_BY_DEVICE = {
 };
 
 export default function Activites() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [category, setCategory] = useState<string | undefined>(undefined);
   const deviceState = useDeviceState();
 
   const { data } = useQuery({
-    queryKey: ['activities', { currentPage }],
-    queryFn: () => getActivities({ sort: 'latest', page: currentPage }),
+    queryKey: [
+      'activities',
+      { page, pageSize: PAGE_SIZE_BY_DEVICE[deviceState], category },
+    ],
+    queryFn: () =>
+      getActivities({
+        sort: 'latest',
+        page,
+        size: PAGE_SIZE_BY_DEVICE[deviceState],
+        category,
+      }),
   });
 
   const { data: popularActivitiesData } = useQuery({
@@ -34,7 +44,11 @@ export default function Activites() {
   });
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setPage(page);
+  };
+
+  const handleCategoryClick = (category: string) => {
+    setCategory(category);
   };
 
   useEffect(() => {
@@ -61,7 +75,7 @@ export default function Activites() {
         </div>
 
         <div className="mt-40 md:mt-54 xl:mt-60">
-          <CategoryMenu />
+          <CategoryMenu handleCategoryClick={handleCategoryClick} />
           {/* TODO: 드롭다운 */}
           <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
             🛼 모든 체험
