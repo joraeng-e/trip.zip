@@ -21,7 +21,8 @@ export default function ActivityDetail() {
 
   return (
     <>
-      <div>{DetailData.id}</div>
+      <div>data id:{DetailData.id}</div>
+      <div>router id:{ActivityId}</div>
       <div>
         <Title
           title={DetailData.title}
