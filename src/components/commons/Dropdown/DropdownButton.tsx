@@ -16,10 +16,10 @@ export default function Button({ ...rest }) {
         maxWidth: width,
         height: height,
       }}
-      className={`flex-center min-h-41 w-full min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-20 pr-12 outline-none`}
+      className={`flex-center min-h-41 w-full min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-18 pr-10 outline-none`}
       onClick={toggleDropdown}
     >
-      <span>{buttonText}</span>
+      <span className="text-14 font-light md:text-18">{buttonText}</span>
       <motion.div
         initial={{ rotate: 0 }}
         animate={{ rotate: isOpen ? 180 : 0 }}
