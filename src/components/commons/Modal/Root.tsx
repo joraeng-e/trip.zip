@@ -5,7 +5,6 @@ import {
   SetStateAction,
   createContext,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 
@@ -13,14 +12,17 @@ export interface ModalRootProps extends PropsWithChildren {
   open?: boolean;
   onOpenChange?: (open?: boolean) => void;
 }
-
 interface ModalContextProps extends Pick<ModalRootProps, 'open'> {
-  handleOpenChange: (open?: boolean) => void; // 필수로 변경
+  handleOpenChange?: (open?: boolean) => void;
   trigger: RefObject<HTMLDivElement> | undefined;
   setTrigger: Dispatch<SetStateAction<RefObject<HTMLDivElement> | undefined>>;
 }
-
-const ModalContext = createContext<ModalContextProps | undefined>(undefined);
+const ModalContext = createContext<ModalContextProps>({
+  open: undefined,
+  handleOpenChange: () => {},
+  trigger: undefined,
+  setTrigger: () => {},
+});
 
 export const useModalContext = () => {
   const context = useContext(ModalContext);
@@ -32,20 +34,15 @@ export const useModalContext = () => {
 
 export default function ModalRoot(props: ModalRootProps) {
   const { children, open: openProp = false, onOpenChange } = props;
-  const [open, setOpen] = useState<boolean>(openProp);
-  const [trigger, setTrigger] = useState<RefObject<HTMLDivElement> | undefined>(
-    undefined,
-  );
-
+  const [open, setOpen] = useState<boolean | undefined>(openProp);
+  const [trigger, setTrigger] = useState<
+    RefObject<HTMLDivElement> | undefined
+  >();
   const handleOpenChange = (currentOpen?: boolean) => {
-    setOpen(currentOpen !== undefined ? currentOpen : !open); // 상태 반전
+    console.log({ currentOpen });
+    setOpen(currentOpen);
     onOpenChange?.(currentOpen);
   };
-
-  // openProp이 변경될 때 상태 업데이트
-  useEffect(() => {
-    setOpen(openProp);
-  }, [openProp]);
 
   const contextValue: ModalContextProps = {
     open,
@@ -53,7 +50,6 @@ export default function ModalRoot(props: ModalRootProps) {
     setTrigger,
     trigger,
   };
-
   return (
     <ModalContext.Provider value={contextValue}>
       {children}

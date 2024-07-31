@@ -21,12 +21,10 @@ export default function ModalTrigger(props: ModalTriggerProps) {
   } = useModalContext();
   const triggerRef = useRef<HTMLDivElement>(null);
 
-  const handleClickTrigger = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClickTrigger = () => {
     if (disabled) {
-      e.preventDefault();
       return; // disabled일 경우 클릭 무시
     }
-    e.preventDefault();
     handleOpenChange?.(!currentOpenState);
   };
 
