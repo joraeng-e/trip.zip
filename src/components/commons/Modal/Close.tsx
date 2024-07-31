@@ -1,6 +1,6 @@
 import { ModalProps } from '@/types/modaltype';
 
-import Button from '../button';
+import Button from '../Button';
 import { useModalContext } from './Root';
 
 interface ModalCloseProps extends ModalProps {

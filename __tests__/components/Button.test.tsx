@@ -1,4 +1,4 @@
-import Button from '@/components/button';
+import Button from '@/components/Button';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 jest.mock('@/libs/utils/Icon', () => ({
