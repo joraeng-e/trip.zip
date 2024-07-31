@@ -79,11 +79,12 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+  const closeDropdown = () => setIsOpen(false);
 
   const handleSelect = useCallback((value: string) => setSelected(value), []);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  useClickOutside(dropdownRef, toggleDropdown);
+  useClickOutside(dropdownRef, closeDropdown);
 
   // Todo : Items 요소 중 첫번째 요소의 value 자동으로 기본값으로 설정 해보고 싶었는데 실패했습니다.. 조금 더 연구해보고 구현 해볼게요!
   // useLayoutEffect(() => {
