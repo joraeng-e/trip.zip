@@ -7,11 +7,7 @@ interface DateTimeInput {
   endTime: string;
 }
 
-interface DateTimeProps {
-  onChange: (schedules: DateTimeInput[]) => void;
-}
-
-export default function DateTime({ onChange }: DateTimeProps) {
+export default function DateTime() {
   const [todayDate, setTodayDate] = useState<string>('');
   const [entries, setEntries] = useState<DateTimeInput[]>([]);
   const [date, setDate] = useState<string>('');
@@ -23,10 +19,6 @@ export default function DateTime({ onChange }: DateTimeProps) {
     setTodayDate(today);
     setDate(today);
   }, []);
-
-  useEffect(() => {
-    onChange(entries);
-  }, [entries]);
 
   const handleAddEntry = () => {
     setEntries([...entries, { date, startTime, endTime }]);
@@ -46,7 +38,7 @@ export default function DateTime({ onChange }: DateTimeProps) {
           <input
             id="date"
             type="date"
-            className="basic-input max-w-380"
+            className="basic-input w-full min-w-[130px] max-w-[380px]"
             value={date}
             min={todayDate}
             onChange={(event) => setDate(event.target.value)}
@@ -57,7 +49,7 @@ export default function DateTime({ onChange }: DateTimeProps) {
           <input
             id="startTime"
             type="time"
-            className="basic-input max-w-140"
+            className="basic-input w-full min-w-[80px] max-w-[140px]"
             value={startTime}
             onChange={(event) => setStartTime(event.target.value)}
           />
@@ -67,13 +59,13 @@ export default function DateTime({ onChange }: DateTimeProps) {
           <input
             id="endTime"
             type="time"
-            className="basic-input max-w-140"
+            className="basic-input w-full min-w-[80px] max-w-[140px]"
             value={endTime}
             onChange={(event) => setEndTime(event.target.value)}
           />
         </div>
         <button type="button" onClick={handleAddEntry} className="mt-23">
-          <PlusTimeIcon />
+          <PlusTimeIcon className="text-green-800 hover:text-nomad-black" />
         </button>
       </div>
       <div>
@@ -84,7 +76,7 @@ export default function DateTime({ onChange }: DateTimeProps) {
                 type="text"
                 value={entry.date}
                 readOnly
-                className="basic-input max-w-380"
+                className="basic-input w-full min-w-[130px] max-w-[380px]"
               />
             </div>
             <div>
@@ -92,7 +84,7 @@ export default function DateTime({ onChange }: DateTimeProps) {
                 type="text"
                 value={entry.startTime}
                 readOnly
-                className="basic-input max-w-140"
+                className="basic-input w-full min-w-[80px] max-w-[140px]"
               />
             </div>
             <div>
@@ -100,11 +92,11 @@ export default function DateTime({ onChange }: DateTimeProps) {
                 type="text"
                 value={entry.endTime}
                 readOnly
-                className="basic-input max-w-140"
+                className="basic-input w-full min-w-[80px] max-w-[140px]"
               />
             </div>
             <button onClick={() => handleRemoveEntry(index)}>
-              <MinusTimeIcon />
+              <MinusTimeIcon className="text-white hover:text-gray-200" />
             </button>
           </div>
         ))}

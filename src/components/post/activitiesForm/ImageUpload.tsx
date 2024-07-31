@@ -42,7 +42,7 @@ export default function ImageUploader({
         <label
           htmlFor={`image-upload-${label}`}
           className={classNames(
-            'flex-center h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
+            'flex-center group h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
             {
               'opacity-50': imagePreviewUrls.length >= maxImages,
               'hover:border-nomad-black': imagePreviewUrls.length < maxImages,
@@ -55,9 +55,11 @@ export default function ImageUploader({
         >
           <PlusIcon
             aria-label="등록 아이콘"
-            className="h-48 w-48 text-gray-500"
+            className="h-48 w-48 text-gray-400 group-hover:text-nomad-black"
           />
-          <span className="mt-1 text-gray-600">{label}</span>
+          <span className="mt-1 text-gray-400 group-hover:text-nomad-black">
+            {label}
+          </span>
         </label>
 
         <input
@@ -71,13 +73,13 @@ export default function ImageUploader({
         />
 
         {imagePreviewUrls.map((url, index) => (
-          <div key={index} className="relative">
+          <div key={index} className="relative p-4">
             <Image
               src={url}
               alt="미리보기 이미지"
               width={206}
               height={206}
-              className="mr-14 mt-14 rounded-lg object-cover"
+              className="mr-14 rounded-lg object-cover"
             />
             <button
               type="button"

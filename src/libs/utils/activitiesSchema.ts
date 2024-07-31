@@ -6,11 +6,9 @@ export const activitiesSchema = yup.object().shape({
   description: yup.string().required('설명을 입력해주세요.'),
   price: yup
     .number()
-    .transform((value, originalValue) =>
-      originalValue.trim() === '' ? 0 : value,
-    )
-    .positive('가격을 입력해주세요.'),
-
+    .typeError('가격을 입력해주세요.')
+    .positive('가격을 0보다 큰 값으로 입력해주세요.')
+    .required('가격을 입력해주세요.'),
   address: yup.string().required('주소를 입력해주세요.'),
   schedules: yup
     .array()

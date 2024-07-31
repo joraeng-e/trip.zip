@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="flex-center w-full gap-12 md:basis-1/2 md:justify-between lg:basis-1/2 [&_>div]:text-[#676767]">
           <div>
             <Link href="https://github.com/joraeng-e/trip.zip">
-              <p>@Joraeng-e</p>
+              <p className="whitespace-nowrap">@Joraeng-e</p>
             </Link>
           </div>
           <div className="flex gap-12 md:gap-30">
