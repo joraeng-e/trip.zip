@@ -6,26 +6,44 @@ import Carousel from '@/components/activities/Carousel';
 import CategoryMenu from '@/components/activities/CategoryMenu';
 import ActivitiesLayout from '@/components/activities/Layout';
 import SearchBox from '@/components/activities/SearchBox';
-import { Activity } from '@/components/activities/type';
 import Pagination from '@/components/commons/Pagination';
+import useDeviceState from '@/hooks/useDeviceState';
+import { getActivities } from '@/libs/api/activities';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
-const MOCK_POPULAR_ACTIVITY: Activity = {
-  id: 1,
-  userId: 101,
-  title: '함께 배우면 즐거운 스트릿 댄스',
-  description: '설명',
-  category: '스포츠',
-  price: 38000,
-  address: '123 Beachside Ave, Santa Monica, CA',
-  bannerImageUrl:
-    'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722240012101.png',
-  rating: 4.8,
-  reviewCount: 127,
-  createdAt: '2023-01-15T08:30:00Z',
-  updatedAt: '2023-07-10T10:45:00Z',
+const PAGE_SIZE_BY_DEVICE = {
+  MOBILE: 4,
+  TABLET: 9,
+  PC: 8,
 };
 
 export default function Activites() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const deviceState = useDeviceState();
+
+  const { data } = useQuery({
+    queryKey: ['activities', { currentPage }],
+    queryFn: () => getActivities({ sort: 'latest', page: currentPage }),
+  });
+
+  const { data: popularActivitiesData } = useQuery({
+    queryKey: ['activities', 'popular'],
+    queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
+  });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
+    if (!data) return;
+
+    const pageSize = PAGE_SIZE_BY_DEVICE[deviceState];
+    setTotalPages(Math.ceil(data.totalCount / pageSize));
+  }, [deviceState, data]);
+
   return (
     <>
       <Carousel />
@@ -36,9 +54,9 @@ export default function Activites() {
             🔥인기 체험
           </h1>
           <div className="no-scrollbar -m-20 flex gap-16 overflow-x-auto p-20 md:gap-32 xl:gap-24">
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
+            {popularActivitiesData?.activities.map((activity) => (
+              <PopularActivityCard key={activity.id} data={activity} />
+            ))}
           </div>
         </div>
 
@@ -49,16 +67,15 @@ export default function Activites() {
             🛼 모든 체험
           </h1>
           <div className="grid grid-cols-2 gap-x-8 gap-y-5 md:grid-cols-3 md:gap-x-16 md:gap-y-32 xl:grid-cols-4 xl:gap-x-24 xl:gap-y-48">
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
+            {data?.activities.map((activity) => (
+              <ActivityCard key={activity.id} data={activity} />
+            ))}
           </div>
         </div>
       </ActivitiesLayout>
 
       <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
-        <Pagination totalPages={10} />
+        <Pagination onPageChange={handlePageChange} totalPages={totalPages} />
       </div>
     </>
   );

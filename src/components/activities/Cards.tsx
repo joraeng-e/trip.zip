@@ -1,18 +1,25 @@
 import { RoundStar } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
+import { SyntheticEvent, useState } from 'react';
 
 import type { Activity } from './type';
 
 export function ActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
+  const [imageSrc, setImageSrc] = useState(bannerImageUrl);
+
+  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    setImageSrc('/imgs/no-img.png');
+  };
 
   return (
     <Link href={`/activity/${id}`} className="group w-full">
       <div className="relative aspect-square w-full">
         <Image
-          src={bannerImageUrl}
+          src={imageSrc}
           fill
+          onError={handleImageError}
           alt="banner"
           className="rounded-[20px] object-cover shadow-none transition-all duration-300 group-hover:translate-y-[-3px] group-hover:shadow-lg group-hover:shadow-gray-400"
         />
@@ -39,6 +46,11 @@ export function ActivityCard({ data }: { data: Activity }) {
 
 export function PopularActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
+  const [imageSrc, setImageSrc] = useState(bannerImageUrl);
+
+  const handleImageError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    setImageSrc('/imgs/no-img.png');
+  };
 
   return (
     <Link
@@ -46,9 +58,10 @@ export function PopularActivityCard({ data }: { data: Activity }) {
       className="relative size-186 flex-shrink-0 rounded-[20px] px-20 pb-24 text-white shadow-none transition-all duration-300 hover:translate-y-[-3px] hover:shadow-lg hover:shadow-gray-400 md:size-[384px]"
     >
       <Image
-        src={bannerImageUrl}
+        src={imageSrc}
         alt="banner"
         fill
+        onError={handleImageError}
         className="absolute -z-10 rounded-[20px] brightness-75 filter"
       />
 
