@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <div className="w-full bg-nomad-black px-38 pb-66 pt-32 md:gap-60 md:px-200 md:pb-108">
+    <div className="absolute bottom-0 w-full bg-nomad-black px-38 pb-66 pt-32 md:gap-60 md:px-200 md:pb-108">
       <div className="flex-center flex-col gap-24 md:flex-row md:justify-between">
         <div className="flex-center w-full gap-12 md:basis-1/2 md:justify-between lg:basis-1/2 [&_>div]:text-[#676767]">
           <div>
