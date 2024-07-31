@@ -39,6 +39,7 @@ export default function Signup() {
     mode: 'all',
   });
 
+  // 모달 메시지에 따른 모달 content 설정 및 폼 제출 후 주소 이동
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
