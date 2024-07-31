@@ -6,6 +6,7 @@ import DeleteIcon from '/public/icon/deleteIcon.svg';
 import FacebookIcon from '/public/icon/facebookIcon.svg';
 import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
+import Logout from '/public/icon/logout.svg';
 import MinusTimeIcon from '/public/icon/minusTimeIcon.svg';
 import NotificationIcon from '/public/icon/notificationIcon.svg';
 import PaginationArrowLeft from '/public/icon/paginationArrowLeft.svg';
@@ -36,6 +37,7 @@ export {
   InstagramIcon,
   TwitterIcon,
   KebabIcon,
+  Logout,
   MinusTimeIcon,
   PlusTimeIcon,
   NotificationIcon,
