@@ -31,9 +31,16 @@ export default function PasswordInput({
   onBlur,
 }: PasswordInputProps) {
   const [isVisibilityIcon, setIsVisibilityIcon] = useState(false);
+  const [isVibrating, setIsVibrating] = useState(false);
 
   const togglePasswordVisibility = () => {
     setIsVisibilityIcon(!isVisibilityIcon);
+  };
+
+  const handleBlur = () => {
+    if (onBlur) onBlur();
+    setIsVibrating(true);
+    setTimeout(() => setIsVibrating(false), 300);
   };
 
   return (
@@ -43,8 +50,8 @@ export default function PasswordInput({
         id={name}
         placeholder={placeholder}
         {...register}
-        onBlur={onBlur}
-        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && 'border-red-400'}`}
+        onBlur={handleBlur}
+        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error && 'animate-vibration border-red-400'} ${isVibrating && 'animate-vibration'}`}
       />
       {isVisibilityIcon ? (
         <PasswordOnIcon
