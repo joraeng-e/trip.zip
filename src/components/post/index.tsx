@@ -1,9 +1,7 @@
-import Button from '@/components/button';
-import Input from '@/components/input/Input';
-import Textarea from '@/components/input/Textarea';
 import { activitiesSchema } from '@/libs/utils/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PostActivitiesRequest } from '@trip.zip-api';
+import { useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -11,10 +9,15 @@ import {
   useFormContext,
 } from 'react-hook-form';
 
-import DateTime from './activities/DateTime';
-import ImageUploader from './activities/ImageUpload';
+import Button from '../commons/Button';
+import Input from '../commons/Input/Input';
+import Textarea from '../commons/Input/Textarea';
+import Dropdown from '../dropdown';
+import DateTime from './activitiesForm/DateTime';
+import ImageUploader from './activitiesForm/ImageUpload';
 
-export default function PostActivities() {
+export default function MyActivities() {
+  const [values, setValues] = useState('카테고리');
   const methods = useForm<PostActivitiesRequest>({
     resolver: yupResolver(activitiesSchema),
   });
@@ -36,12 +39,9 @@ export default function PostActivities() {
 
   return (
     <FormProvider {...methods}>
-      <form
-        className="center my-24 max-w-792"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="flex items-center justify-between">
-          <h1 className="mb-24 text-3xl-bold">내 체험 등록</h1>
+      <form className="center my-24" onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-24 flex items-center justify-between">
+          <h1 className="text-3xl-bold">내 체험 등록</h1>
           <Button type="submit" className="max-w-120" hasICon={true}>
             등록하기
           </Button>
@@ -53,19 +53,30 @@ export default function PostActivities() {
             placeholder="제목"
             register={register('title')}
             error={errors.title}
+            maxWidth="792px"
           />
-          <Input
-            name="category"
-            type="text"
-            placeholder="카테고리"
-            register={register('category')}
-            error={errors.category}
-          />
+          <Dropdown
+            selected={values}
+            setSelected={setValues}
+            width={640}
+            height={58}
+          >
+            <Dropdown.Button />
+            <Dropdown.Body>
+              <Dropdown.Item value="문화 예술" />
+              <Dropdown.Item value="식음료" />
+              <Dropdown.Item value="스포츠" />
+              <Dropdown.Item value="투어" />
+              <Dropdown.Item value="관광" />
+              <Dropdown.Item value="웰빙" />
+            </Dropdown.Body>
+          </Dropdown>
           <Textarea
             name="description"
             placeholder="설명"
             register={register('description')}
             error={errors.description}
+            maxWidth="792px"
           />
           <h3>가격</h3>
           <Input
@@ -74,6 +85,7 @@ export default function PostActivities() {
             placeholder="가격"
             register={register('price')}
             error={errors.price}
+            maxWidth="792px"
           />
           <h3>주소</h3>
           <Input
@@ -82,6 +94,7 @@ export default function PostActivities() {
             placeholder="주소"
             register={register('address')}
             error={errors.address}
+            maxWidth="792px"
           />
           <h3>예약 가능한 시간대</h3>
           <DateTime />

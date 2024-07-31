@@ -18,6 +18,7 @@ export default function Button({ ...rest }) {
       }}
       className={`flex-center min-h-41 min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-20 pr-12 outline-none`}
       onClick={toggleDropdown}
+      type="button"
     >
       <span>{selected}</span>
       <motion.div

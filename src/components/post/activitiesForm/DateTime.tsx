@@ -70,35 +70,41 @@ export default function DateTime() {
       </div>
       <div>
         {entries.map((entry, index) => (
-          <div key={index} className="flex gap-5 [&>div]:flex [&>div]:flex-col">
-            <div>
-              <input
-                type="text"
-                value={entry.date}
-                readOnly
-                className="basic-input w-full min-w-[130px] max-w-[380px]"
-              />
+          <>
+            <hr className="my-16 max-w-769" />
+            <div
+              key={index}
+              className="flex gap-5 [&>div]:flex [&>div]:flex-col"
+            >
+              <div>
+                <input
+                  type="text"
+                  value={entry.date}
+                  readOnly
+                  className="basic-input w-full min-w-[130px] max-w-[380px]"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={entry.startTime}
+                  readOnly
+                  className="basic-input w-full min-w-[80px] max-w-[140px]"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  value={entry.endTime}
+                  readOnly
+                  className="basic-input w-full min-w-[80px] max-w-[140px]"
+                />
+              </div>
+              <button type="button" onClick={() => handleRemoveEntry(index)}>
+                <MinusTimeIcon className="text-white hover:text-gray-200" />
+              </button>
             </div>
-            <div>
-              <input
-                type="text"
-                value={entry.startTime}
-                readOnly
-                className="basic-input w-full min-w-[80px] max-w-[140px]"
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                value={entry.endTime}
-                readOnly
-                className="basic-input w-full min-w-[80px] max-w-[140px]"
-              />
-            </div>
-            <button onClick={() => handleRemoveEntry(index)}>
-              <MinusTimeIcon className="text-white hover:text-gray-200" />
-            </button>
-          </div>
+          </>
         ))}
       </div>
     </div>

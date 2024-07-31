@@ -15,6 +15,7 @@ const Body: React.FC<BodyProps> = ({ children, ...rest }) => {
       className="absolute mt-8 flex h-auto flex-col justify-between gap-10 rounded-xl border-1 border-custom-gray-300 bg-white p-10 shadow-md"
       style={{
         width: width,
+        zIndex: 999,
       }}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
