@@ -8,8 +8,11 @@ export default function ReservationState() {
     <Dropdown selected={value} setSelected={setValue} width={200} height={51}>
       <Dropdown.Button />
       <Dropdown.Body>
-        <Dropdown.Item value="value1" />
-        <Dropdown.Item value="value2" />
+        <Dropdown.Item text="최신순" value="recent" />
+        <Dropdown.Item text="낮은" value="lowest">
+          낮은가격순
+        </Dropdown.Item>
+        <Dropdown.Item text="높은" value="highest" />
       </Dropdown.Body>
     </Dropdown>
   );

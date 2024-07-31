@@ -6,7 +6,7 @@ import { useDropdownContext } from '.';
 const ArrowDown = '/icon/arrowDown.svg';
 
 export default function Button({ ...rest }) {
-  const { toggleDropdown, isOpen, selected, width, height } =
+  const { toggleDropdown, isOpen, width, height, buttonText } =
     useDropdownContext();
 
   return (
@@ -19,7 +19,7 @@ export default function Button({ ...rest }) {
       className={`flex-center min-h-41 w-full min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-20 pr-12 outline-none`}
       onClick={toggleDropdown}
     >
-      <span>{selected}</span>
+      <span>{buttonText}</span>
       <motion.div
         initial={{ rotate: 0 }}
         animate={{ rotate: isOpen ? 180 : 0 }}
