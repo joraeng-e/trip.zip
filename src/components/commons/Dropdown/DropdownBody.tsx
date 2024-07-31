@@ -12,7 +12,7 @@ const Body: React.FC<BodyProps> = ({ children, ...rest }) => {
 
   return isOpen ? (
     <motion.ul
-      className="absolute mt-8 flex h-auto flex-col justify-between gap-10 rounded-xl border-1 border-custom-gray-300 bg-white p-10 shadow-md"
+      className="absolute z-50 mt-8 flex h-auto flex-col justify-between gap-10 rounded-xl border-1 border-custom-gray-300 bg-white p-10 shadow-md"
       style={{
         width: width,
       }}
