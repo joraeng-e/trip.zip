@@ -52,7 +52,7 @@ function Mypage() {
 
   return (
     <div
-      className={`page-container flex justify-between gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
+      className={`page-container flex justify-between md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
       <div className="hidden md:block">
         <ProfileSideBar />
@@ -69,7 +69,9 @@ function Mypage() {
           </motion.nav>
         </div>
       )}
-      {(isMobile && isOpen) || <div className="flex-1">{renderPage()}</div>}
+      {(isMobile && isOpen) || (
+        <div className="w-full md:flex-1">{renderPage()}</div>
+      )}
     </div>
   );
 }
