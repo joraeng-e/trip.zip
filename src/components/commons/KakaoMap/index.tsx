@@ -104,8 +104,8 @@ export default function KakaoMap({ address }: KakaoMapProps) {
 
   return (
     <>
-      <div className="flex items-center justify-center pt-2">
-        <div ref={mapRef} className="h-500 w-[95%]" />
+      <div className="z-0 flex items-center justify-center pt-2">
+        <div ref={mapRef} className="z-0 h-500 w-[95%]" />
       </div>
     </>
   );
