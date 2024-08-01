@@ -84,6 +84,7 @@ export default function Info() {
           error={errors.email}
           maxWidth="792px"
           onBlur={() => trigger('email')}
+          disabled={true}
         />
         <Input
           label="비밀번호"
