@@ -1,8 +1,15 @@
+import { Category } from '@trip.zip-api';
 import * as yup from 'yup';
 
 export const activitiesSchema = yup.object().shape({
   title: yup.string().required('제목을 입력해주세요.'),
-  category: yup.string().required('카테고리를 선택해주세요.'),
+  category: yup
+    .mixed<Category>()
+    .oneOf(
+      ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'] as Category[],
+      '유효한 카테고리를 선택해주세요.',
+    )
+    .required('카테고리를 선택해주세요.'),
   description: yup.string().required('설명을 입력해주세요.'),
   price: yup
     .number()
@@ -24,7 +31,6 @@ export const activitiesSchema = yup.object().shape({
   bannerImageUrl: yup.string().required('배너 이미지를 등록해주세요.'),
   subImageUrls: yup
     .array()
-    .of(yup.string())
-    .max(4, '최대 4개의 소개 이미지를 등록할 수 있습니다.')
-    .optional(),
+    .of(yup.string().url('유효한 URL을 입력해주세요.'))
+    .max(4, '최대 4개의 소개 이미지를 등록할 수 있습니다.'),
 });

@@ -1,39 +1,63 @@
+import { postActivityImage } from '@/libs/api/activities';
 import { PlusIcon, XIcon } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
+import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 interface ImageUploadProps {
+  name: string;
   maxImages?: number;
-  onChange: (imageUrls: string[]) => void;
   label?: string;
 }
 
 export default function ImageUploader({
+  name,
   maxImages = 1,
   label = '이미지 등록',
-  onChange,
 }: ImageUploadProps) {
+  const { setValue } = useFormContext();
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
-  useEffect(() => {
-    onChange(imagePreviewUrls);
-  }, [imagePreviewUrls, onChange]);
+  const imageUploadMutation = useMutation({
+    mutationFn: postActivityImage,
+    onSuccess: (data) => {
+      setImagePreviewUrls((prevUrls) => {
+        const updatedUrls = [...prevUrls, data.activityImageUrl].slice(
+          0,
+          maxImages,
+        );
+        return Array.from(new Set(updatedUrls)); // Remove duplicate URLs
+      });
+    },
+    onError: (error) => {
+      console.error('이미지 업로드 실패:', error);
+      // 에러 처리 로직 추가 (예: 에러 메시지 표시)
+    },
+  });
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (maxImages === 1) {
+      setValue(name, imagePreviewUrls[0] || ''); // 단일 이미지 URL 설정
+    } else {
+      setValue(name, imagePreviewUrls); // 다중 이미지 URL 배열 설정
+    }
+  }, [imagePreviewUrls, name, setValue, maxImages]);
+
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newImageUrls = Array.from(files).map((file) =>
-        URL.createObjectURL(file),
-      );
-      setImagePreviewUrls((prevUrls) =>
-        [...prevUrls, ...newImageUrls].slice(0, maxImages),
-      );
+      for (let i = 0; i < files.length; i++) {
+        if (imagePreviewUrls.length >= maxImages) break;
+        await imageUploadMutation.mutateAsync(files[i]);
+      }
     }
   };
 
   const handleDelete = (index: number) => {
-    setImagePreviewUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
+    const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
+    setImagePreviewUrls(updatedUrls);
   };
 
   return (
@@ -52,14 +76,21 @@ export default function ImageUploader({
             cursor:
               imagePreviewUrls.length >= maxImages ? 'not-allowed' : 'pointer',
           }}
+          aria-label={label}
         >
-          <PlusIcon
-            aria-label="등록 아이콘"
-            className="h-48 w-48 text-gray-400 group-hover:text-nomad-black"
-          />
-          <span className="mt-1 text-gray-400 group-hover:text-nomad-black">
-            {label}
-          </span>
+          {imageUploadMutation.isPending ? (
+            <span>업로드 중...</span>
+          ) : (
+            <>
+              <PlusIcon
+                aria-label="등록 아이콘"
+                className="h-48 w-48 text-gray-400 group-hover:text-nomad-black"
+              />
+              <span className="mt-1 text-gray-400 group-hover:text-nomad-black">
+                {label}
+              </span>
+            </>
+          )}
         </label>
 
         <input
@@ -68,8 +99,11 @@ export default function ImageUploader({
           onChange={handleImageChange}
           accept="image/*"
           className="hidden"
-          multiple
-          disabled={imagePreviewUrls.length >= maxImages}
+          multiple={maxImages > 1}
+          disabled={
+            imagePreviewUrls.length >= maxImages ||
+            imageUploadMutation.isPending
+          }
         />
 
         {imagePreviewUrls.map((url, index) => (
@@ -94,6 +128,11 @@ export default function ImageUploader({
           </div>
         ))}
       </div>
+      {imageUploadMutation.isError && (
+        <p className="mt-2 text-red-500">
+          이미지 업로드 중 오류가 발생했습니다.
+        </p>
+      )}
     </div>
   );
 }
