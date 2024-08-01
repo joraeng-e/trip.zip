@@ -4,6 +4,7 @@ import {
   Address,
   BannerImage,
   Description,
+  MobileBannerImage,
   Review,
   Title,
 } from '@/components/ActivityDetail';
@@ -21,9 +22,7 @@ export default function ActivityDetail() {
 
   return (
     <>
-      <div>data id:{DetailData.id}</div>
-      <div>router id:{ActivityId}</div>
-      <div>
+      <div className="basic-container">
         <Title
           title={DetailData.title}
           address={DetailData.address}
@@ -31,10 +30,20 @@ export default function ActivityDetail() {
           rating={DetailData.rating}
           reviewCount={DetailData.reviewCount}
         />
-        <BannerImage
-          bannerImageUrl={DetailData.bannerImageUrl}
-          subImageUrl={subImageUrls} // 서브 이미지 URL 배열 전달
-        />
+
+        <div className="hidden md:block">
+          <BannerImage
+            bannerImageUrl={DetailData.bannerImageUrl}
+            subImageUrl={subImageUrls} // 서브 이미지 URL 배열 전달
+          />
+        </div>
+        <div className="md:hidden">
+          <MobileBannerImage
+            bannerImageUrl={DetailData.bannerImageUrl}
+            subImageUrl={subImageUrls} // 서브 이미지 URL 배열 전달
+          />
+        </div>
+
         <Description description={DetailData.description} />
         <Address address={DetailData.address} />
         <Review
