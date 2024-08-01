@@ -31,7 +31,7 @@ const sidebar = {
 function MyPage() {
   const [isOpen, toggleOpen] = useCycle(false, true);
 
-  const { activeTab, setActiveTab } = useTabContext();
+  const { activeTab } = useTabContext();
 
   const renderPage = () => {
     switch (activeTab) {
@@ -52,7 +52,7 @@ function MyPage() {
 
   return (
     <div
-      className={`page-container min-screen flex pt-100 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
+      className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
       <div className="hidden md:block">
         <ProfileSideBar toggleOpen={toggleOpen} />

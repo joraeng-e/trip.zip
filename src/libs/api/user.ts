@@ -29,9 +29,7 @@ export async function postUser(
 // 내 정보 조회
 export async function getUser(): Promise<GetUserInfoResponse> {
   try {
-    // POST 요청
     const response = await axiosInstance.get<GetUserInfoResponse>('/users/me');
-
     return response.data;
   } catch (error) {
     console.error('getUser 함수에서 오류 발생:', error);
