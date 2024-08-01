@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 import PasswordInput from './PasswordInput';
@@ -55,6 +55,15 @@ export default function Input({
   maxWidth = '640px',
   onBlur,
 }: InputProps) {
+  const [isVibrating, setIsVibrating] = useState(false);
+
+  const handleBlur = () => {
+    if (onBlur) onBlur();
+    if (!error) return;
+    setIsVibrating(true);
+    setTimeout(() => setIsVibrating(false), 300);
+  };
+
   return (
     <div className={`relative flex w-full flex-col gap-2`} style={{ maxWidth }}>
       <label htmlFor={name}>{label}</label>
@@ -64,8 +73,8 @@ export default function Input({
           id={name}
           placeholder={placeholder}
           {...register}
-          onBlur={onBlur}
-          className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${error ? 'border-red-400' : ''}`}
+          onBlur={handleBlur}
+          className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'}`}
         />
       )}
       {type === 'password' && (
@@ -74,7 +83,7 @@ export default function Input({
           placeholder={placeholder}
           register={register}
           error={error}
-          onBlur={onBlur}
+          onBlur={handleBlur}
         />
       )}
       {error && (
@@ -84,4 +93,7 @@ export default function Input({
       )}
     </div>
   );
+}
+function setIsVibrating(arg0: boolean) {
+  throw new Error('Function not implemented.');
 }

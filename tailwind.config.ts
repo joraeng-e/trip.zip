@@ -107,6 +107,15 @@ const config: Config = {
       'xs-medium': ['12px', { lineHeight: '18px', fontWeight: '500' }],
       'xs-regular': ['12px', { lineHeight: '18px', fontWeight: '400' }],
     },
+    keyframes: {
+      vibration: {
+        from: { transform: 'rotate(0.5deg)' },
+        to: { transform: 'rotate(-0.5deg)' },
+      },
+    },
+    animation: {
+      vibration: 'vibration .1s ease-in-out 5',
+    },
   },
   plugins: [],
 };

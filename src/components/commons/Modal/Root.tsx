@@ -10,15 +10,15 @@ import {
 
 export interface ModalRootProps extends PropsWithChildren {
   open?: boolean;
-  onOpenChange?: (open?: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
 }
 interface ModalContextProps extends Pick<ModalRootProps, 'open'> {
-  handleOpenChange?: (open?: boolean) => void;
+  handleOpenChange: (open: boolean) => void;
   trigger: RefObject<HTMLDivElement> | undefined;
   setTrigger: Dispatch<SetStateAction<RefObject<HTMLDivElement> | undefined>>;
 }
 const ModalContext = createContext<ModalContextProps>({
-  open: undefined,
+  open: false,
   handleOpenChange: () => {},
   trigger: undefined,
   setTrigger: () => {},
@@ -34,11 +34,11 @@ export const useModalContext = () => {
 
 export default function ModalRoot(props: ModalRootProps) {
   const { children, open: openProp = false, onOpenChange } = props;
-  const [open, setOpen] = useState<boolean | undefined>(openProp);
+  const [open, setOpen] = useState<boolean>(openProp);
   const [trigger, setTrigger] = useState<
     RefObject<HTMLDivElement> | undefined
   >();
-  const handleOpenChange = (currentOpen?: boolean) => {
+  const handleOpenChange = (currentOpen: boolean) => {
     console.log({ currentOpen });
     setOpen(currentOpen);
     onOpenChange?.(currentOpen);
