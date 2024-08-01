@@ -1,37 +1,24 @@
-import Device, {
-  MIN_DESKTOP_WIDTH,
-  MIN_TABLET_WIDTH,
-} from '@/libs/constants/device';
+import Device from '@/libs/constants/device';
 import { useEffect, useState } from 'react';
 
-function getDeviceState() {
-  if (typeof window === 'undefined') return Device.Mobile;
-
-  const width = window.innerWidth;
-
-  if (width < MIN_TABLET_WIDTH) return Device.Mobile;
-  if (width < MIN_DESKTOP_WIDTH) return Device.Tablet;
-
-  return Device.PC;
-}
+import { useMediaQuery } from './useMediaQeury';
 
 export default function useDeviceState() {
-  const [deviceState, setDeviceState] = useState<Device>(Device.Mobile);
+  const [deviceState, setDeviceState] = useState(Device.Mobile);
+
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1279px)');
+  const isPC = useMediaQuery('(min-width: 1280px)');
 
   useEffect(() => {
-    function handleResize() {
-      window.requestAnimationFrame(() => {
-        setDeviceState(getDeviceState());
-      });
+    if (isMobile) {
+      setDeviceState(Device.Mobile);
+    } else if (isTablet) {
+      setDeviceState(Device.Tablet);
+    } else if (isPC) {
+      setDeviceState(Device.PC);
     }
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  }, [isMobile, isTablet, isPC]);
 
   return deviceState;
 }

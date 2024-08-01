@@ -110,6 +110,10 @@ export default function Activites() {
     updateQueryParams({ size: PAGE_SIZE_BY_DEVICE[deviceState] });
   }, [deviceState]);
 
+  useEffect(() => {
+    console.log(deviceState);
+  }, [deviceState]);
+
   return (
     <>
       <CarouselContainer />
