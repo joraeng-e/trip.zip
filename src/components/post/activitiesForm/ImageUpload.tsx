@@ -28,20 +28,19 @@ export default function ImageUploader({
           0,
           maxImages,
         );
-        return Array.from(new Set(updatedUrls)); // Remove duplicate URLs
+        return Array.from(new Set(updatedUrls));
       });
     },
     onError: (error) => {
       console.error('이미지 업로드 실패:', error);
-      // 에러 처리 로직 추가 (예: 에러 메시지 표시)
     },
   });
 
   useEffect(() => {
     if (maxImages === 1) {
-      setValue(name, imagePreviewUrls[0] || ''); // 단일 이미지 URL 설정
+      setValue(name, imagePreviewUrls[0] || '');
     } else {
-      setValue(name, imagePreviewUrls); // 다중 이미지 URL 배열 설정
+      setValue(name, imagePreviewUrls);
     }
   }, [imagePreviewUrls, name, setValue, maxImages]);
 

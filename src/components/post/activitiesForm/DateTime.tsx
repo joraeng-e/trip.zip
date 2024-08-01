@@ -45,10 +45,13 @@ export default function DateTime() {
   };
 
   const isValidEntry = useMemo(() => {
-    if (!entry.date || !entry.startTime || !entry.endTime) return false;
-    if (entry.date < todayDate) return false;
-    if (entry.startTime >= entry.endTime) return false;
-    return true;
+    return (
+      entry.date &&
+      entry.startTime &&
+      entry.endTime &&
+      entry.date >= todayDate &&
+      entry.startTime < entry.endTime
+    );
   }, [entry, todayDate]);
 
   const isDuplicateEntry = (newEntry: DateTimeInput) => {
@@ -88,7 +91,9 @@ export default function DateTime() {
           <input
             id="date"
             type="date"
-            className="basic-input max-w-380"
+            className={classNames('basic-input max-w-380', {
+              'border-red-500': errors.schedules?.message,
+            })}
             value={entry.date}
             min={todayDate}
             onChange={handleChange}
@@ -101,7 +106,9 @@ export default function DateTime() {
           <input
             id="startTime"
             type="time"
-            className="basic-input max-w-140"
+            className={classNames('basic-input max-w-140', {
+              'border-red-500': errors.schedules?.message,
+            })}
             value={entry.startTime}
             onChange={handleChange}
           />
@@ -113,7 +120,9 @@ export default function DateTime() {
           <input
             id="endTime"
             type="time"
-            className="basic-input max-w-140"
+            className={classNames('basic-input max-w-140', {
+              'border-red-500': errors.schedules?.message,
+            })}
             value={entry.endTime}
             onChange={handleChange}
           />
@@ -131,9 +140,9 @@ export default function DateTime() {
           <PlusTimeIcon className="mt-18 text-green-800 hover:text-nomad-black" />
         </button>
       </div>
-      {errors.schedules && typeof errors.schedules.message === 'string' && (
+      {errors.schedules && (
         <div className="pl-8 text-xs-regular text-custom-red-200" role="alert">
-          {errors.schedules.message}
+          {errors.schedules.message as string}
         </div>
       )}
       <div className="space-y-4">
