@@ -28,7 +28,12 @@ const MOCK_POPULAR_ACTIVITY: Activity = {
 export default function Activites() {
   return (
     <>
-      <Carousel />
+      <Carousel.Root>
+        <Carousel.Slide1 />
+        <Carousel.Slide2 />
+        <Carousel.Slide3 />
+      </Carousel.Root>
+
       <ActivitiesLayout>
         <SearchBox />
         <div className="mt-24 md:mt-18 xl:mt-32">
