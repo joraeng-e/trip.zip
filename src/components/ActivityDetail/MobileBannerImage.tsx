@@ -1,5 +1,10 @@
+import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import React, { useState } from 'react';
+
+import ThumbnailImage from './ThumbnailImage';
+
+// 썸네일 컴포넌트 임포트
 
 interface MobileImageProps {
   bannerImageUrl: string;
@@ -22,9 +27,9 @@ export default function MobileBannerImage(props: MobileImageProps) {
   };
 
   return (
-    <div className="my-15 flex">
+    <div className="my-15 flex flex-col">
       <div
-        className={`rounded- relative flex h-310 w-full items-center justify-center overflow-hidden ${className}`}
+        className={`relative flex h-310 w-full items-center justify-center overflow-hidden rounded ${className}`}
       >
         <Image
           src={images[currentIndex]}
@@ -41,29 +46,41 @@ export default function MobileBannerImage(props: MobileImageProps) {
 
         {/* 이전 이미지 버튼 */}
         <button
-          className="absolute left-4 top-1/2 -translate-y-1/2 transform rounded bg-custom-gray-300 px-4 py-2 text-white"
+          className="absolute left-0 top-1/2 -translate-y-1/2 transform rounded bg-custom-gray-300 px-4 py-16 opacity-50"
           onClick={prevImage}
         >
-          뒤로
+          <ArrowLeft className="size-20" />
         </button>
 
         {/* 다음 이미지 버튼 */}
         <button
-          className="absolute right-4 top-1/2 -translate-y-1/2 transform rounded bg-custom-gray-300 px-4 py-2 text-white"
+          className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded bg-custom-gray-300 px-4 py-16 opacity-50"
           onClick={nextImage}
         >
-          다음
+          <ArrowRight className="size-20" />
         </button>
 
         {/* 이미지 개수 표시 버튼 */}
-        <div className="absolute bottom-10 right-20 flex">
-          <button
-            className="rounded bg-custom-green-300 px-4 py-2 text-white"
-            onClick={() => console.log('클릭')}
-          >
+        <div className="absolute bottom-10 right-16 flex">
+          <div className="rounded bg-custom-gray-700 px-8 py-2 text-custom-gray-100">
             {`${currentIndex + 1} / ${totalImages}`}
-          </button>
+          </div>
         </div>
+      </div>
+
+      {/* 썸네일 이미지 표시 */}
+      <div className="mt-10 flex space-x-8 overflow-x-auto whitespace-nowrap">
+        {images.map((img, index) => (
+          <div className="w-60 flex-none" key={index}>
+            {' '}
+            {/* 썸네일의 너비 고정 */}
+            <ThumbnailImage
+              src={img}
+              alt={`thumbnail-${index}`}
+              onClick={() => setCurrentIndex(index)} // 썸네일 클릭 시 해당 이미지로 변경
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
