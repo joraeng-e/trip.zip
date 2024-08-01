@@ -27,6 +27,8 @@ const API_SORT_VALUE = {
 
 type SortOptions = keyof typeof API_SORT_VALUE;
 
+//
+
 export default function Activites() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
