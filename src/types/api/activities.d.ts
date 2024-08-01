@@ -104,19 +104,7 @@ declare module '@trip.zip-api' {
   export type GetActivityReviewsResponse = {
     averageRating: number;
     totalCount: number;
-    reviews: {
-      id: number;
-      user: {
-        profileImageUrl: string | null;
-        nickname: string;
-        id: number;
-      };
-      activityId: number;
-      rating: number;
-      content: string;
-      createdAt: string;
-      updatedAt: string;
-    }[];
+    reviews: ReviewResponse[];
   };
 
   // 체험 예약 신청
@@ -145,5 +133,19 @@ declare module '@trip.zip-api' {
   // 체험 이미지 url 생성
   export type PostActivitiesImageResponse = {
     activityImageUrl: string;
+  };
+
+  export type ReviewResponse = {
+    id: number;
+    user: {
+      profileImageUrl: string | null;
+      nickname: string;
+      id: number;
+    };
+    activityId: number;
+    rating: number;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
   };
 }
