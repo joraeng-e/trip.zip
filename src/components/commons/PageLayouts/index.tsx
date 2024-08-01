@@ -37,6 +37,11 @@ export default function Layout({
     if (!result) router.push('/login');
   }
 
+  if (pathname === '/login' || pathname === '/signup') {
+    showHeader = false;
+    showFooter = false;
+  }
+
   return (
     <>
       {showHeader && <Header />}
