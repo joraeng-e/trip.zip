@@ -1,16 +1,16 @@
-import {
-  ActivityCard,
-  PopularActivityCard,
-} from '@/components/activities/Cards';
-import Carousel from '@/components/activities/Carousel';
+import ActivityGrid from '@/components/activities/ActivitiyGrid';
+import CarouselContainer from '@/components/activities/Carousel';
 import CategoryMenu from '@/components/activities/CategoryMenu';
+import DropdownContainer from '@/components/activities/Dropdown';
 import ActivitiesLayout from '@/components/activities/Layout';
-import SearchBox from '@/components/activities/SearchBox';
-import Dropdown from '@/components/commons/Dropdown';
+import PopularActivities from '@/components/activities/PopularActivities';
+import SearchBox from '@/components/activities/Search/SearchBox';
+import SearchResult from '@/components/activities/Search/SearchResult';
 import Pagination from '@/components/commons/Pagination';
 import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 const PAGE_SIZE_BY_DEVICE = {
@@ -27,10 +27,10 @@ const API_SORT_VALUE = {
 
 type SortOptions = keyof typeof API_SORT_VALUE;
 
-//
-
 export default function Activites() {
-  const [page, setPage] = useState(1);
+  const router = useRouter();
+  const initialPage = parseInt(router.query.page as string, 10) || 1;
+  const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [keyword, setKeyword] = useState<string | undefined>(undefined);
@@ -64,16 +64,35 @@ export default function Activites() {
     queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
   });
 
+  const updateQueryParams = (params: {
+    [key: string]: string | number | undefined;
+  }) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          ...params,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   const handlePageChange = (page: number) => {
     setPage(page);
+    updateQueryParams({ page });
   };
 
   const handleCategoryClick = (category: string | undefined) => {
     setCategory(category);
+    updateQueryParams({ category });
   };
 
   const handleKeyword = (keyword: string) => {
     setKeyword(keyword);
+    updateQueryParams({ keyword });
   };
 
   useEffect(() => {
@@ -83,67 +102,28 @@ export default function Activites() {
     setTotalPages(Math.ceil(data.totalCount / pageSize));
   }, [deviceState, data]);
 
+  useEffect(() => {
+    updateQueryParams({ sort: API_SORT_VALUE[sort as SortOptions] });
+  }, [sort]);
+
+  useEffect(() => {
+    updateQueryParams({ size: PAGE_SIZE_BY_DEVICE[deviceState] });
+  }, [deviceState]);
+
   return (
     <>
-      <Carousel.Root>
-        <Carousel.Slide1 />
-        <Carousel.Slide2 />
-        <Carousel.Slide3 />
-      </Carousel.Root>
+      <CarouselContainer />
 
       <ActivitiesLayout>
         <SearchBox handleKeyword={handleKeyword} />
-        {!keyword && (
-          <div className="mt-24 md:mt-18 xl:mt-32">
-            <h1 className="mb-16 text-18 font-semibold text-nomad-black md:text-36">
-              🔥인기 체험
-            </h1>
-            <div className="no-scrollbar -m-20 flex gap-16 overflow-x-auto p-20 md:gap-32 xl:gap-24">
-              {popularActivitiesData?.activities.map((activity) => (
-                <PopularActivityCard key={activity.id} data={activity} />
-              ))}
-            </div>
-          </div>
-        )}
-
+        {!keyword && <PopularActivities data={popularActivitiesData} />}
         {keyword ? (
-          <>
-            <h1 className="mt-24 text-24 leading-28 md:text-32 xl:mt-40">
-              <span className="font-bold">{keyword}</span>으로 검색한
-              결과입니다.
-            </h1>
-            <span className="mb-16 mt-12 block leading-26 md:mb-24">
-              총 {data?.totalCount}개의 결과
-            </span>
-          </>
+          <SearchResult keyword={keyword} totalCount={data?.totalCount} />
         ) : (
           <div className="mt-40 md:mt-54 xl:mt-60">
             <div className="flex justify-between gap-12">
               <CategoryMenu handleCategoryClick={handleCategoryClick} />
-
-              <Dropdown
-                selected={sort}
-                setSelected={setSort}
-                width={150}
-                height={41}
-              >
-                <Dropdown.Button />
-                <Dropdown.Body>
-                  <Dropdown.Item value="최신순">
-                    <span className="text-14 text-custom-gray-800">최신순</span>
-                  </Dropdown.Item>
-                  <Dropdown.Item value="가격이 낮은 순">
-                    <span className="text-14 text-custom-gray-800">
-                      가격이 낮은 순
-                    </span>
-                  </Dropdown.Item>
-                  <Dropdown.Item value="가격이 높은 순">
-                    <span className="text-14 text-custom-gray-800">
-                      가격이 높은 순
-                    </span>
-                  </Dropdown.Item>
-                </Dropdown.Body>
-              </Dropdown>
+              <DropdownContainer value={sort} setValue={setSort} />
             </div>
 
             <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
@@ -151,16 +131,15 @@ export default function Activites() {
             </h1>
           </div>
         )}
-
-        <div className="grid grid-cols-2 gap-x-8 gap-y-5 md:grid-cols-3 md:gap-x-16 md:gap-y-32 xl:grid-cols-4 xl:gap-x-24 xl:gap-y-48">
-          {data?.activities.map((activity) => (
-            <ActivityCard key={activity.id} data={activity} />
-          ))}
-        </div>
+        <ActivityGrid data={data} />
       </ActivitiesLayout>
 
       <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
-        <Pagination onPageChange={handlePageChange} totalPages={totalPages} />
+        <Pagination
+          onPageChange={handlePageChange}
+          totalPages={totalPages}
+          initialPage={page}
+        />
       </div>
     </>
   );

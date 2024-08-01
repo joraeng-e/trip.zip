@@ -1,7 +1,6 @@
+import Button from '@/components/commons/Button';
 import { BedIcon } from '@/libs/utils/Icon';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-
-import Button from '../commons/Button';
 
 export default function SearchBox({
   handleKeyword,
