@@ -4,20 +4,21 @@ import React from 'react';
 interface ImageProps {
   bannerImageUrl: string;
   subImageUrl?: string[];
+  className?: string;
 }
 
 export default function BannerImage(props: ImageProps) {
-  const { bannerImageUrl, subImageUrl } = props;
+  const { bannerImageUrl, subImageUrl, className } = props;
 
   return (
     <div className="flex">
       {/* 배너 이미지: 왼쪽 절반 차지 */}
-      <div className="relative w-1/2">
+      <div className="relative size-186 flex-shrink-0 rounded-[20px] px-20 pb-24 text-white shadow-none transition-all duration-300 hover:translate-y-[-3px] hover:shadow-lg hover:shadow-gray-400 md:size-[384px]">
         <Image
           src={bannerImageUrl}
-          alt="carousel"
+          alt="banner"
           fill
-          className="object-cover"
+          className="absolute -z-10 rounded-[20px] object-cover brightness-75 filter"
         />
       </div>
 
