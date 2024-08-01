@@ -94,6 +94,3 @@ export default function Input({
     </div>
   );
 }
-function setIsVibrating(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}

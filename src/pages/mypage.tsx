@@ -28,7 +28,7 @@ const sidebar = {
   },
 };
 
-function Mypage() {
+function MyPage() {
   const [isOpen, toggleOpen] = useCycle(false, true);
 
   const { activeTab } = useTabContext();
@@ -52,7 +52,7 @@ function Mypage() {
 
   return (
     <div
-      className={`page-container flex justify-between md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
+      className={`page-container min-screen flex pt-100 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
       <div className="hidden md:block">
         <ProfileSideBar />
@@ -79,7 +79,7 @@ function Mypage() {
 export default function MypageWithProvider() {
   return (
     <TabProvider>
-      <Mypage />
+      <MyPage />
     </TabProvider>
   );
 }
