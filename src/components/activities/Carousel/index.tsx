@@ -8,4 +8,12 @@ const Carousel = {
   Slide3: PaginationSlide3,
 };
 
-export default Carousel;
+export default function CarouselContainer() {
+  return (
+    <Carousel.Root>
+      <Carousel.Slide1 />
+      <Carousel.Slide2 />
+      <Carousel.Slide3 />
+    </Carousel.Root>
+  );
+}
