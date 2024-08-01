@@ -62,8 +62,7 @@ instance.interceptors.response.use(
         alert('다시 로그인해주세요.');
       }
     }
-    alert(`ERROR: ${error.response.data.message}`);
-    return Promise.reject(error);
+    throw error;
   },
 );
 

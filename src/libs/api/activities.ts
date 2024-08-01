@@ -28,7 +28,7 @@ export async function getActivities({
   sort?: 'most_reviewed' | 'price_asc' | 'price_desc' | 'latest';
   page?: number;
   size?: number;
-}): Promise<GetActivitiesResponse> {
+} = {}): Promise<GetActivitiesResponse> {
   try {
     const params = new URLSearchParams({
       method,
