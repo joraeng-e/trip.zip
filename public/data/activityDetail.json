@@ -23,6 +23,54 @@
     {
       "id": 5,
       "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 6,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 7,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 8,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 9,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 10,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 11,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 12,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 13,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 14,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 15,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 16,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 17,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
     }
   ],
   "schedules": [
