@@ -31,7 +31,7 @@ const sidebar = {
 function MyPage() {
   const [isOpen, toggleOpen] = useCycle(false, true);
 
-  const { activeTab } = useTabContext();
+  const { activeTab, setActiveTab } = useTabContext();
 
   const renderPage = () => {
     switch (activeTab) {
@@ -55,7 +55,7 @@ function MyPage() {
       className={`page-container min-screen flex pt-100 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
       <div className="hidden md:block">
-        <ProfileSideBar />
+        <ProfileSideBar toggleOpen={toggleOpen} />
       </div>
       {isMobile && (
         <div className="flex">
@@ -65,7 +65,7 @@ function MyPage() {
               className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100"
               variants={sidebar}
             ></motion.div>
-            {isOpen && <ProfileSideBar />}
+            {isOpen && <ProfileSideBar toggleOpen={toggleOpen} />}
           </motion.nav>
         </div>
       )}
