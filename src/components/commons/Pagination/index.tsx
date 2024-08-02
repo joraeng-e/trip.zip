@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { NextButton, PageList, PrevButton } from './Buttons';
 
@@ -53,11 +53,7 @@ export default function Pagination({
   totalPages,
   initialPage = 1,
 }: Props) {
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (totalPages < initialPage) return totalPages;
-    if (initialPage <= 0) return 1;
-    return initialPage;
-  });
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   const updateCurrentPage = (page: number) => {
     setCurrentPage(page);
@@ -69,6 +65,12 @@ export default function Pagination({
     currentPage,
     updateCurrentPage,
   };
+
+  useEffect(() => {
+    if (totalPages < initialPage) updateCurrentPage(totalPages);
+    else if (initialPage <= 0) updateCurrentPage(1);
+    else updateCurrentPage(initialPage);
+  }, [initialPage, totalPages]);
 
   return (
     <PaginationContext.Provider value={contextValue}>

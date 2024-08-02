@@ -1,12 +1,14 @@
-import { GetActivitiesResponse } from '@trip.zip-api';
+import { getActivities } from '@/libs/api/activities';
+import { useQuery } from '@tanstack/react-query';
 
 import PopularActivityCard from './Card';
 
-export default function PopularActivities({
-  data,
-}: {
-  data?: GetActivitiesResponse;
-}) {
+export default function PopularActivities() {
+  const { data } = useQuery({
+    queryKey: ['activities', 'popular'],
+    queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
+  });
+
   // TODO: 에러, 로딩 처리
   return (
     <>
