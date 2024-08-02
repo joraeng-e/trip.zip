@@ -38,11 +38,9 @@ export async function getUser(): Promise<GetUserInfoResponse> {
 }
 
 // 내 정보 수정
-export async function patchUserInfo({
-  userInfo,
-}: {
-  userInfo: PatchUserInfoRequest;
-}): Promise<PatchUserInfoResponse> {
+export async function patchUserInfo(
+  userInfo: PatchUserInfoRequest,
+): Promise<PatchUserInfoResponse> {
   try {
     const response = await axiosInstance.patch<PatchUserInfoResponse>(
       `/users/me`,

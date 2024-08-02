@@ -36,10 +36,7 @@ instance.interceptors.response.use(
           throw new Error('리프레시 토큰이 없습니다.');
         }
 
-        // 리프레시 토큰을 사용해 새로운 액세스 토큰 요청
-        const response = await instance.post('/auth/tokens', {
-          refreshToken: refreshToken,
-        });
+        const response = await instance.post('/auth/tokens');
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
         if (newRefreshToken) console.log('hello');
