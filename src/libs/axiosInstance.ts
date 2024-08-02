@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { deleteCookie, getCookie, setCookie } from './utils/cookie';
 
@@ -10,11 +10,6 @@ instance.interceptors.request.use(
   (config) => {
     const accessToken = getCookie('accessToken');
     if (accessToken) {
-      if (config.headers['Content-Type'] === 'multipart/form-data') {
-        config.headers['Content-Type'] = 'multipart/form-data';
-      } else {
-        config.headers['Content-Type'] = 'application/json';
-      }
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
@@ -29,13 +24,11 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config!;
 
     // 401 오류와 리프레시 토큰이 없는 경우 처리
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
+    if (error.response?.status === 401) {
       try {
         const refreshToken = getCookie('refreshToken');
 
@@ -44,15 +37,15 @@ instance.interceptors.response.use(
         }
 
         // 리프레시 토큰을 사용해 새로운 액세스 토큰 요청
-        const response = await instance.post('/auth/refresh-token', {
+        const response = await instance.post('/auth/tokens', {
           refreshToken: refreshToken,
         });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
-
+        if (newRefreshToken) console.log('hello');
         // 새로운 토큰 저장
-        setCookie('accessToken', accessToken, 0.0208);
-        setCookie('refreshToken', newRefreshToken, 0.0208);
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', newRefreshToken);
 
         // 기본 헤더와 요청 헤더에 새로운 액세스 토큰 설정
         instance.defaults.headers.common['Authorization'] =
@@ -67,7 +60,6 @@ instance.interceptors.response.use(
         alert('다시 로그인해주세요.');
       }
     }
-    alert(`ERROR: ${error.response.data.message}`);
     return Promise.reject(error);
   },
 );
