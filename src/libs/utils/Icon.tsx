@@ -1,3 +1,5 @@
+import TimeSeparatorIcon from '@/../../public/icon/timeSeparatoricon.svg';
+
 import ArrowDown from '/public/icon/arrowDown.svg';
 import ArrowLeft from '/public/icon/arrowLeft.svg';
 import ArrowRight from '/public/icon/arrowRight.svg';
@@ -62,4 +64,5 @@ export {
   ArrowLeft,
   ArrowRight,
   ArrowDown,
+  TimeSeparatorIcon,
 };

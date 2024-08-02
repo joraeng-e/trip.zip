@@ -1,4 +1,8 @@
-import { MinusTimeIcon, PlusTimeIcon } from '@/libs/utils/Icon';
+import {
+  MinusTimeIcon,
+  PlusTimeIcon,
+  TimeSeparatorIcon,
+} from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import { PostActivitiesRequest } from '@trip.zip-api';
 import { useEffect, useMemo, useState } from 'react';
@@ -109,6 +113,9 @@ export default function DateTime() {
             onChange={handleChange}
           />
         </div>
+        <div className="mt-20 hidden md:block">
+          <TimeSeparatorIcon />
+        </div>
         <div className="flex flex-col">
           <label htmlFor="endTime" className="mb-1">
             종료 시간
@@ -156,6 +163,9 @@ export default function DateTime() {
               className="basic-input w-full max-w-140"
               {...register(`schedules.${index}.startTime` as const)}
             />
+            <div className="hidden md:block">
+              <TimeSeparatorIcon />
+            </div>
             <input
               type="text"
               readOnly
