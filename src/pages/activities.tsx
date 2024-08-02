@@ -1,69 +1,145 @@
-import {
-  ActivityCard,
-  PopularActivityCard,
-} from '@/components/activities/Cards';
-import Carousel from '@/components/activities/Carousel';
+import ActivityGrid from '@/components/activities/ActivitiyGrid';
+import CarouselContainer from '@/components/activities/Carousel';
 import CategoryMenu from '@/components/activities/CategoryMenu';
+import DropdownContainer from '@/components/activities/Dropdown';
 import ActivitiesLayout from '@/components/activities/Layout';
-import SearchBox from '@/components/activities/SearchBox';
-import { Activity } from '@/components/activities/type';
+import PopularActivities from '@/components/activities/PopularActivities';
+import SearchBox from '@/components/activities/Search/SearchBox';
+import SearchResult from '@/components/activities/Search/SearchResult';
 import Pagination from '@/components/commons/Pagination';
+import useDeviceState from '@/hooks/useDeviceState';
+import { getActivities } from '@/libs/api/activities';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-const MOCK_POPULAR_ACTIVITY: Activity = {
-  id: 1,
-  userId: 101,
-  title: '함께 배우면 즐거운 스트릿 댄스',
-  description: '설명',
-  category: '스포츠',
-  price: 38000,
-  address: '123 Beachside Ave, Santa Monica, CA',
-  bannerImageUrl:
-    'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722240012101.png',
-  rating: 4.8,
-  reviewCount: 127,
-  createdAt: '2023-01-15T08:30:00Z',
-  updatedAt: '2023-07-10T10:45:00Z',
+const PAGE_SIZE_BY_DEVICE = {
+  MOBILE: 4,
+  TABLET: 9,
+  PC: 8,
 };
 
+const API_SORT_VALUE = {
+  최신순: 'latest',
+  '가격이 낮은 순': 'price_asc',
+  '가격이 높은 순': 'price_desc',
+} as const;
+
+type SortOptions = keyof typeof API_SORT_VALUE;
+
 export default function Activites() {
+  const router = useRouter();
+  const initialPage = parseInt(router.query.page as string, 10) || 1;
+  const [page, setPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(1);
+  const [category, setCategory] = useState<string | undefined>(undefined);
+  const [keyword, setKeyword] = useState<string | undefined>(undefined);
+  const [sort, setSort] = useState('최신순');
+  const deviceState = useDeviceState();
+
+  const { data } = useQuery({
+    queryKey: [
+      'activities',
+      {
+        page,
+        pageSize: PAGE_SIZE_BY_DEVICE[deviceState],
+        category,
+        keyword,
+        sort,
+      },
+    ],
+    queryFn: () =>
+      getActivities({
+        sort: API_SORT_VALUE[sort as SortOptions],
+        page,
+        size: PAGE_SIZE_BY_DEVICE[deviceState],
+        category,
+        keyword,
+      }),
+    placeholderData: keepPreviousData,
+  });
+
+  const { data: popularActivitiesData } = useQuery({
+    queryKey: ['activities', 'popular'],
+    queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
+  });
+
+  const updateQueryParams = (params: {
+    [key: string]: string | number | undefined;
+  }) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          ...params,
+        },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+    updateQueryParams({ page });
+  };
+
+  const handleCategoryClick = (category: string | undefined) => {
+    setCategory(category);
+    updateQueryParams({ category });
+  };
+
+  const handleKeyword = (keyword: string) => {
+    setKeyword(keyword);
+    updateQueryParams({ keyword });
+  };
+
+  useEffect(() => {
+    if (!data) return;
+
+    const pageSize = PAGE_SIZE_BY_DEVICE[deviceState];
+    setTotalPages(Math.ceil(data.totalCount / pageSize));
+  }, [deviceState, data]);
+
+  useEffect(() => {
+    updateQueryParams({ sort: API_SORT_VALUE[sort as SortOptions] });
+  }, [sort]);
+
+  useEffect(() => {
+    updateQueryParams({ size: PAGE_SIZE_BY_DEVICE[deviceState] });
+  }, [deviceState]);
+
   return (
     <>
-      <Carousel.Root>
-        <Carousel.Slide1 />
-        <Carousel.Slide2 />
-        <Carousel.Slide3 />
-      </Carousel.Root>
+      <CarouselContainer />
 
       <ActivitiesLayout>
-        <SearchBox />
-        <div className="mt-24 md:mt-18 xl:mt-32">
-          <h1 className="mb-16 text-18 font-semibold text-nomad-black md:text-36">
-            🔥인기 체험
-          </h1>
-          <div className="no-scrollbar -m-20 flex gap-16 overflow-x-auto p-20 md:gap-32 xl:gap-24">
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <PopularActivityCard data={MOCK_POPULAR_ACTIVITY} />
-          </div>
-        </div>
+        <SearchBox handleKeyword={handleKeyword} />
+        {!keyword && <PopularActivities data={popularActivitiesData} />}
+        {keyword ? (
+          <SearchResult keyword={keyword} totalCount={data?.totalCount} />
+        ) : (
+          <div className="mt-40 md:mt-54 xl:mt-60">
+            <div className="flex justify-between gap-12">
+              <CategoryMenu handleCategoryClick={handleCategoryClick} />
+              <DropdownContainer value={sort} setValue={setSort} />
+            </div>
 
-        <div className="mt-40 md:mt-54 xl:mt-60">
-          <CategoryMenu />
-          {/* TODO: 드롭다운 */}
-          <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
-            🛼 모든 체험
-          </h1>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-5 md:grid-cols-3 md:gap-x-16 md:gap-y-32 xl:grid-cols-4 xl:gap-x-24 xl:gap-y-48">
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
-            <ActivityCard data={MOCK_POPULAR_ACTIVITY} />
+            <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
+              🛼 모든 체험
+            </h1>
           </div>
-        </div>
+        )}
+        <ActivityGrid data={data} />
       </ActivitiesLayout>
 
       <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
-        <Pagination totalPages={10} />
+        <Pagination
+          onPageChange={handlePageChange}
+          totalPages={totalPages}
+          initialPage={page}
+        />
       </div>
     </>
   );
