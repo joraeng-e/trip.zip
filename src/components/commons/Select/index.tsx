@@ -22,6 +22,7 @@ interface SelectProps {
  * Select 컴포넌트
  *
  * 키보드 네비게이션이 가능해요
+ * (방향키와 엔터로 옵션 선택)
  *
  * @component
  * @param {Object} props
@@ -41,8 +42,8 @@ interface SelectProps {
  *     { value: 'option1', label: 'Option 1' },
  *     { value: 'option2', label: 'Option 2' }
  *   ]}
- *   placeholder="Select an option"
- *   error="This field is required"
+ *   placeholder="카테고리"
+ *   error="카테고리를 선택해주세요"
  *   maxWidth="300px"
  * />
  *
@@ -68,31 +69,35 @@ export default function Select({
     setFocusedIndex(-1);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!isOpen) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+      if (
+        event.key === 'Enter' ||
+        event.key === ' ' ||
+        event.key === 'ArrowDown'
+      ) {
         setIsOpen(true);
         setFocusedIndex(0);
-        e.preventDefault();
+        event.preventDefault();
       }
     } else {
-      switch (e.key) {
+      switch (event.key) {
         case 'ArrowDown':
           setFocusedIndex((prevIndex) =>
             Math.min(prevIndex + 1, options.length - 1),
           );
-          e.preventDefault();
+          event.preventDefault();
           break;
         case 'ArrowUp':
           setFocusedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-          e.preventDefault();
+          event.preventDefault();
           break;
         case 'Enter':
         case ' ':
           if (focusedIndex >= 0) {
             handleSelect(options[focusedIndex].value);
           }
-          e.preventDefault();
+          event.preventDefault();
           break;
       }
     }

@@ -91,7 +91,7 @@ export default function DateTime() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-5">
-        <div className="flex w-full flex-col">
+        <div className="flex w-full max-w-380 flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
           </label>

@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { UseFormProps, useWatch } from 'react-hook-form';
+import { UseFormProps } from 'react-hook-form';
 
 import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
@@ -42,37 +42,7 @@ export default function MyActivities() {
     setValue,
     formState: { errors },
     trigger,
-    control,
   } = methods;
-
-  const watchedFields = useWatch({
-    control,
-    name: [
-      'title',
-      'description',
-      'price',
-      'address',
-      'bannerImageUrl',
-      'schedules',
-    ],
-  });
-
-  //useWatch로 관리하는 필드의 값이 채워져 있고 유효한지 확인 => 버튼의 상태에 관여.
-  const isFormValid = () => {
-    const [title, description, price, address, bannerImageUrl, schedules] =
-      watchedFields;
-    return (
-      title &&
-      description &&
-      price &&
-      address &&
-      bannerImageUrl &&
-      schedules &&
-      schedules.length > 0 &&
-      category !== '' &&
-      methods.formState.isValid
-    );
-  };
 
   //post api 성공 or 실패하면 모달이 열려요.
   const { mutate, isPending, isError } = useMutation({
@@ -106,7 +76,7 @@ export default function MyActivities() {
     mutate(requestData);
   };
 
-  //카테고리 변경 선택된 카테고리 저장 후 해당 값 업데이트 & 유효성 검사
+  //카테고리 변경하는 함수, 선택된 카테고리의 값 업데이트 & 유효성 검사
   const handleCategoryChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -139,7 +109,7 @@ export default function MyActivities() {
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.3 }}
       >
-        <form className="mb-30" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-60" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 등록</h1>
             {modalMessage && (
@@ -154,10 +124,9 @@ export default function MyActivities() {
             )}
             <Button
               type="submit"
-              className="max-w-120"
+              className="max-w-120 rounded-md"
               hasICon={true}
-              disabled={isPending || !isFormValid()}
-              variant={isFormValid() ? 'activeButton' : 'disabledButton'}
+              disabled={isPending}
             >
               {isPending ? '등록 중...' : '등록하기'}
             </Button>
