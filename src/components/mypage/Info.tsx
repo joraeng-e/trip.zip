@@ -79,15 +79,19 @@ export default function Info() {
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
-        if (error.response.data.message === '수정할 내용이 없습니다.') {
-          setModalMessage('변경된 정보가 없습니다.');
-        } else if (
-          error.response.data.message === '닉네임은 10자 이하로 작성해주세요.'
-        ) {
-          setModalMessage('닉네임은 10자 이하로 작성해주세요.');
-        } else {
-          console.error('로그인 실패', error);
+        const message = error.response.data.message;
+
+        switch (message) {
+          case '수정할 내용이 없습니다.':
+            setModalMessage('변경된 정보가 없습니다.');
+            break;
+          case '닉네임은 10자 이하로 작성해주세요.':
+            setModalMessage('닉네임은 10자 이하로 작성해주세요.');
+            break;
+          default:
+            console.error('로그인 실패', error);
         }
+
         setIsModalOpen(true);
         setIsSuccessMessage(false);
       }
