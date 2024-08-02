@@ -20,8 +20,8 @@ import Input from '../commons/Input/Input';
 import Textarea from '../commons/Input/Textarea';
 import Modal from '../commons/Modal';
 import Select from '../commons/Select';
-import DateTime from './activitiesForm/DateTime';
-import ImageUploader from './activitiesForm/ImageUpload';
+import DateTime from './FormComponents/DateTime';
+import ImageUploader from './FormComponents/ImageUpload';
 
 export default function MyActivities() {
   const router = useRouter();

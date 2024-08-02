@@ -2,14 +2,14 @@ import useClickOutside from '@/hooks/useClickOutside';
 import { ArrowDown } from '@/libs/utils/Icon';
 import React, { useRef, useState } from 'react';
 
-import DropdownList from './DropdownList';
+import SelectList from './SelectList';
 
 interface Option {
   value: string;
   label: string;
 }
 
-interface CustomSelectProps {
+interface SelectProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Option[];
@@ -33,6 +33,7 @@ interface CustomSelectProps {
  * @param {string} [props.maxWidth] - 컴포넌트의 최대 너비
  *
  * @example
+ * // 저는 옵션 따로 빼줬어요
  * <Select
  *   value={selectedValue}
  *   onChange={handleChange}
@@ -54,7 +55,7 @@ export default function Select({
   placeholder,
   error,
   maxWidth,
-}: CustomSelectProps) {
+}: SelectProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -128,7 +129,7 @@ export default function Select({
           }`}
         />
       </div>
-      <DropdownList
+      <SelectList
         isOpen={isOpen}
         options={options}
         onSelect={handleSelect}

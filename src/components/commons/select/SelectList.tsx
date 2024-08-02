@@ -8,7 +8,7 @@ interface Option {
   label: string;
 }
 
-interface DropdownListProps {
+interface SelectListProps {
   isOpen: boolean;
   options: Option[];
   onSelect: (value: string) => void;
@@ -17,10 +17,9 @@ interface DropdownListProps {
 }
 
 /**
- * DropdownList 컴포넌트
+ * SelectList 컴포넌트
  *
  * 드롭다운 메뉴의 옵션 목록을 표시하는 컴포넌트입니다.
- * 키보드로도 선택할 수 있어요.
  *
  * @param {Object} props - 컴포넌트 props
  * @param {boolean} props.isOpen - 드롭다운 메뉴의 열림/닫힘 상태
@@ -31,13 +30,13 @@ interface DropdownListProps {
  *
  */
 
-export default function DropdownList({
+export default function SelectList({
   isOpen,
   options,
   onSelect,
   selectedValue,
   focusedIndex,
-}: DropdownListProps) {
+}: SelectListProps) {
   return (
     <div>
       {isOpen && (
