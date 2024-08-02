@@ -105,13 +105,8 @@ export default function Info() {
 
     const registerData: registerDataType = {
       nickname: nickname !== userInfo?.nickname ? nickname : undefined,
-      newPassword: newPassword?.trim() || undefined,
+      newPassword: newPassword || undefined,
     };
-
-    // newPassword가 빈 문자열이 아닐 경우에만 추가
-    if (newPassword?.trim()) {
-      registerData.newPassword = newPassword.trim();
-    }
 
     mutation.mutate(registerData);
   };
