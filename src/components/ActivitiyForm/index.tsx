@@ -19,7 +19,7 @@ import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
 import Textarea from '../commons/Input/Textarea';
 import Modal from '../commons/Modal';
-import SelectComponent from '../commons/Select';
+import Select from '../commons/Select';
 import DateTime from './FormComponents/DateTime';
 import ImageUploader from './FormComponents/ImageUpload';
 
@@ -135,7 +135,7 @@ export default function MyActivities() {
               error={title}
               maxWidth="792px"
             />
-            <SelectComponent
+            <Select
               value={category}
               onChange={handleCategoryChange}
               options={CATEGORY_OPTIONS}
