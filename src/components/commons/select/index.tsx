@@ -47,7 +47,7 @@ interface SelectProps {
  *
  */
 
-export default function Select({
+export default function SelectComponent({
   value,
   onChange,
   options,
