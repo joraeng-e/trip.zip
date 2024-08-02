@@ -20,6 +20,7 @@ export default function ImageUploader({
   const { setValue } = useFormContext();
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
+  //이미지 업로드API
   const imageUploadMutation = useMutation({
     mutationFn: postActivityImage,
     onSuccess: (data) => {
@@ -36,6 +37,7 @@ export default function ImageUploader({
     },
   });
 
+  //이미지url이 변경되면 값을 업데이트
   useEffect(() => {
     if (maxImages === 1) {
       setValue(name, imagePreviewUrls[0] || '');
@@ -44,16 +46,24 @@ export default function ImageUploader({
     }
   }, [imagePreviewUrls, name, setValue, maxImages]);
 
+  //선택된 파일을 업로드하고 최대 이미지 수 초과하지 않도록 관리
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      for (let i = 0; i < files.length; i++) {
-        if (imagePreviewUrls.length >= maxImages) break;
-        await imageUploadMutation.mutateAsync(files[i]);
+      const remainingSlots = maxImages - imagePreviewUrls.length;
+      const filesToUpload = Array.from(files).slice(0, remainingSlots);
+
+      try {
+        await Promise.all(
+          filesToUpload.map((file) => imageUploadMutation.mutateAsync(file)),
+        );
+      } catch (error) {
+        console.error('이미지 업로드 중 오류 발생:', error);
       }
     }
   };
 
+  //이미지 삭제.
   const handleDelete = (index: number) => {
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
     setImagePreviewUrls(updatedUrls);
@@ -127,11 +137,6 @@ export default function ImageUploader({
           </div>
         ))}
       </div>
-      {imageUploadMutation.isError && (
-        <p className="mt-2 text-red-500">
-          이미지 업로드 중 오류가 발생했습니다.
-        </p>
-      )}
     </div>
   );
 }

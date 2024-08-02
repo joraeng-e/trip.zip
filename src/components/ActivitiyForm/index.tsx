@@ -1,7 +1,7 @@
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
-import { activitiesSchema } from '@/libs/utils/activitiesSchema';
-import type { ActivitiesFormData } from '@/libs/utils/activitiesSchema';
+import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
+import type { ActivitiesFormData } from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -13,15 +13,15 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { UseFormProps } from 'react-hook-form';
+import { UseFormProps, useWatch } from 'react-hook-form';
 
 import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
 import Textarea from '../commons/Input/Textarea';
 import Modal from '../commons/Modal';
+import Select from '../commons/Select';
 import DateTime from './FormComponents/DateTime';
 import ImageUploader from './FormComponents/ImageUpload';
-import Select from './FormComponents/Select';
 
 export default function MyActivities() {
   const router = useRouter();
@@ -42,8 +42,39 @@ export default function MyActivities() {
     setValue,
     formState: { errors },
     trigger,
+    control,
   } = methods;
 
+  const watchedFields = useWatch({
+    control,
+    name: [
+      'title',
+      'description',
+      'price',
+      'address',
+      'bannerImageUrl',
+      'schedules',
+    ],
+  });
+
+  //useWatch로 관리하는 필드의 값이 채워져 있고 유효한지 확인 => 버튼의 상태에 관여.
+  const isFormValid = () => {
+    const [title, description, price, address, bannerImageUrl, schedules] =
+      watchedFields;
+    return (
+      title &&
+      description &&
+      price &&
+      address &&
+      bannerImageUrl &&
+      schedules &&
+      schedules.length > 0 &&
+      category !== '' &&
+      methods.formState.isValid
+    );
+  };
+
+  //post api 성공 or 실패하면 모달이 열려요.
   const { mutate, isPending, isError } = useMutation({
     mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
@@ -54,10 +85,13 @@ export default function MyActivities() {
     },
     onError: (error) => {
       console.error('Error:', error);
-      // 에러 처리
+      setModalMessage(`체험 등록 중 오류가 발생했습니다: ${error.message}`);
+      setIsModalOpen(true);
+      setIsSuccessMessage(false);
     },
   });
 
+  //폼 제출
   const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
     subImageUrls,
     ...rest
@@ -72,6 +106,7 @@ export default function MyActivities() {
     mutate(requestData);
   };
 
+  //카테고리 변경 선택된 카테고리 저장 후 해당 값 업데이트 & 유효성 검사
   const handleCategoryChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -121,7 +156,8 @@ export default function MyActivities() {
               type="submit"
               className="max-w-120"
               hasICon={true}
-              disabled={isPending}
+              disabled={isPending || !isFormValid()}
+              variant={isFormValid() ? 'activeButton' : 'disabledButton'}
             >
               {isPending ? '등록 중...' : '등록하기'}
             </Button>

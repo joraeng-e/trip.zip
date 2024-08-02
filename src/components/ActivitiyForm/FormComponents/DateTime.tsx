@@ -36,19 +36,22 @@ export default function DateTime() {
     endTime: '',
   });
 
+  //오늘 날짜와 초기 상태를 설정하는 훅
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('en-CA');
     setTodayDate(today);
     setEntry((prevEntry) => ({ ...prevEntry, date: today }));
   }, []);
 
-  const handleChange = ({
+  //사용자가 날짜나 시간을 입력하면 인풋 상태를 업데이트
+  const handleDateTimeInputChange = ({
     target: { id, value },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setEntry((prevEntry) => ({ ...prevEntry, [id]: value }));
     clearErrors('schedules');
   };
 
+  //현재 입력된 날짜와 시간이 유효한지 확인 1.필드가 다 채워져 있는가? 2.시작시간이 종료시간보다 이전인가?
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
     return (
@@ -56,6 +59,7 @@ export default function DateTime() {
     );
   }, [entry, todayDate]);
 
+  //새로 입력된 일정이 이미 존재하는 일정과 중복되는가?
   const isDuplicateEntry = (newEntry: DateTimeInput) => {
     return getValues('schedules').some(
       ({ date, startTime }) =>
@@ -63,6 +67,7 @@ export default function DateTime() {
     );
   };
 
+  //새 일정을 추가. 중복된 시간인지 검사하고,
   const handleAddEntry = async () => {
     if (isDuplicateEntry(entry)) {
       setError('schedules', {
@@ -70,12 +75,14 @@ export default function DateTime() {
         message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
       });
     } else {
+      //아니면 일정을 추가하고 input reset해줘요.
       append(entry);
       setEntry({ date: todayDate, startTime: '', endTime: '' });
       await trigger('schedules');
     }
   };
 
+  //일정 삭제.
   const handleRemoveEntry = (index: number) => {
     remove(index);
     trigger('schedules');
@@ -96,7 +103,7 @@ export default function DateTime() {
             })}
             value={entry.date}
             min={todayDate}
-            onChange={handleChange}
+            onChange={handleDateTimeInputChange}
           />
         </div>
         <div className="flex flex-col">
@@ -110,7 +117,7 @@ export default function DateTime() {
               'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.startTime}
-            onChange={handleChange}
+            onChange={handleDateTimeInputChange}
           />
         </div>
         <div className="mt-20 hidden md:block">
@@ -127,7 +134,7 @@ export default function DateTime() {
               'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.endTime}
-            onChange={handleChange}
+            onChange={handleDateTimeInputChange}
           />
         </div>
         <button
