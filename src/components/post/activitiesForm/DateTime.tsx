@@ -38,28 +38,24 @@ export default function DateTime() {
     setEntry((prevEntry) => ({ ...prevEntry, date: today }));
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
+  const handleChange = ({
+    target: { id, value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
     setEntry((prevEntry) => ({ ...prevEntry, [id]: value }));
     clearErrors('schedules');
   };
 
   const isValidEntry = useMemo(() => {
+    const { date, startTime, endTime } = entry;
     return (
-      entry.date &&
-      entry.startTime &&
-      entry.endTime &&
-      entry.date >= todayDate &&
-      entry.startTime < entry.endTime
+      date && startTime && endTime && date >= todayDate && startTime < endTime
     );
   }, [entry, todayDate]);
 
   const isDuplicateEntry = (newEntry: DateTimeInput) => {
-    const existingEntries = getValues('schedules');
-    return existingEntries.some(
-      (existingEntry: DateTimeInput) =>
-        existingEntry.date === newEntry.date &&
-        existingEntry.startTime === newEntry.startTime,
+    return getValues('schedules').some(
+      ({ date, startTime }) =>
+        date === newEntry.date && startTime === newEntry.startTime,
     );
   };
 
@@ -92,7 +88,7 @@ export default function DateTime() {
             id="date"
             type="date"
             className={classNames('basic-input max-w-380', {
-              'border-red-500': errors.schedules?.message,
+              'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.date}
             min={todayDate}
@@ -107,7 +103,7 @@ export default function DateTime() {
             id="startTime"
             type="time"
             className={classNames('basic-input max-w-140', {
-              'border-red-500': errors.schedules?.message,
+              'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.startTime}
             onChange={handleChange}
@@ -121,7 +117,7 @@ export default function DateTime() {
             id="endTime"
             type="time"
             className={classNames('basic-input max-w-140', {
-              'border-red-500': errors.schedules?.message,
+              'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.endTime}
             onChange={handleChange}
@@ -132,7 +128,7 @@ export default function DateTime() {
           onClick={handleAddEntry}
           className={classNames('mt-6', {
             'cursor-not-allowed opacity-50': !isValidEntry,
-            'text-green-800 hover:text-nomad-black': isValidEntry,
+            'text-green-800 hover:text-nomad-black': !!isValidEntry,
           })}
           disabled={!isValidEntry}
           aria-label="일정 추가"

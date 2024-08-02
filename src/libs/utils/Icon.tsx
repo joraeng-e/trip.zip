@@ -1,3 +1,4 @@
+import ArrowDown from '/public/icon/arrowDown.svg';
 import ArrowLeft from '/public/icon/arrowLeft.svg';
 import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
@@ -60,4 +61,5 @@ export {
   RoundStar,
   ArrowLeft,
   ArrowRight,
+  ArrowDown,
 };

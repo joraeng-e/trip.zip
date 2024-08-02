@@ -2,7 +2,6 @@ import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/activitiesSchema';
 import type { ActivitiesFormData } from '@/libs/utils/activitiesSchema';
-import FormatUtils from '@/libs/utils/formatUtils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -20,7 +19,7 @@ import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
 import Textarea from '../commons/Input/Textarea';
 import Modal from '../commons/Modal';
-import Select from '../commons/select';
+import Select from '../commons/Select';
 import DateTime from './activitiesForm/DateTime';
 import ImageUploader from './activitiesForm/ImageUpload';
 
@@ -45,7 +44,7 @@ export default function MyActivities() {
     trigger,
   } = methods;
 
-  const mutation = useMutation({
+  const { mutate, isPending, isError } = useMutation({
     mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
@@ -59,24 +58,25 @@ export default function MyActivities() {
     },
   });
 
-  const onSubmit: SubmitHandler<ActivitiesFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
+    subImageUrls,
+    ...rest
+  }) => {
     const requestData: PostActivitiesRequest = {
-      ...data,
+      ...rest,
       category: category as Category,
       subImageUrls:
-        data.subImageUrls?.filter(
-          (url): url is string => typeof url === 'string',
-        ) || null,
+        subImageUrls?.filter((url): url is string => typeof url === 'string') ||
+        null,
     };
-    mutation.mutate(requestData);
+    mutate(requestData);
   };
 
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const value = event.target.value as Category;
-    setCategory(value);
-    setValue('category', value);
+  const handleCategoryChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(value as Category);
+    setValue('category', value as Category);
     trigger('category');
   };
 
@@ -85,6 +85,16 @@ export default function MyActivities() {
     setIsModalOpen(false);
     if (isSuccessMessage) router.push('/activities');
   };
+
+  const {
+    title,
+    category: categoryError,
+    description,
+    price,
+    address,
+    bannerImageUrl,
+    subImageUrls,
+  } = errors;
 
   return (
     <FormProvider {...methods}>
@@ -111,9 +121,9 @@ export default function MyActivities() {
               type="submit"
               className="max-w-120"
               hasICon={true}
-              disabled={mutation.isPending}
+              disabled={isPending}
             >
-              {mutation.isPending ? '등록 중...' : '등록하기'}
+              {isPending ? '등록 중...' : '등록하기'}
             </Button>
           </div>
           <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
@@ -122,7 +132,7 @@ export default function MyActivities() {
               type="text"
               placeholder="제목"
               register={register('title')}
-              error={errors.title}
+              error={title}
               maxWidth="792px"
             />
             <Select
@@ -130,14 +140,14 @@ export default function MyActivities() {
               onChange={handleCategoryChange}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
-              error={errors.category?.message}
+              error={categoryError?.message}
               maxWidth="792px"
             />
             <Textarea
               name="description"
               placeholder="설명"
               register={register('description')}
-              error={errors.description}
+              error={description}
               maxWidth="792px"
             />
             <h3>가격</h3>
@@ -145,11 +155,9 @@ export default function MyActivities() {
               name="price"
               type="text"
               placeholder="가격"
-              // value={formattedPrice}
-              // onChange={handlePriceChange}
               register={register('price')}
               maxWidth="792px"
-              error={errors.price}
+              error={price}
             />
             <h3>주소</h3>
             <Input
@@ -157,7 +165,7 @@ export default function MyActivities() {
               type="text"
               placeholder="주소"
               register={register('address')}
-              error={errors.address}
+              error={address}
               maxWidth="792px"
             />
             <h3>예약 가능한 시간대</h3>
@@ -168,9 +176,9 @@ export default function MyActivities() {
               maxImages={1}
               label="배너 이미지 등록"
             />
-            {errors.bannerImageUrl && (
+            {bannerImageUrl && (
               <p className="-mt-15 pl-8 text-xs-regular text-custom-red-200">
-                {errors.bannerImageUrl.message}
+                {bannerImageUrl.message}
               </p>
             )}
             <h3>소개 이미지</h3>
@@ -181,16 +189,16 @@ export default function MyActivities() {
                 label="소개 이미지 등록"
               />
             </div>
-            {errors.subImageUrls && (
+            {subImageUrls && (
               <p className="pl-8 text-xs-regular text-custom-red-200">
-                {errors.subImageUrls.message}
+                {subImageUrls.message}
               </p>
             )}
             <p className="text-custom-gray-800">
               *이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          {mutation.isError && (
+          {isError && (
             <p className="mt-4 text-red-500">
               체험 등록 중 오류가 발생했습니다.
             </p>
