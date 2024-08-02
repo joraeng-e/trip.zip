@@ -2,12 +2,13 @@ import { getUser, patchUserInfo } from '@/libs/api/user';
 import { myInfoSchema } from '@/libs/utils/schemas/myInfoSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { PatchUserInfoRequest } from '@trip.zip-api';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
+import Modal from '../commons/Modal';
 
 type FormData = {
   nickname: string;
@@ -20,6 +21,14 @@ type registerDataType = {
   nickname?: string;
   newPassword?: string;
 };
+
+interface ApiError extends Error {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 const fetchUserInfo = async () => {
   const userInfo = await getUser();
@@ -43,6 +52,12 @@ export default function Info() {
     mode: 'all',
   });
 
+  const [modalMessage, setModalMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
+
+  const router = useRouter();
+
   useEffect(() => {
     if (userInfo) {
       reset({
@@ -58,9 +73,24 @@ export default function Info() {
     mutationFn: patchUserInfo,
     onSuccess: () => {
       console.log('정보 수정 성공');
+      setModalMessage('수정 완료!');
+      setIsModalOpen(true);
+      setIsSuccessMessage(true);
     },
-    onError: (error: Error) => {
-      console.error('수정 실패', error);
+    onError: (error: ApiError) => {
+      if (error.response && error.response.data) {
+        if (error.response.data.message === '수정할 내용이 없습니다.') {
+          setModalMessage('변경된 정보가 없습니다.');
+        } else if (
+          error.response.data.message === '닉네임은 10자 이하로 작성해주세요.'
+        ) {
+          setModalMessage('닉네임은 10자 이하로 작성해주세요.');
+        } else {
+          console.error('로그인 실패', error);
+        }
+        setIsModalOpen(true);
+        setIsSuccessMessage(false);
+      }
     },
   });
 
@@ -84,6 +114,12 @@ export default function Info() {
     }
 
     mutation.mutate(registerData);
+  };
+
+  const resetModalMessage = () => {
+    setModalMessage('');
+    setIsModalOpen(false);
+    if (isSuccessMessage) router.push('/activities');
   };
 
   return (
@@ -140,6 +176,16 @@ export default function Info() {
           maxWidth="792px"
           onBlur={() => trigger('reEnterPassword')}
         />
+        {modalMessage && (
+          <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Modal.Content>
+              <Modal.Description className="py-20 text-center">
+                {modalMessage}
+              </Modal.Description>
+              <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
+            </Modal.Content>
+          </Modal.Root>
+        )}
       </form>
     </div>
   );
