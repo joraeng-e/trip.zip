@@ -20,7 +20,6 @@ interface SelectProps {
 
 /**
  * Select 컴포넌트
- *
  * 키보드 네비게이션이 가능해요
  *
  * @component
