@@ -1,3 +1,5 @@
+import useDeviceState from '@/hooks/useDeviceState';
+import Device from '@/libs/constants/device';
 import { Dispatch, SetStateAction } from 'react';
 
 import Dropdown from '../commons/Dropdown';
@@ -8,8 +10,15 @@ interface Props {
 }
 
 export default function DropdownContainer({ value, setValue }: Props) {
+  const deviceState = useDeviceState();
+
   return (
-    <Dropdown selected={value} setSelected={setValue} width={150} height={41}>
+    <Dropdown
+      selected={value}
+      setSelected={setValue}
+      width={150}
+      height={deviceState === Device.Mobile ? 41 : 59}
+    >
       <Dropdown.Button />
       <Dropdown.Body>
         <Dropdown.Item value="최신순">
