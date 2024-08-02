@@ -14,7 +14,9 @@ export default function ReservationStatus() {
           <option value="chicken">치킨 먹기</option>
         </select>
       </section>
-      <Calendar />
+      <div>
+        <Calendar year={2024} month={11} />
+      </div>
     </div>
   );
 }
