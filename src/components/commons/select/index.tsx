@@ -1,6 +1,6 @@
+import useClickOutside from '@/hooks/useClickOutside';
 import { ArrowDown } from '@/libs/utils/Icon';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import DropdownList from './DropdownList';
 
@@ -9,7 +9,7 @@ interface Option {
   label: string;
 }
 
-interface SelectProps {
+interface CustomSelectProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Option[];
@@ -18,6 +18,35 @@ interface SelectProps {
   maxWidth?: string;
 }
 
+/**
+ * Select 컴포넌트
+ *
+ * 키보드 네비게이션이 가능해요
+ *
+ * @component
+ * @param {Object} props
+ * @param {string} props.value - 현재 선택된 옵션의 값
+ * @param {function} props.onChange - 선택 변경 시 호출될 함수. React.ChangeEvent<HTMLSelectElement>를 인자로 받습니다.
+ * @param {Array<{value: string, label: string}>} props.options - 선택 가능한 옵션들의 배열
+ * @param {string} props.placeholder - 선택되지 않았을 때 표시될 텍스트
+ * @param {string} [props.error] - 에러 메시지. 존재할 경우 에러 상태로 표시됩니다.
+ * @param {string} [props.maxWidth] - 컴포넌트의 최대 너비
+ *
+ * @example
+ * <Select
+ *   value={selectedValue}
+ *   onChange={handleChange}
+ *   options={[
+ *     { value: 'option1', label: 'Option 1' },
+ *     { value: 'option2', label: 'Option 2' }
+ *   ]}
+ *   placeholder="Select an option"
+ *   error="This field is required"
+ *   maxWidth="300px"
+ * />
+ *
+ */
+
 export default function Select({
   value,
   onChange,
@@ -25,36 +54,87 @@ export default function Select({
   placeholder,
   error,
   maxWidth,
-}: SelectProps) {
+}: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (optionValue: string) => {
     onChange({
       target: { value: optionValue },
     } as React.ChangeEvent<HTMLSelectElement>);
     setIsOpen(false);
+    setFocusedIndex(-1);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!isOpen) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+        setIsOpen(true);
+        setFocusedIndex(0);
+        e.preventDefault();
+      }
+    } else {
+      switch (e.key) {
+        case 'ArrowDown':
+          setFocusedIndex((prevIndex) =>
+            Math.min(prevIndex + 1, options.length - 1),
+          );
+          e.preventDefault();
+          break;
+        case 'ArrowUp':
+          setFocusedIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+          e.preventDefault();
+          break;
+        case 'Enter':
+        case ' ':
+          if (focusedIndex >= 0) {
+            handleSelect(options[focusedIndex].value);
+          }
+          e.preventDefault();
+          break;
+      }
+    }
+  };
+
+  useClickOutside(containerRef, () => {
+    setIsOpen(false);
+    setFocusedIndex(-1);
+  });
+
   return (
-    <div style={{ maxWidth, position: 'relative' }}>
+    <div ref={containerRef} style={{ maxWidth, position: 'relative' }}>
       <div
-        className={`basic-input flex w-full items-center justify-between ${error ? 'border-red-400' : ''} flex cursor-pointer items-center ${
+        className={`basic-input w-full ${
+          error ? 'border-red-400' : ''
+        } flex cursor-pointer items-center justify-between ${
           value ? 'text-black' : 'text-gray-400'
         }`}
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="combobox"
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
       >
-        {value
-          ? options.find((opt) => opt.value === value)?.label
-          : placeholder}
-        <motion.div
-          initial={{ rotate: 0 }}
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <ArrowDown />
-        </motion.div>
+        <span>
+          {value
+            ? options.find((opt) => opt.value === value)?.label
+            : placeholder}
+        </span>
+        <ArrowDown
+          className={`transition-transform duration-300 ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
       </div>
-      <DropdownList isOpen={isOpen} options={options} onSelect={handleSelect} />
+      <DropdownList
+        isOpen={isOpen}
+        options={options}
+        onSelect={handleSelect}
+        selectedValue={value}
+        focusedIndex={focusedIndex}
+      />
       {error && (
         <p className="pl-8 text-xs-regular text-custom-red-200">{error}</p>
       )}
