@@ -3,14 +3,14 @@ import {
   getFirstDayOfMonth,
   getLocalDateString,
 } from '@/libs/utils/dateUtils';
-import { useState } from 'react';
 
 import { Booking } from '../ReservationStatus';
 
 type CalendarProps = {
-  year: number;
-  month: number;
+  currentYear: number;
+  currentMonth: number;
   bookings: { date: string; info: string }[];
+  days: string[];
 };
 
 type DateObject = {
@@ -21,11 +21,12 @@ type DateObject = {
   bookingInfo?: string;
 };
 
-export default function Calendar({ year, month, bookings }: CalendarProps) {
-  const [currentYear, setCurrentYear] = useState(year);
-  const [currentMonth, setCurrentMonth] = useState(month - 1);
-  // parameter로 전달된 값이 1일 때 1월을 출력하기 위함
-
+export default function Calendar({
+  currentYear,
+  currentMonth,
+  days,
+  bookings,
+}: CalendarProps) {
   // 현재 달의 날짜 계산
   const firstDayOfCurrentMonth = getFirstDayOfMonth(currentYear, currentMonth);
   const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
@@ -45,9 +46,7 @@ export default function Calendar({ year, month, bookings }: CalendarProps) {
   ): { isScheduled: boolean; info?: string } => {
     // localTime 기준 날짜 변환 to "YYYY-MM-DD"
     const dateString = getLocalDateString(date);
-    console.log(`Checking dateString: ${dateString}`);
     const booking = bookings.find((booking) => booking.date === dateString);
-    console.log(`Booking found: ${booking}`); //
     return booking
       ? { isScheduled: true, info: booking.info }
       : { isScheduled: false };
@@ -138,7 +137,15 @@ export default function Calendar({ year, month, bookings }: CalendarProps) {
   });
 
   return (
-    <div className="grid grid-cols-7 gap-2">
+    <div className="grid grid-cols-7 gap-2 border-1 border-custom-gray-400">
+      {days.map((day) => (
+        <div
+          key={day}
+          className="flex h-43 items-center border-b-1 border-custom-gray-400 pl-6 text-13"
+        >
+          <span>{day}</span>
+        </div>
+      ))}
       {calendar.map((week, weekIndex) =>
         week.map((dateObject, dateIndex) => {
           const dateString = getLocalDateString(dateObject.date);
@@ -146,15 +153,19 @@ export default function Calendar({ year, month, bookings }: CalendarProps) {
           return (
             <div
               key={`${weekIndex}-${dateIndex}`}
-              className={`flex h-100 w-full flex-col text-20 ${dateObject.isCurrentMonth ? '' : 'opacity-40'}`}
+              className={`h-154 w-full border-b-1 border-custom-gray-400`}
             >
-              <span>{dateObject.day}</span>
-              <span className="text-10">{dateString}</span>
-              {bookingsOnDate.map((booking, bookingIndex) => (
-                <div key={bookingIndex} className="flex flex-col text-10">
-                  {booking.info}
-                </div>
-              ))}
+              <div
+                className={`flex flex-col pl-6 ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
+              >
+                <span className="text-17 font-medium">{dateObject.day}</span>
+                <span className="text-7">{dateString}</span>
+                {bookingsOnDate.map((booking, bookingIndex) => (
+                  <div key={bookingIndex} className="flex flex-col text-10">
+                    {booking.info}
+                  </div>
+                ))}
+              </div>
             </div>
           );
         }),

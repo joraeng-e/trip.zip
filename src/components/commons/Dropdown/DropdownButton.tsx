@@ -1,9 +1,8 @@
+import { ArrowDown } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 import { useDropdownContext } from '.';
-
-const ArrowDown = '/icon/arrowDown.svg';
 
 export default function Button({ ...rest }) {
   const { toggleDropdown, isOpen, width, height, buttonText } =
