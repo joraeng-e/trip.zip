@@ -7,21 +7,13 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 
-type ProfileImageProps = {
-  profileImageUrl: string;
-  onImageUpload: (url: string) => void;
-  onImageChange: (file: File) => void;
-};
-
 const whileHover = {
   backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
 };
 
 export default function ProfileImage({
   profileImageUrl,
-  onImageUpload,
-  onImageChange,
-}: ProfileImageProps) {
+}: PostProfileImageResponse) {
   const [isEditBoxVisible, setIsEditBoxVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
@@ -32,7 +24,6 @@ export default function ProfileImage({
     mutationFn: (formData: FormData) => postProfileImage(formData),
     onSuccess: (data) => {
       console.log('이미지 업로드 성공', data);
-      onImageUpload(data.profileImageUrl);
       setIsEditBoxVisible(false);
       setPreviewImageUrl(null);
     },
@@ -44,9 +35,12 @@ export default function ProfileImage({
   const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
+
+      if (selectedImage) {
+        alert('이미지 업로드는 최대 한 개만 가능합니다.');
+        return;
+      }
       setSelectedImage(file);
-      onImageChange(file);
-      handleUpload(file);
     }
   };
 
@@ -56,28 +50,17 @@ export default function ProfileImage({
     }
   };
 
-  const handleUpload = (file: File) => {
-    if (file) {
-      const formData = new FormData();
-      formData.append('profileImageUrl', file);
-      console.log(formData);
-      mutation.mutate(formData);
-    }
-  };
-
   const handleEditClick = () => {
     console.log('Edit button clicked');
     setIsEditBoxVisible(!isEditBoxVisible);
     setPreviewImageUrl(null);
   };
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  useClickOutside(dropdownRef, () => setIsEditBoxVisible(false));
-
   const handleChangeToDefaultImage = () => {
     console.log('기본 이미지로 변경');
-    onImageUpload('');
-    setIsEditBoxVisible(false);
+    setSelectedImage(null); // 선택된 이미지 초기화
+    setPreviewImageUrl(null); // 미리보기 이미지 초기화
+    setIsEditBoxVisible(false); // 편집 박스 숨기기
   };
 
   // 선택한 이미지의 미리보기 URL 생성 + 해제
@@ -109,19 +92,11 @@ export default function ProfileImage({
         ) : (
           <BaseProfile className="h-full w-full object-cover" />
         )}
-        <input
-          className="absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleImgChange}
-        />
       </div>
       <motion.div
         className="flex-center absolute left-120 top-150 h-44 w-44 cursor-pointer rounded-full bg-custom-green-200 md:right-0"
         whileHover={whileHover}
         onClick={handleEditClick}
-        ref={dropdownRef}
       >
         <Pencil />
       </motion.div>
@@ -131,16 +106,24 @@ export default function ProfileImage({
             <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
             <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
           </div>
-
-          <p
-            className="rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
-            onClick={handleImageClick}
-          >
-            이미지 업로드
-          </p>
+          <div className="relative">
+            <input
+              className="absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleImgChange}
+            />
+            <p
+              className="relative cursor-pointer rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+              onClick={handleImageClick}
+            >
+              이미지 업로드
+            </p>
+          </div>
           <hr className="my-2 border border-gray-200" />
           <p
-            className="rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+            className="z-50 rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
             onClick={handleChangeToDefaultImage}
           >
             기본 이미지로 변경
