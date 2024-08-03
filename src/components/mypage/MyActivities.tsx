@@ -63,7 +63,7 @@ export default function MyActivities() {
   return (
     <div className="mb-50">
       <div className="mb-24 flex items-center justify-between">
-        <h1 className="text-3xl-bold">내 체험 등록</h1>
+        <h1 className="text-3xl-bold">내 체험 관리</h1>
         <Modal.Root>
           <Modal.Trigger>
             <Button className="max-w-120 rounded-md px-16 py-10">
