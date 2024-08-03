@@ -1,6 +1,6 @@
+import MyActivities from '@/components/ActivitiyForm';
 import Info from '@/components/mypage/Info';
 import { MenuToggle } from '@/components/mypage/MenuToggle';
-import MyActivities from '@/components/mypage/MyActivities';
 import ProfileSideBar from '@/components/mypage/ProfileSideBar';
 import ReservationList from '@/components/mypage/ReservationList';
 import ReservationState from '@/components/mypage/ReservationState';

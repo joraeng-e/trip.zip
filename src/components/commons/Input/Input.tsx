@@ -4,7 +4,7 @@ import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import PasswordInput from './PasswordInput';
 
 type InputProps = {
-  label: string;
+  label?: string;
   name: string;
   type?: 'text' | 'password' | 'number' | 'email';
   placeholder: string;
