@@ -4,7 +4,7 @@ import { NextButton, PageList, PrevButton } from './Buttons';
 
 interface PaginationContextType {
   totalPages: number;
-  currentPage?: number;
+  currentPage: number;
   handlePageChange: (page: number) => void;
 }
 
@@ -23,7 +23,7 @@ export const usePaginationContext = () => {
 interface Props {
   handlePageChange: (page: number) => void;
   totalPages: number;
-  currentPage?: number;
+  currentPage: number;
 }
 
 /**
@@ -53,7 +53,7 @@ interface Props {
 export default function Pagination({
   handlePageChange,
   totalPages,
-  currentPage = 1,
+  currentPage,
 }: Props) {
   const contextValue = {
     totalPages,

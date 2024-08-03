@@ -48,9 +48,7 @@ export default function Activites({
   initialSort,
 }: Props) {
   const router = useRouter();
-  const [page, setPage] = useState<number | undefined>(
-    Number(initialPage) || 1,
-  );
+  const [page, setPage] = useState(Number(initialPage) || 1);
   const [category, setCategory] = useState<string | undefined>(
     initialCategory || undefined,
   );
