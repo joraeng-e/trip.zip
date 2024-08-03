@@ -33,7 +33,6 @@ export default function SelectOption({
     <div
       role="option"
       aria-selected={isSelected}
-      tabIndex={-1}
       className={`cursor-pointer p-10 pl-12 ${
         isFocused ? 'bg-gray-100' : 'bg-white'
       } ${isSelected ? 'font-bold' : ''} hover:bg-gray-100`}

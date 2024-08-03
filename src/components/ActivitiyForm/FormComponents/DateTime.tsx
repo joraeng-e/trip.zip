@@ -5,7 +5,7 @@ import {
 } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import { PostActivitiesRequest } from '@trip.zip-api';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 interface DateTimeInput {
@@ -15,7 +15,8 @@ interface DateTimeInput {
 }
 
 export default function DateTime() {
-  const [todayDate, setTodayDate] = useState<string>('');
+  const todayDate = new Date().toLocaleDateString('en-CA');
+
   const {
     register,
     control,
@@ -31,19 +32,11 @@ export default function DateTime() {
   });
 
   const [entry, setEntry] = useState<DateTimeInput>({
-    date: '',
+    date: todayDate,
     startTime: '',
     endTime: '',
   });
 
-  //오늘 날짜와 초기 상태를 설정하는 훅
-  useEffect(() => {
-    const today = new Date().toLocaleDateString('en-CA');
-    setTodayDate(today);
-    setEntry((prevEntry) => ({ ...prevEntry, date: today }));
-  }, []);
-
-  //사용자가 날짜나 시간을 입력하면 인풋 상태를 업데이트
   const handleDateTimeInputChange = ({
     target: { id, value },
   }: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +44,6 @@ export default function DateTime() {
     clearErrors('schedules');
   };
 
-  //현재 입력된 날짜와 시간이 유효한지 확인 1.필드가 다 채워져 있는가? 2.시작시간이 종료시간보다 이전인가?
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
     return (
@@ -59,7 +51,6 @@ export default function DateTime() {
     );
   }, [entry, todayDate]);
 
-  //새로 입력된 일정이 이미 존재하는 일정과 중복되는가?
   const isDuplicateEntry = (newEntry: DateTimeInput) => {
     return getValues('schedules').some(
       ({ date, startTime }) =>
@@ -67,7 +58,6 @@ export default function DateTime() {
     );
   };
 
-  //새 일정을 추가. 중복된 시간인지 검사하고,
   const handleAddEntry = async () => {
     if (isDuplicateEntry(entry)) {
       setError('schedules', {
@@ -75,14 +65,12 @@ export default function DateTime() {
         message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
       });
     } else {
-      //아니면 일정을 추가하고 input reset해줘요.
       append(entry);
       setEntry({ date: todayDate, startTime: '', endTime: '' });
       await trigger('schedules');
     }
   };
 
-  //일정 삭제.
   const handleRemoveEntry = (index: number) => {
     remove(index);
     trigger('schedules');
@@ -90,7 +78,7 @@ export default function DateTime() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-5">
+      <div className="flex w-full items-center justify-between gap-5">
         <div className="flex w-full max-w-380 flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
@@ -98,7 +86,7 @@ export default function DateTime() {
           <input
             id="date"
             type="date"
-            className={classNames('basic-input max-w-380', {
+            className={classNames('basic-input max-w-380 cursor-pointer', {
               'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.date}
@@ -113,7 +101,7 @@ export default function DateTime() {
           <input
             id="startTime"
             type="time"
-            className={classNames('basic-input max-w-140', {
+            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
               'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.startTime}
@@ -130,7 +118,7 @@ export default function DateTime() {
           <input
             id="endTime"
             type="time"
-            className={classNames('basic-input max-w-140', {
+            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
               'border-red-500': !!errors.schedules?.message,
             })}
             value={entry.endTime}
@@ -140,14 +128,15 @@ export default function DateTime() {
         <button
           type="button"
           onClick={handleAddEntry}
-          className={classNames('mt-6', {
-            'cursor-not-allowed opacity-50': !isValidEntry,
-            'text-green-800 hover:text-nomad-black': !!isValidEntry,
+          className={classNames('mt-20 h-56 w-56 max-w-56 rounded-md', {
+            'cursor-not-allowed text-gray-400': !isValidEntry,
+            'text-green-700 hover:text-green-900 hover:shadow-lg':
+              !!isValidEntry,
           })}
           disabled={!isValidEntry}
           aria-label="일정 추가"
         >
-          <PlusTimeIcon className="mt-18 text-green-800 hover:text-nomad-black" />
+          <PlusTimeIcon />
         </button>
       </div>
       {errors.schedules && (
@@ -157,7 +146,10 @@ export default function DateTime() {
       )}
       <div className="space-y-4">
         {fields.map((field, index) => (
-          <div key={field.id} className="flex items-center gap-5">
+          <div
+            key={field.id}
+            className="flex items-center justify-between gap-5"
+          >
             <input
               type="text"
               readOnly
@@ -167,7 +159,7 @@ export default function DateTime() {
             <input
               type="text"
               readOnly
-              className="basic-input w-full max-w-140"
+              className="basic-input w-full max-w-136"
               {...register(`schedules.${index}.startTime` as const)}
             />
             <div className="hidden md:block">
@@ -176,7 +168,7 @@ export default function DateTime() {
             <input
               type="text"
               readOnly
-              className="basic-input w-full max-w-140"
+              className="basic-input w-full max-w-136"
               {...register(`schedules.${index}.endTime` as const)}
             />
             <button

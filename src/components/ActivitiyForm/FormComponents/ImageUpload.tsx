@@ -20,7 +20,6 @@ export default function ImageUploader({
   const { setValue } = useFormContext();
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
 
-  //이미지 업로드API
   const imageUploadMutation = useMutation({
     mutationFn: postActivityImage,
     onSuccess: (data) => {
@@ -37,7 +36,6 @@ export default function ImageUploader({
     },
   });
 
-  //이미지url이 변경되면 값을 업데이트
   useEffect(() => {
     if (maxImages === 1) {
       setValue(name, imagePreviewUrls[0] || '');
@@ -46,7 +44,6 @@ export default function ImageUploader({
     }
   }, [imagePreviewUrls, name, setValue, maxImages]);
 
-  //선택된 파일을 업로드하고 최대 이미지 수 초과하지 않도록 관리
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -63,7 +60,6 @@ export default function ImageUploader({
     }
   };
 
-  //이미지 삭제.
   const handleDelete = (index: number) => {
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
     setImagePreviewUrls(updatedUrls);
@@ -116,18 +112,17 @@ export default function ImageUploader({
         />
 
         {imagePreviewUrls.map((url, index) => (
-          <div key={index} className="relative p-4">
+          <div key={index} className="relative size-[206px] p-4">
             <Image
               src={url}
               alt="미리보기 이미지"
-              width={206}
-              height={206}
+              fill
               className="mr-14 rounded-lg object-cover"
             />
             <button
               type="button"
               onClick={() => handleDelete(index)}
-              className="absolute right-0 top-0 h-25 w-25 place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
+              className="absolute right-3 top-3 h-25 w-25 place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
             >
               <XIcon
                 aria-label="삭제 아이콘"
