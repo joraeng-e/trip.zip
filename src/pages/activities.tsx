@@ -28,6 +28,12 @@ const API_SORT_VALUE = {
 
 type SortOptions = keyof typeof API_SORT_VALUE;
 
+const SORT_VALUE = {
+  latest: '최신순',
+  price_asc: '가격이 낮은 순',
+  price_desc: '가격이 높은 순',
+};
+
 interface Props {
   initialPage: string | null;
   initialCategory: string | null;
@@ -51,7 +57,11 @@ export default function Activites({
   const [keyword, setKeyword] = useState<string | undefined>(
     initialKeyword || undefined,
   );
-  const [sort, setSort] = useState(initialSort || '최신순');
+  const [sort, setSort] = useState(
+    initialSort === null
+      ? '최신순'
+      : SORT_VALUE[initialSort as keyof typeof SORT_VALUE],
+  );
   const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
   const deviceState = useDeviceState();
 
@@ -99,15 +109,15 @@ export default function Activites({
   };
 
   const handleCategoryClick = (category: string | undefined) => {
-    setPage(1);
+    handlePageChange(1);
     setCategory(category);
-    updateQueryParams({ page: 1, category });
+    updateQueryParams({ category });
   };
 
   const handleKeyword = (keyword: string) => {
-    setPage(1);
+    handlePageChange(1);
     setKeyword(keyword);
-    updateQueryParams({ page: 1, keyword });
+    updateQueryParams({ keyword });
   };
 
   useEffect(
@@ -160,9 +170,9 @@ export default function Activites({
       <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
         {totalPages && (
           <Pagination
-            onPageChange={handlePageChange}
+            handlePageChange={handlePageChange}
             totalPages={totalPages}
-            initialPage={page}
+            currentPage={page}
           />
         )}
       </div>
