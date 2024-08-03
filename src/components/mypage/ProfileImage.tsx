@@ -19,7 +19,7 @@ export default function ProfileImage() {
 
   return (
     <div className="relative flex flex-col">
-      <p className="mb-8 font-bold md:text-right">프로필 사진</p>
+      <p className="mb-8 font-bold">프로필 사진</p>
       <div className="relative h-160 w-160 overflow-hidden rounded-full border-2">
         <BaseProfile className="h-full w-full object-cover" />
       </div>

@@ -54,7 +54,7 @@ function MyPage() {
     <div
       className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
-      <div className="hidden md:block">
+      <div className="hidden md:sticky md:top-100 md:block">
         <ProfileSideBar toggleOpen={toggleOpen} />
       </div>
       {isMobile && (
