@@ -27,9 +27,9 @@ declare module '@trip.zip-api' {
 
   // 내 정보 수정
   export type PatchUserInfoRequest = {
-    nickname: string;
-    profileImageUrl: string | null;
-    newPassword: string;
+    nickname?: string;
+    profileImageUrl?: string | null;
+    newPassword?: string;
   };
 
   export type PatchUserInfoResponse = {
