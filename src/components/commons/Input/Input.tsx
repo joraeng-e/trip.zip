@@ -12,6 +12,7 @@ type InputProps = {
   error?: FieldError;
   maxWidth?: string;
   onBlur?: () => void;
+  disabled?: boolean;
 };
 
 /**
@@ -54,6 +55,7 @@ export default function Input({
   error,
   maxWidth = '640px',
   onBlur,
+  disabled = false,
 }: InputProps) {
   const [isVibrating, setIsVibrating] = useState(false);
 
@@ -66,7 +68,9 @@ export default function Input({
 
   return (
     <div className={`relative flex w-full flex-col gap-2`} style={{ maxWidth }}>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name} className="mb-2 font-bold">
+        {label}
+      </label>
       {(type === 'text' || type === 'number' || type === 'email') && (
         <input
           type={type}
@@ -74,7 +78,8 @@ export default function Input({
           placeholder={placeholder}
           {...register}
           onBlur={handleBlur}
-          className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'}`}
+          disabled={disabled}
+          className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'} ${disabled && 'cursor-not-allowed'}`}
         />
       )}
       {type === 'password' && (
@@ -93,7 +98,4 @@ export default function Input({
       )}
     </div>
   );
-}
-function setIsVibrating(arg0: boolean) {
-  throw new Error('Function not implemented.');
 }

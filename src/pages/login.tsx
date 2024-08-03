@@ -56,15 +56,19 @@ export default function Signup() {
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
-        if (error.response.data.message === '존재하지 않는 유저입니다.') {
-          setModalMessage('존재하지 않는 유저입니다.');
-        } else if (
-          error.response.data.message === '비밀번호가 일치하지 않습니다.'
-        ) {
-          setModalMessage('비밀번호가 일치하지 않습니다.');
-        } else {
-          console.error('로그인 실패', error);
+        const message = error.response.data.message;
+
+        switch (message) {
+          case '존재하지 않는 유저입니다.':
+            setModalMessage('존재하지 않는 유저입니다.');
+            break;
+          case '비밀번호가 일치하지 않습니다.':
+            setModalMessage('비밀번호가 일치하지 않습니다.');
+            break;
+          default:
+            console.error('로그인 실패', error);
         }
+
         setIsModalOpen(true);
         setIsSuccessMessage(false);
       }
