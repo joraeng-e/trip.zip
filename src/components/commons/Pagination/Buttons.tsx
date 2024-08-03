@@ -47,7 +47,7 @@ export function NextButton() {
 
   useEffect(() => {
     setDisabled(currentPage >= totalPages);
-  }, [currentPage]);
+  }, [currentPage, totalPages]);
 
   return (
     <button

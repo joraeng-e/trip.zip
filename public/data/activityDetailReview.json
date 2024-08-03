@@ -1,0 +1,45 @@
+{
+  "averageRating": 4.5,
+  "totalCount": 3,
+  "reviews": [
+    {
+      "id": 1,
+      "user": {
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "nickname": "사용자1",
+        "id": 101
+      },
+      "activityId": 201,
+      "rating": 5,
+      "content": "정말 재미있었어요! 추천합니다.",
+      "createdAt": "2024-07-28T09:47:16.206Z",
+      "updatedAt": "2024-07-28T09:47:16.206Z"
+    },
+    {
+      "id": 2,
+      "user": {
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "nickname": "사용자2",
+        "id": 102
+      },
+      "activityId": 201,
+      "rating": 4,
+      "content": "좋았지만 몇 가지 아쉬운 점이 있었습니다.",
+      "createdAt": "2024-07-29T09:47:16.206Z",
+      "updatedAt": "2024-07-29T09:47:16.206Z"
+    },
+    {
+      "id": 3,
+      "user": {
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "nickname": "사용자3",
+        "id": 103
+      },
+      "activityId": 201,
+      "rating": 4,
+      "content": "전반적으로 만족스러웠습니다.",
+      "createdAt": "2024-07-30T09:47:16.206Z",
+      "updatedAt": "2024-07-30T09:47:16.206Z"
+    }
+  ]
+}

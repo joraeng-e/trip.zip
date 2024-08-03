@@ -1,5 +1,5 @@
 // 쿠키 설정 함수
-export function setCookie(name: string, value: string, days: number) {
+export function setCookie(name: string, value: string, days?: number) {
   if (typeof document !== 'undefined') {
     const expires = days
       ? `; expires=${new Date(Date.now() + days * 30 * 60 * 1000).toUTCString()}`
