@@ -1,7 +1,5 @@
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
-import { GetServerSideProps } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
 
 import MyActivityForm from '../ActivitiyForm';
@@ -14,44 +12,42 @@ const useMyActivities = (size = 20) => {
     queryKey: ['myActivities', size],
     queryFn: ({ pageParam }: { pageParam?: number }) =>
       getMyActivities({ cursorId: pageParam, size }),
-    getNextPageParam: (lastPage) => lastPage.cursorId,
+    getNextPageParam: (lastBatch) => lastBatch.cursorId,
     initialPageParam: undefined,
   });
 };
 
 export default function MyActivities() {
   const [showActivityForm, setShowActivityForm] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
   const lastCardRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
+
+  //마지막 카드가 화면에 보이는가?
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        //마지막 카드가 있고 + 더 로드할 페이지가 있고 + 현재 로딩중이 아니면 => 다음 페이지 로드
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
       { threshold: 1.0 },
     );
-    observerRef.current = observer;
 
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    const currentObserver = observerRef.current;
     const currentLastCard = lastCardRef.current;
-    if (currentLastCard && currentObserver) {
-      currentObserver.observe(currentLastCard);
+    if (currentLastCard) {
+      observer.observe(currentLastCard);
     }
+
     return () => {
-      if (currentLastCard && currentObserver) {
-        currentObserver.unobserve(currentLastCard);
+      if (currentLastCard) {
+        observer.unobserve(currentLastCard);
       }
+      observer.disconnect();
     };
-  }, [data]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, data]);
 
   const handleConfirm = () => {
     setShowActivityForm(true);
@@ -83,45 +79,24 @@ export default function MyActivities() {
         </Modal.Root>
       </div>
 
-      {data?.pages.map((page, pageIndex) => (
-        <React.Fragment key={pageIndex}>
-          {page.activities.map((activity, activityIndex) => (
+      {data?.pages.map((batch, batchIndex) => (
+        <div key={batchIndex}>
+          {batch.activities.map((activity, activityIndex) => (
             <div
               ref={
-                pageIndex === data.pages.length - 1 &&
-                activityIndex === page.activities.length - 1
+                batchIndex === batch.activities.length - 1 &&
+                activityIndex === batch.activities.length - 1
                   ? lastCardRef
                   : null
               }
               key={activity.id}
             >
-              <MyCard
-                bannerImageUrl={activity.bannerImageUrl}
-                rating={activity.rating}
-                reviewCount={activity.reviewCount}
-                title={activity.title}
-                price={activity.price}
-              />
+              <MyCard {...activity} />
             </div>
           ))}
-        </React.Fragment>
+        </div>
       ))}
       {isFetchingNextPage && <div>로딩 중...</div>}
     </div>
   );
 }
-export const getServerSideProps: GetServerSideProps = async () => {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['myActivities', 20],
-    queryFn: () => getMyActivities({ size: 20 }),
-    initialPageParam: undefined,
-  });
-
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-};

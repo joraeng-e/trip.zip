@@ -34,7 +34,7 @@ export default function MyCard({
               {rating} ({reviewCount})
             </span>
           </div>
-          <h3 className="text-base font-semibold">{title}</h3>
+          <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -48,6 +48,7 @@ export default function MyCard({
           <div className="pr-16">
             <button className="text-gray-400 hover:text-gray-600">
               <KebabIcon />
+              {/* TODO: 수정,삭제 토글 추가 */}
             </button>
           </div>
         </div>
