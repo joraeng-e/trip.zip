@@ -26,7 +26,11 @@ const whileHover = {
   backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
 };
 
-export default function ProfileSideBar() {
+type ProfileSideBarProps = {
+  toggleOpen: () => void;
+};
+
+export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
   const { activeTab, setActiveTab } = useTabContext();
 
   const logout = () => {
@@ -34,6 +38,11 @@ export default function ProfileSideBar() {
     deleteCookie('refreshToken');
     deleteCookie('isLogin');
     router.push('/');
+  };
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    toggleOpen();
   };
 
   return (
@@ -55,7 +64,7 @@ export default function ProfileSideBar() {
       <div className="flex w-full flex-col gap-12 px-12">
         <div
           className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
-          onClick={() => setActiveTab('info')}
+          onClick={() => handleTabClick('info')}
         >
           <ProfileAccountIcon
             className={`${activeTab === 'info' ? svgActiveStyle : svgStyle}`}
@@ -64,7 +73,7 @@ export default function ProfileSideBar() {
         </div>
         <div
           className={`${baseTextStyle} ${activeTab === 'reservationList' ? activeStyle : textGroupStyle}`}
-          onClick={() => setActiveTab('reservationList')}
+          onClick={() => handleTabClick('reservationList')}
         >
           <ProfileChecklistIcon
             className={`${activeTab === 'reservationList' ? svgActiveStyle : svgStyle}`}
@@ -73,7 +82,7 @@ export default function ProfileSideBar() {
         </div>
         <div
           className={`${baseTextStyle} ${activeTab === 'myActivities' ? activeStyle : textGroupStyle}`}
-          onClick={() => setActiveTab('myActivities')}
+          onClick={() => handleTabClick('myActivities')}
         >
           <ProfileCogIcon
             className={`${activeTab === 'myActivities' ? svgActiveStyle : svgStyle}`}
@@ -82,7 +91,7 @@ export default function ProfileSideBar() {
         </div>
         <div
           className={`${baseTextStyle} ${activeTab === 'reservationState' ? activeStyle : textGroupStyle}`}
-          onClick={() => setActiveTab('reservationState')}
+          onClick={() => handleTabClick('reservationState')}
         >
           <ProfileCalendarIcon
             className={`${activeTab === 'reservationState' ? svgActiveStyle : svgStyle}`}

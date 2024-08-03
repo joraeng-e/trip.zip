@@ -28,7 +28,7 @@ const sidebar = {
   },
 };
 
-function Mypage() {
+function MyPage() {
   const [isOpen, toggleOpen] = useCycle(false, true);
 
   const { activeTab } = useTabContext();
@@ -52,10 +52,10 @@ function Mypage() {
 
   return (
     <div
-      className={`page-container flex justify-between gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
+      className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
     >
       <div className="hidden md:block">
-        <ProfileSideBar />
+        <ProfileSideBar toggleOpen={toggleOpen} />
       </div>
       {isMobile && (
         <div className="flex">
@@ -65,11 +65,13 @@ function Mypage() {
               className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100"
               variants={sidebar}
             ></motion.div>
-            {isOpen && <ProfileSideBar />}
+            {isOpen && <ProfileSideBar toggleOpen={toggleOpen} />}
           </motion.nav>
         </div>
       )}
-      {(isMobile && isOpen) || <div className="flex-1">{renderPage()}</div>}
+      {(isMobile && isOpen) || (
+        <div className="w-full md:flex-1">{renderPage()}</div>
+      )}
     </div>
   );
 }
@@ -77,7 +79,7 @@ function Mypage() {
 export default function MypageWithProvider() {
   return (
     <TabProvider>
-      <Mypage />
+      <MyPage />
     </TabProvider>
   );
 }

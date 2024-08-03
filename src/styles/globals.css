@@ -19,15 +19,16 @@
     @apply mx-auto w-full max-w-1200 px-16;
   }
   .page-container {
-    @apply mx-auto mt-100 w-full max-w-1200 px-16;
+    @apply mx-auto mt-70 w-full max-w-1200 px-16;
   }
-
   .flex-center {
     @apply flex items-center justify-center;
   }
-
   .basic-input {
     @apply h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200;
+  }
+  .min-screen {
+    min-height: calc(100vh - 304px);
   }
 }
 
