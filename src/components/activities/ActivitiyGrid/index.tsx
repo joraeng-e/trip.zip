@@ -1,18 +1,38 @@
+import Device from '@/libs/constants/device';
 import { GetActivitiesResponse } from '@trip.zip-api';
 
 import { ActivityCard } from './Card';
 
 export default function ActivityGrid({
   data,
+  isLoading,
+  deviceState,
 }: {
   data?: GetActivitiesResponse;
+  isLoading: boolean;
+  deviceState: Device;
 }) {
   // TODO: 에러, 로딩 처리
+  let skeletonCount = 4;
+  if (deviceState === Device.Mobile) skeletonCount = 4;
+  if (deviceState === Device.Tablet) skeletonCount = 9;
+  if (deviceState === Device.PC) skeletonCount = 8;
+
   return (
-    <div className="grid grid-cols-2 gap-x-8 gap-y-5 md:grid-cols-3 md:gap-x-16 md:gap-y-32 xl:grid-cols-4 xl:gap-x-24 xl:gap-y-48">
-      {data?.activities.map((activity) => (
-        <ActivityCard key={activity.id} data={activity} />
-      ))}
+    <div className="sm grid min-h-[800px] grid-cols-2 gap-x-8 gap-y-5 md:min-h-[1400px] md:grid-cols-3 md:gap-x-16 md:gap-y-32 lg:min-h-[1600px] xl:min-h-[900px] xl:grid-cols-4 xl:gap-x-24 xl:gap-y-48">
+      {!isLoading ? (
+        <>
+          {data?.activities.map((activity) => (
+            <ActivityCard key={activity.id} data={activity} />
+          ))}
+        </>
+      ) : (
+        <>
+          {Array.from({ length: skeletonCount }).map((_, idx) => (
+            <ActivityCard.Skeleton key={idx} />
+          ))}
+        </>
+      )}
     </div>
   );
 }

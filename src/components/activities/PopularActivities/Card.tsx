@@ -23,6 +23,8 @@ export default function PopularActivityCard({ data }: { data: Activity }) {
         alt="banner"
         fill
         onError={handleImageError}
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
         className="absolute -z-10 rounded-[20px] object-cover brightness-75 filter"
       />
 
@@ -44,3 +46,13 @@ export default function PopularActivityCard({ data }: { data: Activity }) {
     </Link>
   );
 }
+
+function Skeleton() {
+  return (
+    <div className="relative size-186 flex-shrink-0 overflow-hidden rounded-[20px] bg-slate-300 md:size-[384px]">
+      <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50"></div>
+    </div>
+  );
+}
+
+PopularActivityCard.Skeleton = Skeleton;

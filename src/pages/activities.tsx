@@ -63,7 +63,7 @@ export default function Activites({
   const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
   const deviceState = useDeviceState();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [
       'activities',
       {
@@ -162,10 +162,15 @@ export default function Activites({
             </h1>
           </div>
         )}
-        <ActivityGrid data={data} />
+
+        <ActivityGrid
+          deviceState={deviceState}
+          isLoading={isLoading}
+          data={data}
+        />
       </ActivitiesLayout>
 
-      <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
+      <div className="mb-120 flex justify-center">
         {totalPages && (
           <Pagination
             handlePageChange={handlePageChange}
