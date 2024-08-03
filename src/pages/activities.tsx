@@ -63,7 +63,7 @@ export default function Activites({
   const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
   const deviceState = useDeviceState();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [
       'activities',
       {
@@ -156,16 +156,15 @@ export default function Activites({
               />
               <DropdownContainer value={sort} setValue={setSort} />
             </div>
-
             <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
               {category || <>🛼 모든 체험</>}
             </h1>
           </div>
         )}
-
         <ActivityGrid
           deviceState={deviceState}
           isLoading={isLoading}
+          isError={isError}
           data={data}
         />
       </ActivitiesLayout>

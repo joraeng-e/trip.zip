@@ -5,7 +5,7 @@ import { memo } from 'react';
 import PopularActivityCard from './Card';
 
 function PopularActivities() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['activities', 'popular'],
     queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
   });
@@ -29,6 +29,11 @@ function PopularActivities() {
                 <PopularActivityCard.Skeleton key={index} />
               ))}
             </>
+          )}
+          {isError && (
+            <div className="flex-center h-186 flex-grow text-18 md:h-[384px]">
+              에러가 발생하였습니다.
+            </div>
           )}
         </div>
       </div>

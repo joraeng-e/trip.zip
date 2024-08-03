@@ -38,9 +38,7 @@ export default function PopularActivityCard({ data }: { data: Activity }) {
         {title}
       </h1>
       <div className="absolute bottom-24 md:bottom-30">
-        <span className="font-bold leading-26">
-          ₩ {price.toLocaleString()}{' '}
-        </span>
+        <span className="font-bold leading-26">₩ {price.toLocaleString()}</span>
         <span className="text-14 leading-24 text-[#a1a1a1]">/ 인</span>
       </div>
     </Link>
