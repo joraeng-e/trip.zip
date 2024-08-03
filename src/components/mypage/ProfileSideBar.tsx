@@ -1,5 +1,6 @@
 import { useTabContext } from '@/context/TabContext';
 import {
+  BaseProfile,
   Logout,
   ProfileAccountIcon,
   ProfileCalendarIcon,
@@ -10,8 +11,6 @@ import { deleteCookie } from '@/libs/utils/cookie';
 import { motion } from 'framer-motion';
 import router from 'next/router';
 import React from 'react';
-
-import ProfileImage from './ProfileImage';
 
 const baseTextStyle =
   'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold transition-all';
@@ -48,7 +47,11 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <ProfileImage />
+      <div className="relative">
+        <div className="relative h-160 w-160 overflow-hidden rounded-full border-2">
+          <BaseProfile className="h-full w-full object-cover" />
+        </div>
+      </div>
       <div className="flex w-full flex-col gap-12 px-12">
         <div
           className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}

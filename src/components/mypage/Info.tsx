@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../commons/Button';
 import Input from '../commons/Input/Input';
 import Modal from '../commons/Modal';
+import ProfileImage from './ProfileImage';
 
 type FormData = {
   nickname: string;
@@ -134,6 +135,7 @@ export default function Info() {
         </Button>
       </div>
       <form className="flex flex-col gap-24" onSubmit={handleSubmit(onSubmit)}>
+        <ProfileImage />
         <Input
           label="닉네임"
           name="nickname"
