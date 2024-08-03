@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios';
-
-import { deleteCookie, getCookie, setCookie } from './utils/cookie';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -9,6 +8,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const accessToken = getCookie('accessToken');
+
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
@@ -36,15 +36,18 @@ instance.interceptors.response.use(
           throw new Error('리프레시 토큰이 없습니다.');
         }
 
-        const response = await instance.post('/auth/tokens');
+        // 서버에 리프레시 토큰 요청
+        const response = await instance.post('/auth/tokens', {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
-        if (newRefreshToken) console.log('hello');
-        // 새로운 토큰 저장
+
         setCookie('accessToken', accessToken);
         setCookie('refreshToken', newRefreshToken);
 
-        // 기본 헤더와 요청 헤더에 새로운 액세스 토큰 설정
         instance.defaults.headers.common['Authorization'] =
           `Bearer ${accessToken}`;
         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
@@ -54,10 +57,12 @@ instance.interceptors.response.use(
         console.error('토큰 갱신 실패:', error);
         deleteCookie('accessToken');
         deleteCookie('refreshToken');
-        alert('다시 로그인해주세요.');
+        if (typeof window !== 'undefined') {
+          alert('다시 로그인해주세요.');
+        }
       }
     }
-    throw error;
+    return Promise.reject(error);
   },
 );
 
