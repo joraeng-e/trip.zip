@@ -1,4 +1,5 @@
 import { useTabContext } from '@/context/TabContext';
+import { getUser } from '@/libs/api/user';
 import {
   BaseProfile,
   Logout,
@@ -8,6 +9,7 @@ import {
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
 import { deleteCookie } from '@/libs/utils/cookie';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import router from 'next/router';
 import React from 'react';
@@ -40,19 +42,29 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
     toggleOpen();
   };
 
+  const userInfo = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getUser,
+  });
+
   return (
     <motion.div
-      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-384"
+      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="relative">
-        <div className="relative h-160 w-160 overflow-hidden rounded-full border-2">
+      <div className="relative flex items-center justify-center gap-24">
+        <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
           <BaseProfile className="h-full w-full object-cover" />
+        </div>
+        <div className="flex flex-col">
+          <p className="text-2xl-bold">{userInfo.data?.nickname}</p>
+          <p>{userInfo.data?.email}</p>
         </div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
+        <hr className="border-1" />
         <div
           className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
           onClick={() => handleTabClick('info')}
@@ -89,8 +101,9 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
           />
           <p>예약 현황</p>
         </div>
+        <hr className="border-1" />
         <div
-          className={`text-black ${baseTextStyle} border-t-2 hover:bg-custom-green-100`}
+          className={`text-black ${baseTextStyle} hover:bg-custom-green-100`}
           onClick={logout}
         >
           <Logout className="h-20 w-20" />

@@ -31,15 +31,10 @@ interface ApiError extends Error {
   };
 }
 
-const fetchUserInfo = async () => {
-  const userInfo = await getUser();
-  return userInfo;
-};
-
 export default function Info() {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
-    queryFn: fetchUserInfo,
+    queryFn: getUser,
   });
 
   const {
@@ -134,49 +129,54 @@ export default function Info() {
           저장하기
         </Button>
       </div>
-      <form className="flex flex-col gap-24" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="flex flex-col-reverse gap-24 md:flex-row md:justify-between"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col gap-24 md:flex-1">
+          <Input
+            label="닉네임"
+            name="nickname"
+            type="text"
+            placeholder="닉네임을 입력해주세요"
+            register={register('nickname')}
+            error={errors.nickname}
+            maxWidth="792px"
+            onBlur={() => trigger('nickname')}
+          />
+          <Input
+            label="이메일"
+            name="email"
+            type="text"
+            placeholder="이메일을 입력해 주세요"
+            register={register('email')}
+            error={errors.email}
+            maxWidth="792px"
+            onBlur={() => trigger('email')}
+            disabled={true}
+          />
+          <Input
+            label="비밀번호 재설정"
+            name="newPassword"
+            type="password"
+            placeholder="8자 이상 입력해 주세요"
+            register={register('newPassword')}
+            error={errors.newPassword}
+            maxWidth="792px"
+            onBlur={() => trigger('newPassword')}
+          />
+          <Input
+            label="비밀번호 재입력"
+            name="reEnterPassword"
+            type="password"
+            placeholder="비밀번호를 한번 더 입력해 주세요"
+            register={register('reEnterPassword')}
+            error={errors.reEnterPassword}
+            maxWidth="792px"
+            onBlur={() => trigger('reEnterPassword')}
+          />
+        </div>
         <ProfileImage />
-        <Input
-          label="닉네임"
-          name="nickname"
-          type="text"
-          placeholder="닉네임을 입력해주세요"
-          register={register('nickname')}
-          error={errors.nickname}
-          maxWidth="792px"
-          onBlur={() => trigger('nickname')}
-        />
-        <Input
-          label="이메일"
-          name="email"
-          type="text"
-          placeholder="이메일을 입력해 주세요"
-          register={register('email')}
-          error={errors.email}
-          maxWidth="792px"
-          onBlur={() => trigger('email')}
-          disabled={true}
-        />
-        <Input
-          label="비밀번호 재설정"
-          name="newPassword"
-          type="password"
-          placeholder="8자 이상 입력해 주세요"
-          register={register('newPassword')}
-          error={errors.newPassword}
-          maxWidth="792px"
-          onBlur={() => trigger('newPassword')}
-        />
-        <Input
-          label="비밀번호 재입력"
-          name="reEnterPassword"
-          type="password"
-          placeholder="비밀번호를 한번 더 입력해 주세요"
-          register={register('reEnterPassword')}
-          error={errors.reEnterPassword}
-          maxWidth="792px"
-          onBlur={() => trigger('reEnterPassword')}
-        />
         {modalMessage && (
           <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Content>
