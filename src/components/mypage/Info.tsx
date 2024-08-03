@@ -16,11 +16,13 @@ type FormData = {
   email: string;
   newPassword?: string | null;
   reEnterPassword?: string | null;
+  profileImageUrl?: string | null;
 };
 
 type registerDataType = {
   nickname?: string;
   newPassword?: string;
+  profileImageUrl?: string;
 };
 
 interface ApiError extends Error {
@@ -43,6 +45,7 @@ export default function Info() {
     formState: { errors },
     trigger,
     reset,
+    setValue,
   } = useForm<FormData>({
     resolver: yupResolver(myInfoSchema),
     mode: 'all',
@@ -51,6 +54,7 @@ export default function Info() {
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState('');
 
   const router = useRouter();
 
@@ -61,7 +65,9 @@ export default function Info() {
         email: userInfo.email,
         newPassword: '',
         reEnterPassword: '',
+        profileImageUrl: null,
       });
+      setProfileImageUrl(userInfo.profileImageUrl || '');
     }
   }, [userInfo, reset]);
 
@@ -106,6 +112,7 @@ export default function Info() {
     const registerData: registerDataType = {
       nickname: nickname !== userInfo?.nickname ? nickname : undefined,
       newPassword: newPassword || undefined,
+      profileImageUrl: profileImageUrl || undefined,
     };
 
     mutation.mutate(registerData);
@@ -118,7 +125,7 @@ export default function Info() {
   };
 
   return (
-    <div className="mb-70 h-fit">
+    <div className="mb-100 h-fit">
       <div className="mb-30 flex w-full items-center justify-between">
         <h1 className="text-3xl-bold">내 정보</h1>
         <Button
@@ -176,7 +183,13 @@ export default function Info() {
             onBlur={() => trigger('reEnterPassword')}
           />
         </div>
-        <ProfileImage />
+        <ProfileImage
+          profileImageUrl={profileImageUrl}
+          onImageUpload={(url) => setProfileImageUrl(url)}
+          onImageChange={(file) =>
+            setValue('profileImageUrl', URL.createObjectURL(file))
+          }
+        />
         {modalMessage && (
           <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Modal.Content>
