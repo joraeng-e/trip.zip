@@ -67,9 +67,9 @@ export default function Pagination({
   };
 
   useEffect(() => {
-    if (totalPages < initialPage) updateCurrentPage(totalPages);
-    else if (initialPage <= 0) updateCurrentPage(1);
-    else updateCurrentPage(initialPage);
+    if (totalPages < initialPage) setCurrentPage(totalPages);
+    else if (initialPage <= 0) setCurrentPage(1);
+    else setCurrentPage(initialPage);
   }, [initialPage, totalPages]);
 
   return (

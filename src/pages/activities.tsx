@@ -99,13 +99,15 @@ export default function Activites({
   };
 
   const handleCategoryClick = (category: string | undefined) => {
+    setPage(1);
     setCategory(category);
-    updateQueryParams({ category });
+    updateQueryParams({ page: 1, category });
   };
 
   const handleKeyword = (keyword: string) => {
+    setPage(1);
     setKeyword(keyword);
-    updateQueryParams({ keyword });
+    updateQueryParams({ page: 1, keyword });
   };
 
   useEffect(
