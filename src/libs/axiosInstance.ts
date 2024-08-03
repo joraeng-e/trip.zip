@@ -1,7 +1,5 @@
 import axios, { AxiosError } from 'axios';
-
-import { IS_SERVER } from './constants/server';
-import { deleteCookie, getCookie, setCookie } from './utils/cookie';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -10,6 +8,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const accessToken = getCookie('accessToken');
+
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
@@ -51,28 +50,41 @@ instance.interceptors.response.use(
 
     // 401 오류와 리프레시 토큰이 없는 경우 처리
     if (error.response?.status === 401) {
-      const accessToken = await refreshToken();
-      originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-      return instance(originalRequest);
-    }
+      try {
+        const refreshToken = getCookie('refreshToken');
 
+        if (!refreshToken) {
+          throw new Error('리프레시 토큰이 없습니다.');
+        }
+
+        // 서버에 리프레시 토큰 요청
+        const response = await instance.post('/auth/tokens', {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
+
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', newRefreshToken);
+
+        instance.defaults.headers.common['Authorization'] =
+          `Bearer ${accessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+
+        return instance(originalRequest);
+      } catch (error) {
+        console.error('토큰 갱신 실패:', error);
+        deleteCookie('accessToken');
+        deleteCookie('refreshToken');
+        if (typeof window !== 'undefined') {
+          alert('다시 로그인해주세요.');
+        }
+      }
+    }
     return Promise.reject(error);
   },
 );
-
-const REFRESH_INTERVAL = 29 * 60 * 1000; // 29분
-setInterval(async () => {
-  try {
-    await refreshToken();
-  } catch (error) {
-    console.error('주기적인 토큰 갱신 실패:', error);
-    deleteCookie('accessToken');
-    deleteCookie('refreshToken');
-    alert('다시 로그인해주세요.');
-    if (!IS_SERVER) {
-      window.location.replace('/login');
-    }
-  }
-}, REFRESH_INTERVAL);
 
 export default instance;

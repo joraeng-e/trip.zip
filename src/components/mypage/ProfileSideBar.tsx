@@ -8,8 +8,7 @@ import {
   ProfileChecklistIcon,
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
-import { deleteCookie } from '@/libs/utils/cookie';
-import { useQuery } from '@tanstack/react-query';
+import { deleteCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
 import router from 'next/router';
 import React from 'react';
