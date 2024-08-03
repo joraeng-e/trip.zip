@@ -8,6 +8,7 @@ import {
   ProfileChecklistIcon,
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
+import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
 import router from 'next/router';
@@ -48,12 +49,12 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
 
   return (
     <motion.div
-      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344"
+      className="flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="relative flex items-center justify-center gap-24">
+      <div className="relative flex items-center justify-center gap-24 md:gap-10 lg:gap-24">
         <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
           <BaseProfile className="h-full w-full object-cover" />
         </div>
