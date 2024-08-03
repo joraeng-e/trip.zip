@@ -1,69 +1,88 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
-const instance = axios.create({
+const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
-instance.interceptors.request.use(
-  (config) => {
-    const accessToken = getCookie('accessToken');
+axiosInstance.interceptors.request.use(
+  async (config: InternalAxiosRequestConfig) => {
+    const excludedUrls = ['/auth/tokens'];
+    if (excludedUrls.some((url) => config.url?.includes(url))) {
+      return config;
+    }
 
+    const accessToken = getCookie('accessToken');
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
-instance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error: AxiosError) => {
-    const originalRequest = error.config!;
+const refreshToken = async () => {
+  const refreshToken = getCookie('refreshToken');
 
-    // 401 오류와 리프레시 토큰이 없는 경우 처리
+  if (!refreshToken) {
+    throw new Error('리프레시 토큰이 없습니다.');
+  }
+
+  try {
+    const response = await axiosInstance.post(
+      '/auth/tokens',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      },
+    );
+
+    const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+    // 새로운 토큰 저장
+    setCookie('accessToken', accessToken);
+    setCookie('refreshToken', newRefreshToken);
+
+    axiosInstance.defaults.headers.common['Authorization'] =
+      `Bearer ${accessToken}`;
+
+    return accessToken;
+  } catch (error) {
+    deleteCookie('accessToken');
+    deleteCookie('refreshToken');
+    if (typeof window !== 'undefined') {
+      alert('다시 로그인해주세요.');
+    }
+    throw error;
+  }
+};
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig;
+
     if (error.response?.status === 401) {
       try {
-        const refreshToken = getCookie('refreshToken');
+        const accessToken = await refreshToken();
 
-        if (!refreshToken) {
-          throw new Error('리프레시 토큰이 없습니다.');
-        }
-
-        // 서버에 리프레시 토큰 요청
-        const response = await instance.post('/auth/tokens', {
-          headers: {
-            Authorization: `Bearer ${refreshToken}`,
-          },
-        });
-
-        const { accessToken, refreshToken: newRefreshToken } = response.data;
-
-        setCookie('accessToken', accessToken);
-        setCookie('refreshToken', newRefreshToken);
-
-        instance.defaults.headers.common['Authorization'] =
-          `Bearer ${accessToken}`;
+        // 새로운 액세스 토큰으로 헤더 업데이트 및 원래 요청 재시도
         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
 
-        return instance(originalRequest);
+        return axiosInstance(originalRequest);
       } catch (error) {
-        console.error('토큰 갱신 실패:', error);
-        deleteCookie('accessToken');
-        deleteCookie('refreshToken');
-        if (typeof window !== 'undefined') {
-          alert('다시 로그인해주세요.');
-        }
+        return Promise.reject(error);
       }
     }
+
     return Promise.reject(error);
   },
 );
 
-export default instance;
+export default axiosInstance;
