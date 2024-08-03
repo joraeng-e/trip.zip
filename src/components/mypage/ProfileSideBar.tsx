@@ -49,7 +49,7 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
 
   return (
     <motion.div
-      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg"
+      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

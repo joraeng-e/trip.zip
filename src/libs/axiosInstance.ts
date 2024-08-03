@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
+import { IS_SERVER } from './constants/server';
 import { deleteCookie, getCookie, setCookie } from './utils/cookie';
 
 const instance = axios.create({
@@ -67,8 +68,10 @@ setInterval(async () => {
     console.error('주기적인 토큰 갱신 실패:', error);
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    alert('다시 로그인해주세요.');
-    window.location.replace('/login');
+    if (!IS_SERVER) {
+      alert('다시 로그인해주세요.');
+      window.location.replace('/login');
+    }
   }
 }, REFRESH_INTERVAL);
 
