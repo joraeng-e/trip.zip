@@ -6,6 +6,17 @@ import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
+import AutomobileEmoji from '/public/icon/emoji/automobileEmoji.svg';
+import CouchLampEmoji from '/public/icon/emoji/couchLampEmoji.svg';
+import GemEmoji from '/public/icon/emoji/gemEmoji.svg';
+import HeartEmoji from '/public/icon/emoji/heartEmoji.svg';
+import HuggingFaceEmoji from '/public/icon/emoji/huggingFaceEmoji.svg';
+import MoneyWingEmoji from '/public/icon/emoji/moneyWingEmoji.svg';
+import NationalParkEmoji from '/public/icon/emoji/nationalParkEmoji.svg';
+import PartyEmoji from '/public/icon/emoji/partyEmoji.svg';
+import SoccerBallEmoji from '/public/icon/emoji/soccerBallEmoji.svg';
+import SpongeEmoji from '/public/icon/emoji/spongeEmoji.svg';
+import StarEmoji from '/public/icon/emoji/starEmoji.svg';
 import FacebookIcon from '/public/icon/facebookIcon.svg';
 import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
@@ -67,4 +78,15 @@ export {
   ArrowRight,
   ArrowDown,
   TimeSeparatorIcon,
+  AutomobileEmoji,
+  CouchLampEmoji,
+  GemEmoji,
+  HeartEmoji,
+  HuggingFaceEmoji,
+  MoneyWingEmoji,
+  NationalParkEmoji,
+  PartyEmoji,
+  SoccerBallEmoji,
+  SpongeEmoji,
+  StarEmoji,
 };
