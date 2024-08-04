@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import BlurBannerImage from './BlurBannerImage';
 import ThumbnailImage from './ThumbnailImage';
 
 interface SwiperImageProps {
@@ -58,7 +59,7 @@ export default function SwiperImage(props: SwiperImageProps) {
   return (
     <div className="relative my-15">
       <div
-        className={`relative flex h-310 w-full items-center justify-center overflow-hidden rounded ${className}`}
+        className="w-full min-w-[280px] max-w-480 overflow-hidden bg-slate-300"
         onTouchStart={(e) => setTouch({ ...touch, start: e.touches[0].pageX })}
         onTouchMove={(e) => {
           if (ref.current) {
@@ -80,20 +81,19 @@ export default function SwiperImage(props: SwiperImageProps) {
       >
         <div
           ref={ref}
-          className="flex"
           style={updateTransform(currentImgIndex)}
+          className="flex bg-slate-500"
         >
-          {imageList.map((url, index) => (
-            <>
-              <img
-                key={index}
-                src={url}
-                className="h-auto w-auto object-contain"
-              />
-            </>
+          {imageList.map((img, index) => (
+            <img
+              key={`image-index-${index}`}
+              src={img}
+              className={'h-auto w-full object-contain'}
+            />
           ))}
         </div>
       </div>
+
       <div className="mt-10 flex space-x-8 overflow-x-auto whitespace-nowrap">
         {images.map((img, index) => (
           <div className="w-60 flex-none" key={index}>
