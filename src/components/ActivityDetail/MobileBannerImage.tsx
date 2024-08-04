@@ -1,11 +1,9 @@
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
-import Image from 'next/image';
 import React, { useState } from 'react';
 
+import BlurBannerImage from './BlurBannerImage';
 import SwiperImage from './SwiperImage';
 import ThumbnailImage from './ThumbnailImage';
-
-// 썸네일 컴포넌트 임포트
 
 interface MobileImageProps {
   bannerImageUrl: string;
@@ -32,17 +30,9 @@ export default function MobileBannerImage(props: MobileImageProps) {
       <div
         className={`relative flex h-310 w-full items-center justify-center overflow-hidden rounded ${className}`}
       >
-        <Image
+        <BlurBannerImage
           src={images[currentIndex]}
           alt={`image-${currentIndex}`}
-          fill
-          className="absolute -z-10 rounded-lg object-cover blur-md filter"
-        />
-        <Image
-          src={images[currentIndex]}
-          alt={`image-${currentIndex}`}
-          layout="fill"
-          className="rounded-lg object-contain"
         />
 
         {/* 이전 이미지 버튼 */}
@@ -73,8 +63,6 @@ export default function MobileBannerImage(props: MobileImageProps) {
       <div className="mt-10 flex space-x-8 overflow-x-auto whitespace-nowrap">
         {images.map((img, index) => (
           <div className="w-60 flex-none" key={index}>
-            {' '}
-            {/* 썸네일의 너비 고정 */}
             <ThumbnailImage
               src={img}
               alt={`thumbnail-${index}`}
@@ -83,7 +71,7 @@ export default function MobileBannerImage(props: MobileImageProps) {
           </div>
         ))}
       </div>
-      <SwiperImage images={images} />
+      {/* <SwiperImage images={images} /> */}
     </div>
   );
 }
