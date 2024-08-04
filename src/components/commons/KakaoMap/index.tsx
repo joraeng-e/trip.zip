@@ -11,6 +11,7 @@ declare global {
 
 interface KakaoMapProps {
   address: string;
+  className?: string;
 }
 
 /**
@@ -41,7 +42,7 @@ interface KakaoMapProps {
  * @author 배영준
  */
 
-export default function KakaoMap({ address }: KakaoMapProps) {
+export default function KakaoMap({ address, className }: KakaoMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [scriptFlag, setScriptFlag] = useState(false);
 
@@ -105,7 +106,7 @@ export default function KakaoMap({ address }: KakaoMapProps) {
   return (
     <>
       <div className="z-0 flex items-center justify-center pt-2">
-        <div ref={mapRef} className="z-0 h-500 w-[95%]" />
+        <div ref={mapRef} className={`z-0 h-500 w-[95%] ${className}`} />
       </div>
     </>
   );
