@@ -1,6 +1,6 @@
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import MyActivityForm from '../ActivitiyForm';
 import MyCard from '../activitiesManagement/MyCard';
@@ -24,15 +24,27 @@ export default function MyActivities() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
 
-  //마지막 카드가 화면에 보이는가?
+  // 모든 활동을 최신순으로 정렬
+  const sortedActivities = useMemo(() => {
+    if (!data) return [];
+    return data.pages
+      .flatMap((page) => page.activities)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+  }, [data]);
+
+  //IntersectionObserver의 역할: 마지막 카드가 화면에 보이는가?
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        //마지막 카드가 있고 + 더 로드할 페이지가 있고 + 현재 로딩중이 아니면 => 다음 페이지 로드
+        //더 로드할 페이지가 있고 + 현재 로딩중이 아니면 => 다음 페이지 로드
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
+      //마지막 카드 전체가 뷰포트에 들어올 때
       { threshold: 1.0 },
     );
 
@@ -47,7 +59,7 @@ export default function MyActivities() {
       }
       observer.disconnect();
     };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, data]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const handleConfirm = () => {
     setShowActivityForm(true);
@@ -79,21 +91,13 @@ export default function MyActivities() {
         </Modal.Root>
       </div>
 
-      {data?.pages.map((batch, batchIndex) => (
-        <div key={batchIndex}>
-          {batch.activities.map((activity, activityIndex) => (
-            <div
-              ref={
-                batchIndex === batch.activities.length - 1 &&
-                activityIndex === batch.activities.length - 1
-                  ? lastCardRef
-                  : null
-              }
-              key={activity.id}
-            >
-              <MyCard {...activity} />
-            </div>
-          ))}
+      {sortedActivities.map((activity, index) => (
+        <div
+          // Intersection Observer의 관찰 대상
+          ref={index === sortedActivities.length - 1 ? lastCardRef : null}
+          key={activity.id}
+        >
+          <MyCard {...activity} />
         </div>
       ))}
       {isFetchingNextPage && <div>로딩 중...</div>}
