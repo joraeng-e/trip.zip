@@ -1,4 +1,3 @@
-// ThumbnailImage.tsx
 import Image from 'next/image';
 
 interface ThumbnailImageProps {

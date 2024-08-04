@@ -1,6 +1,7 @@
 import { KebabIcon } from '@/libs/utils/Icon';
 import { LocationIcon } from '@/libs/utils/Icon';
 import React from 'react';
+import { FaStar } from 'react-icons/fa';
 
 interface TitleProps {
   title: string;
@@ -26,7 +27,8 @@ export default function Title(props: TitleProps) {
         {title} <KebabIcon className="" />
       </div>
       <div className="flex gap-12 text-md-regular text-custom-black">
-        ⭐{rating}({reviewCount})
+        <FaStar className="mt-4 text-yellow-500" />
+        {rating}({reviewCount})
         <div
           className="flex cursor-pointer items-center gap-12"
           onClick={handleClickClipboard}

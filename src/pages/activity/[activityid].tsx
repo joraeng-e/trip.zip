@@ -22,7 +22,7 @@ export default function ActivityDetail() {
 
   return (
     <>
-      <div className="basic-container">
+      <div className="basic-container px-0">
         <Title
           title={DetailData.title}
           address={DetailData.address}

@@ -35,9 +35,9 @@ export default function MobileBannerImage(props: MobileImageProps) {
   }, [currentIndex, totalImages]);
 
   return (
-    <div className="my-15 flex flex-col">
+    <div className="my-16 flex flex-col">
       <div
-        className={`relative flex h-310 w-full items-center justify-center overflow-hidden rounded ${className}`}
+        className={`relative flex h-310 w-full items-center justify-center overflow-hidden ${className}`}
       >
         <BlurBannerImage
           src={images[currentIndex]}
@@ -71,7 +71,7 @@ export default function MobileBannerImage(props: MobileImageProps) {
       {/* 썸네일 이미지 표시 */}
       <div
         ref={thumbnailRef}
-        className="mt-10 flex cursor-pointer space-x-8 overflow-x-hidden"
+        className="mx-16 mt-16 flex cursor-pointer space-x-8 overflow-x-hidden"
       >
         {images.map((img, index) => (
           <div className="w-60 flex-none" key={index}>
