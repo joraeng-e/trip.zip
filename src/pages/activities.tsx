@@ -107,15 +107,18 @@ export default function Activites({
   };
 
   const handleCategoryClick = (category: string | undefined) => {
-    handlePageChange(1);
+    setPage(1);
+    setSort('최신순');
     setCategory(category);
-    updateQueryParams({ category });
+    updateQueryParams({ page: 1, sort: 'latest', category });
   };
 
   const handleKeyword = (keyword: string) => {
-    handlePageChange(1);
+    setPage(1);
+    setSort('최신순');
+    setCategory(undefined);
     setKeyword(keyword);
-    updateQueryParams({ keyword });
+    updateQueryParams({ page: 1, sort: 'latest', category: '', keyword });
   };
 
   useEffect(
