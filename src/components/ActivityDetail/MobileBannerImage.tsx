@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
+import SwiperImage from './SwiperImage';
 import ThumbnailImage from './ThumbnailImage';
 
 // 썸네일 컴포넌트 임포트
@@ -82,6 +83,7 @@ export default function MobileBannerImage(props: MobileImageProps) {
           </div>
         ))}
       </div>
+      <SwiperImage images={images} />
     </div>
   );
 }
