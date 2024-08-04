@@ -1,8 +1,7 @@
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import BlurBannerImage from './BlurBannerImage';
-import SwiperImage from './SwiperImage';
 import ThumbnailImage from './ThumbnailImage';
 
 interface MobileImageProps {
@@ -13,17 +12,27 @@ interface MobileImageProps {
 
 export default function MobileBannerImage(props: MobileImageProps) {
   const { bannerImageUrl, subImageUrl, className } = props;
-  const images = [bannerImageUrl, ...(subImageUrl || [])]; // 모든 이미지를 배열로 결합
-  const totalImages = images.length; // 총 이미지 개수
-  const [currentIndex, setCurrentIndex] = useState(0); // 현재 이미지 인덱스
+  const images = [bannerImageUrl, ...(subImageUrl || [])];
+  const totalImages = images.length;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
 
   const nextImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages); // 다음 이미지로 이동
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
   };
 
   const prevImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages); // 이전 이미지로 이동
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
+
+  // 현재 인덱스를 기준으로 썸네일 스크롤 위치 조정
+  useEffect(() => {
+    if (thumbnailRef.current) {
+      const thumbnailWidth = thumbnailRef.current.clientWidth / totalImages;
+      const offset = currentIndex * thumbnailWidth - thumbnailWidth / 2;
+      thumbnailRef.current.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+  }, [currentIndex, totalImages]);
 
   return (
     <div className="my-15 flex flex-col">
@@ -60,7 +69,10 @@ export default function MobileBannerImage(props: MobileImageProps) {
       </div>
 
       {/* 썸네일 이미지 표시 */}
-      <div className="mt-10 flex space-x-8 overflow-x-auto whitespace-nowrap">
+      <div
+        ref={thumbnailRef}
+        className="mt-10 flex cursor-pointer space-x-8 overflow-x-hidden"
+      >
         {images.map((img, index) => (
           <div className="w-60 flex-none" key={index}>
             <ThumbnailImage
@@ -71,7 +83,6 @@ export default function MobileBannerImage(props: MobileImageProps) {
           </div>
         ))}
       </div>
-      {/* <SwiperImage images={images} /> */}
     </div>
   );
 }
