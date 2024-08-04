@@ -12,7 +12,9 @@ export default function Description(props: DescriptionProps) {
 
   const handleTextDisplay = isExpanded
     ? description
-    : `${description.slice(0, maxLength)}...`;
+    : description.length > maxLength
+      ? `${description.slice(0, maxLength)}...`
+      : description; // maxLength보다 짧은 경우 '...'을 붙이지 않음
 
   return (
     <>

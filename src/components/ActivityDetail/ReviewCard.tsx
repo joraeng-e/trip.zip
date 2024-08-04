@@ -27,13 +27,15 @@ export default function ReviewCard(props: ReviewCardProps) {
 
   const handleTextDisplay = isExpanded
     ? textWithoutTags
-    : `${textWithoutTags.slice(0, maxLength)}...`;
+    : textWithoutTags.length > maxLength
+      ? `${textWithoutTags.slice(0, maxLength)}...`
+      : textWithoutTags; // maxLength보다 짧은 경우 '...'을 붙이지 않음
 
   return (
     <>
       <div className="contour">
         <ActivityTags extractedTags={extractedTags} />
-        <div className="pt-10">
+        <div className="pt-6">
           <div className="flex items-center gap-12">
             <div className="relative h-40 w-40 overflow-hidden rounded-full">
               <Image
