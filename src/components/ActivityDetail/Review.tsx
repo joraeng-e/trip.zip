@@ -1,5 +1,6 @@
 import { GetActivityReviewsResponse } from '@trip.zip-api';
 import React from 'react';
+import { FaStar } from 'react-icons/fa';
 
 import Pagination from '../commons/Pagination';
 import ReviewCard from './ReviewCard';
@@ -23,31 +24,21 @@ export default function Review(props: GetActivityReviewsResponse) {
     return '평가 없음';
   };
 
-  // 별 표시 함수
-  const renderStars = (rating: number) => {
-    const fullStars = Math.floor(rating);
-    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
-    const emptyStars = 5 - fullStars - halfStar;
-
-    return (
-      <div>
-        {'★'.repeat(fullStars)}
-        {halfStar ? '☆' : ''}
-        {'☆'.repeat(emptyStars)}
-      </div>
-    );
-  };
-
   return (
     <div>
-      {/* 평균 평점과 만족도 표시 */}
-      <div>
-        {renderStars(averageRating)} {/* 평점을 별로 표시 */}
-        <span>{getSatisfactionText(averageRating)}</span> {/* 만족도 텍스트 */}
+      <hr className="contour" />
+      <div className="mx-16">
+        <div className="flex items-center gap-10">
+          <FaStar className="h-24 w-24 text-yellow-500" />
+          <h2 className="text-xl-bold text-nomad-black">{averageRating}</h2>
+          <div className="text-2lg-bold text-nomad-black">
+            {getSatisfactionText(averageRating)}
+          </div>
+        </div>
+        <div className="mt-10 text-2lg-semibold text-custom-gray-500">
+          {totalCount}개 후기
+        </div>
       </div>
-
-      {/* 총 후기 개수 표시 */}
-      <div>{totalCount}개 후기</div>
 
       {/* 리뷰 목록 표시 */}
       <div>
