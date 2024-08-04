@@ -21,31 +21,22 @@ const tags = [
   { name: '뷰맛집', emoji: <NationalParkEmoji /> },
   { name: '친절해요', emoji: <HuggingFaceEmoji /> },
   { name: '고급스러워요', emoji: <GemEmoji /> },
-  { name: '분위기가 편안해요', emoji: <CouchLampEmoji /> },
-  { name: '가격이 합리적이에요', emoji: <MoneyWingEmoji /> },
+  { name: '편안해요', emoji: <CouchLampEmoji /> },
+  { name: '합리적이에요', emoji: <MoneyWingEmoji /> },
   { name: '청결해요', emoji: <SpongeEmoji /> },
-  { name: '주차하기 편해요', emoji: <AutomobileEmoji /> },
+  { name: '주차시설', emoji: <AutomobileEmoji /> },
 ];
 
 interface ActivityTagsProps {
-  content: string;
+  extractedTags: string[]; // props를 수정
 }
 
-const ActivityTags: React.FC<ActivityTagsProps> = ({ content }) => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
-  useEffect(() => {
-    // 문자열에서 태그를 추출하여 상태에 설정
-    const extractedTags =
-      content.match(/#\S+/g)?.map((tag) => tag.substring(1)) || [];
-    setSelectedTags(extractedTags);
-  }, [content]);
-
+const ActivityTags: React.FC<ActivityTagsProps> = ({ extractedTags }) => {
   return (
     <div className="p-4">
       <div className="mb-4 flex flex-wrap gap-2">
         {tags
-          .filter((tag) => selectedTags.includes(tag.name)) // 선택된 태그만 표시
+          .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
           .map(({ name, emoji }) => (
             <span
               key={name}

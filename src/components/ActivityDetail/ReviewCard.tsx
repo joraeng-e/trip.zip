@@ -1,6 +1,10 @@
+import useExtractTags from '@/hooks/useExtractTags';
 import { BaseProfile } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import React from 'react';
+import { FaStar } from 'react-icons/fa';
+
+import ActivityTags from '../commons/ReviewTag';
 
 interface ReviewCardProps {
   user: {
@@ -13,8 +17,11 @@ interface ReviewCardProps {
   createdAt: string;
 }
 
-export default function Review(props: ReviewCardProps) {
+export default function ReviewCard(props: ReviewCardProps) {
   const { user, rating, content, createdAt } = props;
+
+  const { tags: extractedTags, textWithoutTags } = useExtractTags(content);
+
   return (
     <div className="mb-4 border p-4">
       <div className="flex items-center">
@@ -31,7 +38,9 @@ export default function Review(props: ReviewCardProps) {
         </div>
       </div>
       <div className="mt-2">{renderStars(rating)}</div>
-      <div className="mt-2">{content}</div>
+      <div className="mt-2">{textWithoutTags}</div>{' '}
+      {/* 태그가 없는 문자열 출력 */}
+      <ActivityTags extractedTags={extractedTags} />
     </div>
   );
 }
@@ -43,10 +52,24 @@ const renderStars = (rating: number) => {
   const emptyStars = 5 - fullStars - halfStar;
 
   return (
-    <div>
-      {'★'.repeat(fullStars)}
-      {halfStar ? '☆' : ''}
-      {'☆'.repeat(emptyStars)}
+    <div className="flex">
+      {'★'
+        .repeat(fullStars)
+        .split('')
+        .map((_, index) => (
+          <FaStar key={index} className="text-yellow-500" />
+        ))}
+      {halfStar ? <FaStar className="text-yellow-500" /> : null}
+      {'☆'
+        .repeat(emptyStars)
+        .split('')
+        .map((_, index) => (
+          <FaStar
+            key={fullStars + halfStar + index}
+            className="text-gray-300"
+          />
+        ))}
+      <div></div>
     </div>
   );
 };
