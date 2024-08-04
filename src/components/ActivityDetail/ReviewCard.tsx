@@ -1,7 +1,7 @@
 import useExtractTags from '@/hooks/useExtractTags';
 import { BaseProfile } from '@/libs/utils/Icon';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 
 import ActivityTags from '../commons/ReviewTag';
@@ -15,33 +15,70 @@ interface ReviewCardProps {
   rating: number;
   content: string;
   createdAt: string;
+  maxLength?: number;
 }
 
 export default function ReviewCard(props: ReviewCardProps) {
-  const { user, rating, content, createdAt } = props;
+  const { user, rating, content, createdAt, maxLength = 100 } = props;
 
   const { tags: extractedTags, textWithoutTags } = useExtractTags(content);
 
+  const [isExpanded, setIsExpanded] = useState(false); // 내용이 확장되었는지 여부
+
+  const handleTextDisplay = isExpanded
+    ? textWithoutTags
+    : `${textWithoutTags.slice(0, maxLength)}...`;
+
   return (
-    <div className="mb-4 border p-4">
-      <div className="flex items-center">
-        <Image
-          src={user.profileImageUrl || BaseProfile}
-          alt={user.nickname}
-          width={10}
-          height={10}
-          className="mr-2 h-10 w-10 rounded-full"
-        />
-        <div>
-          <div>{user.nickname}</div>
-          <div>{new Date(createdAt).toLocaleDateString()}</div>
+    <>
+      <div className="contour">
+        <ActivityTags extractedTags={extractedTags} />
+        <div className="pt-10">
+          <div className="flex items-center gap-12">
+            <div className="relative h-40 w-40 overflow-hidden rounded-full">
+              <Image
+                src={user.profileImageUrl || BaseProfile}
+                alt={user.nickname}
+                fill
+              />
+            </div>
+            <div>
+              <div className="text-lg-bold text-nomad-black">
+                {user.nickname}
+              </div>
+              <div className="text-lg-regular text-custom-gray-500">
+                {new Date(createdAt).toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+          <div className="relative my-10 flex items-center gap-12">
+            {renderStars(rating)}
+            <div className="pt-2 text-lg-regular text-custom-gray-700">
+              {rating}
+            </div>
+          </div>
+          <div className="mt-2 text-lg-regular text-nomad-black">
+            <div>{handleTextDisplay}</div>
+            {textWithoutTags.length > maxLength && !isExpanded && (
+              <button
+                className="mt-2 text-custom-gray-700"
+                onClick={() => setIsExpanded(true)}
+              >
+                더 보기
+              </button>
+            )}
+            {isExpanded && (
+              <button
+                className="mt-2 text-custom-gray-700"
+                onClick={() => setIsExpanded(false)}
+              >
+                접기
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      <div className="mt-2">{renderStars(rating)}</div>
-      <div className="mt-2">{textWithoutTags}</div>{' '}
-      {/* 태그가 없는 문자열 출력 */}
-      <ActivityTags extractedTags={extractedTags} />
-    </div>
+    </>
   );
 }
 
