@@ -1,11 +1,13 @@
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import MyActivityForm from '../ActivitiyForm';
 import MyCard from '../activitiesManagement/MyCard';
 import Button from '../commons/Button';
 import Modal from '../commons/Modal';
+import EmptyImage from '/public/imgs/empty.png';
 
 const useMyActivities = (size = 20) => {
   return useInfiniteQuery({
@@ -91,16 +93,26 @@ export default function MyActivities() {
         </Modal.Root>
       </div>
 
-      {sortedActivities.map((activity, index) => (
-        <div
-          // Intersection Observer의 관찰 대상
-          ref={index === sortedActivities.length - 1 ? lastCardRef : null}
-          key={activity.id}
-        >
-          <MyCard {...activity} />
+      {sortedActivities.length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
+          <Image src={EmptyImage} alt="빈 이미지" width={200} height={200} />
+          <p className="mt-20 text-2xl-medium text-custom-gray-700">
+            아직 등록한 체험이 없어요
+          </p>
         </div>
-      ))}
-      {isFetchingNextPage && <div>로딩 중...</div>}
+      ) : (
+        <>
+          {sortedActivities.map((activity, index) => (
+            <div
+              ref={index === sortedActivities.length - 1 ? lastCardRef : null}
+              key={activity.id}
+            >
+              <MyCard {...activity} />
+            </div>
+          ))}
+          {isFetchingNextPage && <div>로딩 중...</div>}
+        </>
+      )}
     </div>
   );
 }
