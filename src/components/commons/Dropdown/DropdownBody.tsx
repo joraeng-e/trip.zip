@@ -14,6 +14,7 @@ const Body: React.FC<BodyProps> = ({ children, ...rest }) => {
     <motion.ul
       style={{
         maxWidth: width,
+        zIndex: 999,
       }}
       className="absolute z-40 mt-8 flex h-auto w-full min-w-90 flex-col justify-between gap-10 rounded-xl border-1 border-custom-gray-300 bg-white p-10 shadow-md"
       initial={{ opacity: 0, y: -10 }}

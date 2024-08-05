@@ -12,6 +12,10 @@ export const signupSchema = yup.object().shape({
   password: yup
     .string()
     .min(8, '8자 이상 입력해주세요.')
+    .matches(/[a-z]/, '소문자가 포함되어야 합니다.')
+    .matches(/[0-9]/, '숫자가 포함되어야 합니다.')
+    .matches(/[!@#$%^&*(),.?":{}|<>]/, '특수문자가 포함되어야 합니다.')
+    .matches(/^\S*$/, '공백을 포함할 수 없습니다.')
     .required('비밀번호는 필수입니다.'),
   confirmPassword: yup
     .string()

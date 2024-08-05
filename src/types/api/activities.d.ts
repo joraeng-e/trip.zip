@@ -34,7 +34,7 @@ declare module '@trip.zip-api' {
       endTime: string;
     }[];
     bannerImageUrl: string;
-    subImageUrls: string[];
+    subImageUrls?: string[] | null;
   };
 
   export type PostActivitiesResponse = {
