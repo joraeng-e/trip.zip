@@ -5,6 +5,8 @@ import {
 } from '@/libs/utils/dateUtils';
 import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
 
+import StatusTag from './BookingStatusTag';
+
 type CalendarProps = {
   currentYear: number;
   currentMonth: number;
@@ -137,21 +139,17 @@ export default function Calendar({
           return (
             <div
               key={`${weekIndex}-${dateIndex}`}
-              className={`h-154 w-full border-b-1 border-custom-gray-400`}
+              className="flex h-154 w-full flex-col justify-between border-b-1 border-custom-gray-400 pb-6 pl-6"
             >
               <div
-                className={`flex flex-col pl-6 ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
+                className={`flex flex-col ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
               >
                 <span className="text-17 font-medium">{dateObject.day}</span>
-                <span className="text-7">{dateString}</span>
-                {dateObject.bookingInfo && (
-                  <div className="flex flex-col text-10">
-                    <span>완료: {dateObject.bookingInfo.completed}</span>
-                    <span>확인됨: {dateObject.bookingInfo.confirmed}</span>
-                    <span>대기 중: {dateObject.bookingInfo.pending}</span>
-                  </div>
-                )}
+                <span className="text-7 opacity-10">{dateString}</span>
               </div>
+              {dateObject.bookingInfo && (
+                <StatusTag bookingInfo={dateObject.bookingInfo} />
+              )}
             </div>
           );
         }),

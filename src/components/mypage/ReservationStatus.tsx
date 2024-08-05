@@ -3,7 +3,10 @@ import {
   getMyAllActivities,
 } from '@/libs/api/myActivities';
 import { DoubleArrowNext, DoubleArrowPrev } from '@/libs/utils/Icon';
-import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
+import {
+  Activities,
+  GetMyActivitiesReservationDashboardResponse,
+} from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
 import Calendar from './BookingCalendar/BookingCalendar';
@@ -12,6 +15,33 @@ type ActivityListItem = {
   id: number;
   title: string;
 };
+
+const mock = [
+  {
+    date: '2024-08-15',
+    reservations: {
+      completed: 0,
+      confirmed: 1,
+      pending: 0,
+    },
+  },
+  {
+    date: '2024-08-17',
+    reservations: {
+      completed: 0,
+      confirmed: 0,
+      pending: 1,
+    },
+  },
+  {
+    date: '2024-08-19',
+    reservations: {
+      completed: 0,
+      confirmed: 0,
+      pending: 1,
+    },
+  },
+];
 
 export default function ReservationStatus() {
   const days = ['일', '월', '화', '수', '목', '금', '토'];
@@ -41,51 +71,53 @@ export default function ReservationStatus() {
     }
   };
 
-  const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
-  const [activityId, setActivityId] = useState<number>();
-  const [monthlyData, setMonthlyData] =
-    useState<GetMyActivitiesReservationDashboardResponse>([]);
+  // const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
+  // const [activityId, setActivityId] = useState<number>();
+  // const [monthlyData, setMonthlyData] =
+  //   useState<GetMyActivitiesReservationDashboardResponse>([]);
 
-  useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const response = await getMyAllActivities();
-        const activityList = response.activities.map((activity: any) => ({
-          id: activity.id,
-          title: activity.title,
-        }));
-        setActivityList(activityList);
-        setActivityId(activityList[0].id);
-      } catch (error) {
-        console.error('Failed to fetch activities:', error);
-      }
-    };
-    fetchActivities();
-  }, []);
+  // useEffect(() => {
+  //   const fetchActivities = async () => {
+  //     try {
+  //       const response = await getMyAllActivities();
+  //       const activityList = response.activities.map(
+  //         (activity: Activities) => ({
+  //           id: activity.id,
+  //           title: activity.title,
+  //         }),
+  //       );
+  //       setActivityList(activityList);
+  //       setActivityId(activityList[0].id);
+  //     } catch (error) {
+  //       console.error('Failed to fetch activities:', error);
+  //     }
+  //   };
+  //   fetchActivities();
+  // }, []);
 
-  useEffect(() => {
-    if (activityId === undefined) return;
-    const fetchBookingStatus = async () => {
-      try {
-        const response = await getMyActivitiesReservationDashboard({
-          activityId,
-          year: currentYear.toString(),
-          month: (currentMonth + 1).toString().padStart(2, '0'),
-        });
-        setMonthlyData(response);
-      } catch (error) {
-        console.error('Failed to fetch Monthly Booking Info', error);
-      }
-    };
-    fetchBookingStatus();
-  }, [activityId, currentMonth, currentYear]);
+  // useEffect(() => {
+  //   if (activityId === undefined) return;
+  //   const fetchBookingStatus = async () => {
+  //     try {
+  //       const response = await getMyActivitiesReservationDashboard({
+  //         activityId,
+  //         year: currentYear.toString(),
+  //         month: (currentMonth + 1).toString().padStart(2, '0'),
+  //       });
+  //       setMonthlyData(response);
+  //     } catch (error) {
+  //       console.error('Failed to fetch Monthly Booking Info', error);
+  //     }
+  //   };
+  //   fetchBookingStatus();
+  // }, [activityId, currentMonth, currentYear]);
 
   return (
     <>
       <div className="flex h-full w-full min-w-342 flex-col gap-24">
         <section className="flex flex-col gap-32">
           <h2 className="text-32 font-bold">예약 현황</h2>
-          <select
+          {/* <select
             className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none"
             onChange={(e) => setActivityId(Number(e.target.value))}
           >
@@ -98,7 +130,7 @@ export default function ReservationStatus() {
                 {activity.title}
               </option>
             ))}
-          </select>
+          </select> */}
         </section>
       </div>
       <div className="mb-100 mt-24 flex flex-col gap-17">
@@ -118,7 +150,7 @@ export default function ReservationStatus() {
             currentYear={currentYear}
             currentMonth={currentMonth}
             days={days}
-            monthlyData={monthlyData}
+            monthlyData={mock}
           />
         </div>
       </div>
