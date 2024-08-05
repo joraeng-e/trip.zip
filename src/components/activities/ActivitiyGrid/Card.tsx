@@ -1,11 +1,11 @@
 import { RoundStar } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Activity } from '../type';
 
-export function ActivityCard({ data }: { data: Activity }) {
+function ActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
   const [imageSrc, setImageSrc] = useState(bannerImageUrl);
 
@@ -46,7 +46,9 @@ export function ActivityCard({ data }: { data: Activity }) {
   );
 }
 
-function Skeleton() {
+export default memo(ActivityCard);
+
+export function ActivityCardSkeleton() {
   return (
     <div className="w-full">
       <div className="relative aspect-square overflow-hidden rounded-[20px] bg-slate-300">
@@ -64,5 +66,3 @@ function Skeleton() {
     </div>
   );
 }
-
-ActivityCard.Skeleton = Skeleton;

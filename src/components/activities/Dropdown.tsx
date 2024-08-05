@@ -18,7 +18,6 @@ export default function DropdownContainer({ value, setValue }: Props) {
       setSelected={setValue}
       width={150}
       height={deviceState === Device.Mobile ? 41 : 59}
-      defaultValue="가격"
     >
       <Dropdown.Button />
       <Dropdown.Body>

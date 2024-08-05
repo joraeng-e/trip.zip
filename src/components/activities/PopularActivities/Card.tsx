@@ -1,11 +1,11 @@
 import { RoundStar } from '@/libs/utils/Icon';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Activity } from '../type';
 
-export default function PopularActivityCard({ data }: { data: Activity }) {
+function PopularActivityCard({ data }: { data: Activity }) {
   const { id, title, price, rating, reviewCount, bannerImageUrl } = data;
   const [imageSrc, setImageSrc] = useState(bannerImageUrl);
 
@@ -16,7 +16,7 @@ export default function PopularActivityCard({ data }: { data: Activity }) {
   return (
     <Link
       href={`/activity/${id}`}
-      className="relative size-186 flex-shrink-0 rounded-[20px] px-20 pb-24 text-white shadow-none transition-all duration-300 hover:translate-y-[-3px] hover:shadow-lg hover:shadow-gray-400 md:size-[384px]"
+      className="relative size-186 flex-shrink-0 snap-center rounded-[20px] px-20 pb-24 text-white shadow-none transition-all duration-300 hover:translate-y-[-3px] hover:shadow-lg hover:shadow-gray-400 md:size-[384px]"
     >
       <Image
         src={imageSrc}
@@ -45,12 +45,12 @@ export default function PopularActivityCard({ data }: { data: Activity }) {
   );
 }
 
-function Skeleton() {
+export default memo(PopularActivityCard);
+
+export function PopularActivityCardSkeleton() {
   return (
     <div className="relative size-186 flex-shrink-0 overflow-hidden rounded-[20px] bg-slate-300 md:size-[384px]">
       <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50"></div>
     </div>
   );
 }
-
-PopularActivityCard.Skeleton = Skeleton;

@@ -1,7 +1,7 @@
 import Device from '@/libs/constants/device';
 import { GetActivitiesResponse } from '@trip.zip-api';
 
-import { ActivityCard } from './Card';
+import ActivityCard, { ActivityCardSkeleton } from './Card';
 
 export default function ActivityGrid({
   data,
@@ -31,7 +31,7 @@ export default function ActivityGrid({
         ) : (
           <>
             {Array.from({ length: skeletonCount }).map((_, idx) => (
-              <ActivityCard.Skeleton key={idx} />
+              <ActivityCardSkeleton key={idx} />
             ))}
           </>
         )}
