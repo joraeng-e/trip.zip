@@ -136,12 +136,25 @@ export default function ReservationStatus() {
       <div className="mb-100 mt-24 flex flex-col gap-17">
         {/* control bar */}
         <div className="flex justify-center gap-10">
-          <button type="button" onClick={handleMonthPrev}>
+          <button
+            type="button"
+            onClick={handleMonthPrev}
+            className="outline-none hover:opacity-40"
+          >
             <DoubleArrowPrev aria-label="이전 달" />
           </button>
-          <button type="button">{currentYear}년</button>
-          <button type="button">{currentMonth + 1}월</button>
-          <button type="button" onClick={handleMonthNext}>
+          {/* todo: 연도, 날짜 드롭다운 추가 */}
+          <button type="button" className="outline-none hover:opacity-40">
+            {currentYear}년
+          </button>
+          <button type="button" className="outline-none hover:opacity-40">
+            {currentMonth + 1}월
+          </button>
+          <button
+            type="button"
+            onClick={handleMonthNext}
+            className="outline-none hover:opacity-40"
+          >
             <DoubleArrowNext aria-label="다음 달" />
           </button>
         </div>

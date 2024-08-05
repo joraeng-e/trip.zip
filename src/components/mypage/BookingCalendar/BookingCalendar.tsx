@@ -25,12 +25,23 @@ type DateObject = {
   };
 };
 
+const removeTime = (date: Date) => {
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+const isPastDate = (date: Date, today: Date) => {
+  return removeTime(new Date(date)) < today;
+};
+
 export default function Calendar({
   currentYear,
   currentMonth,
   days,
   monthlyData,
 }: CalendarProps) {
+  const today = removeTime(new Date());
+
   // 현재 달의 날짜 계산
   const firstDayOfCurrentMonth = getFirstDayOfMonth(currentYear, currentMonth);
   const daysInCurrentMonth = getDaysInMonth(currentYear, currentMonth);
@@ -128,27 +139,37 @@ export default function Calendar({
       {days.map((day) => (
         <div
           key={day}
-          className="flex h-43 items-center border-b-1 border-custom-gray-400 pl-6 text-13"
+          className="flex h-43 items-center border-b-1 border-custom-gray-400 pl-6 text-13 md:text-17"
         >
           <span>{day}</span>
         </div>
       ))}
       {calendar.map((week, weekIndex) =>
         week.map((dateObject, dateIndex) => {
-          const dateString = getLocalDateString(dateObject.date);
+          const alertClass = isPastDate(dateObject.date, today)
+            ? 'bg-custom-gray-800'
+            : 'bg-green-400';
           return (
             <div
               key={`${weekIndex}-${dateIndex}`}
-              className="flex h-154 w-full flex-col justify-between border-b-1 border-custom-gray-400 pb-6 pl-6"
+              className="flex h-120 w-full flex-col justify-between border-b-1 border-custom-gray-400 pb-6 pl-6 md:h-154"
             >
               <div
                 className={`flex flex-col ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
               >
-                <span className="text-17 font-medium">{dateObject.day}</span>
-                <span className="text-7 opacity-10">{dateString}</span>
+                <span className="text-17 font-medium md:text-21">
+                  {dateObject.day}
+                </span>
+                {dateObject.bookingInfo && (
+                  <div
+                    className={`${alertClass} size-8 rounded-full ${new Date()}`}
+                  />
+                )}
               </div>
               {dateObject.bookingInfo && (
-                <StatusTag bookingInfo={dateObject.bookingInfo} />
+                <>
+                  <StatusTag bookingInfo={dateObject.bookingInfo} />
+                </>
               )}
             </div>
           );
