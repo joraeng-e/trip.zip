@@ -30,8 +30,6 @@ type DropdownContextProps = {
   isOpen: boolean;
   handleSelect: (value: string) => void;
   selected: string;
-  setButtonText: (value: string) => void;
-  buttonText: string;
   width?: number;
   height?: number;
 };
@@ -52,9 +50,8 @@ export const useDropdownContext = () => {
  * Dropdown with rounded square shape
  * @param selected - dropdown으로 조작할 state
  * @param setSelected - dropdown으로 조작할 state의 setState 메소드
- * @param width - dropdown Button, Item 너비, maxWidth로 적용(optional)
+ * @param width - dropdown list 너비, maxWidth로 적용(optional)
  * @param height - dropdown Button 높이, Item 높이 자동 설정(optional)
- * @param defaultValue - dropdown Button에 초기값으로 들어갈 텍스트
  * (optional, defaultValue || selected)
  * @example
  * ```
@@ -66,7 +63,7 @@ export const useDropdownContext = () => {
           height={}
           defaultValue="필터"
   >
-    <Dropdown.Button />
+    <Dropdown.Button>{jsx}</Dropdown.Button>
     <Dropdown.Body>
       <Dropdown.Item text="최신순" value="recent" />
       <Dropdown.Item text="lowest" value="lowest">낮은가격순</Dropdown.Item> - text, label 다른 경우
@@ -80,12 +77,10 @@ export default function Dropdown({
   children,
   setSelected,
   selected,
-  defaultValue,
   width,
   height,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [buttonText, setButtonText] = useState(defaultValue || selected);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
@@ -115,8 +110,6 @@ export default function Dropdown({
         isOpen,
         handleSelect,
         selected,
-        setButtonText,
-        buttonText,
         width,
         height,
       }}
