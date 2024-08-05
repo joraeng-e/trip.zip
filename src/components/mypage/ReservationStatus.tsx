@@ -1,25 +1,19 @@
-import { getMyActivities } from '@/libs/api/myActivities';
+import {
+  getMyActivitiesReservationDashboard,
+  getMyAllActivities,
+} from '@/libs/api/myActivities';
 import { DoubleArrowNext, DoubleArrowPrev } from '@/libs/utils/Icon';
-import React, { useState } from 'react';
+import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
+import React, { useEffect, useState } from 'react';
 
 import Calendar from './BookingCalendar/BookingCalendar';
 
-export type Booking = {
-  date: string; // 'YYYY-MM-DD'
-  info: string; // 예약 정보
+type ActivityListItem = {
+  id: number;
+  title: string;
 };
 
 export default function ReservationStatus() {
-  const myActivities = getMyActivities();
-  //mock
-  const bookings: Booking[] = [
-    { date: '2024-07-30', info: 'Meeting' },
-    { date: '2024-08-10', info: 'Surfing' },
-    { date: '2024-08-10', info: 'Meeting' },
-    { date: '2024-08-15', info: 'Hospital' },
-    { date: '2024-09-02', info: 'Birthday' },
-  ];
-
   const days = ['일', '월', '화', '수', '목', '금', '토'];
 
   const today = new Date();
@@ -47,16 +41,63 @@ export default function ReservationStatus() {
     }
   };
 
+  const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
+  const [activityId, setActivityId] = useState<number>();
+  const [monthlyData, setMonthlyData] =
+    useState<GetMyActivitiesReservationDashboardResponse>([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await getMyAllActivities();
+        const activityList = response.activities.map((activity: any) => ({
+          id: activity.id,
+          title: activity.title,
+        }));
+        setActivityList(activityList);
+        setActivityId(activityList[0].id);
+      } catch (error) {
+        console.error('Failed to fetch activities:', error);
+      }
+    };
+    fetchActivities();
+  }, []);
+
+  useEffect(() => {
+    if (activityId === undefined) return;
+    const fetchBookingStatus = async () => {
+      try {
+        const response = await getMyActivitiesReservationDashboard({
+          activityId,
+          year: currentYear.toString(),
+          month: (currentMonth + 1).toString().padStart(2, '0'),
+        });
+        setMonthlyData(response);
+      } catch (error) {
+        console.error('Failed to fetch Monthly Booking Info', error);
+      }
+    };
+    fetchBookingStatus();
+  }, [activityId, currentMonth, currentYear]);
+
   return (
     <>
       <div className="flex h-full w-full min-w-342 flex-col gap-24">
         <section className="flex flex-col gap-32">
           <h2 className="text-32 font-bold">예약 현황</h2>
-          <select className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none">
-            <option value="burger">햄버거 먹기</option>
-            <option value="beef">소고기 먹기</option>
-            <option value="peperoni">페퍼로니 피자 먹기</option>
-            <option value="chicken">치킨 먹기</option>
+          <select
+            className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none"
+            onChange={(e) => setActivityId(Number(e.target.value))}
+          >
+            {activityList?.map((activity, index) => (
+              <option
+                value={activity.id}
+                // 첫번째 option 기본값으로 지정
+                {...(index === 0 && { selected: true })}
+              >
+                {activity.title}
+              </option>
+            ))}
           </select>
         </section>
       </div>
@@ -77,7 +118,7 @@ export default function ReservationStatus() {
             currentYear={currentYear}
             currentMonth={currentMonth}
             days={days}
-            bookings={bookings}
+            monthlyData={monthlyData}
           />
         </div>
       </div>

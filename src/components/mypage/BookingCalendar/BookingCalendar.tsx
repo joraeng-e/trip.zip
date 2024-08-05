@@ -3,29 +3,31 @@ import {
   getFirstDayOfMonth,
   getLocalDateString,
 } from '@/libs/utils/dateUtils';
-
-import { Booking } from '../ReservationStatus';
+import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
 
 type CalendarProps = {
   currentYear: number;
   currentMonth: number;
-  bookings: { date: string; info: string }[];
   days: string[];
+  monthlyData: GetMyActivitiesReservationDashboardResponse;
 };
 
 type DateObject = {
   date: Date;
   day: number;
   isCurrentMonth: boolean;
-  isScheduled: boolean;
-  bookingInfo?: string;
+  bookingInfo?: {
+    completed: number;
+    confirmed: number;
+    pending: number;
+  };
 };
 
 export default function Calendar({
   currentYear,
   currentMonth,
   days,
-  bookings,
+  monthlyData,
 }: CalendarProps) {
   // 현재 달의 날짜 계산
   const firstDayOfCurrentMonth = getFirstDayOfMonth(currentYear, currentMonth);
@@ -40,17 +42,14 @@ export default function Calendar({
   const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
   const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
 
-  // 날짜 예약 여부 확인 함수
-  const isScheduledDate = (
-    date: Date,
-  ): { isScheduled: boolean; info?: string } => {
-    // localTime 기준 날짜 변환 to "YYYY-MM-DD"
-    const dateString = getLocalDateString(date);
-    const booking = bookings.find((booking) => booking.date === dateString);
-    return booking
-      ? { isScheduled: true, info: booking.info }
-      : { isScheduled: false };
-  };
+  // 날짜 별 예약정보 리스트업
+  const bookingMap = new Map<
+    string,
+    { completed: number; confirmed: number; pending: number }
+  >();
+  monthlyData.forEach((booking) => {
+    bookingMap.set(booking.date, booking.reservations);
+  });
 
   // 캘린더 생성 함수
   const generateCalendar = () => {
@@ -60,26 +59,24 @@ export default function Calendar({
     // 이전 달 날짜 채우기
     for (let i = firstDayOfCurrentMonth - 1; i >= 0; i--) {
       const date = new Date(prevYear, prevMonth, daysInPrevMonth - i);
-      const { isScheduled, info } = isScheduledDate(date);
+      const dateString = getLocalDateString(date);
       week.push({
         date,
         day: daysInPrevMonth - i,
         isCurrentMonth: false,
-        isScheduled,
-        bookingInfo: info,
+        bookingInfo: bookingMap.get(dateString),
       });
     }
 
     // 현재 월 날짜 채우기
     for (let day = 1; day <= daysInCurrentMonth; day++) {
       const date = new Date(currentYear, currentMonth, day);
-      const { isScheduled, info } = isScheduledDate(date);
+      const dateString = getLocalDateString(date);
       week.push({
         date,
         day,
         isCurrentMonth: true,
-        isScheduled,
-        bookingInfo: info,
+        bookingInfo: bookingMap.get(dateString),
       });
       if (week.length === 7) {
         calendar.push(week);
@@ -91,13 +88,12 @@ export default function Calendar({
     let nextMonthDay = 1;
     while (week.length < 7) {
       const date = new Date(nextYear, nextMonth, nextMonthDay);
-      const { isScheduled, info } = isScheduledDate(date);
+      const dateString = getLocalDateString(date);
       week.push({
         date,
         day: nextMonthDay,
         isCurrentMonth: false,
-        isScheduled,
-        bookingInfo: info,
+        bookingInfo: bookingMap.get(dateString),
       });
       nextMonthDay++;
     }
@@ -108,13 +104,12 @@ export default function Calendar({
       week = [];
       for (let i = 1; i <= 7; i++) {
         const date = new Date(nextYear, nextMonth, nextMonthDay);
-        const { isScheduled, info } = isScheduledDate(date);
+        const dateString = getLocalDateString(date);
         week.push({
           date,
           day: nextMonthDay,
           isCurrentMonth: false,
-          isScheduled,
-          bookingInfo: info,
+          bookingInfo: bookingMap.get(dateString),
         });
         nextMonthDay++;
       }
@@ -125,16 +120,6 @@ export default function Calendar({
   };
 
   const calendar = generateCalendar();
-
-  // bookings를 DateObject에 매핑
-  const bookingMap = new Map<string, Booking[]>();
-  bookings.forEach((booking) => {
-    const dateString = booking.date;
-    if (!bookingMap.has(dateString)) {
-      bookingMap.set(dateString, []);
-    }
-    bookingMap.get(dateString)?.push(booking);
-  });
 
   return (
     <div className="grid grid-cols-7 gap-2 border-1 border-custom-gray-400">
@@ -149,7 +134,6 @@ export default function Calendar({
       {calendar.map((week, weekIndex) =>
         week.map((dateObject, dateIndex) => {
           const dateString = getLocalDateString(dateObject.date);
-          const bookingsOnDate = bookingMap.get(dateString) || [];
           return (
             <div
               key={`${weekIndex}-${dateIndex}`}
@@ -160,11 +144,13 @@ export default function Calendar({
               >
                 <span className="text-17 font-medium">{dateObject.day}</span>
                 <span className="text-7">{dateString}</span>
-                {bookingsOnDate.map((booking, bookingIndex) => (
-                  <div key={bookingIndex} className="flex flex-col text-10">
-                    {booking.info}
+                {dateObject.bookingInfo && (
+                  <div className="flex flex-col text-10">
+                    <span>완료: {dateObject.bookingInfo.completed}</span>
+                    <span>확인됨: {dateObject.bookingInfo.confirmed}</span>
+                    <span>대기 중: {dateObject.bookingInfo.pending}</span>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           );
