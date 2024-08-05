@@ -1,0 +1,150 @@
+import {
+  Children,
+  ReactElement,
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import CarouselIndicator from './Indicator';
+import CarouselNavigator from './Navigator';
+import CarouselSlide from './Slide';
+
+interface CarouselContextType {
+  currentIndex: number;
+  totalSlides: number;
+  updateSlide: (slideIndex: number) => void;
+}
+
+const CarouselContext = createContext<CarouselContextType | null>(null);
+
+export const useCarouselContext = () => {
+  const context = useContext(CarouselContext);
+  if (!context) {
+    throw new Error('Carousel 컨텍스트를 호출할 수 없는 범위입니다.');
+  }
+  return context;
+};
+
+export default function CarouselRoot({
+  children,
+  autoPlay = true,
+}: {
+  children: ReactNode;
+  autoPlay?: boolean;
+}) {
+  const _children = useMemo(
+    () => Children.toArray(children) as ReactElement[],
+    [children],
+  );
+  const carouselSlides = useMemo(
+    () => _children.filter((child) => child.type === CarouselSlide),
+    [_children],
+  );
+  const carouselNavigator = useMemo(
+    () => _children.find((child) => child.type === CarouselNavigator),
+    [_children],
+  );
+  const carouselIndicator = useMemo(
+    () => _children.find((child) => child.type === CarouselIndicator),
+    [_children],
+  );
+
+  const totalSlides = carouselSlides.length + 2;
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  const updateSlide = (
+    slideIndex: number | ((prevIndex: number) => number),
+  ) => {
+    if (isTransitioning) return;
+
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) =>
+      typeof slideIndex === 'number' ? slideIndex : slideIndex(prevIndex),
+    );
+  };
+  const contextValue = {
+    currentIndex,
+    totalSlides,
+    updateSlide,
+  };
+
+  useEffect(() => {
+    if (!isTransitioning) return;
+
+    const handleTransitionEnd = () => {
+      if (!sliderRef.current) return;
+
+      sliderRef.current.style.transition = 'none';
+      if (currentIndex === 0) {
+        sliderRef.current.style.transform = `translateX(-${carouselSlides.length * 100}%)`;
+        setCurrentIndex(carouselSlides.length);
+      } else if (currentIndex === totalSlides - 1) {
+        sliderRef.current.style.transform = 'translateX(-100%)';
+        setCurrentIndex(1);
+      }
+
+      setTimeout(() => {
+        if (!sliderRef.current) return;
+
+        sliderRef.current.style.transition = 'transform 500ms ease-in-out';
+        setIsTransitioning(false);
+      }, 50);
+    };
+
+    if (!sliderRef.current) return;
+    sliderRef.current.addEventListener('transitionend', handleTransitionEnd);
+
+    return () => {
+      if (!sliderRef.current) return;
+
+      sliderRef.current.removeEventListener(
+        'transitionend',
+        handleTransitionEnd,
+      );
+    };
+  }, [currentIndex, isTransitioning, totalSlides]);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+
+    const interval = setInterval(() => {
+      updateSlide((prev) => prev + 1);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <CarouselContext.Provider value={contextValue}>
+      <div className="relative h-240 w-full overflow-hidden md:h-550">
+        <div
+          ref={sliderRef}
+          className="flex size-full transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          <div className="size-full flex-shrink-0">
+            {carouselSlides[carouselSlides.length - 1]}
+          </div>
+
+          {carouselSlides.map((child, idx) => (
+            <div className="size-full flex-shrink-0" key={idx}>
+              {child}
+            </div>
+          ))}
+
+          <div className="size-full flex-shrink-0">{carouselSlides[0]}</div>
+        </div>
+
+        {carouselNavigator}
+        {carouselIndicator}
+      </div>
+    </CarouselContext.Provider>
+  );
+}
