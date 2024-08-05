@@ -1,5 +1,5 @@
 import { GetActivityReviewsResponse } from '@trip.zip-api';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Pagination from '../commons/Pagination';
 import ReviewCard from './ReviewCard';
@@ -8,9 +8,10 @@ import ReviewCard from './ReviewCard';
 
 export default function Review(props: GetActivityReviewsResponse) {
   const { averageRating, totalCount, reviews } = props;
+  const [page, setPage] = useState(1);
 
   const handlePageChange = (page: number) => {
-    console.log({ page });
+    setPage(page);
   };
 
   // 평점에 따라 만족도 텍스트 결정
@@ -61,7 +62,11 @@ export default function Review(props: GetActivityReviewsResponse) {
           />
         ))}
       </div>
-      <Pagination onPageChange={handlePageChange} totalPages={10} />
+      <Pagination
+        handlePageChange={handlePageChange}
+        totalPages={10}
+        currentPage={page}
+      />
     </div>
   );
 }

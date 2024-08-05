@@ -10,6 +10,7 @@ import Pagination from '@/components/commons/Pagination';
 import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -27,17 +28,42 @@ const API_SORT_VALUE = {
 
 type SortOptions = keyof typeof API_SORT_VALUE;
 
-export default function Activites() {
+const SORT_VALUE = {
+  latest: '최신순',
+  price_asc: '가격이 낮은 순',
+  price_desc: '가격이 높은 순',
+};
+
+interface Props {
+  initialPage: string | null;
+  initialCategory: string | null;
+  initialKeyword: string | null;
+  initialSort: string | null;
+}
+
+export default function Activites({
+  initialPage,
+  initialCategory,
+  initialKeyword,
+  initialSort,
+}: Props) {
   const router = useRouter();
-  const initialPage = parseInt(router.query.page as string, 10) || 1;
-  const [page, setPage] = useState(initialPage);
-  const [totalPages, setTotalPages] = useState(1);
-  const [category, setCategory] = useState<string | undefined>(undefined);
-  const [keyword, setKeyword] = useState<string | undefined>(undefined);
-  const [sort, setSort] = useState('최신순');
+  const [page, setPage] = useState(Number(initialPage) || 1);
+  const [category, setCategory] = useState<string | undefined>(
+    initialCategory || undefined,
+  );
+  const [keyword, setKeyword] = useState<string | undefined>(
+    initialKeyword || undefined,
+  );
+  const [sort, setSort] = useState(
+    initialSort === null
+      ? '최신순'
+      : SORT_VALUE[initialSort as keyof typeof SORT_VALUE],
+  );
+  const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
   const deviceState = useDeviceState();
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [
       'activities',
       {
@@ -45,23 +71,18 @@ export default function Activites() {
         pageSize: PAGE_SIZE_BY_DEVICE[deviceState],
         category,
         keyword,
-        sort,
+        sort: API_SORT_VALUE[sort as SortOptions],
       },
     ],
     queryFn: () =>
       getActivities({
-        sort: API_SORT_VALUE[sort as SortOptions],
         page,
         size: PAGE_SIZE_BY_DEVICE[deviceState],
         category,
         keyword,
+        sort: API_SORT_VALUE[sort as SortOptions],
       }),
     placeholderData: keepPreviousData,
-  });
-
-  const { data: popularActivitiesData } = useQuery({
-    queryKey: ['activities', 'popular'],
-    queryFn: () => getActivities({ sort: 'most_reviewed', size: 3 }),
   });
 
   const updateQueryParams = (params: {
@@ -86,61 +107,97 @@ export default function Activites() {
   };
 
   const handleCategoryClick = (category: string | undefined) => {
+    setPage(1);
+    setSort('최신순');
     setCategory(category);
-    updateQueryParams({ category });
+    updateQueryParams({ page: 1, sort: 'latest', category });
   };
 
   const handleKeyword = (keyword: string) => {
+    setPage(1);
+    setSort('최신순');
+    setCategory(undefined);
     setKeyword(keyword);
-    updateQueryParams({ keyword });
+    updateQueryParams({ page: 1, sort: 'latest', category: '', keyword });
   };
 
-  useEffect(() => {
-    if (!data) return;
+  useEffect(
+    function updateTotalPages() {
+      if (!data || data.totalCount === 0) return;
 
-    const pageSize = PAGE_SIZE_BY_DEVICE[deviceState];
-    setTotalPages(Math.ceil(data.totalCount / pageSize));
-  }, [deviceState, data]);
+      const pageSize = PAGE_SIZE_BY_DEVICE[deviceState];
+      setTotalPages(Math.ceil(data.totalCount / pageSize));
+    },
+    [deviceState, data],
+  );
 
-  useEffect(() => {
-    updateQueryParams({ sort: API_SORT_VALUE[sort as SortOptions] });
-  }, [sort]);
-
-  useEffect(() => {
-    updateQueryParams({ size: PAGE_SIZE_BY_DEVICE[deviceState] });
-  }, [deviceState]);
+  useEffect(
+    function updateSortNSizeQeury() {
+      updateQueryParams({
+        sort: API_SORT_VALUE[sort as SortOptions],
+        size: PAGE_SIZE_BY_DEVICE[deviceState],
+      });
+    },
+    [sort, deviceState],
+  );
 
   return (
     <>
       <CarouselContainer />
 
       <ActivitiesLayout>
-        <SearchBox handleKeyword={handleKeyword} />
-        {!keyword && <PopularActivities data={popularActivitiesData} />}
+        <SearchBox initialKeyword={keyword} handleKeyword={handleKeyword} />
+        {!keyword && <PopularActivities />}
         {keyword ? (
           <SearchResult keyword={keyword} totalCount={data?.totalCount} />
         ) : (
           <div className="mt-40 md:mt-54 xl:mt-60">
             <div className="flex justify-between gap-12">
-              <CategoryMenu handleCategoryClick={handleCategoryClick} />
+              <CategoryMenu
+                currentCategory={category}
+                handleCategoryClick={handleCategoryClick}
+              />
               <DropdownContainer value={sort} setValue={setSort} />
             </div>
-
             <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36">
-              🛼 모든 체험
+              {category || <>🛼 모든 체험</>}
             </h1>
           </div>
         )}
-        <ActivityGrid data={data} />
+        <ActivityGrid
+          deviceState={deviceState}
+          isLoading={isLoading}
+          isError={isError}
+          data={data}
+        />
       </ActivitiesLayout>
 
-      <div className="mb-120 mt-38 flex justify-center md:mb-[660px] md:mt-72 xl:mb-[340px] xl:mt-64">
-        <Pagination
-          onPageChange={handlePageChange}
-          totalPages={totalPages}
-          initialPage={page}
-        />
+      <div className="mb-120 flex justify-center">
+        {totalPages && (
+          <Pagination
+            handlePageChange={handlePageChange}
+            totalPages={totalPages}
+            currentPage={page}
+          />
+        )}
       </div>
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { query } = context;
+  const initialPage = query.page || null;
+  const initialCategory = query.category || null;
+  const initialKeyword = query.keyword || null;
+  const initialSort = query.sort || null;
+
+  return {
+    props: {
+      initialPage,
+      initialCategory,
+      initialKeyword,
+      initialSort,
+    },
+  };
 }
