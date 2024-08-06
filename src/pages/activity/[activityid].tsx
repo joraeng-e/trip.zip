@@ -9,6 +9,7 @@ import {
   Title,
 } from '@/components/ActivityDetail';
 import ActivityHeader from '@/components/ActivityDetail/ActivityHeader';
+import ActivitySideBar from '@/components/ActivityDetail/ActivitySidebar';
 import Button from '@/components/commons/Button';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -141,22 +142,7 @@ export default function ActivityDetail() {
               />
             </div>
             <div className="relative w-3/12">
-              {showButton && (
-                <div className="sticky top-100 h-300 w-full rounded-lg border-2 border-custom-gray-400 text-nomad-black">
-                  <div className="text-2xl-bold">
-                    {DetailData.price}
-                    <span className="text-lg-regular">/ 2인</span>
-                  </div>
-                  <Button
-                    variant="activeButton"
-                    hasICon={true}
-                    className="h-36 rounded-md text-md-bold"
-                    onClick={() => alert('Button Clicked!')}
-                  >
-                    {DetailData.price} 원 / 인
-                  </Button>
-                </div>
-              )}
+              {showButton && <ActivitySideBar price={DetailData.price} />}
             </div>
           </div>
         </div>
