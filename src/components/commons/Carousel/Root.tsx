@@ -13,11 +13,12 @@ import {
 import CarouselIndicator from './Indicator';
 import CarouselNavigator from './Navigator';
 import CarouselSlide from './Slide';
+import useCarouselDrag from './hooks/useCarouselDrag';
 
 interface CarouselContextType {
   currentIndex: number;
   totalSlides: number;
-  updateSlide: (slideIndex: number) => void;
+  updateSlide: (slideIndex: number | ((prevIndex: number) => number)) => void;
 }
 
 const CarouselContext = createContext<CarouselContextType | null>(null);
@@ -69,6 +70,10 @@ export default function CarouselRoot({
       typeof slideIndex === 'number' ? slideIndex : slideIndex(prevIndex),
     );
   };
+
+  const { handleMouseDown, handleMouseLeave, handleMouseUp, handleMouseMove } =
+    useCarouselDrag({ ref: sliderRef, currentIndex, totalSlides, updateSlide });
+
   const contextValue = {
     currentIndex,
     totalSlides,
@@ -127,6 +132,10 @@ export default function CarouselRoot({
         <div
           ref={sliderRef}
           className="flex size-full transition-transform duration-500 ease-in-out"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           <div className="size-full flex-shrink-0">
