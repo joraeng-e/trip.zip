@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
 
 export default function CarouselSlide({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return <section className="relative size-full">{children}</section>;
 }
