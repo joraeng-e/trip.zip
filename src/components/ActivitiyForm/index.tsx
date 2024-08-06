@@ -23,7 +23,7 @@ import Select from '../commons/Select';
 import DateTime from './FormComponents/DateTime';
 import ImageUploader from './FormComponents/ImageUpload';
 
-export default function MyActivities() {
+export default function MyActivityForm() {
   const router = useRouter();
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
