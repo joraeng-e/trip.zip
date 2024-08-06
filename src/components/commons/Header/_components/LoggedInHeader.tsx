@@ -41,6 +41,7 @@ export default function LoggedInHeader() {
       <div
         className="flex cursor-pointer items-center gap-6 border-l-2 pl-16"
         onClick={handleProfileClick}
+        ref={dropdownRef}
       >
         <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border">
           {userInfo?.profileImageUrl ? (
@@ -64,7 +65,6 @@ export default function LoggedInHeader() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          ref={dropdownRef}
         >
           <div className="absolute -top-2 right-20 rotate-90">
             <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
