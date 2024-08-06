@@ -59,7 +59,7 @@ export default function CarouselRoot({
   const totalSlides = hasMultipleSlides
     ? carouselSlides.length + 2
     : carouselSlides.length;
-  const [currentIndex, setCurrentIndex] = useState(1);
+  const [currentIndex, setCurrentIndex] = useState(hasMultipleSlides ? 1 : 0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -147,7 +147,7 @@ export default function CarouselRoot({
       <div className="group/carousel relative h-240 w-full overflow-hidden md:h-550">
         <div
           ref={sliderRef}
-          className="flex size-full transition-transform duration-500 ease-in-out"
+          className={`flex size-full transition-transform duration-500 ease-in-out ${!hasMultipleSlides && 'justify-center'}`}
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
