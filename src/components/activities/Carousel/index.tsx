@@ -1,7 +1,7 @@
 import Carousel from '@/components/commons/Carousel';
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 
-import { Slide1, Slide2, Slide3 } from './Container';
+import { Slide1, Slide2, Slide3 } from './Slides';
 
 export default function CarouselContainer() {
   return (
