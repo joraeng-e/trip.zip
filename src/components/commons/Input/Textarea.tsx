@@ -2,7 +2,7 @@ import React, { TextareaHTMLAttributes } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
-  label: string;
+  label?: string;
   register: UseFormRegisterReturn;
   error?: FieldError;
   maxWidth?: string;

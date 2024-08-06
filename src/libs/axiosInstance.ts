@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
   },
 });
 
-// 요청 인터셉터
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const excludedUrls = ['/auth/tokens'];
@@ -26,7 +25,6 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// 토큰 갱신 함수
 const refreshToken = async () => {
   const refreshToken = getCookie('refreshToken');
 
@@ -51,7 +49,6 @@ const refreshToken = async () => {
     setCookie('accessToken', accessToken);
     setCookie('refreshToken', newRefreshToken);
 
-    // 기본 헤더와 요청 헤더에 새로운 액세스 토큰 설정
     axiosInstance.defaults.headers.common['Authorization'] =
       `Bearer ${accessToken}`;
 
@@ -62,11 +59,10 @@ const refreshToken = async () => {
     if (typeof window !== 'undefined') {
       alert('다시 로그인해주세요.');
     }
-    throw error; // 에러를 다시 던져서 호출자에게 전달
+    throw error;
   }
 };
 
-// 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -81,7 +77,7 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (error) {
-        return Promise.reject(error); // 에러를 다시 던져서 호출자에게 전달
+        return Promise.reject(error);
       }
     }
 

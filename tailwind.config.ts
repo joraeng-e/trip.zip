@@ -64,13 +64,6 @@ const config: Config = {
           300: '#0085FF',
         },
       },
-      flexCenter: {
-        '.flex-center': {
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-      },
     },
     fontSize: {
       '3xl-bold': ['32px', { lineHeight: '46px', fontWeight: 'bold' }],
@@ -112,9 +105,14 @@ const config: Config = {
         from: { transform: 'rotate(0.5deg)' },
         to: { transform: 'rotate(-0.5deg)' },
       },
+      shimmer: {
+        '0%': { transform: 'translateX(-100%)' },
+        '100%': { transform: 'translateX(100%)' },
+      },
     },
     animation: {
       vibration: 'vibration .1s ease-in-out 5',
+      shimmer: 'shimmer 2s infinite',
     },
   },
   plugins: [],

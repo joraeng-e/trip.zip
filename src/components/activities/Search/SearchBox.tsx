@@ -1,28 +1,26 @@
 import Button from '@/components/commons/Button';
 import { BedIcon } from '@/libs/utils/Icon';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 export default function SearchBox({
+  initialKeyword,
   handleKeyword,
 }: {
+  initialKeyword?: string;
   handleKeyword: (keyword: string) => void;
 }) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialKeyword || '');
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    // keyword를 모두 지울 경우 refetch
+    if (!event.target.value) handleKeyword(event.target.value);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleKeyword(inputValue);
   };
-
-  // keyword를 모두 지울 경우 refetch
-  useEffect(() => {
-    if (inputValue) return;
-    handleKeyword(inputValue);
-  }, [inputValue]);
 
   return (
     <div className="rounded-2xl bg-white px-24 py-16 shadow-xl md:px-24 md:py-35">

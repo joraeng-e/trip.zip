@@ -1,8 +1,13 @@
+import TimeSeparatorIcon from '@/../../public/icon/timeSeparatoricon.svg';
+
+import ArrowDown from '/public/icon/arrowDown.svg';
 import ArrowLeft from '/public/icon/arrowLeft.svg';
 import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
+import DoubleArrowNext from '/public/icon/doubleArrowNext.svg';
+import DoubleArrowPrev from '/public/icon/doubleArrowPrev.svg';
 import FacebookIcon from '/public/icon/facebookIcon.svg';
 import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
@@ -15,6 +20,7 @@ import PaperPlaneIcon from '/public/icon/paperPlane.svg';
 import PasswordOffIcon from '/public/icon/passwordOffIcon.svg';
 import PasswordOnIcon from '/public/icon/passwordOnIcon.svg';
 import Pencil from '/public/icon/pencil.svg';
+import PlusIcon from '/public/icon/plusIcon.svg';
 import PlusTimeIcon from '/public/icon/plusTimeIcon.svg';
 import ProfileAccountIcon from '/public/icon/profileAccountIcon.svg';
 import ProfileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
@@ -54,8 +60,13 @@ export {
   PaperPlaneIcon,
   PaginationArrowLeft,
   PaginationArrowRight,
+  PlusIcon,
   BaseProfile,
   RoundStar,
   ArrowLeft,
   ArrowRight,
+  ArrowDown,
+  TimeSeparatorIcon,
+  DoubleArrowPrev,
+  DoubleArrowNext,
 };

@@ -1,11 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import { NextButton, PageList, PrevButton } from './Buttons';
 
 interface PaginationContextType {
   totalPages: number;
   currentPage: number;
-  updateCurrentPage: (page: number) => void;
+  handlePageChange: (page: number) => void;
 }
 
 const PaginationContext = createContext<PaginationContextType | null>(null);
@@ -21,54 +21,50 @@ export const usePaginationContext = () => {
 };
 
 interface Props {
-  onPageChange?: (page: number) => void;
+  handlePageChange: (page: number) => void;
   totalPages: number;
-  initialPage?: number;
+  currentPage: number;
 }
 
 /**
  * @example
  * ```tsx
  * export default function PaginationExample() {
+ *  const [page, setPage] = useState(1);
+ *
  *  const handlePageChange = (page: number) => {
- *    console.log({ page });
+ *    setPage(page);
  *  }
  *
  *  return (
  *    <>
- *      <Pagination onPageChange={handlePageChange} totalPages={10} />
+ *      <Pagination handlePageChange={handlePageChange} totalPages={10} currentPage={page} />
  *    </>
  *  )
  * }
  * ```
  *
- * @property {function} onPageChange - 현재 페이지가 변경되었을 때 실행될 함수
+ * @property {function} handlePageChange - 현재 페이지가 변경되었을 때 실행될 함수
  * @property {number} totalPages - 전체 페이지 개수
- * @property {number} initialPage - 컴포넌트 마운트 시 페이지
+ * @property {number} currentPage - 현재 페이지
  * @author 천권희
  */
 
 export default function Pagination({
-  onPageChange,
+  handlePageChange,
   totalPages,
-  initialPage = 1,
+  currentPage,
 }: Props) {
-  const [currentPage, setCurrentPage] = useState(() => {
-    if (totalPages < initialPage) return totalPages;
-    if (initialPage <= 0) return 1;
-    return initialPage;
-  });
-
-  const updateCurrentPage = (page: number) => {
-    setCurrentPage(page);
-    onPageChange?.(page);
-  };
-
   const contextValue = {
     totalPages,
     currentPage,
-    updateCurrentPage,
+    handlePageChange,
   };
+
+  useEffect(() => {
+    if (totalPages < currentPage) handlePageChange(totalPages);
+    if (currentPage <= 0) handlePageChange(1);
+  }, [currentPage, totalPages]);
 
   return (
     <PaginationContext.Provider value={contextValue}>

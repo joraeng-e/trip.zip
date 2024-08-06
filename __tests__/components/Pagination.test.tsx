@@ -2,6 +2,7 @@ import Pagination, {
   usePaginationContext,
 } from '@/components/commons/Pagination';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useState } from 'react';
 
 describe('Pagination Component', () => {
   it('usePaginationContext 호출 범위 테스트', () => {
@@ -22,19 +23,19 @@ describe('Pagination Component', () => {
   });
 
   it('페이지네이션 컴포넌트 마운트 시 1페이지 활성화', () => {
-    render(<Pagination totalPages={10} />);
+    render(<PaginationTest totalPages={10} currentPage={1} />);
 
     expect(screen.getByText('1')).toHaveClass('bg-custom-green-200');
   });
 
   it('initial page 테스트', () => {
-    render(<Pagination totalPages={10} initialPage={7} />);
+    render(<PaginationTest totalPages={10} currentPage={7} />);
 
     expect(screen.getByText('7')).toHaveClass('bg-custom-green-200');
   });
 
   test('initial page가 total page 보다 큰 경우', () => {
-    render(<Pagination totalPages={10} initialPage={11} />);
+    render(<PaginationTest totalPages={10} currentPage={11} />);
 
     const nextButton = screen.getByRole('button', { name: /next/i });
 
@@ -43,7 +44,7 @@ describe('Pagination Component', () => {
   });
 
   it('initial page가 0, 음수인 경우', () => {
-    render(<Pagination totalPages={10} initialPage={-1} />);
+    render(<PaginationTest totalPages={10} currentPage={-1} />);
 
     const prevButton = screen.getByRole('button', { name: /prev/i });
 
@@ -52,7 +53,7 @@ describe('Pagination Component', () => {
   });
 
   it('initial page에 의한 페이지 리스트가 의도하는 대로 보여지는지 테스트', () => {
-    render(<Pagination totalPages={10} initialPage={7} />);
+    render(<PaginationTest totalPages={10} currentPage={7} />);
     const pageNumbers = [5, 6, 7, 8, 9];
 
     pageNumbers.forEach((pageNumber) => {
@@ -64,21 +65,21 @@ describe('Pagination Component', () => {
   });
 
   it('prev button disabled test', () => {
-    render(<Pagination totalPages={10} initialPage={1} />);
+    render(<PaginationTest totalPages={10} currentPage={1} />);
 
     const prevButton = screen.getByRole('button', { name: /prev/i });
     expect(prevButton).toBeDisabled();
   });
 
   it('next button disabled test', () => {
-    render(<Pagination totalPages={10} initialPage={10} />);
+    render(<PaginationTest totalPages={10} currentPage={10} />);
 
     const nextButton = screen.getByRole('button', { name: /next/i });
     expect(nextButton).toBeDisabled();
   });
 
   it('prev button click test', () => {
-    render(<Pagination totalPages={10} initialPage={4} />);
+    render(<PaginationTest totalPages={10} currentPage={4} />);
 
     const prevButton = screen.getByRole('button', { name: /prev/i });
     fireEvent.click(prevButton);
@@ -87,7 +88,7 @@ describe('Pagination Component', () => {
   });
 
   it('next button click test', () => {
-    render(<Pagination totalPages={10} initialPage={4} />);
+    render(<PaginationTest totalPages={10} currentPage={4} />);
 
     const nextButton = screen.getByRole('button', { name: /next/i });
     fireEvent.click(nextButton);
@@ -97,7 +98,7 @@ describe('Pagination Component', () => {
   });
 
   it('page button click test', () => {
-    render(<Pagination totalPages={10} initialPage={4} />);
+    render(<PaginationTest totalPages={10} currentPage={4} />);
 
     const pageButton = screen.getByText('6');
     fireEvent.click(pageButton);
@@ -105,3 +106,25 @@ describe('Pagination Component', () => {
     expect(pageButton).toHaveClass('bg-custom-green-200');
   });
 });
+
+function PaginationTest({
+  currentPage,
+  totalPages,
+}: {
+  currentPage: number;
+  totalPages: number;
+}) {
+  const [page, setPage] = useState(currentPage);
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
+
+  return (
+    <Pagination
+      currentPage={page}
+      handlePageChange={handlePageChange}
+      totalPages={totalPages}
+    />
+  );
+}

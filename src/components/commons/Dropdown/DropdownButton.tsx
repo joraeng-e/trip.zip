@@ -1,9 +1,8 @@
+import { ArrowDown } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 import { useDropdownContext } from '.';
-
-const ArrowDown = '/icon/arrowDown.svg';
 
 export default function Button({ ...rest }) {
   const { toggleDropdown, isOpen, width, height, buttonText } =
@@ -18,6 +17,7 @@ export default function Button({ ...rest }) {
       }}
       className={`flex-center min-h-41 w-full min-w-90 justify-between rounded-xl border-1 border-custom-green-200 pl-18 pr-10 outline-none`}
       onClick={toggleDropdown}
+      type="button"
     >
       <span className="text-14 font-light md:text-18">{buttonText}</span>
       <motion.div
