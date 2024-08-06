@@ -60,14 +60,16 @@ export const useDropdownContext = () => {
           selected={value}
           setSelected={setValue}
           width={}
+          maxWidth={}
           height={}
           defaultValue="필터"
   >
-    <Dropdown.Button>{jsx}</Dropdown.Button>
+    <Dropdown.Button className="tailwind 쓸 수 있어요(optional)">
+      {jsx}
+    </Dropdown.Button>
     <Dropdown.Body>
-      <Dropdown.Item text="최신순" value="recent" />
-      <Dropdown.Item text="lowest" value="lowest">낮은가격순</Dropdown.Item> - text, label 다른 경우
-      <Dropdown.Item text="높은가격순" value="highest" /> - text, value 다른 경우
+      <Dropdown.Item value="recent" />
+      <Dropdown.Item value="lowest">낮은가격순</Dropdown.Item> - value, label 다른 경우
     </Dropdown.Body>
   </Dropdown>
  ```

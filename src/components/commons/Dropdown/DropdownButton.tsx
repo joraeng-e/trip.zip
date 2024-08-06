@@ -4,13 +4,16 @@ import { useDropdownContext } from '.';
 
 type ButtonProps = {
   children: ReactNode;
+  className?: string;
 };
 
-export default function Button({ children }: ButtonProps) {
+export default function Button({ children, className, ...rest }: ButtonProps) {
   const { toggleDropdown, maxWidth, width, height } = useDropdownContext();
 
   return (
     <button
+      {...rest}
+      className={`${className}`}
       onClick={toggleDropdown}
       type="button"
       style={{
