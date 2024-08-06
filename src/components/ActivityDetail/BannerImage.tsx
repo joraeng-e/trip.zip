@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import React from 'react';
 
 interface ImageProps {
   bannerImageUrl: string;
@@ -11,30 +10,40 @@ export default function BannerImage(props: ImageProps) {
   const { bannerImageUrl, subImageUrl, className } = props;
 
   return (
-    <div className="flex">
-      {/* 배너 이미지: 왼쪽 절반 차지 */}
-      <div className="relative size-186 flex-shrink-0 rounded-[20px] px-20 pb-24 text-white shadow-none transition-all duration-300 hover:translate-y-[-3px] hover:shadow-lg hover:shadow-gray-400 md:size-[384px]">
+    <div className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className}`}>
+      {/* 배너 이미지: 전체 그리드 열 차지 */}
+      <div className="group relative col-span-1 h-500 overflow-hidden md:col-span-1">
         <Image
           src={bannerImageUrl}
           alt="banner"
           fill
-          className="absolute -z-10 rounded-[20px] object-cover brightness-75 filter"
+          className="rounded-l-xl object-cover transition duration-300 group-hover:brightness-75"
         />
       </div>
 
       {/* 서브 이미지: 오른쪽 절반 차지, 최대 4개 */}
       {subImageUrl && subImageUrl.length > 0 && (
-        <div className="grid w-1/2 grid-cols-2 gap-2">
-          {subImageUrl.slice(0, 4).map((url, index) => (
-            <div key={index} className="relative h-1/2 w-full">
-              <Image
-                src={url}
-                alt={`sub-image-${index}`}
-                fill
-                className="object-cover"
-              />
-            </div>
-          ))}
+        <div className="col-span-1 grid grid-cols-2 gap-2">
+          {subImageUrl.slice(0, 4).map((url, index) => {
+            // 1번과 3번 이미지에 대해 다른 rounded 스타일을 적용
+            const roundedClass =
+              index === 1
+                ? 'rounded-tr-xl'
+                : index === 3
+                  ? 'rounded-br-xl'
+                  : '';
+
+            return (
+              <div key={index} className="group relative h-250 w-full">
+                <Image
+                  src={url}
+                  alt={`sub-image-${index}`}
+                  fill
+                  className={`object-cover transition duration-300 group-hover:brightness-75 ${roundedClass}`}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
