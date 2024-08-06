@@ -1,7 +1,8 @@
-import { getUser, patchUserInfo } from '@/libs/api/user';
+import { getUser, patchUserInfo, postProfileImage } from '@/libs/api/user';
 import { myInfoSchema } from '@/libs/utils/schemas/myInfoSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { PostProfileImageResponse } from '@trip.zip-api';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,7 +23,7 @@ type FormData = {
 type registerDataType = {
   nickname?: string;
   newPassword?: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
 };
 
 interface ApiError extends Error {
@@ -45,6 +46,7 @@ export default function Info() {
     formState: { errors },
     trigger,
     reset,
+    getValues,
     setValue,
   } = useForm<FormData>({
     resolver: yupResolver(myInfoSchema),
@@ -55,6 +57,9 @@ export default function Info() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [newProfileImageFile, setNewProfileImageFile] = useState<File | null>(
+    null,
+  );
 
   const router = useRouter();
 
@@ -65,12 +70,29 @@ export default function Info() {
         email: userInfo.email,
         newPassword: '',
         reEnterPassword: '',
-        profileImageUrl: null,
+        profileImageUrl: userInfo.profileImageUrl,
       });
       setProfileImageUrl(userInfo.profileImageUrl || '');
     }
   }, [userInfo, reset]);
 
+  // 이미지 POST
+  const imgMutation = useMutation({
+    mutationFn: postProfileImage,
+    onSuccess: (res: PostProfileImageResponse) => {
+      console.log('업로드 성공', res);
+      const newProfileImageUrl = res.profileImageUrl;
+      setProfileImageUrl(newProfileImageUrl);
+
+      // 이미지 업로드 후 프로필 정보 업데이트
+      updateProfileInfo({ profileImageUrl: newProfileImageUrl });
+    },
+    onError: (error) => {
+      console.log('업로드 실패', error);
+    },
+  });
+
+  // 프로필 정보 PATCH
   const mutation = useMutation({
     mutationFn: patchUserInfo,
     onSuccess: () => {
@@ -91,7 +113,7 @@ export default function Info() {
             setModalMessage('닉네임은 10자 이하로 작성해주세요.');
             break;
           default:
-            console.error('로그인 실패', error);
+            console.error(error);
         }
 
         setIsModalOpen(true);
@@ -100,22 +122,42 @@ export default function Info() {
     },
   });
 
-  const onSubmit = async (data: FormData) => {
-    const { nickname, newPassword } = data;
-
-    // 유효성 검사: 최소 하나의 필드가 유효한 경우
-    if (!nickname && !newPassword) {
-      console.log('변경된 정보가 없습니다.');
-      return;
-    }
+  const updateProfileInfo = (additionalData: registerDataType) => {
+    const { nickname, newPassword } = getValues();
 
     const registerData: registerDataType = {
       nickname: nickname !== userInfo?.nickname ? nickname : undefined,
       newPassword: newPassword || undefined,
-      profileImageUrl: profileImageUrl || undefined,
+      profileImageUrl: additionalData.profileImageUrl || profileImageUrl,
     };
 
     mutation.mutate(registerData);
+  };
+
+  const onSubmit = async (data: FormData) => {
+    const { nickname, newPassword, profileImageUrl } = data;
+
+    if (!nickname && !newPassword && !profileImageUrl && !newProfileImageFile) {
+      console.log('변경된 정보가 없습니다.');
+      return;
+    }
+
+    // 이미지가 새로 업로드되는 경우
+    if (newProfileImageFile) {
+      const imageData = new FormData();
+      imageData.append('image', newProfileImageFile);
+      imgMutation.mutate(imageData);
+    } else {
+      // 이미지가 변경되지 않는 경우
+      updateProfileInfo({ profileImageUrl });
+    }
+  };
+
+  const handleImageChange = (file: File) => {
+    setNewProfileImageFile(file);
+    const objectUrl = URL.createObjectURL(file);
+    setProfileImageUrl(objectUrl);
+    setValue('profileImageUrl', objectUrl);
   };
 
   const resetModalMessage = () => {
@@ -185,10 +227,7 @@ export default function Info() {
         </div>
         <ProfileImage
           profileImageUrl={profileImageUrl}
-          // onImageUpload={(url) => setProfileImageUrl(url)}
-          onImageChange={(file) =>
-            setValue('profileImageUrl', URL.createObjectURL(file))
-          }
+          handleImageChange={handleImageChange}
         />
         {modalMessage && (
           <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>

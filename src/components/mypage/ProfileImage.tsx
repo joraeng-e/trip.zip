@@ -1,7 +1,4 @@
-import { postProfileImage } from '@/libs/api/user';
 import { BaseProfile, Pencil } from '@/libs/utils/Icon';
-import { useMutation } from '@tanstack/react-query';
-import { PostProfileImageResponse } from '@trip.zip-api';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
@@ -12,30 +9,20 @@ const whileHover = {
 
 type ProfileImageProps = {
   profileImageUrl: string;
-  onImageChange: (file: File) => void;
+  handleImageChange: (file: File) => void;
 };
 
 export default function ProfileImage({
   profileImageUrl,
-  onImageChange,
+  handleImageChange,
 }: ProfileImageProps) {
   const [isEditBoxVisible, setIsEditBoxVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(
+    profileImageUrl,
+  );
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const mutation = useMutation<PostProfileImageResponse, Error, FormData>({
-    mutationFn: (formData: FormData) => postProfileImage(formData),
-    onSuccess: (data) => {
-      console.log('이미지 업로드 성공', data);
-      setIsEditBoxVisible(false);
-      setPreviewImageUrl(null);
-    },
-    onError: (error: Error) => {
-      console.error('이미지 업로드 실패', error);
-    },
-  });
 
   const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -47,9 +34,10 @@ export default function ProfileImage({
       }
       // 부모 컴포넌트로 파일 전달
       if (file) {
-        onImageChange(file);
+        handleImageChange(file);
+        setPreviewImageUrl(URL.createObjectURL(file));
+        setSelectedImage(file);
       }
-      setSelectedImage(file);
     }
   };
 
@@ -59,30 +47,26 @@ export default function ProfileImage({
     }
   };
 
+  // 연필 클릭
   const handleEditClick = () => {
     setIsEditBoxVisible(!isEditBoxVisible);
   };
 
+  // 기본 이미지로 변경
   const handleChangeToDefaultImage = () => {
     console.log('기본 이미지로 변경');
-    setSelectedImage(null); // 선택된 이미지 초기화
-    setPreviewImageUrl(null); // 미리보기 이미지 초기화
-    setIsEditBoxVisible(false); // 편집 박스 숨기기
+    setSelectedImage(null);
+    setPreviewImageUrl(null);
+    setIsEditBoxVisible(false);
   };
 
-  // 선택한 이미지의 미리보기 URL 생성 + 해제
   useEffect(() => {
-    if (selectedImage) {
-      const objectUrl = URL.createObjectURL(selectedImage);
-      setPreviewImageUrl(objectUrl);
-
-      return () => {
-        URL.revokeObjectURL(objectUrl);
-      };
-    } else {
-      setPreviewImageUrl(null);
-    }
-  }, [selectedImage]);
+    return () => {
+      if (previewImageUrl) {
+        URL.revokeObjectURL(previewImageUrl);
+      }
+    };
+  }, [previewImageUrl]);
 
   return (
     <div className="relative flex flex-col">
