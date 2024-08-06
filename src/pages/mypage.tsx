@@ -3,7 +3,7 @@ import { MenuToggle } from '@/components/mypage/MenuToggle';
 import MyActivities from '@/components/mypage/MyActivities';
 import ProfileSideBar from '@/components/mypage/ProfileSideBar';
 import ReservationList from '@/components/mypage/ReservationList';
-import ReservationState from '@/components/mypage/ReservationState';
+import ReservationStatus from '@/components/mypage/ReservationStatus';
 import { TabProvider, useTabContext } from '@/context/TabContext';
 import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { motion, useCycle } from 'framer-motion';
@@ -42,7 +42,7 @@ function MyPage() {
       case 'myActivities':
         return <MyActivities />;
       case 'reservationState':
-        return <ReservationState />;
+        return <ReservationStatus />;
       default:
         return <Info />;
     }

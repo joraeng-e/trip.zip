@@ -41,6 +41,18 @@ export async function getMyActivities({
   }
 }
 
+// 내 체험 리스트 전체 조회
+export async function getMyAllActivities(): Promise<GetMyActivitiesResponse> {
+  try {
+    const response =
+      await axiosInstance.get<GetMyActivitiesResponse>('/my-activities');
+    return response.data;
+  } catch (error) {
+    console.error('getMyActivities 함수에서 오류 발생:', error);
+    throw error;
+  }
+}
+
 // 내 체험 월별 예약 현황 조회
 export async function getMyActivitiesReservationDashboard({
   activityId,
