@@ -27,30 +27,28 @@ export default function MyCard({
         />
       </div>
       <div className="flex flex-1 flex-col justify-between p-16">
-        <div>
-          <div className="mb-4 flex items-center">
-            <StarOnIcon className="mr-4 h-16 w-16 text-yellow-400" />
-            <span className="text-sm">
-              {rating} ({reviewCount})
-            </span>
-          </div>
-          <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
-        </div>
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <p className="text-xl-medium font-bold text-gray-900">
-              ₩{price.toLocaleString()}
-            </p>
-            <span className="ml-4 text-lg-medium text-custom-gray-800">
-              /인
-            </span>
+          <div>
+            <div className="mb-4 flex items-center">
+              <StarOnIcon className="mr-4 h-16 w-16 text-yellow-400" />
+              <span className="text-sm">
+                {rating} ({reviewCount})
+              </span>
+            </div>
+            <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
           </div>
-          <div className="pr-16">
+          <div>
             <button className="text-gray-400 hover:text-gray-600">
               <KebabIcon />
               {/* TODO: 수정,삭제 토글 추가 */}
             </button>
           </div>
+        </div>
+        <div className="flex items-center">
+          <p className="text-xl-medium font-bold text-gray-900">
+            ₩{price.toLocaleString()}
+          </p>
+          <span className="ml-4 text-lg-medium text-custom-gray-800">/인</span>
         </div>
       </div>
     </div>
