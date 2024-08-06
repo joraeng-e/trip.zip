@@ -1,4 +1,4 @@
-import { MyPageLayout } from '@/components/mypage/myPageLayout';
+import MyPageLayout from '@/components/mypage/myPageLayout';
 import { getUser, patchUserInfo } from '@/libs/api/user';
 import { myInfoSchema } from '@/libs/utils/schemas/myInfoSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
