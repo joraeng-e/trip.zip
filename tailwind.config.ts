@@ -105,9 +105,14 @@ const config: Config = {
         from: { transform: 'rotate(0.5deg)' },
         to: { transform: 'rotate(-0.5deg)' },
       },
+      shimmer: {
+        '0%': { transform: 'translateX(-100%)' },
+        '100%': { transform: 'translateX(100%)' },
+      },
     },
     animation: {
       vibration: 'vibration .1s ease-in-out 5',
+      shimmer: 'shimmer 2s infinite',
     },
   },
   plugins: [],

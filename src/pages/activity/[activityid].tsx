@@ -9,6 +9,7 @@ import {
   Title,
 } from '@/components/ActivityDetail';
 import { GetActivityDetailResponse } from '@trip.zip-api';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -23,34 +24,44 @@ export default function ActivityDetail() {
   return (
     <>
       <div className="basic-container px-0">
-        <Title
-          title={DetailData.title}
-          address={DetailData.address}
-          category={DetailData.category}
-          rating={DetailData.rating}
-          reviewCount={DetailData.reviewCount}
-        />
-
-        <div className="hidden md:block">
-          <BannerImage
-            bannerImageUrl={DetailData.bannerImageUrl}
-            subImageUrl={subImageUrls} // 서브 이미지 URL 배열 전달
+        <Head>
+          <title>{DetailData.title} - Trip.zip</title>
+          <meta name="description" content={DetailData.description} />
+          <meta property="og:title" content={DetailData.title} />
+          <meta property="og:description" content={DetailData.description} />
+          <meta property="og:image" content={DetailData.bannerImageUrl} />
+          <meta property="og:url" content={`${ActivityId}`} />
+        </Head>
+        <div>data id: {DetailData.id}</div>
+        <div>router id: {ActivityId}</div>
+        <div>
+          <Title
+            title={DetailData.title}
+            address={DetailData.address}
+            category={DetailData.category}
+            rating={DetailData.rating}
+            reviewCount={DetailData.reviewCount}
+          />
+          <div className="hidden md:block">
+            <BannerImage
+              bannerImageUrl={DetailData.bannerImageUrl}
+              subImageUrl={subImageUrls}
+            />
+          </div>
+          <div className="md:hidden">
+            <MobileBannerImage
+              bannerImageUrl={DetailData.bannerImageUrl}
+              subImageUrl={subImageUrls}
+            />
+          </div>
+          <Description description={DetailData.description} />
+          <Address address={DetailData.address} />
+          <Review
+            averageRating={ReviewData.averageRating}
+            totalCount={ReviewData.totalCount}
+            reviews={ReviewData.reviews}
           />
         </div>
-        <div className="md:hidden">
-          <MobileBannerImage
-            bannerImageUrl={DetailData.bannerImageUrl}
-            subImageUrl={subImageUrls} // 서브 이미지 URL 배열 전달
-          />
-        </div>
-
-        <Description description={DetailData.description} />
-        <Address address={DetailData.address} />
-        <Review
-          averageRating={ReviewData.averageRating}
-          totalCount={ReviewData.totalCount}
-          reviews={ReviewData.reviews}
-        />
       </div>
     </>
   );

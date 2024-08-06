@@ -4,12 +4,14 @@ import { useState } from 'react';
 const CATEGORIES = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
 export default function CategoryMenu({
+  currentCategory,
   handleCategoryClick,
 }: {
+  currentCategory?: string;
   handleCategoryClick: (category: string | undefined) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState<string | undefined>(
-    undefined,
+    currentCategory,
   );
 
   const handleClick = (category: string) => {
