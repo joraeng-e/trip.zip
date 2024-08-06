@@ -5,12 +5,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { usePaginationContext } from '.';
 
 export function PrevButton() {
-  const { updateCurrentPage, currentPage } = usePaginationContext();
+  const { handlePageChange, currentPage } = usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === 1);
 
   const handlePrevClick = () => {
     if (currentPage <= 1) return;
-    updateCurrentPage(currentPage - 1);
+    handlePageChange(currentPage - 1);
   };
 
   useEffect(() => {
@@ -37,12 +37,12 @@ export function PrevButton() {
 }
 
 export function NextButton() {
-  const { updateCurrentPage, currentPage, totalPages } = usePaginationContext();
+  const { handlePageChange, currentPage, totalPages } = usePaginationContext();
   const [disabled, setDisabled] = useState(currentPage === totalPages);
 
   const handleNextClick = () => {
     if (currentPage >= totalPages) return;
-    updateCurrentPage(currentPage + 1);
+    handlePageChange(currentPage + 1);
   };
 
   useEffect(() => {
@@ -104,10 +104,10 @@ export function PageList() {
 }
 
 function PageItem({ page }: { page: number }) {
-  const { currentPage, updateCurrentPage } = usePaginationContext();
+  const { currentPage, handlePageChange } = usePaginationContext();
 
   const handlePageItemClick = () => {
-    updateCurrentPage(page);
+    handlePageChange(page);
   };
 
   const classnames = classNames(
