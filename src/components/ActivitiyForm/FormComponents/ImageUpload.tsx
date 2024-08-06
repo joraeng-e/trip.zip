@@ -10,15 +10,21 @@ interface ImageUploadProps {
   name: string;
   maxImages?: number;
   label?: string;
+  existingImages?: { id: number; imageUrl: string }[];
+  onImageRemove?: (imageId: number) => void;
 }
 
 export default function ImageUploader({
   name,
   maxImages = 1,
   label = '이미지 등록',
+  existingImages = [],
+  onImageRemove,
 }: ImageUploadProps) {
   const { setValue } = useFormContext();
-  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>(
+    existingImages.map((img) => img.imageUrl),
+  );
 
   const imageUploadMutation = useMutation({
     mutationFn: postActivityImage,
@@ -61,6 +67,10 @@ export default function ImageUploader({
   };
 
   const handleDelete = (index: number) => {
+    const imageToDelete = existingImages[index];
+    if (imageToDelete && onImageRemove) {
+      onImageRemove(imageToDelete.id);
+    }
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
     setImagePreviewUrls(updatedUrls);
   };

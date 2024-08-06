@@ -5,16 +5,25 @@ import {
 } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import { PostActivitiesRequest } from '@trip.zip-api';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 interface DateTimeInput {
+  id?: number;
   date: string;
   startTime: string;
   endTime: string;
 }
 
-export default function DateTime() {
+interface DateTimeProps {
+  existingSchedules?: DateTimeInput[];
+  onScheduleRemove?: (scheduleId: number) => void;
+}
+
+export default function DateTime({
+  existingSchedules,
+  onScheduleRemove,
+}: DateTimeProps) {
   const todayDate = new Date().toLocaleDateString('en-CA');
 
   const {
@@ -26,7 +35,8 @@ export default function DateTime() {
     setError,
     clearErrors,
   } = useFormContext<PostActivitiesRequest>();
-  const { fields, append, remove } = useFieldArray({
+
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: 'schedules',
   });
@@ -36,6 +46,12 @@ export default function DateTime() {
     startTime: '',
     endTime: '',
   });
+
+  useEffect(() => {
+    if (existingSchedules && existingSchedules.length > 0) {
+      replace(existingSchedules);
+    }
+  }, [existingSchedules, replace]);
 
   const handleDateTimeInputChange = ({
     target: { id, value },
@@ -72,6 +88,10 @@ export default function DateTime() {
   };
 
   const handleRemoveEntry = (index: number) => {
+    const schedule = fields[index];
+    if (schedule.id && onScheduleRemove) {
+      onScheduleRemove(Number(schedule.id));
+    }
     remove(index);
     trigger('schedules');
   };
@@ -152,13 +172,11 @@ export default function DateTime() {
           >
             <input
               type="text"
-              readOnly
               className="basic-input w-full max-w-380"
               {...register(`schedules.${index}.date` as const)}
             />
             <input
               type="text"
-              readOnly
               className="basic-input w-full max-w-136"
               {...register(`schedules.${index}.startTime` as const)}
             />
@@ -167,7 +185,6 @@ export default function DateTime() {
             </div>
             <input
               type="text"
-              readOnly
               className="basic-input w-full max-w-136"
               {...register(`schedules.${index}.endTime` as const)}
             />
