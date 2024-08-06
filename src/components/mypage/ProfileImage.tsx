@@ -1,4 +1,3 @@
-import useClickOutside from '@/hooks/useClickOutside';
 import { postProfileImage } from '@/libs/api/user';
 import { BaseProfile, Pencil } from '@/libs/utils/Icon';
 import { useMutation } from '@tanstack/react-query';
@@ -11,9 +10,15 @@ const whileHover = {
   backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
 };
 
+type ProfileImageProps = {
+  profileImageUrl: string;
+  onImageChange: (file: File) => void;
+};
+
 export default function ProfileImage({
   profileImageUrl,
-}: PostProfileImageResponse) {
+  onImageChange,
+}: ProfileImageProps) {
   const [isEditBoxVisible, setIsEditBoxVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
@@ -40,6 +45,10 @@ export default function ProfileImage({
         alert('이미지 업로드는 최대 한 개만 가능합니다.');
         return;
       }
+      // 부모 컴포넌트로 파일 전달
+      if (file) {
+        onImageChange(file);
+      }
       setSelectedImage(file);
     }
   };
@@ -51,9 +60,7 @@ export default function ProfileImage({
   };
 
   const handleEditClick = () => {
-    console.log('Edit button clicked');
     setIsEditBoxVisible(!isEditBoxVisible);
-    setPreviewImageUrl(null);
   };
 
   const handleChangeToDefaultImage = () => {

@@ -185,7 +185,7 @@ export default function Info() {
         </div>
         <ProfileImage
           profileImageUrl={profileImageUrl}
-          onImageUpload={(url) => setProfileImageUrl(url)}
+          // onImageUpload={(url) => setProfileImageUrl(url)}
           onImageChange={(file) =>
             setValue('profileImageUrl', URL.createObjectURL(file))
           }
