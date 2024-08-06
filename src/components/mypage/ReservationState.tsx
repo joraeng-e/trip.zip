@@ -9,7 +9,6 @@ export default function ReservationState() {
     <Dropdown
       selected={value}
       setSelected={setValue}
-      width={50}
       maxWidth={100}
       height={50}
     >
