@@ -133,14 +133,14 @@ export default function CarouselRoot({
   }, [currentIndex, isTransitioning, totalSlides]);
 
   useEffect(() => {
-    if (!autoPlay || !hasMultipleSlides) return;
+    if (!autoPlay || !hasMultipleSlides || isTransitioning) return;
 
     const interval = setInterval(() => {
       updateSlide((prev) => prev + 1);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [autoPlay, hasMultipleSlides]);
+  }, [autoPlay, hasMultipleSlides, isTransitioning]);
 
   return (
     <CarouselContext.Provider value={contextValue}>
