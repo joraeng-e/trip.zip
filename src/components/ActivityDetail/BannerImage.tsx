@@ -1,4 +1,7 @@
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+
+import ImageModal from './ImageModal';
 
 interface ImageProps {
   bannerImageUrl: string;
@@ -8,9 +11,36 @@ interface ImageProps {
 
 export default function BannerImage(props: ImageProps) {
   const { bannerImageUrl, subImageUrl, className } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 바깥 스크롤을 비활성화
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'; // 컴포넌트 언마운트 시 원래 상태로 복원
+    };
+  }, [isModalOpen]);
+
+  // 배너 이미지와 서브 이미지를 하나의 배열로 합침
+  const allImages = [bannerImageUrl, ...(subImageUrl || [])];
 
   return (
-    <div className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className}`}>
+    <div
+      className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className} relative`}
+    >
       {/* 배너 이미지: 전체 그리드 열 차지 */}
       <div className="group relative col-span-1 h-500 overflow-hidden md:col-span-1">
         <Image
@@ -25,7 +55,6 @@ export default function BannerImage(props: ImageProps) {
       {subImageUrl && subImageUrl.length > 0 && (
         <div className="col-span-1 grid grid-cols-2 gap-2">
           {subImageUrl.slice(0, 4).map((url, index) => {
-            // 1번과 3번 이미지에 대해 다른 rounded 스타일을 적용
             const roundedClass =
               index === 1
                 ? 'rounded-tr-xl'
@@ -46,6 +75,21 @@ export default function BannerImage(props: ImageProps) {
           })}
         </div>
       )}
+
+      {/* 전체 사진 보기 버튼 */}
+      <button
+        onClick={handleOpenModal}
+        className="absolute bottom-20 right-20 h-40 w-120 rounded-3xl bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
+      >
+        사진 모두 보기
+      </button>
+
+      {/* 모달 컴포넌트 */}
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        images={allImages} // 모든 이미지 배열 전달
+      />
     </div>
   );
 }
