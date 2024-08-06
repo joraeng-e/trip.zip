@@ -1,4 +1,4 @@
-import MyPageLayout from '@/components/mypage/myPageLayout';
+import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';

@@ -1,4 +1,4 @@
-import MyPageLayout from '@/components/mypage/myPageLayout';
+import MyPageLayout from '@/components/mypage/MyPageLayout';
 import React from 'react';
 
 export default function ReservationList() {
