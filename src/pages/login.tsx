@@ -7,6 +7,7 @@ import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import { LoginResponse } from '@trip.zip-api';
+import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -51,8 +52,16 @@ export default function Signup() {
       setModalMessage('로그인 완료!');
       setIsModalOpen(true);
       setIsSuccessMessage(true);
-      document.cookie = `accessToken=${data.accessToken}; path=/; secure; samesite=strict`;
-      document.cookie = `refreshToken=${data.refreshToken}; path=/; secure; samesite=strict`;
+      setCookie('accessToken', data.accessToken, {
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+      });
+      setCookie('refreshToken', data.refreshToken, {
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+      });
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {

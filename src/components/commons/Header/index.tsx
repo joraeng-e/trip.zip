@@ -1,5 +1,5 @@
 import tripZip from '@/../public/logo/tripZip.png';
-import { isLogin } from '@/libs/utils/cookie';
+import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -28,7 +28,9 @@ export default function Header() {
   const isHeaderScrollValid = scrollPosition === 0;
 
   const checkLoginState = () => {
-    setLoggedIn(isLogin);
+    // 쿠키에서 accessToken을 확인해 로그인 상태 결정
+    const accessToken = getCookie('accessToken');
+    setLoggedIn(!!accessToken);
   };
 
   useEffect(() => {
