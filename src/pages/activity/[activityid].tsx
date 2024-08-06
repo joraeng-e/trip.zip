@@ -141,7 +141,7 @@ export default function ActivityDetail() {
                 reviews={ReviewData.reviews}
               />
             </div>
-            <div className="relative w-3/12">
+            <div className="relative mr-24 hidden w-3/12 md:block">
               {showButton && <ActivitySideBar price={DetailData.price} />}
             </div>
           </div>

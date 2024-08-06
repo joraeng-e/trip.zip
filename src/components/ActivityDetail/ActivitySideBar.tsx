@@ -8,7 +8,7 @@ interface ActivitySideBarProps {
 export default function ActivitySideBar(props: ActivitySideBarProps) {
   const { price } = props;
   return (
-    <div className="sticky top-100 m-16 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black">
+    <div className="sticky top-100 m-16 w-auto rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black">
       <div className="my-10 text-2xl-bold">
         {price}
         <span className="text-lg-regular">/ 2인</span>
