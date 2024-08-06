@@ -6,6 +6,8 @@ import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
+import DoubleArrowNext from '/public/icon/doubleArrowNext.svg';
+import DoubleArrowPrev from '/public/icon/doubleArrowPrev.svg';
 import FacebookIcon from '/public/icon/facebookIcon.svg';
 import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
@@ -65,4 +67,6 @@ export {
   ArrowRight,
   ArrowDown,
   TimeSeparatorIcon,
+  DoubleArrowPrev,
+  DoubleArrowNext,
 };
