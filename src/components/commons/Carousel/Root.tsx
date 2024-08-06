@@ -55,7 +55,10 @@ export default function CarouselRoot({
     [_children],
   );
 
-  const totalSlides = carouselSlides.length + 2;
+  const hasMultipleSlides = carouselSlides.length > 1;
+  const totalSlides = hasMultipleSlides
+    ? carouselSlides.length + 2
+    : carouselSlides.length;
   const [currentIndex, setCurrentIndex] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -71,8 +74,21 @@ export default function CarouselRoot({
     );
   };
 
-  const { handleMouseDown, handleMouseLeave, handleMouseUp, handleMouseMove } =
-    useCarouselDrag({ ref: sliderRef, currentIndex, totalSlides, updateSlide });
+  const {
+    handleMouseDown,
+    handleMouseLeave,
+    handleMouseUp,
+    handleMouseMove,
+    handleTouchStart,
+    handleTouchCancel,
+    handleTouchEnd,
+    handleTouchMove,
+  } = useCarouselDrag({
+    ref: sliderRef,
+    currentIndex,
+    totalSlides,
+    updateSlide,
+  });
 
   const contextValue = {
     currentIndex,
@@ -117,18 +133,18 @@ export default function CarouselRoot({
   }, [currentIndex, isTransitioning, totalSlides]);
 
   useEffect(() => {
-    if (!autoPlay) return;
+    if (!autoPlay || !hasMultipleSlides) return;
 
     const interval = setInterval(() => {
       updateSlide((prev) => prev + 1);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [autoPlay, hasMultipleSlides]);
 
   return (
     <CarouselContext.Provider value={contextValue}>
-      <div className="relative h-240 w-full overflow-hidden md:h-550">
+      <div className="group/carousel relative h-240 w-full overflow-hidden md:h-550">
         <div
           ref={sliderRef}
           className="flex size-full transition-transform duration-500 ease-in-out"
@@ -136,11 +152,17 @@ export default function CarouselRoot({
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
+          onTouchStart={handleTouchStart}
+          onTouchCancel={handleTouchCancel}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          <div className="size-full flex-shrink-0">
-            {carouselSlides[carouselSlides.length - 1]}
-          </div>
+          {hasMultipleSlides && (
+            <div className="size-full flex-shrink-0">
+              {carouselSlides[carouselSlides.length - 1]}
+            </div>
+          )}
 
           {carouselSlides.map((child, idx) => (
             <div className="size-full flex-shrink-0" key={idx}>
@@ -148,11 +170,13 @@ export default function CarouselRoot({
             </div>
           ))}
 
-          <div className="size-full flex-shrink-0">{carouselSlides[0]}</div>
+          {hasMultipleSlides && (
+            <div className="size-full flex-shrink-0">{carouselSlides[0]}</div>
+          )}
         </div>
 
-        {carouselNavigator}
-        {carouselIndicator}
+        {hasMultipleSlides && carouselNavigator}
+        {hasMultipleSlides && carouselIndicator}
       </div>
     </CarouselContext.Provider>
   );

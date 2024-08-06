@@ -1,4 +1,4 @@
-import { MouseEvent, RefObject, useState } from 'react';
+import { MouseEvent, RefObject, TouchEvent, useState } from 'react';
 
 interface Params {
   ref: RefObject<HTMLElement>;
@@ -18,16 +18,29 @@ export default function useCarouselDrag({
 
   const handleMouseDown = (e: MouseEvent) => {
     if (!ref.current) return;
-
     setIsDragging(true);
     setStartX(e.pageX - ref.current.offsetLeft);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    if (!ref.current) return;
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - ref.current.offsetLeft);
   };
 
   const handleMouseLeave = () => {
     setIsDragging(false);
   };
 
+  const handleTouchCancel = () => {
+    setIsDragging(false);
+  };
+
   const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
   };
 
@@ -44,10 +57,26 @@ export default function useCarouselDrag({
     }
   };
 
+  const handleTouchMove = (e: TouchEvent) => {
+    if (!isDragging || !ref.current) return;
+    const x = e.touches[0].pageX - ref.current.offsetLeft;
+    const walk = x - startX;
+
+    if (walk < -75 && currentIndex < totalSlides - 1) {
+      updateSlide(currentIndex + 1);
+    } else if (walk > 75 && currentIndex > 0) {
+      updateSlide(currentIndex - 1);
+    }
+  };
+
   return {
     handleMouseDown,
     handleMouseLeave,
     handleMouseUp,
     handleMouseMove,
+    handleTouchStart,
+    handleTouchCancel,
+    handleTouchEnd,
+    handleTouchMove,
   };
 }
