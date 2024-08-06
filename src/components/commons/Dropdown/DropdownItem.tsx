@@ -15,14 +15,12 @@ export type ItemProps = {
  * @param text - 버튼 안의 텍스트로 전달될 값(optional, text || value)
  */
 const Item: React.FC<ItemProps> = ({ children, value, text, ...rest }) => {
-  const { handleSelect, toggleDropdown, height, setButtonText } =
-    useDropdownContext();
+  const { handleSelect, toggleDropdown, height } = useDropdownContext();
 
   const itemHeight = height ? height - 10 : 41;
 
   const onSelect = () => {
     handleSelect(value);
-    setButtonText(text || value);
     toggleDropdown();
   };
 

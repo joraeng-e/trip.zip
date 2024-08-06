@@ -7,9 +7,7 @@ import React, {
   useCallback,
   useContext,
   useRef,
-  useState, // ReactElement,
-  // useEffect,
-  // useLayoutEffect,
+  useState,
 } from 'react';
 
 import Body from './DropdownBody';
@@ -22,6 +20,7 @@ type DropdownProps = {
   setSelected: Dispatch<SetStateAction<string>>;
   defaultValue?: string;
   width?: number;
+  maxWidth?: number;
   height?: number;
 };
 
@@ -31,6 +30,7 @@ type DropdownContextProps = {
   handleSelect: (value: string) => void;
   selected: string;
   width?: number;
+  maxWidth?: number;
   height?: number;
 };
 
@@ -50,9 +50,9 @@ export const useDropdownContext = () => {
  * Dropdown with rounded square shape
  * @param selected - dropdown으로 조작할 state
  * @param setSelected - dropdown으로 조작할 state의 setState 메소드
- * @param width - dropdown list 너비, maxWidth로 적용(optional)
- * @param height - dropdown Button 높이, Item 높이 자동 설정(optional)
- * (optional, defaultValue || selected)
+ * @param width - dropdown list, button영역 너비(optional)
+ * @param maxWidth - dropdown list, button영역 너비, maxWidth로 적용(optional)
+ * @param height - dropdown item, button영역 높이, list 높이 자동 설정(optional)
  * @example
  * ```
  * const [value, setValue] = useState('첫번째');
@@ -78,6 +78,7 @@ export default function Dropdown({
   setSelected,
   selected,
   width,
+  maxWidth,
   height,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,19 +91,6 @@ export default function Dropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   useClickOutside(dropdownRef, closeDropdown);
 
-  // Todo : Items 요소 중 첫번째 요소의 value 자동으로 기본값으로 설정 해보고 싶었는데 실패했습니다.. 조금 더 연구해보고 구현 해볼게요!
-  // useLayoutEffect(() => {
-  //   if (!selected) {
-  //     const firstItem = React.Children.toArray(children)
-  //       .filter((child): child is ReactElement => React.isValidElement(child))
-  //       .find((child) => child.type === Item);
-
-  //     if (firstItem && !selected) {
-  //       setSelected(firstItem.props.value);
-  //     }
-  //   }
-  // }, [children, selected, setSelected]);
-
   return (
     <DropdownContext.Provider
       value={{
@@ -111,6 +99,7 @@ export default function Dropdown({
         handleSelect,
         selected,
         width,
+        maxWidth,
         height,
       }}
     >
