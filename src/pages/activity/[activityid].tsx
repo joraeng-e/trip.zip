@@ -8,9 +8,11 @@ import {
   Review,
   Title,
 } from '@/components/ActivityDetail';
+import ActivityHeader from '@/components/ActivityDetail/ActivityHeader';
+import Button from '@/components/commons/Button';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function ActivityDetail() {
   const router = useRouter();
@@ -22,23 +24,56 @@ export default function ActivityDetail() {
 
   const [showButton, setShowButton] = useState(true);
   const [showHeader, setShowHeader] = useState(false);
+  const [activeSection, setActiveSection] = useState('title'); // 현재 활성화된 섹션
+
+  const titleRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const addressRef = useRef<HTMLDivElement>(null);
+  const reviewRef = useRef<HTMLDivElement>(null);
+
+  const HEADER_HEIGHT = 140;
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
 
     if (scrollY > 400) {
-      // 400px 이상 스크롤 시 버튼 숨기고 헤더 표시
       setShowButton(false);
       setShowHeader(true);
     } else {
       setShowButton(true);
       setShowHeader(false);
     }
+
+    // 현재 섹션 판단
+    const titleTop = titleRef.current?.getBoundingClientRect().top || 0;
+    const descriptionTop =
+      descriptionRef.current?.getBoundingClientRect().top || 0;
+    const addressTop = addressRef.current?.getBoundingClientRect().top || 0;
+    const reviewTop = reviewRef.current?.getBoundingClientRect().top || 0;
+
+    if (titleTop < window.innerHeight && titleTop > 0) {
+      setActiveSection('title');
+    } else if (descriptionTop < window.innerHeight && descriptionTop > 0) {
+      setActiveSection('description');
+    } else if (addressTop < window.innerHeight && addressTop > 0) {
+      setActiveSection('address');
+    } else if (reviewTop < window.innerHeight && reviewTop > 0) {
+      setActiveSection('review');
+    }
+  };
+
+  const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+    if (ref.current) {
+      const offsetTop =
+        ref.current.getBoundingClientRect().top +
+        window.scrollY -
+        HEADER_HEIGHT;
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -47,10 +82,17 @@ export default function ActivityDetail() {
   return (
     <>
       {showHeader && (
-        <div className="sticky top-70 z-50 h-70 border-y-1 border-custom-gray-200 bg-white">
-          <h2>{DetailData.price} 원 / 인</h2>
-        </div>
+        <ActivityHeader
+          onScrollToSection={scrollToSection}
+          price={DetailData.price}
+          titleRef={titleRef}
+          descriptionRef={descriptionRef}
+          addressRef={addressRef}
+          reviewRef={reviewRef}
+          activeSection={activeSection}
+        />
       )}
+
       <div className="basic-container relative px-0">
         <Head>
           <title>{DetailData.title} - Trip.zip</title>
@@ -61,6 +103,7 @@ export default function ActivityDetail() {
           <meta property="og:url" content={`${ActivityId}`} />
         </Head>
         <div>
+          <div ref={titleRef} />
           <div className="mt-10 hidden md:block">
             <BannerImage
               bannerImageUrl={DetailData.bannerImageUrl}
@@ -76,7 +119,7 @@ export default function ActivityDetail() {
 
           <div className="mt-10 flex">
             <div className="mr-4 flex-1">
-              {/* 70% 차지 */}
+              <div ref={titleRef} />
               <Title
                 title={DetailData.title}
                 address={DetailData.address}
@@ -84,8 +127,13 @@ export default function ActivityDetail() {
                 rating={DetailData.rating}
                 reviewCount={DetailData.reviewCount}
               />
+              <div ref={descriptionRef} />
               <Description description={DetailData.description} />
+
+              <div ref={addressRef} />
               <Address address={DetailData.address} />
+
+              <div ref={reviewRef} />
               <Review
                 averageRating={ReviewData.averageRating}
                 totalCount={ReviewData.totalCount}
@@ -94,11 +142,19 @@ export default function ActivityDetail() {
             </div>
             <div className="relative w-3/12">
               {showButton && (
-                <div className="sticky top-100 h-300 w-full rounded-lg border-2 border-custom-gray-400">
-                  1000원 / 2인
-                  <button className="mt-2 w-full rounded-lg bg-blue-500 text-white">
-                    예약
-                  </button>
+                <div className="sticky top-100 h-300 w-full rounded-lg border-2 border-custom-gray-400 text-nomad-black">
+                  <div className="text-2xl-bold">
+                    {DetailData.price}
+                    <span className="text-lg-regular">/ 2인</span>
+                  </div>
+                  <Button
+                    variant="activeButton"
+                    hasICon={true}
+                    className="h-36 rounded-md text-md-bold"
+                    onClick={() => alert('Button Clicked!')}
+                  >
+                    {DetailData.price} 원 / 인
+                  </Button>
                 </div>
               )}
             </div>
