@@ -137,6 +137,11 @@ export default function Info() {
   const onSubmit = async (data: FormData) => {
     const { nickname, newPassword, profileImageUrl } = data;
 
+    // 닉네임이 변경된 경우 상태 업데이트
+    if (nickname !== userInfo?.nickname) {
+      setValue('nickname', nickname);
+    }
+
     if (!nickname && !newPassword && !profileImageUrl && !newProfileImageFile) {
       console.log('변경된 정보가 없습니다.');
       return;
@@ -152,6 +157,13 @@ export default function Info() {
       updateProfileInfo({ profileImageUrl });
     }
   };
+
+  // 닉네임이 변경될 때마다 반영
+  useEffect(() => {
+    if (userInfo) {
+      setValue('nickname', userInfo.nickname);
+    }
+  }, [userInfo, setValue]);
 
   const handleImageChange = (file: File) => {
     setNewProfileImageFile(file);

@@ -68,6 +68,10 @@ export default function ProfileImage({
     };
   }, [previewImageUrl]);
 
+  useEffect(() => {
+    setPreviewImageUrl(profileImageUrl || null);
+  }, [profileImageUrl]);
+
   return (
     <div className="relative flex flex-col">
       <p className="mb-8 font-bold">프로필 사진</p>
