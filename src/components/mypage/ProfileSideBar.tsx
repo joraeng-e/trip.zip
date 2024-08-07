@@ -1,15 +1,16 @@
 import { useTabContext } from '@/context/TabContext';
+import { getUser } from '@/libs/api/user';
 import {
   BaseProfile,
   Logout,
-  Pencil,
   ProfileAccountIcon,
   ProfileCalendarIcon,
   ProfileChecklistIcon,
   ProfileCogIcon,
 } from '@/libs/utils/Icon';
+import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -21,10 +22,6 @@ const textGroupStyle =
 const activeStyle = 'bg-custom-green-100 text-nomad-black';
 const svgStyle = 'fill-gray-400 transition-all group-hover:fill-nomad-black';
 const svgActiveStyle = 'fill-nomad-black';
-
-const whileHover = {
-  backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
-};
 
 type ProfileSideBarProps = {
   toggleOpen: () => void;
@@ -46,6 +43,11 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
     toggleOpen();
   };
 
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getUser,
+  });
+
   useEffect(() => {
     const path = router.pathname;
     const tab = path.split('/mypage/')[1]; // URL 경로에서 탭 추출
@@ -53,17 +55,28 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   }, [router.pathname, setActiveTab]);
 
   return (
-    <div className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-384">
-      <div className="relative">
-        <BaseProfile className="h-160 w-160" />
-        <motion.div
-          className="flex-center absolute bottom-0 right-10 h-44 w-44 cursor-pointer rounded-full bg-custom-green-200"
-          whileHover={whileHover}
-        >
-          <Pencil />
-        </motion.div>
+    <div className="flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344">
+      <div className="relative flex items-center justify-center gap-24 md:gap-10 lg:gap-24">
+        <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
+          {userInfo?.profileImageUrl ? (
+            <Image
+              src={userInfo?.profileImageUrl}
+              alt="trip.zip"
+              className="h-full w-full object-cover"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <BaseProfile className="h-full w-full object-cover" />
+          )}
+        </div>
+        <div className="flex flex-col">
+          <p className="text-2xl-bold">{userInfo?.nickname}</p>
+          <p>{userInfo?.email}</p>
+        </div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
+        <hr className="border-1" />
         <Link href="/mypage/info">
           <div
             className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
@@ -108,8 +121,9 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
             <p>예약 현황</p>
           </div>
         </Link>
+        <hr className="border-1" />
         <div
-          className={`text-black ${baseTextStyle} border-t-2 hover:bg-custom-green-100`}
+          className={`text-black ${baseTextStyle} hover:bg-custom-green-100`}
           onClick={logout}
         >
           <Logout className="h-20 w-20" />

@@ -19,7 +19,7 @@
     @apply mx-auto w-full max-w-1200 px-16;
   }
   .page-container {
-    @apply mx-auto mt-70 w-full max-w-1200 px-16;
+    @apply mx-auto mt-50 w-full max-w-1200 px-16;
   }
   .flex-center {
     @apply flex items-center justify-center;

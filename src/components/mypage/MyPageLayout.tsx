@@ -1,4 +1,3 @@
-// components/MyPageLayout.tsx
 import { TabProvider } from '@/context/TabContext';
 import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { motion, useCycle } from 'framer-motion';
@@ -35,7 +34,7 @@ export function MyPageLayout({ children }: { children: ReactNode }) {
       <div
         className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
       >
-        <div className="hidden md:block">
+        <div className="sticky top-100 hidden md:block">
           <ProfileSideBar toggleOpen={toggleOpen} />
         </div>
         {isMobile && (
