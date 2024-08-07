@@ -8,8 +8,8 @@ const whileHover = {
 };
 
 type ProfileImageProps = {
-  profileImageUrl: string;
-  handleImageChange: (file: File) => void;
+  profileImageUrl: string | null;
+  handleImageChange: (file: File | null) => void;
 };
 
 export default function ProfileImage({
@@ -32,6 +32,11 @@ export default function ProfileImage({
         alert('이미지 업로드는 최대 한 개만 가능합니다.');
         return;
       }
+
+      if (previewImageUrl) {
+        URL.revokeObjectURL(previewImageUrl);
+      }
+
       // 부모 컴포넌트로 파일 전달
       if (file) {
         handleImageChange(file);
@@ -54,10 +59,13 @@ export default function ProfileImage({
 
   // 기본 이미지로 변경
   const handleChangeToDefaultImage = () => {
-    console.log('기본 이미지로 변경');
+    if (previewImageUrl) {
+      URL.revokeObjectURL(previewImageUrl);
+    }
     setSelectedImage(null);
     setPreviewImageUrl(null);
     setIsEditBoxVisible(false);
+    handleImageChange(null);
   };
 
   useEffect(() => {
@@ -69,7 +77,11 @@ export default function ProfileImage({
   }, [previewImageUrl]);
 
   useEffect(() => {
-    setPreviewImageUrl(profileImageUrl || null);
+    if (profileImageUrl) {
+      setPreviewImageUrl(profileImageUrl);
+    } else {
+      setPreviewImageUrl(null);
+    }
   }, [profileImageUrl]);
 
   return (

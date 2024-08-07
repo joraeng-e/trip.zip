@@ -35,7 +35,7 @@ interface ApiError extends Error {
 }
 
 export default function Info() {
-  const { data: userInfo } = useQuery({
+  const { data: userInfo, refetch } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
   });
@@ -56,7 +56,7 @@ export default function Info() {
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
-  const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [newProfileImageFile, setNewProfileImageFile] = useState<File | null>(
     null,
   );
@@ -100,6 +100,9 @@ export default function Info() {
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
       setIsSuccessMessage(true);
+
+      // 성공적으로 수정되었을 때 refetch로 최신 데이터로 업데이트
+      refetch();
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
@@ -137,11 +140,6 @@ export default function Info() {
   const onSubmit = async (data: FormData) => {
     const { nickname, newPassword, profileImageUrl } = data;
 
-    // 닉네임이 변경된 경우 상태 업데이트
-    if (nickname !== userInfo?.nickname) {
-      setValue('nickname', nickname);
-    }
-
     if (!nickname && !newPassword && !profileImageUrl && !newProfileImageFile) {
       console.log('변경된 정보가 없습니다.');
       return;
@@ -158,18 +156,15 @@ export default function Info() {
     }
   };
 
-  // 닉네임이 변경될 때마다 반영
-  useEffect(() => {
-    if (userInfo) {
-      setValue('nickname', userInfo.nickname);
+  const handleImageChange = (file: File | null) => {
+    if (file) {
+      setNewProfileImageFile(file);
+      const objectUrl = URL.createObjectURL(file);
+      setProfileImageUrl(objectUrl);
+      setValue('profileImageUrl', objectUrl);
+    } else {
+      setProfileImageUrl(null);
     }
-  }, [userInfo, setValue]);
-
-  const handleImageChange = (file: File) => {
-    setNewProfileImageFile(file);
-    const objectUrl = URL.createObjectURL(file);
-    setProfileImageUrl(objectUrl);
-    setValue('profileImageUrl', objectUrl);
   };
 
   const resetModalMessage = () => {
