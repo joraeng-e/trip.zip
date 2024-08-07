@@ -1,4 +1,3 @@
-// components/MyPageLayout.tsx
 import { TabProvider } from '@/context/TabContext';
 import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { motion, useCycle } from 'framer-motion';

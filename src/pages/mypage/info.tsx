@@ -86,6 +86,7 @@ export default function Info() {
 
       // 이미지 업로드 후 프로필 정보 업데이트
       updateProfileInfo({ profileImageUrl: newProfileImageUrl });
+      refetch();
     },
     onError: (error) => {
       console.log('업로드 실패', error);
@@ -100,8 +101,8 @@ export default function Info() {
       setModalMessage('수정 완료!');
       setIsModalOpen(true);
       setIsSuccessMessage(true);
+      setNewProfileImageFile(null);
 
-      // 성공적으로 수정되었을 때 refetch로 최신 데이터로 업데이트
       refetch();
     },
     onError: (error: ApiError) => {
@@ -164,13 +165,14 @@ export default function Info() {
       setValue('profileImageUrl', objectUrl);
     } else {
       setProfileImageUrl(null);
+      setValue('profileImageUrl', null);
     }
   };
 
   const resetModalMessage = () => {
     setModalMessage('');
     setIsModalOpen(false);
-    if (isSuccessMessage) router.push('/activities');
+    if (isSuccessMessage) router.push('/mypage/info');
   };
 
   return (

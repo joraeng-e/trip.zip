@@ -30,19 +30,13 @@ export default function ProfileImage({
 
       if (selectedImage) {
         alert('이미지 업로드는 최대 한 개만 가능합니다.');
+        // TODO: toast
         return;
       }
 
-      if (previewImageUrl) {
-        URL.revokeObjectURL(previewImageUrl);
-      }
-
-      // 부모 컴포넌트로 파일 전달
-      if (file) {
-        handleImageChange(file);
-        setPreviewImageUrl(URL.createObjectURL(file));
-        setSelectedImage(file);
-      }
+      handleImageChange(file);
+      setPreviewImageUrl(URL.createObjectURL(file));
+      setSelectedImage(file);
     }
   };
 
@@ -59,6 +53,7 @@ export default function ProfileImage({
 
   // 기본 이미지로 변경
   const handleChangeToDefaultImage = () => {
+    console.log('기본 이미지로 변경');
     if (previewImageUrl) {
       URL.revokeObjectURL(previewImageUrl);
     }
@@ -108,7 +103,13 @@ export default function ProfileImage({
         <Pencil />
       </motion.div>
       {isEditBoxVisible && (
-        <div className="absolute -bottom-100 left-50 z-10 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:left-0 md:right-0">
+        <motion.div
+          className="absolute -bottom-100 left-50 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:left-0 md:right-0"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
           <div className="absolute -top-2 right-20 rotate-90">
             <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
             <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
@@ -135,7 +136,7 @@ export default function ProfileImage({
           >
             기본 이미지로 변경
           </p>
-        </div>
+        </motion.div>
       )}
     </div>
   );
