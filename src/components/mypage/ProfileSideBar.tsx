@@ -10,15 +10,15 @@ import {
 } from '@/libs/utils/Icon';
 import { deleteCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
-import router from 'next/router';
-import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 const baseTextStyle =
   'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold transition-all';
 const textGroupStyle =
   'text-gray-400 hover:bg-custom-green-100 hover:text-nomad-black ';
 const activeStyle = 'bg-custom-green-100 text-nomad-black';
-
 const svgStyle = 'fill-gray-400 transition-all group-hover:fill-nomad-black';
 const svgActiveStyle = 'fill-nomad-black';
 
@@ -30,8 +30,9 @@ type ProfileSideBarProps = {
   toggleOpen: () => void;
 };
 
-export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
+const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   const { activeTab, setActiveTab } = useTabContext();
+  const router = useRouter();
 
   const logout = () => {
     deleteCookie('accessToken');
@@ -45,13 +46,14 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
     toggleOpen();
   };
 
+  useEffect(() => {
+    const path = router.pathname;
+    const tab = path.split('/mypage/')[1]; // URL 경로에서 탭 추출
+    setActiveTab(tab || 'info'); // 기본값 'info'
+  }, [router.pathname, setActiveTab]);
+
   return (
-    <motion.div
-      className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-384"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
+    <div className="flex-center h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-384">
       <div className="relative">
         <BaseProfile className="h-160 w-160" />
         <motion.div
@@ -62,42 +64,50 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
         </motion.div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
-        <div
-          className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
-          onClick={() => handleTabClick('info')}
-        >
-          <ProfileAccountIcon
-            className={`${activeTab === 'info' ? svgActiveStyle : svgStyle}`}
-          />
-          <p>내 정보</p>
-        </div>
-        <div
-          className={`${baseTextStyle} ${activeTab === 'reservationList' ? activeStyle : textGroupStyle}`}
-          onClick={() => handleTabClick('reservationList')}
-        >
-          <ProfileChecklistIcon
-            className={`${activeTab === 'reservationList' ? svgActiveStyle : svgStyle}`}
-          />
-          <p>예약 내역</p>
-        </div>
-        <div
-          className={`${baseTextStyle} ${activeTab === 'myActivities' ? activeStyle : textGroupStyle}`}
-          onClick={() => handleTabClick('myActivities')}
-        >
-          <ProfileCogIcon
-            className={`${activeTab === 'myActivities' ? svgActiveStyle : svgStyle}`}
-          />
-          <p>내 체험 관리</p>
-        </div>
-        <div
-          className={`${baseTextStyle} ${activeTab === 'reservationState' ? activeStyle : textGroupStyle}`}
-          onClick={() => handleTabClick('reservationState')}
-        >
-          <ProfileCalendarIcon
-            className={`${activeTab === 'reservationState' ? svgActiveStyle : svgStyle}`}
-          />
-          <p>예약 현황</p>
-        </div>
+        <Link href="/mypage/info">
+          <div
+            className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
+            onClick={() => handleTabClick('info')}
+          >
+            <ProfileAccountIcon
+              className={`${activeTab === 'info' ? svgActiveStyle : svgStyle}`}
+            />
+            <p>내 정보</p>
+          </div>
+        </Link>
+        <Link href="/mypage/reservationList">
+          <div
+            className={`${baseTextStyle} ${activeTab === 'reservationList' ? activeStyle : textGroupStyle}`}
+            onClick={() => handleTabClick('reservationList')}
+          >
+            <ProfileChecklistIcon
+              className={`${activeTab === 'reservationList' ? svgActiveStyle : svgStyle}`}
+            />
+            <p>예약 내역</p>
+          </div>
+        </Link>
+        <Link href="/mypage/myActivities">
+          <div
+            className={`${baseTextStyle} ${activeTab === 'myActivities' ? activeStyle : textGroupStyle}`}
+            onClick={() => handleTabClick('myActivities')}
+          >
+            <ProfileCogIcon
+              className={`${activeTab === 'myActivities' ? svgActiveStyle : svgStyle}`}
+            />
+            <p>내 체험 관리</p>
+          </div>
+        </Link>
+        <Link href="/mypage/reservationStatus">
+          <div
+            className={`${baseTextStyle} ${activeTab === 'reservationStatus' ? activeStyle : textGroupStyle}`}
+            onClick={() => handleTabClick('reservationStatus')}
+          >
+            <ProfileCalendarIcon
+              className={`${activeTab === 'reservationStatus' ? svgActiveStyle : svgStyle}`}
+            />
+            <p>예약 현황</p>
+          </div>
+        </Link>
         <div
           className={`text-black ${baseTextStyle} border-t-2 hover:bg-custom-green-100`}
           onClick={logout}
@@ -106,6 +116,8 @@ export default function ProfileSideBar({ toggleOpen }: ProfileSideBarProps) {
           <p>로그아웃</p>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
-}
+};
+
+export default ProfileSideBar;
