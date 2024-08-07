@@ -3,7 +3,6 @@ import { getUser } from '@/libs/api/user';
 import {
   BaseProfile,
   Logout,
-  Pencil,
   ProfileAccountIcon,
   ProfileCalendarIcon,
   ProfileChecklistIcon,
@@ -11,7 +10,7 @@ import {
 } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -44,7 +43,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
     toggleOpen();
   };
 
-  const userInfo = useQuery({
+  const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
   });
@@ -59,14 +58,25 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
     <div className="flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344">
       <div className="relative flex items-center justify-center gap-24 md:gap-10 lg:gap-24">
         <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
-          <BaseProfile className="h-full w-full object-cover" />
+          {userInfo?.profileImageUrl ? (
+            <Image
+              src={userInfo?.profileImageUrl}
+              alt="trip.zip"
+              className="h-full w-full object-cover"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <BaseProfile className="h-full w-full object-cover" />
+          )}
         </div>
         <div className="flex flex-col">
-          <p className="text-2xl-bold">{userInfo.data?.nickname}</p>
-          <p>{userInfo.data?.email}</p>
+          <p className="text-2xl-bold">{userInfo?.nickname}</p>
+          <p>{userInfo?.email}</p>
         </div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
+        <hr className="border-1" />
         <Link href="/mypage/info">
           <div
             className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
