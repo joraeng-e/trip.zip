@@ -50,9 +50,8 @@ export const useDropdownContext = () => {
  * Dropdown with rounded square shape
  * @param selected - dropdown으로 조작할 state
  * @param setSelected - dropdown으로 조작할 state의 setState 메소드
- * @param width - dropdown list, button영역 너비(optional)
- * @param maxWidth - dropdown list, button영역 너비, maxWidth로 적용(optional)
- * @param height - dropdown item, button영역 높이, list 높이 자동 설정(optional)
+ * @param maxWidth - dropdown list 너비, maxWidth로 적용(optional)
+ * @param height - dropdown item 높이, list 높이 자동 설정(optional)
  * @example
  * ```
  * const [value, setValue] = useState('첫번째');

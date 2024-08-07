@@ -8,7 +8,7 @@ type ButtonProps = {
 };
 
 export default function Button({ children, className, ...rest }: ButtonProps) {
-  const { toggleDropdown, maxWidth, height } = useDropdownContext();
+  const { toggleDropdown } = useDropdownContext();
 
   return (
     <button
@@ -16,11 +16,6 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
       className={`${className}`}
       onClick={toggleDropdown}
       type="button"
-      style={{
-        width: '100%',
-        maxWidth: maxWidth,
-        height: height,
-      }}
     >
       {children}
     </button>
