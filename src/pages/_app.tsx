@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import type { ReactElement, ReactNode } from 'react';
 import React, { useState } from 'react';
 
@@ -53,9 +54,27 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {getLayout(<Component {...pageProps} />)}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="체험 상품을 보고 간단하게 예약할 수 있는 서비스"
+        />
+        <meta property="og:title" content="Trip.zip" />
+        <meta
+          property="og:description"
+          content="체험 상품을 보고 간단하게 예약할 수 있는 서비스"
+        />
+        <meta property="og:image" content="/logo/tripZip.png" />
+        <meta property="og:url" content="https://trip-zip.vercel.app/" />
+        <link rel="icon" href="/logo/tripzipFavicon.png" type="image/png" />
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        {getLayout(<Component {...pageProps} />)}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </>
   );
 }

@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import { LoginResponse } from '@trip.zip-api';
 import { setCookie } from 'cookies-next';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -95,61 +96,75 @@ export default function Signup() {
   };
 
   return (
-    <div className="page-container">
-      <div className="flex flex-col items-center justify-center">
-        <Link href="/" aria-label="메인페이지로 이동">
-          <Image src={tripZip} alt="trip.zip" width={300} height={20} />
-        </Link>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full max-w-640 flex-col gap-16"
-        >
-          <Input
-            label="이메일"
-            name="email"
-            type="text"
-            placeholder="이메일을 입력해 주세요"
-            register={register('email')}
-            error={errors.email}
-            onBlur={() => trigger('email')}
-          />
-          <Input
-            label="비밀번호"
-            name="password"
-            type="password"
-            placeholder="비밀번호를 입력해 주세요"
-            register={register('password')}
-            error={errors.password}
-            onBlur={() => trigger('password')}
-          />
-          {modalMessage && (
-            <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <Modal.Content>
-                <Modal.Description className="py-20 text-center">
-                  {modalMessage}
-                </Modal.Description>
-                <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
-              </Modal.Content>
-            </Modal.Root>
-          )}
-          <Button
-            type="submit"
-            className="rounded-md"
-            variant={isValid ? 'activeButton' : 'disabledButton'}
-          >
-            로그인 하기
-          </Button>
-        </form>
-        <div className="text-md mt-20 flex gap-8">
-          <p>회원이 아니신가요?</p>
-          <Link
-            href="/signup"
-            className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
-          >
-            회원가입하기
+    <>
+      <Head>
+        <title>로그인 - Trip.zip</title>
+        <meta
+          name="description"
+          content="Trip.zip에 로그인해 체험 상품을 예약하세요."
+        />
+        <meta property="og:title" content="로그인 - Trip.zip" />
+        <meta
+          property="og:description"
+          content="Trip.zip에 로그인해 체험 상품을 예약하세요."
+        />
+      </Head>
+      <div className="page-container">
+        <div className="flex flex-col items-center justify-center">
+          <Link href="/" aria-label="메인페이지로 이동">
+            <Image src={tripZip} alt="trip.zip" width={300} height={20} />
           </Link>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex w-full max-w-640 flex-col gap-16"
+          >
+            <Input
+              label="이메일"
+              name="email"
+              type="text"
+              placeholder="이메일을 입력해 주세요"
+              register={register('email')}
+              error={errors.email}
+              onBlur={() => trigger('email')}
+            />
+            <Input
+              label="비밀번호"
+              name="password"
+              type="password"
+              placeholder="비밀번호를 입력해 주세요"
+              register={register('password')}
+              error={errors.password}
+              onBlur={() => trigger('password')}
+            />
+            {modalMessage && (
+              <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <Modal.Content>
+                  <Modal.Description className="py-20 text-center">
+                    {modalMessage}
+                  </Modal.Description>
+                  <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
+                </Modal.Content>
+              </Modal.Root>
+            )}
+            <Button
+              type="submit"
+              className="rounded-md"
+              variant={isValid ? 'activeButton' : 'disabledButton'}
+            >
+              로그인 하기
+            </Button>
+          </form>
+          <div className="text-md mt-20 flex gap-8">
+            <p>회원이 아니신가요?</p>
+            <Link
+              href="/signup"
+              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
+            >
+              회원가입하기
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

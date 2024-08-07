@@ -21,6 +21,21 @@ declare module '@trip.zip-api' {
     }[];
   };
 
+  export type Activities = {
+    id: number;
+    userId: number;
+    title: string;
+    description: string;
+    category: Category;
+    price: number;
+    address: string;
+    bannerImageUrl: string;
+    rating: number;
+    reviewCount: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+
   // 내 체험 월별 예약 현황 조회
   export type GetMyActivitiesReservationDashboardResponse = {
     date: string;

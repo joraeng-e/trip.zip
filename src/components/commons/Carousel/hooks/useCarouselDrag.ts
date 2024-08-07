@@ -16,16 +16,16 @@ export default function useCarouselDrag({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
 
-  const handleMouseDown = (e: MouseEvent) => {
+  const handleMouseDown = (event: MouseEvent) => {
     if (!ref.current) return;
     setIsDragging(true);
-    setStartX(e.pageX - ref.current.offsetLeft);
+    setStartX(event.pageX - ref.current.offsetLeft);
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
+  const handleTouchStart = (event: TouchEvent) => {
     if (!ref.current) return;
     setIsDragging(true);
-    setStartX(e.touches[0].pageX - ref.current.offsetLeft);
+    setStartX(event.touches[0].pageX - ref.current.offsetLeft);
   };
 
   const handleMouseLeave = () => {
@@ -44,10 +44,10 @@ export default function useCarouselDrag({
     setIsDragging(false);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (event: MouseEvent) => {
     if (!isDragging || !ref.current) return;
-    e.preventDefault();
-    const x = e.pageX - ref.current.offsetLeft;
+    event.preventDefault();
+    const x = event.pageX - ref.current.offsetLeft;
     const walk = x - startX;
 
     if (walk < -100 && currentIndex < totalSlides - 1) {
@@ -57,9 +57,9 @@ export default function useCarouselDrag({
     }
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = (event: TouchEvent) => {
     if (!isDragging || !ref.current) return;
-    const x = e.touches[0].pageX - ref.current.offsetLeft;
+    const x = event.touches[0].pageX - ref.current.offsetLeft;
     const walk = x - startX;
 
     if (walk < -75 && currentIndex < totalSlides - 1) {
