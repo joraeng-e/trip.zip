@@ -1,4 +1,5 @@
 import { getUser } from '@/libs/api/user';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
@@ -45,8 +46,18 @@ export default function Layout({
   return (
     <>
       {showHeader && <Header />}
-      {children}
-      {showFooter && <Footer />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={router.pathname}
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+          {showFooter && <Footer />}
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 }
