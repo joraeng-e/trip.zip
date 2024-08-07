@@ -1,6 +1,6 @@
 import useClickOutside from '@/hooks/useClickOutside';
 import { getUser } from '@/libs/api/user';
-import { BaseProfile, NotificationIcon } from '@/libs/utils/Icon';
+import { BaseProfile } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
@@ -8,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
+
+import Notification from './Notification';
 
 export default function LoggedInHeader() {
   const [isProfileBoxVisible, setIsProfileBoxVisible] = useState(false);
@@ -37,9 +39,7 @@ export default function LoggedInHeader() {
 
   return (
     <div className="relative flex items-center gap-16">
-      <div className="cursor-pointer" aria-label="알림">
-        <NotificationIcon />
-      </div>
+      <Notification />
       <div
         className="flex cursor-pointer items-center gap-6 border-l-2 pl-16"
         onClick={handleProfileClick}
