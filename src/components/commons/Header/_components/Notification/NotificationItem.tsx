@@ -52,7 +52,7 @@ function HighlightText({ text }: { text: string }) {
   const parts = text.split(regex);
 
   return (
-    <div>
+    <>
       {parts.map((part, index) => {
         const highlight = highlights.find(
           (h) => h.word.toLowerCase() === part.toLowerCase(),
@@ -66,6 +66,6 @@ function HighlightText({ text }: { text: string }) {
           part
         );
       })}
-    </div>
+    </>
   );
 }

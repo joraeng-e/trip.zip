@@ -1,5 +1,5 @@
 import { getMyNotifications } from '@/libs/api/myNotifications';
-import { XIcon } from '@/libs/utils/Icon';
+import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
@@ -24,9 +24,12 @@ export default function NotificationPopup({ closePopup }: Props) {
       className="absolute right-100 top-full z-50 mt-20 min-h-160 w-[368px] rounded-[10px] bg-custom-green-100 px-20 py-24 shadow-lg xl:right-0"
     >
       <div className="mb-16 flex items-center justify-between">
-        <h1 className="text-20 font-bold leading-32">
-          알림 {data?.totalCount}개
-        </h1>
+        <div className="flex items-center gap-4">
+          <PaperPlaneIcon width={32} height={32} />
+          <h1 className="text-20 font-bold leading-32">
+            알림 {data?.totalCount}개
+          </h1>
+        </div>
         <button type="button" onClick={closePopup}>
           <XIcon />
         </button>
@@ -56,9 +59,12 @@ function MobilePopup({ closePopup }: Props) {
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto bg-custom-green-100 px-20 py-40">
       <div className="mb-16 flex justify-between">
-        <h1 className="text-20 font-bold leading-32">
-          알림 {data?.totalCount}개
-        </h1>
+        <div className="flex items-center gap-4">
+          <PaperPlaneIcon width={32} height={32} />
+          <h1 className="text-20 font-bold leading-32">
+            알림 {data?.totalCount}개
+          </h1>
+        </div>
         <button type="button" onClick={closePopup}>
           <XIcon />
         </button>

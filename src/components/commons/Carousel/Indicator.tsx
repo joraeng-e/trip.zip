@@ -2,7 +2,7 @@ import classNames from '@/libs/utils/classNames';
 
 import { useCarouselContext } from './Root';
 
-export default function CarouselDots() {
+export default function CarouselIndicator() {
   const { currentIndex, totalSlides } = useCarouselContext();
 
   return (
