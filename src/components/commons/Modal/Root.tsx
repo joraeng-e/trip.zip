@@ -5,6 +5,7 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 
@@ -38,11 +39,28 @@ export default function ModalRoot(props: ModalRootProps) {
   const [trigger, setTrigger] = useState<
     RefObject<HTMLDivElement> | undefined
   >();
+
   const handleOpenChange = (currentOpen: boolean) => {
     console.log({ currentOpen });
     setOpen(currentOpen);
     onOpenChange?.(currentOpen);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && open) {
+        handleOpenChange(false); // 엔터 키를 눌렀을 때 모달 닫기
+      }
+    };
+
+    // 키보드 이벤트 리스너 추가
+    window.addEventListener('keydown', handleKeyDown);
+
+    // 컴포넌트 언마운트 시 리스너 제거
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]); // open 값이 변경될 때마다 리스너를 업데이트
 
   const contextValue: ModalContextProps = {
     open,
@@ -50,6 +68,7 @@ export default function ModalRoot(props: ModalRootProps) {
     setTrigger,
     trigger,
   };
+
   return (
     <ModalContext.Provider value={contextValue}>
       {children}

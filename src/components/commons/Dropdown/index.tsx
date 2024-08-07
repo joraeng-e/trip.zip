@@ -7,9 +7,7 @@ import React, {
   useCallback,
   useContext,
   useRef,
-  useState, // ReactElement,
-  // useEffect,
-  // useLayoutEffect,
+  useState,
 } from 'react';
 
 import Body from './DropdownBody';
@@ -22,6 +20,7 @@ type DropdownProps = {
   setSelected: Dispatch<SetStateAction<string>>;
   defaultValue?: string;
   width?: number;
+  maxWidth?: number;
   height?: number;
 };
 
@@ -30,9 +29,8 @@ type DropdownContextProps = {
   isOpen: boolean;
   handleSelect: (value: string) => void;
   selected: string;
-  setButtonText: (value: string) => void;
-  buttonText: string;
   width?: number;
+  maxWidth?: number;
   height?: number;
 };
 
@@ -52,10 +50,8 @@ export const useDropdownContext = () => {
  * Dropdown with rounded square shape
  * @param selected - dropdown으로 조작할 state
  * @param setSelected - dropdown으로 조작할 state의 setState 메소드
- * @param width - dropdown Button, Item 너비, maxWidth로 적용(optional)
- * @param height - dropdown Button 높이, Item 높이 자동 설정(optional)
- * @param defaultValue - dropdown Button에 초기값으로 들어갈 텍스트
- * (optional, defaultValue || selected)
+ * @param maxWidth - dropdown list 너비, maxWidth로 적용(optional)
+ * @param height - dropdown item 높이, list 높이 자동 설정(optional)
  * @example
  * ```
  * const [value, setValue] = useState('첫번째');
@@ -63,14 +59,16 @@ export const useDropdownContext = () => {
           selected={value}
           setSelected={setValue}
           width={}
+          maxWidth={}
           height={}
           defaultValue="필터"
   >
-    <Dropdown.Button />
+    <Dropdown.Button className="tailwind 쓸 수 있어요(optional)">
+      {jsx}
+    </Dropdown.Button>
     <Dropdown.Body>
-      <Dropdown.Item text="최신순" value="recent" />
-      <Dropdown.Item text="lowest" value="lowest">낮은가격순</Dropdown.Item> - text, label 다른 경우
-      <Dropdown.Item text="높은가격순" value="highest" /> - text, value 다른 경우
+      <Dropdown.Item value="recent" />
+      <Dropdown.Item value="lowest">낮은가격순</Dropdown.Item> - value, label 다른 경우
     </Dropdown.Body>
   </Dropdown>
  ```
@@ -80,12 +78,11 @@ export default function Dropdown({
   children,
   setSelected,
   selected,
-  defaultValue,
   width,
+  maxWidth,
   height,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [buttonText, setButtonText] = useState(defaultValue || selected);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
@@ -95,19 +92,6 @@ export default function Dropdown({
   const dropdownRef = useRef<HTMLDivElement>(null);
   useClickOutside(dropdownRef, closeDropdown);
 
-  // Todo : Items 요소 중 첫번째 요소의 value 자동으로 기본값으로 설정 해보고 싶었는데 실패했습니다.. 조금 더 연구해보고 구현 해볼게요!
-  // useLayoutEffect(() => {
-  //   if (!selected) {
-  //     const firstItem = React.Children.toArray(children)
-  //       .filter((child): child is ReactElement => React.isValidElement(child))
-  //       .find((child) => child.type === Item);
-
-  //     if (firstItem && !selected) {
-  //       setSelected(firstItem.props.value);
-  //     }
-  //   }
-  // }, [children, selected, setSelected]);
-
   return (
     <DropdownContext.Provider
       value={{
@@ -115,9 +99,8 @@ export default function Dropdown({
         isOpen,
         handleSelect,
         selected,
-        setButtonText,
-        buttonText,
         width,
+        maxWidth,
         height,
       }}
     >
