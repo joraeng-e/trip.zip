@@ -1,3 +1,4 @@
+import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import {
   getMyActivitiesReservationDashboard,
@@ -46,7 +47,9 @@ export default function ReservationStatus() {
   };
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
-  const [activityId, setActivityId] = useState<number>();
+  const [activityId, setActivityId] = useState<number | string>();
+  const [activityTitle, setActivityTitle] = useState<string | string>('');
+
   const [monthlyData, setMonthlyData] =
     useState<GetMyActivitiesReservationDashboardResponse>([]);
 
@@ -62,6 +65,7 @@ export default function ReservationStatus() {
         );
         setActivityList(activityList);
         setActivityId(activityList[0].id);
+        setActivityTitle(activityList[0].title);
       } catch (error) {
         console.error('Failed to fetch activities:', error);
       }
@@ -86,26 +90,45 @@ export default function ReservationStatus() {
     fetchBookingStatus();
   }, [activityId, currentMonth, currentYear]);
 
+  useEffect(() => {
+    const selectedActivity = activityList.find(
+      (activity) => activity.title === activityTitle,
+    );
+    if (selectedActivity) {
+      setActivityId(selectedActivity.id);
+    }
+  }, [activityTitle, activityList]);
+
   return (
     <MyPageLayout>
       <div className="flex h-full w-full min-w-342 flex-col gap-24">
         <section className="flex flex-col gap-32">
           <h2 className="text-32 font-bold">예약 현황</h2>
-          <select
-            className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none"
-            onChange={(e) => setActivityId(Number(e.target.value))}
+          <Dropdown
+            selected={activityTitle}
+            setSelected={setActivityTitle}
+            maxWidth={792}
+            height={56}
           >
-            {activityList?.map((activity, index) => (
-              <option
-                key={index}
-                value={activity.id}
-                // 첫번째 option 기본값으로 지정
-                {...(index === 0 && { selected: true })}
-              >
-                {activity.title}
-              </option>
-            ))}
-          </select>
+            <Dropdown.Button
+              className="basic-input flex w-full items-center justify-between"
+              showArrow={true}
+            >
+              {activityTitle}
+            </Dropdown.Button>
+            <Dropdown.Body>
+              {activityList?.map((activity, index) => (
+                <Dropdown.Item
+                  key={index}
+                  value={activity.title}
+                  // 첫번째 option 기본값으로 지정
+                  {...(index === 0 && { selected: true })}
+                >
+                  {activity.title}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Body>
+          </Dropdown>
         </section>
       </div>
       <div className="mb-100 mt-24 flex flex-col gap-17">

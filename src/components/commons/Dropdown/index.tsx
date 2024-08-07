@@ -58,7 +58,6 @@ export const useDropdownContext = () => {
  * <Dropdown
           selected={value}
           setSelected={setValue}
-          width={}
           maxWidth={}
           height={}
           defaultValue="필터"
