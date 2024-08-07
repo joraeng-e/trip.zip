@@ -1,5 +1,8 @@
+import { deleteNotification } from '@/libs/api/myNotifications';
 import { XIcon } from '@/libs/utils/Icon';
 import { formatTimeAgo } from '@/libs/utils/dateUtils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GetMyNotificationsResponse } from '@trip.zip-api';
 
 interface Props {
   data: {
@@ -11,12 +14,42 @@ interface Props {
     updatedAt: string;
     deletedAt: string | null;
   };
-  onDelete: (id: number) => void;
 }
 
-export default function NotificationItem({ data, onDelete }: Props) {
+export default function NotificationItem({ data }: Props) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteNotification,
+    onMutate: async (id: number) => {
+      await queryClient.cancelQueries({ queryKey: ['notifications'] });
+
+      const previousNotifications = queryClient.getQueryData(['notifications']);
+
+      queryClient.setQueryData(
+        ['notifications'],
+        (old: GetMyNotificationsResponse) => ({
+          ...old,
+          notifications: old.notifications.filter(
+            (notification) => notification.id !== id,
+          ),
+          totalCount: old.totalCount - 1,
+        }),
+      );
+
+      return () => {
+        queryClient.setQueryData(['notifications'], previousNotifications);
+      };
+    },
+    onError: (error, variables, rollback) => {
+      rollback?.();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+
   const handleDelete = () => {
-    onDelete(data.id);
+    mutation.mutate(data.id);
   };
 
   return (

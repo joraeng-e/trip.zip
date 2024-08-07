@@ -2,7 +2,6 @@ import { getMyNotifications } from '@/libs/api/myNotifications';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 import NotificationItem from './NotificationItem';
 
@@ -11,39 +10,29 @@ interface Props {
 }
 
 export default function NotificationPopup({ closePopup }: Props) {
-  const { data, isError } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => getMyNotifications(),
   });
-
-  const [notifications, setNotifications] = useState(data?.notifications || []);
-  const [totalCount, setTotalCount] = useState(data?.totalCount || 0);
-
-  const handleDelete = (id: number) => {
-    setNotifications((prev) =>
-      prev.filter((notification) => notification.id !== id),
-    );
-    setTotalCount((prev) => prev - 1);
-  };
 
   return (
     <>
       <div className="hidden md:block">
         <TabletAndPCUI
-          data={notifications}
-          totalCount={totalCount}
+          data={data?.notifications || []}
+          totalCount={data?.totalCount || 0}
           closePopup={closePopup}
-          handleDelete={handleDelete}
+          isLoading={isLoading}
           isError={isError}
         />
       </div>
 
       <div className="block md:hidden">
         <MobileUI
-          data={notifications}
-          totalCount={totalCount}
+          data={data?.notifications || []}
+          totalCount={data?.totalCount || 0}
           closePopup={closePopup}
-          handleDelete={handleDelete}
+          isLoading={isLoading}
           isError={isError}
         />
       </div>
@@ -63,7 +52,7 @@ interface UIProps {
   }[];
   totalCount: number;
   closePopup: () => void;
-  handleDelete: (id: number) => void;
+  isLoading: boolean;
   isError: boolean;
 }
 
@@ -71,7 +60,7 @@ function TabletAndPCUI({
   data,
   totalCount,
   closePopup,
-  handleDelete,
+  isLoading,
   isError,
 }: UIProps) {
   return (
@@ -85,7 +74,9 @@ function TabletAndPCUI({
       <div className="mb-16 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <PaperPlaneIcon width={32} height={32} />
-          <h1 className="text-20 font-bold leading-32">알림 {totalCount}개</h1>
+          <h1 className="text-20 font-bold leading-32">
+            알림 {!isLoading && `${totalCount}개`}
+          </h1>
         </div>
         <button type="button" onClick={closePopup}>
           <XIcon />
@@ -99,11 +90,7 @@ function TabletAndPCUI({
           </h1>
         )}
         {data.map((notification) => (
-          <NotificationItem
-            key={notification.id}
-            data={notification}
-            onDelete={handleDelete}
-          />
+          <NotificationItem key={notification.id} data={notification} />
         ))}
         {isError && <h1 className="flex-center mt-16">에러가 발생했습니다.</h1>}
       </div>
@@ -115,15 +102,17 @@ function MobileUI({
   data,
   totalCount,
   closePopup,
-  handleDelete,
   isError,
+  isLoading,
 }: UIProps) {
   return (
     <div className="fixed inset-0 z-10 overflow-y-auto bg-custom-green-100 px-20 py-40">
       <div className="mb-16 flex justify-between">
         <div className="flex items-center gap-4">
           <PaperPlaneIcon width={32} height={32} />
-          <h1 className="text-20 font-bold leading-32">알림 {totalCount}개</h1>
+          <h1 className="text-20 font-bold leading-32">
+            알림 {!isLoading && `${totalCount}개`}
+          </h1>
         </div>
         <button type="button" onClick={closePopup}>
           <XIcon />
@@ -137,7 +126,7 @@ function MobileUI({
           </h1>
         )}
         {data.map((each) => (
-          <NotificationItem key={each.id} data={each} onDelete={handleDelete} />
+          <NotificationItem key={each.id} data={each} />
         ))}
         {isError && <h1 className="flex-center mt-20">에러가 발생했습니다.</h1>}
       </div>
