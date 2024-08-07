@@ -24,6 +24,8 @@ export default function LoggedInHeader() {
   const router = useRouter();
 
   const logout = () => {
+    alert('로그아웃');
+    // TODO: toast 로그아웃 띄우기
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
     deleteCookie('isLogin');
@@ -57,36 +59,33 @@ export default function LoggedInHeader() {
           )}
         </div>
         <p className="font-semibold">{userInfo?.nickname}</p>
-      </div>
-      {isProfileBoxVisible && (
-        <motion.div
-          className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:right-0"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="absolute -top-2 right-20 rotate-90">
-            <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
-            <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
-          </div>
-          <Link href="/mypage">
-            <p
-              className="z-50 rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
-              onClick={() => setIsProfileBoxVisible(false)}
-            >
-              마이페이지
-            </p>
-          </Link>
-          <hr className="my-2 border border-gray-200" />
-          <p
-            className="z-50 rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
-            onClick={logout}
+        {isProfileBoxVisible && (
+          <motion.div
+            className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:right-0 md:w-110"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
           >
-            로그아웃
-          </p>
-        </motion.div>
-      )}
+            <div className="absolute -top-2 right-20 rotate-90">
+              <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
+              <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
+            </div>
+            <Link href="/mypage">
+              <p className="rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300">
+                마이페이지
+              </p>
+            </Link>
+            <hr className="my-2 border border-gray-200" />
+            <p
+              className="rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+              onClick={logout}
+            >
+              로그아웃
+            </p>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
