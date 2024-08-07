@@ -19,7 +19,7 @@ export default function DropdownContainer({ value, setValue }: Props) {
       width={150}
       height={deviceState === Device.Mobile ? 41 : 59}
     >
-      <Dropdown.Button />
+      <Dropdown.Button>children</Dropdown.Button>
       <Dropdown.Body>
         <Dropdown.Item value="가격이 낮은 순">
           <span className="text-14 text-custom-gray-800">가격이 낮은 순</span>
