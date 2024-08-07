@@ -75,7 +75,7 @@ export default function NotificationPopup({ closePopup }: Props) {
   );
 }
 
-interface UIProps {
+interface UIProps extends Props {
   data: {
     id: number;
     teamId: string;
@@ -86,7 +86,6 @@ interface UIProps {
     deletedAt: string | null;
   }[];
   totalCount: number;
-  closePopup: () => void;
   isLoading: boolean;
   isError: boolean;
 }
