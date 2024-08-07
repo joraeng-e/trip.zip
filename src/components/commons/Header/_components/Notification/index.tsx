@@ -20,9 +20,11 @@ export default function Notification() {
   };
 
   const prefetchNotifications = async () => {
-    await queryClient.prefetchQuery({
+    await queryClient.prefetchInfiniteQuery({
       queryKey: ['notifications'],
-      queryFn: () => getMyNotifications(),
+      queryFn: ({ pageParam: cursorId }) =>
+        getMyNotifications({ size: 3, cursorId }),
+      initialPageParam: undefined,
     });
   };
 

@@ -1,8 +1,13 @@
 import { deleteNotification } from '@/libs/api/myNotifications';
 import { XIcon } from '@/libs/utils/Icon';
 import { formatTimeAgo } from '@/libs/utils/dateUtils';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { GetMyNotificationsResponse } from '@trip.zip-api';
+import { useState } from 'react';
 
 interface Props {
   data: {
@@ -16,7 +21,13 @@ interface Props {
   };
 }
 
+const getColor = (string: string) => {
+  if (string.includes('승인')) return '#0085FF';
+  if (string.includes('거절')) return '#FF472E';
+};
+
 export default function NotificationItem({ data }: Props) {
+  const [isDeleting, setIsDeleting] = useState(false);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: deleteNotification,
@@ -27,12 +38,15 @@ export default function NotificationItem({ data }: Props) {
 
       queryClient.setQueryData(
         ['notifications'],
-        (old: GetMyNotificationsResponse) => ({
+        (old: InfiniteData<GetMyNotificationsResponse>) => ({
           ...old,
-          notifications: old.notifications.filter(
-            (notification) => notification.id !== id,
-          ),
-          totalCount: old.totalCount - 1,
+          pages: old.pages.map((page) => ({
+            ...page,
+            notifications: page.notifications.filter(
+              (notification) => notification.id !== id,
+            ),
+            totalCount: page.totalCount - 1,
+          })),
         }),
       );
 
@@ -49,24 +63,28 @@ export default function NotificationItem({ data }: Props) {
   });
 
   const handleDelete = () => {
-    mutation.mutate(data.id);
+    setIsDeleting(true);
+    setTimeout(() => {
+      mutation.mutate(data.id);
+    }, 500);
   };
 
   return (
-    <div className="flex min-h-[105px] w-full flex-col rounded-[5px] bg-white px-12 py-16 md:min-h-[126px]">
+    <div
+      className={`flex min-h-[105px] w-full flex-col rounded-[5px] bg-white px-12 py-16 md:min-h-[126px] ${
+        isDeleting && 'animate-fadeout'
+      }`}
+    >
       <div className="flex justify-between">
-        {data.deletedAt ? (
-          <div className="size-5 rounded-full bg-custom-red-200" />
-        ) : (
-          <div className="size-5 rounded-full bg-custom-blue-300" />
-        )}
+        <div
+          className="size-5 rounded-full"
+          style={{ backgroundColor: getColor(data.content) }}
+        />
         <button
           type="button"
           className="hidden opacity-50 md:block"
           onClick={handleDelete}
-        >
-          <XIcon />
-        </button>
+        ></button>
       </div>
 
       <p className="mt-4 line-clamp-3 text-14 leading-24 text-nomad-black md:mt-0">
