@@ -77,7 +77,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
       </div>
       <div className="flex w-full flex-col gap-12 px-12">
         <hr className="border-1" />
-        <Link href="/mypage/info">
+        <Link href="/mypage">
           <div
             className={`${baseTextStyle} ${activeTab === 'info' ? activeStyle : textGroupStyle}`}
             onClick={() => handleTabClick('info')}
