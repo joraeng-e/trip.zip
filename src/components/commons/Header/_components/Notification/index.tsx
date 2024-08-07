@@ -1,5 +1,4 @@
 import useClickOutside from '@/hooks/useClickOutside';
-import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { getMyNotifications } from '@/libs/api/myNotifications';
 import { NotificationIcon } from '@/libs/utils/Icon';
 import { useQueryClient } from '@tanstack/react-query';
@@ -11,7 +10,6 @@ export default function Notification() {
   const [isNotificationPopupOpen, setIsNotificationPopupOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
-  const isMobile = useMediaQuery('(max-width: 767px)');
 
   const toggleNotificationPopup = () => {
     setIsNotificationPopupOpen((prev) => !prev);
@@ -44,15 +42,7 @@ export default function Notification() {
       >
         <NotificationIcon />
       </div>
-      {isNotificationPopupOpen && (
-        <>
-          {!isMobile ? (
-            <NotificationPopup closePopup={closePopup} />
-          ) : (
-            <NotificationPopup.Mobile closePopup={closePopup} />
-          )}
-        </>
-      )}
+      {isNotificationPopupOpen && <NotificationPopup closePopup={closePopup} />}
     </div>
   );
 }

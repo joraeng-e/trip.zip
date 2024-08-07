@@ -11,9 +11,14 @@ interface Props {
     updatedAt: string;
     deletedAt: string | null;
   };
+  onDelete: (id: number) => void;
 }
 
-export default function NotificationItem({ data }: Props) {
+export default function NotificationItem({ data, onDelete }: Props) {
+  const handleDelete = () => {
+    onDelete(data.id);
+  };
+
   return (
     <div className="flex min-h-[105px] w-full flex-col rounded-[5px] bg-white px-12 py-16 md:min-h-[126px]">
       <div className="flex justify-between">
@@ -22,9 +27,13 @@ export default function NotificationItem({ data }: Props) {
         ) : (
           <div className="size-5 rounded-full bg-custom-blue-300" />
         )}
-        <div className="hidden opacity-50 md:block">
+        <button
+          type="button"
+          className="hidden opacity-50 md:block"
+          onClick={handleDelete}
+        >
           <XIcon />
-        </div>
+        </button>
       </div>
 
       <p className="mt-4 line-clamp-3 text-14 leading-24 text-nomad-black md:mt-0">
