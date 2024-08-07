@@ -9,6 +9,7 @@ import {
 } from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
+import Dropdown from '../commons/Dropdown';
 import Calendar from './BookingCalendar/BookingCalendar';
 
 type ActivityListItem = {
@@ -86,28 +87,26 @@ export default function ReservationStatus() {
   }, [activityId, currentMonth, currentYear]);
 
   return (
-    <>
-      <div className="flex h-full w-full min-w-342 flex-col gap-24">
-        <section className="flex flex-col gap-32">
-          <h2 className="text-32 font-bold">예약 현황</h2>
-          <select
-            className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none"
-            onChange={(e) => setActivityId(Number(e.target.value))}
-          >
-            {activityList?.map((activity, index) => (
-              <option
-                key={index}
-                value={activity.id}
-                // 첫번째 option 기본값으로 지정
-                {...(index === 0 && { selected: true })}
-              >
-                {activity.title}
-              </option>
-            ))}
-          </select>
-        </section>
+    <section className="flex h-full w-full min-w-342 flex-col gap-24">
+      <div className="flex flex-col gap-32">
+        <h2 className="text-32 font-bold">예약 현황</h2>
+        <select
+          className="h-56 w-full rounded-md border-1 border-custom-gray-700 outline-none"
+          onChange={(e) => setActivityId(Number(e.target.value))}
+        >
+          {activityList?.map((activity, index) => (
+            <option
+              key={index}
+              value={activity.id}
+              // 첫번째 option 기본값으로 지정
+              {...(index === 0 && { selected: true })}
+            >
+              {activity.title}
+            </option>
+          ))}
+        </select>
       </div>
-      <div className="mb-100 mt-24 flex flex-col gap-17">
+      <div className="mb-100 flex flex-col gap-17">
         {/* control bar */}
         <div className="flex h-42 justify-center gap-10">
           <button
@@ -147,6 +146,6 @@ export default function ReservationStatus() {
           />
         </div>
       </div>
-    </>
+    </section>
   );
 }
