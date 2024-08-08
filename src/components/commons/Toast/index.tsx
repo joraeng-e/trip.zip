@@ -21,7 +21,10 @@ const option = {
   draggable: true,
 };
 
-export const notify = (type: string, message: string) => {
+export const notify = (
+  type: 'success' | 'error' | 'info' | 'warning',
+  message: string,
+) => {
   switch (type) {
     case 'success':
       toast.success(message, option);
