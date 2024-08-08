@@ -10,10 +10,10 @@ import {
 } from '@/components/ActivityDetail';
 import ActivityHeader from '@/components/ActivityDetail/ActivityHeader';
 import ActivitySideBar from '@/components/ActivityDetail/ActivitySideBar';
+import MobileFooter from '@/components/ActivityDetail/MobileReservationFooter';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import Calendar from 'react-calendar';
 
 export default function ActivityDetail() {
   const router = useRouter();
@@ -115,7 +115,7 @@ export default function ActivityDetail() {
           </div>
 
           <div className="mt-10 flex">
-            <div className="mr-4 flex-1">
+            <div className="mr-16 flex-1">
               <div ref={titleRef} />
               <Title
                 title={DetailData.title}
@@ -137,11 +137,15 @@ export default function ActivityDetail() {
                 reviews={ReviewData.reviews}
               />
             </div>
-            <div className="relative mr-16 hidden w-3/12 min-w-300 md:block">
+
+            <div className="relative hidden w-3/12 min-w-300 md:block">
               <ActivitySideBar
                 price={DetailData.price}
                 schedules={DetailData.schedules}
               />
+            </div>
+            <div className="md:hidden">
+              <MobileFooter />
             </div>
           </div>
         </div>
