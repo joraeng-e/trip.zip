@@ -15,15 +15,15 @@ interface Props {
 export default function NotificationPopup({ closePopup }: Props) {
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useInfiniteQuery<GetMyNotificationsResponse, Error>({
-      queryKey: ['notifications'],
-      queryFn: ({ pageParam: cursorId }) => {
-        return getMyNotifications({
+      queryKey: ['notifications', 'list'],
+      queryFn: ({ pageParam: cursorId }) =>
+        getMyNotifications({
           size: 3,
           cursorId: cursorId as number | undefined,
-        });
-      },
-      getNextPageParam: (lastPage) => lastPage.cursorId ?? undefined,
+        }),
       initialPageParam: undefined,
+      getNextPageParam: (lastPage) => lastPage.cursorId ?? undefined,
+      staleTime: 0,
     });
 
   const sentinelRef = useRef<HTMLDivElement>(null);

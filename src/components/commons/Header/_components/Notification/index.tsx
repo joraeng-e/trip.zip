@@ -1,15 +1,39 @@
 import useClickOutside from '@/hooks/useClickOutside';
 import { getMyNotifications } from '@/libs/api/myNotifications';
 import { NotificationIcon } from '@/libs/utils/Icon';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { GetMyNotificationsResponse } from '@trip.zip-api';
+import { useEffect, useRef, useState } from 'react';
 
 import NotificationPopup from './NotificationPopup';
 
 export default function Notification() {
   const [isNotificationPopupOpen, setIsNotificationPopupOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
+  const { data } = useQuery<GetMyNotificationsResponse, Error>({
+    queryKey: ['notifications', 'status'],
+    queryFn: () => getMyNotifications({ size: 1 }),
+    refetchInterval: 5000,
+    staleTime: 0,
+  });
+
+  const [previousTotalCount, setPreviousTotalCount] = useState(0);
+  const [isNotificationUpdate, setIsNotificationUpdate] = useState(false);
+
+  useEffect(() => {
+    if (!data) return;
+
+    const currentTotalCount = data.totalCount;
+
+    if (currentTotalCount > previousTotalCount) {
+      setIsNotificationUpdate(true);
+      setTimeout(() => {
+        setIsNotificationUpdate(false);
+      }, 10_000);
+    } else setIsNotificationUpdate(false);
+
+    setPreviousTotalCount(currentTotalCount);
+  }, [data]);
 
   const toggleNotificationPopup = () => {
     setIsNotificationPopupOpen((prev) => !prev);
@@ -17,20 +41,6 @@ export default function Notification() {
 
   const closePopup = () => {
     setIsNotificationPopupOpen(false);
-  };
-
-  const prefetchNotifications = async () => {
-    await queryClient.prefetchInfiniteQuery({
-      queryKey: ['notifications'],
-      queryFn: ({ pageParam: cursorId }) =>
-        getMyNotifications({ size: 3, cursorId }),
-      initialPageParam: undefined,
-      staleTime: 0,
-    });
-  };
-
-  const handleMouseEnter = () => {
-    prefetchNotifications();
   };
 
   useClickOutside(notificationRef, closePopup);
@@ -42,14 +52,17 @@ export default function Notification() {
         className="relative block"
         aria-label="알림"
         onClick={toggleNotificationPopup}
-        onMouseEnter={handleMouseEnter}
       >
         <NotificationIcon />
 
-        <span className="absolute right-2 top-0 flex h-6 w-6">
-          <span className="relative inline-flex h-6 w-6 rounded-full bg-custom-green-300 ring-1 ring-white" />
-          <span className="animate-ping absolute inline-flex size-full rounded-full bg-custom-green-300 opacity-75" />
-        </span>
+        {data && data?.totalCount > 0 && (
+          <span className="absolute right-2 top-0 flex h-8 w-8">
+            <span className="relative inline-flex h-8 w-8 rounded-full bg-custom-green-300 ring-1 ring-white" />
+            {isNotificationUpdate && (
+              <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-custom-green-300 opacity-75" />
+            )}
+          </span>
+        )}
       </button>
       {isNotificationPopupOpen && <NotificationPopup closePopup={closePopup} />}
     </div>

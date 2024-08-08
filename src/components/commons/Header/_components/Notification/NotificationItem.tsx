@@ -34,12 +34,15 @@ export default function NotificationItem({ data }: Props) {
   const mutation = useMutation({
     mutationFn: deleteNotification,
     onMutate: async (id: number) => {
-      await queryClient.cancelQueries({ queryKey: ['notifications'] });
+      await queryClient.cancelQueries({ queryKey: ['notifications', 'list'] });
 
-      const previousNotifications = queryClient.getQueryData(['notifications']);
+      const previousNotifications = queryClient.getQueryData([
+        'notifications',
+        'list',
+      ]);
 
       queryClient.setQueryData(
-        ['notifications'],
+        ['notifications', 'list'],
         (old: InfiniteData<GetMyNotificationsResponse>) => ({
           ...old,
           pages: old.pages.map((page) => ({
@@ -53,14 +56,17 @@ export default function NotificationItem({ data }: Props) {
       );
 
       return () => {
-        queryClient.setQueryData(['notifications'], previousNotifications);
+        queryClient.setQueryData(
+          ['notifications', 'list'],
+          previousNotifications,
+        );
       };
     },
     onError: (error, variables, rollback) => {
       rollback?.();
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'list'] });
     },
   });
 
