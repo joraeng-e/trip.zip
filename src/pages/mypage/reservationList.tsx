@@ -1,5 +1,6 @@
-import Dropdown from '@/components/commons/Dropdown';
+import Dropdown, { useDropdownContext } from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import { ArrowDown } from '@/libs/utils/Icon';
 import React, { useState } from 'react';
 
 export default function ReservationList() {
