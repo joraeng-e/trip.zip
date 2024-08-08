@@ -75,16 +75,28 @@
   ],
   "schedules": [
     {
-      "id": 1,
-      "date": "2023-12-01",
+      "id": 8328,
+      "date": "2024-08-05",
+      "startTime": "13:00",
+      "endTime": "14:00"
+    },
+    {
+      "id": 8329,
+      "date": "2024-08-10",
       "startTime": "12:00",
       "endTime": "13:00"
     },
     {
-      "id": 2,
-      "date": "2023-12-05",
-      "startTime": "12:00",
-      "endTime": "13:00"
+      "id": 8330,
+      "date": "2024-08-13",
+      "startTime": "13:00",
+      "endTime": "14:00"
+    },
+    {
+      "id": 8331,
+      "date": "2024-08-22",
+      "startTime": "14:00",
+      "endTime": "15:00"
     }
   ],
   "reviewCount": 5,
