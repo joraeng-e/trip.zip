@@ -9,8 +9,7 @@ import {
   Title,
 } from '@/components/ActivityDetail';
 import ActivityHeader from '@/components/ActivityDetail/ActivityHeader';
-import ActivitySideBar from '@/components/ActivityDetail/ActivitySidebar';
-import Button from '@/components/commons/Button';
+import ActivitySideBar from '@/components/ActivityDetail/ActivitySideBar';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
