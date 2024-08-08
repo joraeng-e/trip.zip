@@ -3,7 +3,6 @@ import React from 'react';
 
 interface ActivityHeaderProps {
   onScrollToSection: (ref: React.RefObject<HTMLDivElement>) => void;
-  price: number;
   titleRef: React.RefObject<HTMLDivElement>;
   descriptionRef: React.RefObject<HTMLDivElement>;
   addressRef: React.RefObject<HTMLDivElement>;
@@ -14,7 +13,6 @@ interface ActivityHeaderProps {
 export default function ActivityHeader(props: ActivityHeaderProps) {
   const {
     onScrollToSection,
-    price,
     titleRef,
     descriptionRef,
     addressRef,
@@ -23,7 +21,7 @@ export default function ActivityHeader(props: ActivityHeaderProps) {
   } = props;
 
   const getButtonClass = (section: string) =>
-    `mr-4 w-100 ${activeSection === section ? 'border-b-2 border-blue-600' : 'border-b border-transparent'}`;
+    `mr-4 mt-2 w-100 border-b-2 transition-all duration-300 ${activeSection === section ? 'border-b-2 border-blue-600' : 'border-b border-transparent'}`;
 
   return (
     <div className="sticky top-70 z-50 hidden h-70 w-full border-y-1 border-custom-gray-200 bg-white transition-all duration-500 md:block">
@@ -53,16 +51,6 @@ export default function ActivityHeader(props: ActivityHeaderProps) {
           >
             후기
           </button>
-        </div>
-        <div>
-          <Button
-            variant="activeButton"
-            hasICon={true}
-            className="m-10 h-36 rounded-md text-md-bold"
-            onClick={() => alert('Button Clicked!')}
-          >
-            {price} 원 / 인
-          </Button>
         </div>
       </div>
     </div>
