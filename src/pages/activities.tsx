@@ -11,6 +11,7 @@ import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { GetServerSidePropsContext } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -143,6 +144,18 @@ export default function Activites({
 
   return (
     <>
+      <Head>
+        <title>홈 - Trip.zip</title>
+        <meta
+          name="description"
+          content="체험 상품을 발견하고 간편하게 예약할 수 있는 Trip.zip에 오신 것을 환영합니다."
+        />
+        <meta property="og:title" content="홈 - Trip.zip" />
+        <meta
+          property="og:description"
+          content="체험 상품을 발견하고 간편하게 예약할 수 있는 Trip.zip에 오신 것을 환영합니다."
+        />
+      </Head>
       <CarouselContainer />
 
       <ActivitiesLayout>

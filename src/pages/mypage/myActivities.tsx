@@ -1,17 +1,12 @@
+import MyActivityForm from '@/components/ActivitiyForm';
+import MyCard from '@/components/activitiesManagement/MyCard';
+import Button from '@/components/commons/Button';
+import Modal from '@/components/commons/Modal';
 import { getMyActivities } from '@/libs/api/myActivities';
-import { deleteMyActivity } from '@/libs/api/myActivities';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import MyActivityForm from '../ActivitiyForm';
-import MyCard from '../activitiesManagement/MyCard';
-import Button from '../commons/Button';
-import Modal from '../commons/Modal';
 import EmptyImage from '/public/imgs/empty.png';
 
 const useMyActivities = (size = 20) => {
@@ -25,7 +20,6 @@ const useMyActivities = (size = 20) => {
 };
 
 export default function MyActivities() {
-  const queryClient = useQueryClient();
   const [showActivityForm, setShowActivityForm] = useState(false);
   const lastCardRef = useRef<HTMLDivElement | null>(null);
 
@@ -69,22 +63,6 @@ export default function MyActivities() {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteMyActivity(id),
-    onSuccess: () => {
-      console.log('삭제 요청 성공');
-      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
-    },
-    onError: (error) => {
-      console.error('삭제 요청 실패:', error);
-    },
-  });
-
-  const handleDelete = (activityId: number) => {
-    console.log('handleDelete 호출됨:', activityId);
-    deleteMutation.mutate(activityId);
-  };
-
   const handleConfirm = () => {
     setShowActivityForm(true);
   };
@@ -109,7 +87,7 @@ export default function MyActivities() {
           <Modal.Content>
             <Modal.Description>체험을 등록하시겠습니까?</Modal.Description>
             <Modal.Close onConfirm={handleConfirm} confirm>
-              예
+              확인
             </Modal.Close>
           </Modal.Content>
         </Modal.Root>
@@ -124,16 +102,12 @@ export default function MyActivities() {
         </div>
       ) : (
         <>
-          {sortedActivities.map((activities, index) => (
+          {sortedActivities.map((activity, index) => (
             <div
               ref={index === sortedActivities.length - 1 ? lastCardRef : null}
-              key={activities.id}
+              key={activity.id}
             >
-              <MyCard
-                {...activities}
-                onEdit={() => {}}
-                onDelete={() => handleDelete(activities.id)}
-              />
+              <MyCard {...activity} />
             </div>
           ))}
           {isFetchingNextPage && <div>로딩 중...</div>}
