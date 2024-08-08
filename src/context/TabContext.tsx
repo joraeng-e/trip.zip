@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   Dispatch,
   ReactNode,
@@ -15,7 +16,9 @@ type TabContextType = {
 export const TabContext = createContext<TabContextType | undefined>(undefined);
 
 export const TabProvider = ({ children }: { children: ReactNode }) => {
-  const [activeTab, setActiveTab] = useState('info');
+  const router = useRouter();
+  const initialTab = router.pathname.split('/mypage/')[1] || 'info';
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   return (
     <TabContext.Provider value={{ activeTab, setActiveTab }}>

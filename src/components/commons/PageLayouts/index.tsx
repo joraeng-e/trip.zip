@@ -1,4 +1,5 @@
 import { getUser } from '@/libs/api/user';
+import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
@@ -13,7 +14,13 @@ type LayoutProps = {
 };
 
 const PRIVATE_PATHS = ['/private'];
-// Todo : "내 정보, 예약내역, 내 체험 관리, 내 체험 등록, 내 체험 수정, 예약 현황, 알림(모달), 후기 작성(모달)" PRIVATE_PATH list에 추가
+const MYPAGE_PATHS = [
+  '/mypage',
+  '/mypage/info',
+  '/mypage/reservationList',
+  '/mypage/myActivities',
+  '/mypage/reservationStatus',
+];
 
 /**
  * 페이지 컴포넌트를 감싸는 레이아웃 컴포넌트입니다🙇🏻‍♂️
@@ -42,11 +49,23 @@ export default function Layout({
     showFooter = false;
   }
 
+  const isMyPage = MYPAGE_PATHS.some((path) => pathname.startsWith(path));
+
   return (
     <>
       {showHeader && <Header />}
-      {children}
-      {showFooter && <Footer />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={router.pathname}
+          initial={isMyPage ? undefined : { opacity: 0, y: -50 }}
+          animate={isMyPage ? undefined : { opacity: 1, y: 0 }}
+          exit={isMyPage ? undefined : { opacity: 0, y: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          {children}
+          {showFooter && <Footer />}
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 }

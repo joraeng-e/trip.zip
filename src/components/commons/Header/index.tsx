@@ -42,7 +42,7 @@ export default function Header() {
       className={`sticky top-0 z-50 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'}`}
     >
       <div className="basic-container flex items-center justify-between">
-        <Link href="/" aria-label="메인페이지로 이동">
+        <Link href="/activities" aria-label="메인페이지로 이동">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
         {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
