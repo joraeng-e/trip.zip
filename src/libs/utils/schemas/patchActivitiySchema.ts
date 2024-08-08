@@ -5,7 +5,7 @@ import * as yup from 'yup';
 export const patchActivitySchema = yup.object().shape({
   title: yup.string().required('제목을 입력해주세요.'),
   category: yup
-    .string()
+    .mixed<Category>()
     .oneOf([
       '문화 · 예술',
       '식음료',
@@ -23,14 +23,13 @@ export const patchActivitySchema = yup.object().shape({
     .required('가격을 입력해주세요.'),
   address: yup.string().required('주소를 입력해주세요.'),
   bannerImageUrl: yup.string().required('배너 이미지를 등록해주세요.'),
-  subImageIdsToRemove: yup.array().of(yup.number()),
+  subImageIdsToRemove: yup.array().of(yup.number()).default([]),
   subImageUrlsToAdd: yup
     .array()
     .of(yup.string().url('유효한 URL을 입력해주세요.'))
     .max(4, '최대 4개의 소개 이미지를 등록할 수 있습니다.')
-    .nullable()
-    .transform((value) => value?.filter(Boolean) || undefined),
-  scheduleIdsToRemove: yup.array().of(yup.number()),
+    .default([]),
+  scheduleIdsToRemove: yup.array().of(yup.number()).default([]),
   schedulesToAdd: yup
     .array()
     .of(
@@ -40,7 +39,7 @@ export const patchActivitySchema = yup.object().shape({
         endTime: yup.string().required('종료 시간을 입력해주세요.'),
       }),
     )
-    .nullable(),
+    .default([]),
 });
 
 export type PatchActivityFormData = InferType<typeof patchActivitySchema>;
