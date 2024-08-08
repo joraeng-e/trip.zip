@@ -25,6 +25,7 @@ export default function Notification() {
       queryFn: ({ pageParam: cursorId }) =>
         getMyNotifications({ size: 3, cursorId }),
       initialPageParam: undefined,
+      staleTime: 0,
     });
   };
 
