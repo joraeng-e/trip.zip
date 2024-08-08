@@ -8,17 +8,27 @@ import { useEffect, useRef, useState } from 'react';
 import NotificationPopup from './NotificationPopup';
 
 export default function Notification() {
-  const [isNotificationPopupOpen, setIsNotificationPopupOpen] = useState(false);
-  const notificationRef = useRef<HTMLDivElement>(null);
   const { data } = useQuery<GetMyNotificationsResponse, Error>({
     queryKey: ['notifications', 'status'],
     queryFn: () => getMyNotifications({ size: 1 }),
-    refetchInterval: 5000,
+    refetchInterval: 60_000,
     staleTime: 0,
   });
 
+  const [isNotificationPopupOpen, setIsNotificationPopupOpen] = useState(false);
   const [previousTotalCount, setPreviousTotalCount] = useState(0);
   const [isNotificationUpdate, setIsNotificationUpdate] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  const toggleNotificationPopup = () => {
+    setIsNotificationPopupOpen((prev) => !prev);
+  };
+
+  const closePopup = () => {
+    setIsNotificationPopupOpen(false);
+  };
+
+  useClickOutside(notificationRef, closePopup);
 
   useEffect(() => {
     if (!data) return;
@@ -34,16 +44,6 @@ export default function Notification() {
 
     setPreviousTotalCount(currentTotalCount);
   }, [data]);
-
-  const toggleNotificationPopup = () => {
-    setIsNotificationPopupOpen((prev) => !prev);
-  };
-
-  const closePopup = () => {
-    setIsNotificationPopupOpen(false);
-  };
-
-  useClickOutside(notificationRef, closePopup);
 
   return (
     <div ref={notificationRef}>
