@@ -1,12 +1,9 @@
-import {
-  GetMyReservationsResponse,
-  PatchMyReservationResponse,
-  PostReviewRequest,
-  PostReviewResponse,
-  ReservationStatus,
-} from '@trip.zip-api';
+import { GetMyReservationsResponse, PatchMyReservationResponse, PostReviewRequest, PostReviewResponse, ReservationStatus } from '@trip.zip-api';
+
+
 
 import axiosInstance from '../axiosInstance';
+
 
 // 내 예약 리스트 조회
 export async function getMyReservations({
@@ -41,13 +38,10 @@ export async function getMyReservations({
 }
 
 // 내 예약 수정 (취소)
-export async function patchMyReservationStatus({
-  reservationId,
-  status,
-}: {
-  reservationId: number;
-  status: 'canceled';
-}): Promise<PatchMyReservationResponse> {
+export async function patchMyReservationStatus(
+  reservationId: number,
+  status: 'canceled',
+): Promise<PatchMyReservationResponse> {
   try {
     // PATCH 요청
     const response = await axiosInstance.patch<PatchMyReservationResponse>(

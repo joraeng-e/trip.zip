@@ -1,4 +1,7 @@
 import Button from '@/components/commons/Button';
+import Modal from '@/components/commons/Modal';
+import { patchMyReservationStatus } from '@/libs/api/myReservations';
+import { useMutation } from '@tanstack/react-query';
 import { Reservation } from '@trip.zip-api';
 import Image from 'next/image';
 import React from 'react';
@@ -10,6 +13,7 @@ type ReservationCardProps = {
 export default function ReservationCard({ reservation }: ReservationCardProps) {
   const {
     activity: { bannerImageUrl, title },
+    id,
     date,
     startTime,
     endTime,
@@ -37,9 +41,26 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
     switch (status) {
       case 'pending':
         return (
-          <Button variant="inactiveButton" className="max-w-100 rounded-md">
-            예약 취소
-          </Button>
+          <>
+            <Modal.Root>
+              <Modal.Trigger>
+                <Button
+                  variant="inactiveButton"
+                  className="max-w-120 rounded-md px-16 py-10"
+                >
+                  예약 취소
+                </Button>
+              </Modal.Trigger>
+              <Modal.Content>
+                <Modal.Description className="text-center">
+                  예약을 취소하시겠어요?
+                </Modal.Description>
+                <Modal.Close onConfirm={() => mutation.mutate()} confirm>
+                  확인
+                </Modal.Close>
+              </Modal.Content>
+            </Modal.Root>
+          </>
         );
       case 'completed':
         return <Button className="max-w-100 rounded-md">후기 작성</Button>;
@@ -47,6 +68,16 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
         return;
     }
   };
+
+  const mutation = useMutation({
+    mutationFn: () => patchMyReservationStatus(id, 'canceled'),
+    onSuccess: () => {
+      alert('예약이 성공적으로 취소되었습니다.');
+    },
+    onError: (error: Error) => {
+      alert(`예약 취소 중 오류 발생: ${error.message}`);
+    },
+  });
 
   return (
     <div className="mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
