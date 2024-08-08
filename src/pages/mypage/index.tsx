@@ -1,6 +1,6 @@
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
-import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import ProfileImage from '@/components/mypage/ProfileImage';
 import { getUser, patchUserInfo, postProfileImage } from '@/libs/api/user';
@@ -53,9 +53,6 @@ export default function Info() {
     mode: 'all',
   });
 
-  const [modalMessage, setModalMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [newProfileImageFile, setNewProfileImageFile] = useState<File | null>(
     null,
@@ -97,13 +94,9 @@ export default function Info() {
   const mutation = useMutation({
     mutationFn: patchUserInfo,
     onSuccess: () => {
-      console.log('정보 수정 성공');
-      setModalMessage('수정 완료!');
-      setIsModalOpen(true);
-      setIsSuccessMessage(true);
       setNewProfileImageFile(null);
-
       refetch();
+      router.push('/mypage');
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
@@ -111,17 +104,14 @@ export default function Info() {
 
         switch (message) {
           case '수정할 내용이 없습니다.':
-            setModalMessage('변경된 정보가 없습니다.');
+            notify('warning', '변경된 정보가 없습니다.');
             break;
           case '닉네임은 10자 이하로 작성해주세요.':
-            setModalMessage('닉네임은 10자 이하로 작성해주세요.');
+            notify('warning', '닉네임은 10자 이하로 작성해주세요.');
             break;
           default:
             console.error(error);
         }
-
-        setIsModalOpen(true);
-        setIsSuccessMessage(false);
       }
     },
   });
@@ -141,9 +131,14 @@ export default function Info() {
   const onSubmit = async (data: FormData) => {
     const { nickname, newPassword, profileImageUrl } = data;
 
-    if (!nickname && !newPassword && !profileImageUrl && !newProfileImageFile) {
-      console.log('변경된 정보가 없습니다.');
-      return;
+    if (
+      nickname === userInfo?.nickname &&
+      !newPassword &&
+      !newProfileImageFile
+    ) {
+      notify('warning', '변경된 정보가 없습니다.');
+    } else {
+      notify('success', '수정 완료!');
     }
 
     // 이미지가 새로 업로드되는 경우
@@ -167,12 +162,6 @@ export default function Info() {
       setProfileImageUrl(null);
       setValue('profileImageUrl', null);
     }
-  };
-
-  const resetModalMessage = () => {
-    setModalMessage('');
-    setIsModalOpen(false);
-    if (isSuccessMessage) router.push('/mypage/info');
   };
 
   return (
@@ -239,16 +228,6 @@ export default function Info() {
             profileImageUrl={profileImageUrl}
             handleImageChange={handleImageChange}
           />
-          {modalMessage && (
-            <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <Modal.Content>
-                <Modal.Description className="py-20 text-center">
-                  {modalMessage}
-                </Modal.Description>
-                <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
-              </Modal.Content>
-            </Modal.Root>
-          )}
         </form>
       </div>
     </MyPageLayout>

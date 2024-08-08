@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { notify } from '../commons/Toast';
+
 const whileHover = {
   backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
 };
@@ -29,8 +31,7 @@ export default function ProfileImage({
       const file = e.target.files[0];
 
       if (selectedImage) {
-        alert('이미지 업로드는 최대 한 개만 가능합니다.');
-        // TODO: toast
+        notify('warning', '이미지 업로드는 최대 한 개만 가능합니다.');
         return;
       }
 
