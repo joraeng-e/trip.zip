@@ -1,7 +1,7 @@
 import { GetActivityReviewsResponse } from '@trip.zip-api';
 import React, { useState } from 'react';
 
-import Pagination from '../commons/Pagination';
+import Pagination from '../../commons/Pagination';
 import ReviewCard from './ReviewCard';
 import ReviewTitle from './ReviewTitle';
 

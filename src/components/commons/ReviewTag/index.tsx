@@ -12,7 +12,6 @@ import {
   StarEmoji,
 } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
-import React from 'react';
 
 const tags = [
   { name: '스포츠', emoji: <SoccerBallEmoji /> },
@@ -32,7 +31,9 @@ interface ActivityTagsProps {
   extractedTags: string[]; // props를 수정
 }
 
-const ActivityTags: React.FC<ActivityTagsProps> = ({ extractedTags }) => {
+export default function ActivityTags(props: ActivityTagsProps) {
+  const { extractedTags } = props;
+
   return (
     <div className="my-16">
       <div className="flex flex-wrap gap-10">
@@ -74,6 +75,4 @@ const ActivityTags: React.FC<ActivityTagsProps> = ({ extractedTags }) => {
       `}</style>
     </div>
   );
-};
-
-export default ActivityTags;
+}
