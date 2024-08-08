@@ -37,14 +37,20 @@ export default function Notification() {
 
   return (
     <div ref={notificationRef}>
-      <div
-        className="cursor-pointer"
+      <button
+        type="button"
+        className="relative block"
         aria-label="알림"
         onClick={toggleNotificationPopup}
         onMouseEnter={handleMouseEnter}
       >
         <NotificationIcon />
-      </div>
+
+        <span className="absolute right-2 top-0 flex h-6 w-6">
+          <span className="relative inline-flex h-6 w-6 rounded-full bg-custom-green-300 ring-1 ring-white" />
+          <span className="animate-ping absolute inline-flex size-full rounded-full bg-custom-green-300 opacity-75" />
+        </span>
+      </button>
       {isNotificationPopupOpen && <NotificationPopup closePopup={closePopup} />}
     </div>
   );
