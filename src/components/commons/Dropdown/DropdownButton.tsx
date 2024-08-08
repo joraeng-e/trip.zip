@@ -1,4 +1,3 @@
-import { ArrowDown } from '@/libs/utils/Icon';
 import { ReactNode } from 'react';
 
 import { useDropdownContext } from '.';
@@ -9,7 +8,7 @@ type ButtonProps = {
 };
 
 export default function Button({ children, className, ...rest }: ButtonProps) {
-  const { isOpen, toggleDropdown } = useDropdownContext();
+  const { toggleDropdown } = useDropdownContext();
 
   return (
     <button
@@ -19,11 +18,6 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
       type="button"
     >
       {children}
-      <ArrowDown
-        className={`transition-transform duration-300 ${
-          isOpen ? 'rotate-180' : ''
-        }`}
-      />
     </button>
 
     // <button
