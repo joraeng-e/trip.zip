@@ -67,6 +67,7 @@ export default function NotificationItem({ data }: Props) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications', 'list'] });
+      queryClient.invalidateQueries({ queryKey: ['notifications', 'status'] });
     },
   });
 

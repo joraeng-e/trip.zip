@@ -1,7 +1,7 @@
 import useClickOutside from '@/hooks/useClickOutside';
 import { getMyNotifications } from '@/libs/api/myNotifications';
 import { NotificationIcon } from '@/libs/utils/Icon';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { GetMyNotificationsResponse } from '@trip.zip-api';
 import { useEffect, useRef, useState } from 'react';
 
