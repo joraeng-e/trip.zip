@@ -1,5 +1,6 @@
 import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
 import { getMyReservations } from '@/libs/api/myReservations';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +11,7 @@ import React, { useState } from 'react';
 export default function ReservationList() {
   const [value, setValue] = useState<ReservationStatus>('pending');
 
-  const { data: reservations } = useQuery<GetMyReservationsResponse>({
+  const { data: reservationData } = useQuery<GetMyReservationsResponse>({
     queryKey: ['reservations', value],
     queryFn: () =>
       getMyReservations({
@@ -18,7 +19,9 @@ export default function ReservationList() {
         status: value,
       }),
   });
-  console.log(reservations);
+
+  // reservations가 GetMyReservationsResponse의 프로퍼티로 가정
+  const reservations = reservationData?.reservations || []; // 기본값 설정
 
   return (
     <MyPageLayout>
@@ -35,7 +38,7 @@ export default function ReservationList() {
             height={50}
             defaultValue="필터"
           >
-            <Dropdown.Button className="w-100 rounded-xl border border-custom-green-200 py-10 md:w-160">
+            <Dropdown.Button className="w-100 rounded-xl border-2 border-custom-green-200 py-10 md:w-160">
               필터
             </Dropdown.Button>
             <Dropdown.Body>
@@ -47,9 +50,13 @@ export default function ReservationList() {
             </Dropdown.Body>
           </Dropdown>
         </div>
-        {reservations?.reservations.map((reservation) => (
-          <ReservationCard key={reservation.id} reservation={reservation} />
-        ))}
+        {!reservations.length ? (
+          <NoActivity />
+        ) : (
+          reservations.map((reservation) => (
+            <ReservationCard key={reservation.id} reservation={reservation} />
+          ))
+        )}
       </div>
     </MyPageLayout>
   );
