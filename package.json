@@ -25,6 +25,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-kakao-maps-sdk": "^1.1.27",
+    "react-toastify": "^10.0.5",
     "vercel": "^35.2.1",
     "yup": "^1.4.0"
   },
