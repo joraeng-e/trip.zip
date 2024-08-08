@@ -104,7 +104,9 @@ export default function Dropdown({
         height,
       }}
     >
-      <div ref={dropdownRef}>{children}</div>
+      <div ref={dropdownRef} className="relative">
+        {children}
+      </div>
     </DropdownContext.Provider>
   );
 }
