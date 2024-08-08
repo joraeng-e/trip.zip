@@ -1,5 +1,10 @@
 import { getMyActivities } from '@/libs/api/myActivities';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { deleteMyActivity } from '@/libs/api/myActivities';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import Image from 'next/image';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -20,6 +25,7 @@ const useMyActivities = (size = 20) => {
 };
 
 export default function MyActivities() {
+  const queryClient = useQueryClient();
   const [showActivityForm, setShowActivityForm] = useState(false);
   const lastCardRef = useRef<HTMLDivElement | null>(null);
 
@@ -63,6 +69,22 @@ export default function MyActivities() {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteMyActivity(id),
+    onSuccess: () => {
+      console.log('삭제 요청 성공');
+      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
+    },
+    onError: (error) => {
+      console.error('삭제 요청 실패:', error);
+    },
+  });
+
+  const handleDelete = (activityId: number) => {
+    console.log('handleDelete 호출됨:', activityId);
+    deleteMutation.mutate(activityId);
+  };
+
   const handleConfirm = () => {
     setShowActivityForm(true);
   };
@@ -87,7 +109,7 @@ export default function MyActivities() {
           <Modal.Content>
             <Modal.Description>체험을 등록하시겠습니까?</Modal.Description>
             <Modal.Close onConfirm={handleConfirm} confirm>
-              확인
+              예
             </Modal.Close>
           </Modal.Content>
         </Modal.Root>
@@ -102,12 +124,16 @@ export default function MyActivities() {
         </div>
       ) : (
         <>
-          {sortedActivities.map((activity, index) => (
+          {sortedActivities.map((activities, index) => (
             <div
               ref={index === sortedActivities.length - 1 ? lastCardRef : null}
-              key={activity.id}
+              key={activities.id}
             >
-              <MyCard {...activity} />
+              <MyCard
+                {...activities}
+                onEdit={() => {}}
+                onDelete={() => handleDelete(activities.id)}
+              />
             </div>
           ))}
           {isFetchingNextPage && <div>로딩 중...</div>}
