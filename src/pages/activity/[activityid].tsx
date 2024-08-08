@@ -13,6 +13,7 @@ import ActivitySideBar from '@/components/ActivityDetail/ActivitySideBar';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
+import Calendar from 'react-calendar';
 
 export default function ActivityDetail() {
   const router = useRouter();
@@ -22,7 +23,6 @@ export default function ActivityDetail() {
     .map((image) => image.imageUrl)
     .filter((url) => url);
 
-  const [showButton, setShowButton] = useState(true);
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title'); // 현재 활성화된 섹션
 
@@ -37,10 +37,8 @@ export default function ActivityDetail() {
     const scrollY = window.scrollY;
 
     if (scrollY > 400) {
-      setShowButton(false);
       setShowHeader(true);
     } else {
-      setShowButton(true);
       setShowHeader(false);
     }
 
@@ -84,7 +82,6 @@ export default function ActivityDetail() {
       {showHeader && (
         <ActivityHeader
           onScrollToSection={scrollToSection}
-          price={DetailData.price}
           titleRef={titleRef}
           descriptionRef={descriptionRef}
           addressRef={addressRef}
@@ -140,8 +137,11 @@ export default function ActivityDetail() {
                 reviews={ReviewData.reviews}
               />
             </div>
-            <div className="relative mr-24 hidden w-3/12 md:block">
-              {showButton && <ActivitySideBar price={DetailData.price} />}
+            <div className="relative mr-16 hidden w-3/12 min-w-300 md:block">
+              <ActivitySideBar
+                price={DetailData.price}
+                schedules={DetailData.schedules}
+              />
             </div>
           </div>
         </div>
