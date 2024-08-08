@@ -1,3 +1,4 @@
+import MyPageLayout from '@/components/mypage/MyPageLayout';
 import {
   getMyActivitiesReservationDashboard,
   getMyAllActivities,
@@ -9,7 +10,7 @@ import {
 } from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
-import Calendar from './BookingCalendar/BookingCalendar';
+import Calendar from '../../components/mypage/BookingCalendar/BookingCalendar';
 
 type ActivityListItem = {
   id: number;
@@ -86,7 +87,7 @@ export default function ReservationStatus() {
   }, [activityId, currentMonth, currentYear]);
 
   return (
-    <>
+    <MyPageLayout>
       <div className="flex h-full w-full min-w-342 flex-col gap-24">
         <section className="flex flex-col gap-32">
           <h2 className="text-32 font-bold">예약 현황</h2>
@@ -147,6 +148,6 @@ export default function ReservationStatus() {
           />
         </div>
       </div>
-    </>
+    </MyPageLayout>
   );
 }

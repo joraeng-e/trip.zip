@@ -1,13 +1,9 @@
-import {
-  GetUserInfoResponse,
-  PatchUserInfoRequest,
-  PatchUserInfoResponse,
-  PostProfileImageResponse,
-  RegisterRequest,
-  RegisterResponse,
-} from '@trip.zip-api';
+import { GetUserInfoResponse, PatchUserInfoRequest, PatchUserInfoResponse, PostProfileImageResponse, RegisterRequest, RegisterResponse } from '@trip.zip-api';
+
+
 
 import axiosInstance from '../axiosInstance';
+
 
 // 회원가입
 export async function postUser(
@@ -55,18 +51,13 @@ export async function patchUserInfo(
 }
 
 // 프로필 이미지 url 생성
-export async function postProfileImage({
-  imageFile,
-}: {
-  imageFile: File;
-}): Promise<PostProfileImageResponse> {
+export async function postProfileImage(
+  imageData: FormData,
+): Promise<PostProfileImageResponse> {
   try {
-    const formData = new FormData();
-    formData.append('image', imageFile);
-
     const response = await axiosInstance.post<PostProfileImageResponse>(
       `/users/me/image`,
-      formData,
+      imageData,
       {
         headers: {
           'Content-Type': 'multipart/form-data',

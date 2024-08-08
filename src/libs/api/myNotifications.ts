@@ -9,7 +9,7 @@ export async function getMyNotifications({
 }: {
   cursorId?: number;
   size?: number;
-}): Promise<GetMyNotificationsResponse> {
+} = {}): Promise<GetMyNotificationsResponse> {
   try {
     const params = new URLSearchParams();
     if (cursorId !== undefined) {
