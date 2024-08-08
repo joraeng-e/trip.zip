@@ -109,10 +109,28 @@ const config: Config = {
         '0%': { transform: 'translateX(-100%)' },
         '100%': { transform: 'translateX(100%)' },
       },
+      fadeout: {
+        '0%': {
+          opacity: '1',
+          transform: 'translateX(0)',
+        },
+        '100%': {
+          opacity: '0',
+          transform: 'translateX(-20px)',
+        },
+      },
+      ping: {
+        '75%, 100%': {
+          transform: 'scale(2)',
+          opacity: '0',
+        },
+      },
     },
     animation: {
       vibration: 'vibration .1s ease-in-out 5',
       shimmer: 'shimmer 2s infinite',
+      fadeout: 'fadeout 0.3s forwards',
+      ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) 10',
     },
   },
   plugins: [],
