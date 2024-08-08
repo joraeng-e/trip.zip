@@ -26,10 +26,12 @@ export default function ActivityDetail() {
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title'); // 현재 활성화된 섹션
 
-  const titleRef = useRef<HTMLDivElement>(null);
-  const descriptionRef = useRef<HTMLDivElement>(null);
-  const addressRef = useRef<HTMLDivElement>(null);
-  const reviewRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = {
+    title: useRef<HTMLDivElement>(null),
+    description: useRef<HTMLDivElement>(null),
+    address: useRef<HTMLDivElement>(null),
+    review: useRef<HTMLDivElement>(null),
+  };
 
   const HEADER_HEIGHT = 140;
 
@@ -42,12 +44,14 @@ export default function ActivityDetail() {
       setShowHeader(false);
     }
 
-    // 현재 섹션 판단
-    const titleTop = titleRef.current?.getBoundingClientRect().top || 0;
+    const titleTop =
+      sectionRefs.title.current?.getBoundingClientRect().top || 0;
     const descriptionTop =
-      descriptionRef.current?.getBoundingClientRect().top || 0;
-    const addressTop = addressRef.current?.getBoundingClientRect().top || 0;
-    const reviewTop = reviewRef.current?.getBoundingClientRect().top || 0;
+      sectionRefs.description.current?.getBoundingClientRect().top || 0;
+    const addressTop =
+      sectionRefs.address.current?.getBoundingClientRect().top || 0;
+    const reviewTop =
+      sectionRefs.review.current?.getBoundingClientRect().top || 0;
 
     if (titleTop < window.innerHeight && titleTop > 0) {
       setActiveSection('title');
@@ -82,10 +86,7 @@ export default function ActivityDetail() {
       {showHeader && (
         <ActivityHeader
           onScrollToSection={scrollToSection}
-          titleRef={titleRef}
-          descriptionRef={descriptionRef}
-          addressRef={addressRef}
-          reviewRef={reviewRef}
+          sectionRefs={sectionRefs}
           activeSection={activeSection}
         />
       )}
@@ -100,7 +101,7 @@ export default function ActivityDetail() {
           <meta property="og:url" content={`${ActivityId}`} />
         </Head>
         <div>
-          <div ref={titleRef} />
+          <div ref={sectionRefs.title} />
           <div className="mt-10 hidden md:block">
             <BannerImage
               bannerImageUrl={DetailData.bannerImageUrl}
@@ -116,7 +117,6 @@ export default function ActivityDetail() {
 
           <div className="mt-10 flex">
             <div className="mr-16 flex-1">
-              <div ref={titleRef} />
               <Title
                 title={DetailData.title}
                 address={DetailData.address}
@@ -124,13 +124,13 @@ export default function ActivityDetail() {
                 rating={DetailData.rating}
                 reviewCount={DetailData.reviewCount}
               />
-              <div ref={descriptionRef} />
+              <div ref={sectionRefs.description} />
               <Description description={DetailData.description} />
 
-              <div ref={addressRef} />
+              <div ref={sectionRefs.address} />
               <Address address={DetailData.address} />
 
-              <div ref={reviewRef} />
+              <div ref={sectionRefs.review} />
               <Review
                 averageRating={ReviewData.averageRating}
                 totalCount={ReviewData.totalCount}

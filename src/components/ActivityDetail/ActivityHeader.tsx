@@ -1,24 +1,16 @@
-import Button from '@/components/commons/Button';
-import React from 'react';
-
 interface ActivityHeaderProps {
   onScrollToSection: (ref: React.RefObject<HTMLDivElement>) => void;
-  titleRef: React.RefObject<HTMLDivElement>;
-  descriptionRef: React.RefObject<HTMLDivElement>;
-  addressRef: React.RefObject<HTMLDivElement>;
-  reviewRef: React.RefObject<HTMLDivElement>;
-  activeSection: string; // 현재 활성 섹션
+  sectionRefs: {
+    title: React.RefObject<HTMLDivElement>;
+    description: React.RefObject<HTMLDivElement>;
+    address: React.RefObject<HTMLDivElement>;
+    review: React.RefObject<HTMLDivElement>;
+  };
+  activeSection: string;
 }
 
 export default function ActivityHeader(props: ActivityHeaderProps) {
-  const {
-    onScrollToSection,
-    titleRef,
-    descriptionRef,
-    addressRef,
-    reviewRef,
-    activeSection,
-  } = props;
+  const { onScrollToSection, sectionRefs, activeSection } = props;
 
   const getButtonClass = (section: string) =>
     `mr-4 mt-2 w-100 border-b-2 transition-all duration-300 ${activeSection === section ? 'border-b-2 border-blue-600' : 'border-b border-transparent'}`;
@@ -29,25 +21,25 @@ export default function ActivityHeader(props: ActivityHeaderProps) {
         <div className="flex h-full space-x-4">
           <button
             className={getButtonClass('title')}
-            onClick={() => onScrollToSection(titleRef)}
+            onClick={() => onScrollToSection(sectionRefs.title)}
           >
             개요
           </button>
           <button
             className={getButtonClass('description')}
-            onClick={() => onScrollToSection(descriptionRef)}
+            onClick={() => onScrollToSection(sectionRefs.description)}
           >
             내용
           </button>
           <button
             className={getButtonClass('address')}
-            onClick={() => onScrollToSection(addressRef)}
+            onClick={() => onScrollToSection(sectionRefs.address)}
           >
             위치
           </button>
           <button
             className={getButtonClass('review')}
-            onClick={() => onScrollToSection(reviewRef)}
+            onClick={() => onScrollToSection(sectionRefs.review)}
           >
             후기
           </button>
