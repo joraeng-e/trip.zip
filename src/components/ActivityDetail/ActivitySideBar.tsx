@@ -11,6 +11,7 @@ interface ActivitySideBarProps {
     startTime: string;
     endTime: string;
   }[];
+  className?: string;
 }
 
 type ValuePiece = Date | null;
@@ -18,7 +19,7 @@ type ValuePiece = Date | null;
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function ActivitySideBar(props: ActivitySideBarProps) {
-  const { price, schedules } = props;
+  const { price, schedules, className } = props;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -67,7 +68,9 @@ export default function ActivitySideBar(props: ActivitySideBarProps) {
   };
 
   return (
-    <div className="sticky top-160 m-16 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black">
+    <div
+      className={`w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
+    >
       <div className="my-10 text-center text-2xl-bold">
         {price}
         <span className="text-lg-regular"> / 인</span>
@@ -89,7 +92,6 @@ export default function ActivitySideBar(props: ActivitySideBarProps) {
           tileClassName={tileClassName}
         />
       </div>
-
       {selectedSchedules && selectedSchedules.length > 0 && (
         <AvailableSchedules
           selectedSchedules={selectedSchedules}
