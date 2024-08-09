@@ -111,7 +111,7 @@ export default function ActivityDetail() {
               detailData={DetailData}
               reviewData={ReviewData}
             />
-            <div className="relative hidden w-3/12 min-w-300 md:block">
+            <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar
                 price={DetailData.price}
                 schedules={DetailData.schedules}

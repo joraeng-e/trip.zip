@@ -24,7 +24,7 @@ interface DetailContentProps {
 export default function DetailContent(props: DetailContentProps) {
   const { sectionRefs } = props;
   return (
-    <div className="mr-16 flex-1">
+    <div className="flex-1">
       <Title
         title={DetailData.title}
         address={DetailData.address}

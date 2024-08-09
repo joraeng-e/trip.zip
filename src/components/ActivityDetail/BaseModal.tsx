@@ -4,11 +4,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 interface BaseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  className?: string;
   children: React.ReactNode;
 }
 
 export default function BaseModal(props: BaseModalProps) {
-  const { isOpen, onClose, children } = props;
+  const { isOpen, onClose, className, children } = props;
 
   return (
     <AnimatePresence>
@@ -21,7 +22,7 @@ export default function BaseModal(props: BaseModalProps) {
           onClick={onClose}
         >
           <motion.div
-            className="relative h-auto max-h-full w-400 max-w-full overflow-auto rounded-md bg-white"
+            className={`relative h-auto max-h-full w-400 max-w-full overflow-auto rounded-md bg-white ${className}`}
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.5 }}

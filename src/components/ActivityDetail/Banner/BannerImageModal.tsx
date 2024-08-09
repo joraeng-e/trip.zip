@@ -35,7 +35,11 @@ export default function BannerImageModal(props: BannerImageModalProps) {
   }, [currentIndex, totalImages]);
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose}>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      className="h-820 w-full max-w-1200"
+    >
       <div className="relative flex h-700 w-full items-center justify-center overflow-hidden">
         <div className="h-full w-full">
           <Image
