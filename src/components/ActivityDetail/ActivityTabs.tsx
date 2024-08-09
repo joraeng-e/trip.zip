@@ -9,7 +9,7 @@ interface ActivityHeaderProps {
   activeSection: string;
 }
 
-export default function ActivityHeader(props: ActivityHeaderProps) {
+export default function ActivityTabs(props: ActivityHeaderProps) {
   const { onScrollToSection, sectionRefs, activeSection } = props;
 
   const getButtonClass = (section: string) =>
