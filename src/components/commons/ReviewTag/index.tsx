@@ -42,37 +42,19 @@ export default function ActivityTags(props: ActivityTagsProps) {
           .map(({ name, emoji }) => (
             <motion.div
               key={name}
-              className="flex items-center rounded-lg p-8"
-              style={{
-                background: 'linear-gradient(90deg, #6bfdfd, #22ebd0)',
-                backgroundSize: '400% 400%',
-                animation: 'gradient 15s ease infinite',
-              }}
+              className="flex items-center rounded-lg border border-custom-gray-400 p-12"
               whileHover={{
                 scale: 1.05,
                 transition: { duration: 0.3 },
               }}
             >
               {emoji}
-              <span className="mx-4 text-lg-medium text-custom-gray-100">
+              <span className="mx-4 text-lg-medium text-nomad-black">
                 {name}
               </span>
             </motion.div>
           ))}
       </div>
-      <style jsx>{`
-        @keyframes gradient {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-      `}</style>
     </div>
   );
 }
