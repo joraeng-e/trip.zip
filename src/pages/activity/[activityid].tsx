@@ -1,19 +1,13 @@
 import DetailData from '@/../public/data/activityDetail.json';
 import ReviewData from '@/../public/data/activityDetailReview.json';
-import {
-  Address,
-  BannerImage,
-  Description,
-  MobileBannerImage,
-  Review,
-  Title,
-} from '@/components/ActivityDetail';
-import ActivityHeader from '@/components/ActivityDetail/ActivityHeader';
+import { BannerImage, MobileBannerImage } from '@/components/ActivityDetail';
 import ActivitySideBar from '@/components/ActivityDetail/ActivitySideBar';
+import ActivityTabs from '@/components/ActivityDetail/ActivityTabs';
+import DetailContent from '@/components/ActivityDetail/DetailContent';
 import MobileFooter from '@/components/ActivityDetail/MobileReservationFooter';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function ActivityDetail() {
   const router = useRouter();
@@ -84,7 +78,7 @@ export default function ActivityDetail() {
   return (
     <>
       {showHeader && (
-        <ActivityHeader
+        <ActivityTabs
           onScrollToSection={scrollToSection}
           sectionRefs={sectionRefs}
           activeSection={activeSection}
@@ -100,54 +94,30 @@ export default function ActivityDetail() {
           <meta property="og:image" content={DetailData.bannerImageUrl} />
           <meta property="og:url" content={`${ActivityId}`} />
         </Head>
+        <div ref={sectionRefs.title} />
         <div>
-          <div ref={sectionRefs.title} />
-          <div className="mt-10 hidden md:block">
-            <BannerImage
-              bannerImageUrl={DetailData.bannerImageUrl}
-              subImageUrl={subImageUrls}
-            />
-          </div>
-          <div className="mt-10 md:hidden">
-            <MobileBannerImage
-              bannerImageUrl={DetailData.bannerImageUrl}
-              subImageUrl={subImageUrls}
-            />
-          </div>
-
+          <BannerImage
+            bannerImageUrl={DetailData.bannerImageUrl}
+            subImageUrl={subImageUrls}
+          />
+          <MobileBannerImage
+            bannerImageUrl={DetailData.bannerImageUrl}
+            subImageUrl={subImageUrls}
+          />
           <div className="mt-10 flex">
-            <div className="mr-16 flex-1">
-              <Title
-                title={DetailData.title}
-                address={DetailData.address}
-                category={DetailData.category}
-                rating={DetailData.rating}
-                reviewCount={DetailData.reviewCount}
-              />
-              <div ref={sectionRefs.description} />
-              <Description description={DetailData.description} />
-
-              <div ref={sectionRefs.address} />
-              <Address address={DetailData.address} />
-
-              <div ref={sectionRefs.review} />
-              <Review
-                averageRating={ReviewData.averageRating}
-                totalCount={ReviewData.totalCount}
-                reviews={ReviewData.reviews}
-              />
-            </div>
-
+            <DetailContent
+              sectionRefs={sectionRefs}
+              detailData={DetailData}
+              reviewData={ReviewData}
+            />
             <div className="relative hidden w-3/12 min-w-300 md:block">
               <ActivitySideBar
                 price={DetailData.price}
                 schedules={DetailData.schedules}
               />
             </div>
-            <div className="md:hidden">
-              <MobileFooter />
-            </div>
           </div>
+          <MobileFooter />
         </div>
       </div>
     </>
