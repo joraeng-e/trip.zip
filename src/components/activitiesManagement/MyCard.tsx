@@ -2,11 +2,13 @@ import useClickOutside from '@/hooks/useClickOutside';
 import { deleteMyActivity } from '@/libs/api/myActivities';
 import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 
 import Modal from '../commons/Modal';
+import { notify } from '../commons/Toast';
 
 interface MyCardProps {
   id: number;
@@ -15,6 +17,10 @@ interface MyCardProps {
   reviewCount: number;
   title: string;
   price: number;
+}
+
+interface ErrorResponse {
+  message: string;
 }
 
 export default function MyCard({
@@ -35,17 +41,20 @@ export default function MyCard({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
       setIsDropdownOpen(false);
+      notify('success', '체험이 성공적으로 삭제되었습니다.');
     },
-    onError: (error) => {
-      console.error('Failed to delete activity:', error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      const errorMessage =
+        error.response?.data?.message || '체험 삭제에 실패했습니다.';
+      notify('error', errorMessage);
     },
   });
 
-  useClickOutside(dropdownRef, () => {
-    if (isDropdownOpen) {
-      setIsDropdownOpen(false);
-    }
-  });
+  // useClickOutside(dropdownRef, () => {
+  //   if (isDropdownOpen) {
+  //     setIsDropdownOpen(false);
+  //   }
+  // });
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
