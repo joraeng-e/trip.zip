@@ -1,7 +1,7 @@
 import DetailData from '@/../public/data/activityDetail.json';
 
 import BaseModal from '../BaseModal';
-import ActivitySideBar from './ReservationSideBar';
+import ReservationSideBar from './ReservationSideBar';
 
 interface MobileReservationModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export default function MobileReservationModal(
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose}>
-      <ActivitySideBar
+      <ReservationSideBar
         price={DetailData.price}
         schedules={DetailData.schedules}
         className="relative bottom-0 w-400"
