@@ -14,7 +14,7 @@ export default function MobileReservationModal(
   const { isOpen, onClose } = props;
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose}>
+    <BaseModal isOpen={isOpen} onClose={onClose} className="mx-60">
       <ReservationSideBar
         price={DetailData.price}
         schedules={DetailData.schedules}

@@ -82,12 +82,13 @@ export default function BannerImage(props: ImageProps) {
         >
           사진 모두 보기
         </button>
-
-        <ImageModal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          images={Images}
-        />
+        <div className="max-w-1200">
+          <ImageModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            images={Images}
+          />
+        </div>
       </div>
     </div>
   );

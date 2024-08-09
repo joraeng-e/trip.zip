@@ -22,7 +22,7 @@ export default function BaseModal(props: BaseModalProps) {
           onClick={onClose}
         >
           <motion.div
-            className={`relative h-auto max-h-full w-400 max-w-full overflow-auto rounded-md bg-white ${className}`}
+            className={`relative h-auto max-h-full w-auto max-w-1200 overflow-auto rounded-md bg-white ${className}`}
             initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.5 }}

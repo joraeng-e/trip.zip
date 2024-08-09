@@ -35,11 +35,7 @@ export default function BannerImageModal(props: BannerImageModalProps) {
   }, [currentIndex, totalImages]);
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      className="h-820 w-full max-w-1200"
-    >
+    <BaseModal isOpen={isOpen} onClose={onClose} className="mx-40 h-820">
       <div className="relative flex h-700 w-full items-center justify-center overflow-hidden">
         <div className="h-full w-full">
           <Image
@@ -59,7 +55,7 @@ export default function BannerImageModal(props: BannerImageModalProps) {
         className="mx-16 mt-16 flex cursor-pointer space-x-8 overflow-x-hidden"
       >
         {images.map((img, index) => (
-          <div className="my-10 ml-4 w-80 flex-none" key={index}>
+          <div className="my-10 mb-20 ml-4 w-80 flex-none" key={index}>
             <ThumbnailImage
               src={img}
               alt={`thumbnail-${index}`}
