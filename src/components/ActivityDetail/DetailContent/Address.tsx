@@ -1,7 +1,7 @@
 import { LocationIcon, PaperPlaneIcon } from '@/libs/utils/Icon';
 import React from 'react';
 
-import KakaoMap from '../commons/KakaoMap';
+import KakaoMap from '../../commons/KakaoMap';
 
 interface AddressProps {
   address: string;
