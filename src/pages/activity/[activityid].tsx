@@ -1,10 +1,11 @@
 import DetailData from '@/../public/data/activityDetail.json';
 import ReviewData from '@/../public/data/activityDetailReview.json';
-import { BannerImage, MobileBannerImage } from '@/components/ActivityDetail';
-import ActivitySideBar from '@/components/ActivityDetail/ActivitySideBar';
-import ActivityTabs from '@/components/ActivityDetail/ActivityTabs';
+import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
+import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
-import MobileFooter from '@/components/ActivityDetail/MobileReservationFooter';
+import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
+import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
+import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -18,7 +19,7 @@ export default function ActivityDetail() {
     .filter((url) => url);
 
   const [showHeader, setShowHeader] = useState(false);
-  const [activeSection, setActiveSection] = useState('title'); // 현재 활성화된 섹션
+  const [activeSection, setActiveSection] = useState('title');
 
   const sectionRefs = {
     title: useRef<HTMLDivElement>(null),
@@ -111,7 +112,7 @@ export default function ActivityDetail() {
               reviewData={ReviewData}
             />
             <div className="relative hidden w-3/12 min-w-300 md:block">
-              <ActivitySideBar
+              <ReservationSideBar
                 price={DetailData.price}
                 schedules={DetailData.schedules}
               />

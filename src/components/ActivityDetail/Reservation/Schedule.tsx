@@ -1,6 +1,6 @@
 import Button from '@/components/commons/Button';
 
-interface ActivityScheduleProps {
+interface ScheduleProps {
   selectedSchedules: { startTime: string; endTime: string }[];
   activeIndex: number | null;
   handleButtonClick: (
@@ -9,7 +9,7 @@ interface ActivityScheduleProps {
   ) => void;
 }
 
-export default function ActivitySchedule(props: ActivityScheduleProps) {
+export default function Schedule(props: ScheduleProps) {
   const { selectedSchedules, activeIndex, handleButtonClick } = props;
   return (
     <>

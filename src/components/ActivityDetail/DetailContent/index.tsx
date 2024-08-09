@@ -1,16 +1,15 @@
 import DetailData from '@/../public/data/activityDetail.json';
 import ReviewData from '@/../public/data/activityDetailReview.json';
 import {
-  Address,
-  Description,
-  Review,
-  Title,
-} from '@/components/ActivityDetail';
-import {
   GetActivityDetailResponse,
   GetActivityReviewsResponse,
 } from '@trip.zip-api';
 import React from 'react';
+
+import Review from '../Reivew';
+import Address from './Address';
+import Description from './Description';
+import Title from './Title';
 
 interface DetailContentProps {
   sectionRefs: {

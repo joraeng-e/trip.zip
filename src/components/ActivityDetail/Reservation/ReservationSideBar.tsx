@@ -2,9 +2,9 @@ import { CalendarStyle } from '@/styles/CalendarStyle';
 import moment from 'moment';
 import { useState } from 'react';
 
-import AvailableSchedules from './ActivitySchedule';
+import Schedule from './Schedule';
 
-interface ActivitySideBarProps {
+interface ReservationSideBarProps {
   price: number;
   schedules: {
     date: string;
@@ -18,7 +18,7 @@ type ValuePiece = Date | null;
 
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-export default function ActivitySideBar(props: ActivitySideBarProps) {
+export default function ReservationSideBar(props: ReservationSideBarProps) {
   const { price, schedules, className } = props;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -93,7 +93,7 @@ export default function ActivitySideBar(props: ActivitySideBarProps) {
         />
       </div>
       {selectedSchedules && selectedSchedules.length > 0 && (
-        <AvailableSchedules
+        <Schedule
           selectedSchedules={selectedSchedules}
           activeIndex={activeIndex}
           handleButtonClick={handleButtonClick}
