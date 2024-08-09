@@ -1,6 +1,7 @@
 import { CalendarStyle } from '@/styles/CalendarStyle';
 import moment from 'moment';
 import { useState } from 'react';
+import 'react-calendar/dist/Calendar.css';
 
 import Schedule from './Schedule';
 
@@ -73,7 +74,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     >
       <div className="my-10 text-center text-2xl-bold">
         {price}
-        <span className="text-lg-regular"> / 인</span>
+        <span className="text-lg-regular text-custom-gray-700"> / 인</span>
       </div>
       <div>
         <CalendarStyle
