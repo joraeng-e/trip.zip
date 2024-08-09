@@ -80,7 +80,10 @@ export default function EditActivityForm() {
     }: {
       activityId: number;
       data: FormData;
-    }) => patchMyActivity({ activityId, data }),
+    }) => {
+      console.log('서버로 전송되는 데이터:', Object.fromEntries(data));
+      return patchMyActivity({ activityId, data });
+    },
     onSuccess: (data: PatchMyActivityResponse) => {
       console.log('체험 수정 성공:', data);
       setModalMessage('체험 수정이 완료되었습니다.');
@@ -102,6 +105,7 @@ export default function EditActivityForm() {
   };
 
   const onSubmit = (data: PatchActivityFormData) => {
+    console.log('제출된 데이터:', data);
     const formData = new FormData();
 
     // PatchMyActivityRequest에 맞게 데이터 변환

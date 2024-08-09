@@ -1,4 +1,4 @@
-import MyCard from '@/components/activitiesManagement/myCard';
+import MyCard from '@/components/activitiesManagement/MyCard';
 import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';

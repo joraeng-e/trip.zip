@@ -41,11 +41,11 @@ export default function MyCard({
     },
   });
 
-  // useClickOutside(dropdownRef, () => {
-  //   if (isDropdownOpen) {
-  //     setIsDropdownOpen(false);
-  //   }
-  // });
+  useClickOutside(dropdownRef, () => {
+    if (isDropdownOpen) {
+      setIsDropdownOpen(false);
+    }
+  });
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);

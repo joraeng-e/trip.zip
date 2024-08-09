@@ -177,7 +177,7 @@ export default function DateTime({
             />
             <input
               type="text"
-              className="basic-input w-full max-w-136"
+              className="basic-input w-full max-w-133"
               {...register(`schedules.${index}.startTime` as const)}
             />
             <div className="hidden md:block">
@@ -185,7 +185,7 @@ export default function DateTime({
             </div>
             <input
               type="text"
-              className="basic-input w-full max-w-136"
+              className="basic-input w-full max-w-135"
               {...register(`schedules.${index}.endTime` as const)}
             />
             <button
