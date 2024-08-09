@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import ImageCounter from '../ImageCounter';
-import ImageNavButton from '../ImageNavButton';
-import ThumbnailImage from '../ThumbnailImage';
 import BlurBannerImage from './BlurBannerImage';
+import ImageCounter from './ImageCounter';
+import ImageNavButton from './ImageNavButton';
+import ThumbnailImage from './ThumbnailImage';
 
 interface MobileImageProps {
   bannerImageUrl: string;

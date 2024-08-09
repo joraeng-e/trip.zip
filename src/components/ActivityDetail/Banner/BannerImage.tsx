@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import ImageModal from '../ImageModal';
+import ImageModal from './BannerImageModal';
 
 interface ImageProps {
   bannerImageUrl: string;
