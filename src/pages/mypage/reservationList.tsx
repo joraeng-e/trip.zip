@@ -34,7 +34,7 @@ export default function ReservationList() {
     <MyPageLayout>
       <div className="mb-100 h-fit">
         <div className="mb-30 flex w-full items-center justify-between">
-          <h1 className="text-3xl font-bold">예약 내역</h1>
+          <h1 className="text-3xl-bold">예약 내역</h1>
           <Dropdown
             selected={value}
             setSelected={setValue}
@@ -43,19 +43,12 @@ export default function ReservationList() {
             height={50}
           >
             <Dropdown.Button className="w-100 rounded-xl border-2 border-custom-green-200 py-10 md:w-160">
-              {value === ''
-                ? '전체 보기'
-                : value === 'pending'
-                  ? '예약 신청'
-                  : value === 'canceled'
-                    ? '예약 취소'
-                    : value === 'confirmed'
-                      ? '예약 승인'
-                      : value === 'declined'
-                        ? '예약 거절'
-                        : value === 'completed'
-                          ? '체험 완료'
-                          : '전체 보기'}
+              {value === '' && '전체 보기'}
+              {value === 'pending' && '예약 신청'}
+              {value === 'canceled' && '예약 취소'}
+              {value === 'confirmed' && '예약 승인'}
+              {value === 'declined' && '예약 거절'}
+              {value === 'completed' && '체험 완료'}
             </Dropdown.Button>
             <Dropdown.Body>
               <Dropdown.Item value="">전체 보기</Dropdown.Item>
