@@ -3,32 +3,70 @@ import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
 import { getMyReservations } from '@/libs/api/myReservations';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { GetMyReservationsResponse, ReservationStatus } from '@trip.zip-api';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+
+const CARD_PER_PAGE = 5;
 
 export default function ReservationList() {
   const [value, setValue] = useState<string>('');
+  const lastCardRef = useRef<HTMLDivElement | null>(null);
 
   // 필터가 없을 경우 전체를 조회하도록 status 설정
   const status: ReservationStatus | undefined =
     value === '' ? undefined : (value as ReservationStatus);
 
-  const { data: reservationData } = useQuery<GetMyReservationsResponse>({
+  // useInfiniteQuery를 사용해 페이지 단위로 예약 데이터 조회
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status: queryStatus,
+  } = useInfiniteQuery<GetMyReservationsResponse>({
     queryKey: ['reservations', value],
-    queryFn: () =>
+    queryFn: ({ pageParam = undefined }) =>
       getMyReservations({
-        size: 20,
+        cursorId: pageParam !== undefined ? Number(pageParam) : undefined,
+        size: CARD_PER_PAGE,
         status: status,
       }),
+    getNextPageParam: (lastPage) => lastPage.cursorId,
+    initialPageParam: undefined,
   });
 
-  // 데이터가 undefined일 경우, 빈 배열([])을 기본값으로 설정
-  const reservations = reservationData?.reservations || [];
+  // 모든 예약을 최신순으로 정렬
+  const sortedReservations = useMemo(() => {
+    if (!data) return [];
+    return data.pages
+      .flatMap((page) => page.reservations)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [data]);
 
-  const sortedReservations = reservations.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  // IntersectionObserver를 사용해 마지막 카드가 화면에 보일 때 다음 페이지 로드
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    const currentLastCard = lastCardRef.current;
+    if (currentLastCard) {
+      observer.observe(currentLastCard);
+    }
+
+    return () => {
+      if (currentLastCard) {
+        observer.unobserve(currentLastCard);
+      }
+      observer.disconnect();
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <MyPageLayout>
@@ -60,12 +98,23 @@ export default function ReservationList() {
             </Dropdown.Body>
           </Dropdown>
         </div>
-        {!sortedReservations.length ? (
+
+        {sortedReservations.length === 0 ? (
           <NoActivity />
         ) : (
-          sortedReservations.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
-          ))
+          <>
+            {sortedReservations.map((reservation, index) => (
+              <div
+                ref={
+                  index === sortedReservations.length - 1 ? lastCardRef : null
+                }
+                key={reservation.id}
+              >
+                <ReservationCard reservation={reservation} />
+              </div>
+            ))}
+            {isFetchingNextPage && <div>로딩 중...</div>}
+          </>
         )}
       </div>
     </MyPageLayout>
