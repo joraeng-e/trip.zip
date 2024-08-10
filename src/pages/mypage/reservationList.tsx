@@ -18,23 +18,18 @@ export default function ReservationList() {
     value === '' ? undefined : (value as ReservationStatus);
 
   // useInfiniteQuery를 사용해 페이지 단위로 예약 데이터 조회
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    status: queryStatus,
-  } = useInfiniteQuery<GetMyReservationsResponse>({
-    queryKey: ['reservations', value],
-    queryFn: ({ pageParam = undefined }) =>
-      getMyReservations({
-        cursorId: pageParam !== undefined ? Number(pageParam) : undefined,
-        size: CARD_PER_PAGE,
-        status: status,
-      }),
-    getNextPageParam: (lastPage) => lastPage.cursorId,
-    initialPageParam: undefined,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery<GetMyReservationsResponse>({
+      queryKey: ['reservations', value],
+      queryFn: ({ pageParam = undefined }) =>
+        getMyReservations({
+          cursorId: pageParam !== undefined ? Number(pageParam) : undefined,
+          size: CARD_PER_PAGE,
+          status: status,
+        }),
+      getNextPageParam: (lastPage) => lastPage.cursorId,
+      initialPageParam: undefined,
+    });
 
   // 모든 예약을 최신순으로 정렬
   const sortedReservations = useMemo(() => {
