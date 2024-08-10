@@ -1,3 +1,5 @@
+import DateTime from '@/components/ActivitiyForm/DateTime';
+import type { DateTimeInput } from '@/components/ActivitiyForm/DateTime';
 import EditDateTime from '@/components/ActivitiyForm/EditDateTIme';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import Button from '@/components/commons/Button';
@@ -5,7 +7,6 @@ import Input from '@/components/commons/Input/Input';
 import Textarea from '@/components/commons/Input/Textarea';
 import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
-import { notify } from '@/components/commons/Toast';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { getActivityDetail } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
@@ -28,9 +29,8 @@ export default function EditActivityForm() {
 
   const [category, setCategory] = useState('');
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
-  const [schedulesToAdd, setSchedulesToAdd] = useState<
-    Omit<GetActivityDetailResponse['schedules'][0], 'id'>[]
-  >([]);
+  const [schedulesToAdd, setSchedulesToAdd] = useState<DateTimeInput[]>([]);
+
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
   const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,7 +82,6 @@ export default function EditActivityForm() {
       }
       setModalMessage('체험이 성공적으로 수정되었습니다.');
       setIsModalOpen(true);
-      notify('success', '체험이 성공적으로 수정되었습니다.');
     },
     onError: () => {
       setModalMessage('체험 수정 중 오류가 발생했습니다.');
@@ -111,11 +110,10 @@ export default function EditActivityForm() {
       address: data.address,
       bannerImageUrl: data.bannerImageUrl,
       subImageIdsToRemove,
-      subImageUrlsToAdd, // This will now reference the state
+      subImageUrlsToAdd,
       scheduleIdsToRemove,
       schedulesToAdd,
     };
-    console.log(formData);
     updateActivityMutation.mutateAsync({ activityId, data: formData });
   };
 
@@ -123,9 +121,7 @@ export default function EditActivityForm() {
     setScheduleIdsToRemove((prev) => [...prev, scheduleId]);
   };
 
-  const handleScheduleAdd = (
-    newSchedule: Omit<GetActivityDetailResponse['schedules'][0], 'id'>,
-  ) => {
+  const handleScheduleAdd = (newSchedule: DateTimeInput) => {
     setSchedulesToAdd((prev) => [...prev, newSchedule]);
   };
 
@@ -214,8 +210,9 @@ export default function EditActivityForm() {
               maxWidth="792px"
             />
             <h3>예약 가능한 시간대</h3>
-            <EditDateTime
-              existingSchedules={activityData.schedules}
+            <DateTime
+              isEditMode={true}
+              existingSchedules={activityData?.schedules || []}
               onScheduleRemove={handleScheduleRemove}
               onScheduleAdd={handleScheduleAdd}
             />

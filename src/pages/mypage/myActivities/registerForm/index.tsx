@@ -169,7 +169,7 @@ export default function MyActivityForm() {
               maxWidth="792px"
             />
             <h3>예약 가능한 시간대</h3>
-            <DateTime />
+            <DateTime isEditMode={false} />
             <h3>배너 이미지</h3>
             <ImageUploader
               name="bannerImageUrl"

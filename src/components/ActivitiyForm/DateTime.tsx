@@ -4,70 +4,103 @@ import {
   TimeSeparatorIcon,
 } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
-import { PostActivitiesRequest } from '@trip.zip-api';
-import { useMemo, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-interface DateTimeInput {
+export interface DateTimeInput {
   date: string;
   startTime: string;
   endTime: string;
 }
-export default function DateTime() {
+
+interface Schedule extends DateTimeInput {
+  id: number;
+}
+
+interface DateTimeProps {
+  isEditMode?: boolean;
+  existingSchedules?: Schedule[];
+  onScheduleRemove?: (scheduleId: number) => void;
+  onScheduleAdd?: (schedule: DateTimeInput) => void;
+}
+
+export default function DateTime({
+  isEditMode = false,
+  existingSchedules = [],
+  onScheduleRemove,
+  onScheduleAdd,
+}: DateTimeProps) {
   const todayDate = new Date().toLocaleDateString('en-CA');
   const {
-    register,
-    control,
-    getValues,
-    trigger,
     formState: { errors },
+    setValue,
+    trigger,
     setError,
     clearErrors,
-  } = useFormContext<PostActivitiesRequest>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'schedules',
-  });
+    register,
+  } = useFormContext();
+  const [schedules, setSchedules] = useState<Schedule[]>(existingSchedules);
   const [entry, setEntry] = useState<DateTimeInput>({
     date: todayDate,
     startTime: '',
     endTime: '',
   });
+
+  useEffect(() => {
+    if (existingSchedules.length > 0) {
+      setSchedules(existingSchedules);
+      setValue('schedules', existingSchedules);
+    }
+  }, [existingSchedules, setValue]);
+
+  const isDuplicateEntry = (newEntry: DateTimeInput) => {
+    return schedules.some(
+      ({ date, startTime }) =>
+        date === newEntry.date && startTime === newEntry.startTime,
+    );
+  };
+
   const handleDateTimeInputChange = ({
     target: { id, value },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setEntry((prevEntry) => ({ ...prevEntry, [id]: value }));
     clearErrors('schedules');
   };
+
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
-    return date && startTime && endTime && startTime < endTime;
-  }, [entry, todayDate]);
-  const isDuplicateEntry = (newEntry: DateTimeInput) => {
-    return getValues('schedules').some(
-      ({ date, startTime }) =>
-        date === newEntry.date && startTime === newEntry.startTime,
+    return (
+      date && startTime && endTime && date >= todayDate && startTime < endTime
     );
-  };
+  }, [entry, todayDate]);
+
   const handleAddEntry = async () => {
     if (isDuplicateEntry(entry)) {
       setError('schedules', {
         type: 'manual',
         message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
       });
-    } else if (entry.startTime >= entry.endTime) {
-      setError('schedules', {
-        type: 'manual',
-        message: '시작 시간은 종료 시간보다 빨라야 합니다.',
-      });
     } else {
-      append(entry);
+      const newSchedule: Schedule = { ...entry, id: Date.now() };
+      if (isEditMode && onScheduleAdd) {
+        onScheduleAdd(entry);
+      }
+      setSchedules([...schedules, newSchedule]);
       setEntry({ date: todayDate, startTime: '', endTime: '' });
+      setValue('schedules', [...schedules, newSchedule]);
       await trigger('schedules');
     }
   };
-  const handleRemoveEntry = (index: number) => {
-    remove(index);
+
+  const handleRemoveEntry = (scheduleId: number) => {
+    if (isEditMode && onScheduleRemove) {
+      onScheduleRemove(scheduleId);
+    }
+    const updatedSchedules = schedules.filter(
+      (schedule) => schedule.id !== scheduleId,
+    );
+    setSchedules(updatedSchedules);
+    setValue('schedules', updatedSchedules);
     trigger('schedules');
   };
 
@@ -140,22 +173,22 @@ export default function DateTime() {
         </div>
       )}
       <div className="space-y-4">
-        {fields.map((field, index) => (
+        {schedules.map((schedule) => (
           <div
-            key={field.id}
+            key={schedule.id}
             className="flex max-w-792 items-center justify-between gap-5"
           >
             <input
               type="text"
               readOnly
               className="basic-input w-full max-w-380"
-              {...register(`schedules.${index}.date` as const)}
+              value={schedule.date}
             />
             <input
               type="text"
               readOnly
               className="basic-input w-full max-w-136"
-              {...register(`schedules.${index}.startTime` as const)}
+              value={schedule.startTime}
             />
             <div className="hidden md:block">
               <TimeSeparatorIcon />
@@ -164,11 +197,11 @@ export default function DateTime() {
               type="text"
               readOnly
               className="basic-input w-full max-w-136"
-              {...register(`schedules.${index}.endTime` as const)}
+              value={schedule.endTime}
             />
             <button
               type="button"
-              onClick={() => handleRemoveEntry(index)}
+              onClick={() => handleRemoveEntry(schedule.id)}
               aria-label="일정 제거"
             >
               <MinusTimeIcon className="text-white hover:text-gray-200" />
