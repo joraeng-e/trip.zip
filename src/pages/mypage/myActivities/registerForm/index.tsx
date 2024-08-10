@@ -3,13 +3,12 @@ import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
 import type { ActivitiesFormData } from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Category,
   PostActivitiesRequest,
   PostActivitiesResponse,
 } from '@trip.zip-api';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
@@ -26,6 +25,7 @@ import MyPageLayout from '../../../../components/mypage/MyPageLayout';
 
 export default function MyActivityForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
@@ -45,10 +45,11 @@ export default function MyActivityForm() {
     trigger,
   } = methods;
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
+      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
       setModalMessage('체험 등록이 완료되었습니다.');
       setIsModalOpen(true);
       setIsSuccessMessage(true);
@@ -197,11 +198,6 @@ export default function MyActivityForm() {
               *이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          {isError && (
-            <p className="mt-4 text-red-500">
-              체험 등록 중 오류가 발생했습니다.
-            </p>
-          )}
         </form>
       </FormProvider>
     </MyPageLayout>

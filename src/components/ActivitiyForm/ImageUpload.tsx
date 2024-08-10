@@ -12,6 +12,7 @@ interface ImageUploadProps {
   label?: string;
   existingImages?: { id: number; imageUrl: string }[];
   onImageRemove?: (imageId: number) => void;
+  onSuccess?: (uploadedUrl: string) => void;
 }
 
 export default function ImageUploader({
@@ -20,6 +21,7 @@ export default function ImageUploader({
   label = '이미지 등록',
   existingImages = [],
   onImageRemove,
+  onSuccess,
 }: ImageUploadProps) {
   const { setValue } = useFormContext();
   const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>(
@@ -29,13 +31,14 @@ export default function ImageUploader({
   const imageUploadMutation = useMutation({
     mutationFn: postActivityImage,
     onSuccess: (data) => {
+      const newUrl = data.activityImageUrl;
       setImagePreviewUrls((prevUrls) => {
-        const updatedUrls = [...prevUrls, data.activityImageUrl].slice(
-          0,
-          maxImages,
-        );
+        const updatedUrls = [...prevUrls, newUrl].slice(0, maxImages);
         return Array.from(new Set(updatedUrls));
       });
+      if (onSuccess) {
+        onSuccess(newUrl); // 성공 시 부모 컴포넌트로 URL을 전달
+      }
     },
     onError: (error) => {
       console.error('이미지 업로드 실패:', error);
@@ -69,8 +72,9 @@ export default function ImageUploader({
   const handleDelete = (index: number) => {
     const imageToDelete = existingImages[index];
     if (imageToDelete && onImageRemove) {
-      onImageRemove(imageToDelete.id);
+      onImageRemove(imageToDelete.id); // 이미지 ID를 부모 컴포넌트로 전달하여 삭제 처리
     }
+
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
     setImagePreviewUrls(updatedUrls);
   };

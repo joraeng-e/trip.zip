@@ -4,76 +4,96 @@ import {
   TimeSeparatorIcon,
 } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
-import { PostActivitiesRequest } from '@trip.zip-api';
-import { useMemo, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  GetActivityDetailResponse,
+  PostActivitiesRequest,
+} from '@trip.zip-api';
+import { useEffect, useMemo, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
-interface DateTimeInput {
-  date: string;
-  startTime: string;
-  endTime: string;
+interface DateTimeProps {
+  existingSchedules: GetActivityDetailResponse['schedules'];
+  onScheduleRemove: (scheduleId: number) => void;
+  onScheduleAdd: (
+    schedule: Omit<GetActivityDetailResponse['schedules'][0], 'id'>,
+  ) => void;
 }
-export default function DateTime() {
+
+export default function EditDateTime({
+  existingSchedules,
+  onScheduleRemove,
+  onScheduleAdd,
+}: DateTimeProps) {
   const todayDate = new Date().toLocaleDateString('en-CA');
   const {
-    register,
-    control,
-    getValues,
+    setValue,
     trigger,
     formState: { errors },
     setError,
     clearErrors,
   } = useFormContext<PostActivitiesRequest>();
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'schedules',
-  });
-  const [entry, setEntry] = useState<DateTimeInput>({
+
+  const [schedules, setSchedules] = useState<
+    GetActivityDetailResponse['schedules']
+  >(existingSchedules || []);
+
+  const [entry, setEntry] = useState({
     date: todayDate,
     startTime: '',
     endTime: '',
   });
+
+  useEffect(() => {
+    setValue('schedules', schedules);
+  }, [schedules, setValue]);
+
   const handleDateTimeInputChange = ({
     target: { id, value },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setEntry((prevEntry) => ({ ...prevEntry, [id]: value }));
     clearErrors('schedules');
   };
+
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
-    return date && startTime && endTime && startTime < endTime;
+    return (
+      date && startTime && endTime && date >= todayDate && startTime < endTime
+    );
   }, [entry, todayDate]);
-  const isDuplicateEntry = (newEntry: DateTimeInput) => {
-    return getValues('schedules').some(
+
+  const isDuplicateEntry = (newEntry: typeof entry) => {
+    return schedules.some(
       ({ date, startTime }) =>
         date === newEntry.date && startTime === newEntry.startTime,
     );
   };
+
   const handleAddEntry = async () => {
     if (isDuplicateEntry(entry)) {
       setError('schedules', {
         type: 'manual',
         message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
       });
-    } else if (entry.startTime >= entry.endTime) {
-      setError('schedules', {
-        type: 'manual',
-        message: '시작 시간은 종료 시간보다 빨라야 합니다.',
-      });
     } else {
-      append(entry);
+      const newSchedule = { ...entry };
+      onScheduleAdd(newSchedule);
+      setSchedules([...schedules, { ...newSchedule, id: Date.now() }]);
       setEntry({ date: todayDate, startTime: '', endTime: '' });
       await trigger('schedules');
+      console.log('New schedule added:', newSchedule);
     }
   };
-  const handleRemoveEntry = (index: number) => {
-    remove(index);
+
+  const handleRemoveEntry = (scheduleId: number) => {
+    onScheduleRemove(scheduleId);
+    setSchedules(schedules.filter((schedule) => schedule.id !== scheduleId));
     trigger('schedules');
+    console.log('Schedule removed:', scheduleId);
   };
 
   return (
     <div className="space-y-4">
-      <div className="flex max-w-792 flex-wrap items-center justify-between gap-5">
+      <div className="flex w-full items-center justify-between gap-5">
         <div className="flex w-full max-w-380 flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
@@ -140,35 +160,55 @@ export default function DateTime() {
         </div>
       )}
       <div className="space-y-4">
-        {fields.map((field, index) => (
+        {schedules.map((schedule) => (
           <div
-            key={field.id}
-            className="flex max-w-792 items-center justify-between gap-5"
+            key={schedule.id}
+            className="flex items-center justify-between gap-5"
           >
             <input
               type="text"
-              readOnly
               className="basic-input w-full max-w-380"
-              {...register(`schedules.${index}.date` as const)}
+              value={schedule.date}
+              readOnly
+              onChange={(e) => {
+                const newSchedules = schedules.map((s) =>
+                  s.id === schedule.id ? { ...s, date: e.target.value } : s,
+                );
+                setSchedules(newSchedules);
+              }}
             />
             <input
               type="text"
+              className="basic-input w-full max-w-133"
+              value={schedule.startTime}
               readOnly
-              className="basic-input w-full max-w-136"
-              {...register(`schedules.${index}.startTime` as const)}
+              onChange={(e) => {
+                const newSchedules = schedules.map((s) =>
+                  s.id === schedule.id
+                    ? { ...s, startTime: e.target.value }
+                    : s,
+                );
+                setSchedules(newSchedules);
+              }}
             />
             <div className="hidden md:block">
               <TimeSeparatorIcon />
             </div>
             <input
               type="text"
+              className="basic-input w-full max-w-135"
+              value={schedule.endTime}
               readOnly
-              className="basic-input w-full max-w-136"
-              {...register(`schedules.${index}.endTime` as const)}
+              onChange={(e) => {
+                const newSchedules = schedules.map((s) =>
+                  s.id === schedule.id ? { ...s, endTime: e.target.value } : s,
+                );
+                setSchedules(newSchedules);
+              }}
             />
             <button
               type="button"
-              onClick={() => handleRemoveEntry(index)}
+              onClick={() => handleRemoveEntry(schedule.id)}
               aria-label="일정 제거"
             >
               <MinusTimeIcon className="text-white hover:text-gray-200" />

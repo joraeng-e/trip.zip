@@ -1,20 +1,22 @@
-import DateTime from '@/components/ActivitiyForm/DateTime';
+import EditDateTime from '@/components/ActivitiyForm/EditDateTIme';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Textarea from '@/components/commons/Input/Textarea';
 import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
+import { notify } from '@/components/commons/Toast';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { getActivityDetail } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import {
-  PatchActivityFormData,
-  patchActivitySchema,
-} from '@/libs/utils/schemas/patchActivitiySchema';
+  ActivitiesFormData,
+  activitiesSchema,
+} from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { GetActivityDetailResponse } from '@trip.zip-api';
 import { Category, PatchMyActivityRequest } from '@trip.zip-api';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -26,25 +28,24 @@ export default function EditActivityForm() {
 
   const [category, setCategory] = useState('');
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
+  const [schedulesToAdd, setSchedulesToAdd] = useState<
+    Omit<GetActivityDetailResponse['schedules'][0], 'id'>[]
+  >([]);
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
+  const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-
+  const queryClient = useQueryClient();
   const activityId = typeof id === 'string' ? parseInt(id, 10) : undefined;
 
   const { data: activityData, isLoading } = useQuery({
     queryKey: ['activity', activityId],
-    queryFn: async () => {
-      if (typeof activityId !== 'number') {
-        throw new Error('유효하지 않은 ID');
-      }
-      return getActivityDetail(activityId);
-    },
-    enabled: typeof activityId === 'number',
+    queryFn: () => getActivityDetail(activityId!),
+    enabled: !!activityId,
   });
 
-  const methods = useForm<PatchActivityFormData>({
-    resolver: yupResolver(patchActivitySchema),
+  const methods = useForm<ActivitiesFormData>({
+    resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
   });
 
@@ -62,7 +63,6 @@ export default function EditActivityForm() {
       setValue('description', activityData.description);
       setValue('price', activityData.price);
       setValue('address', activityData.address);
-      setValue('bannerImageUrl', activityData.bannerImageUrl);
       setCategory(activityData.category);
     }
   }, [activityData, setValue]);
@@ -76,8 +76,13 @@ export default function EditActivityForm() {
       data: PatchMyActivityRequest;
     }) => patchMyActivity({ activityId, data }),
     onSuccess: () => {
+      if (activityId !== undefined) {
+        queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
+        queryClient.invalidateQueries({ queryKey: ['myActivities'] });
+      }
       setModalMessage('체험이 성공적으로 수정되었습니다.');
       setIsModalOpen(true);
+      notify('success', '체험이 성공적으로 수정되었습니다.');
     },
     onError: () => {
       setModalMessage('체험 수정 중 오류가 발생했습니다.');
@@ -91,7 +96,7 @@ export default function EditActivityForm() {
     setValue('category', selectedCategory);
   };
 
-  const onSubmit = (data: PatchActivityFormData) => {
+  const onSubmit = (data: ActivitiesFormData) => {
     if (!activityId) {
       setModalMessage('유효하지 않은 체험 ID입니다.');
       setIsModalOpen(true);
@@ -106,17 +111,36 @@ export default function EditActivityForm() {
       address: data.address,
       bannerImageUrl: data.bannerImageUrl,
       subImageIdsToRemove,
-      subImageUrlsToAdd: data.subImageUrlsToAdd || [],
+      subImageUrlsToAdd, // This will now reference the state
       scheduleIdsToRemove,
-      schedulesToAdd: data.schedulesToAdd || [],
+      schedulesToAdd,
     };
+    console.log(formData);
+    updateActivityMutation.mutateAsync({ activityId, data: formData });
+  };
 
-    updateActivityMutation.mutate({ activityId: activityId, data: formData });
+  const handleScheduleRemove = (scheduleId: number) => {
+    setScheduleIdsToRemove((prev) => [...prev, scheduleId]);
+  };
+
+  const handleScheduleAdd = (
+    newSchedule: Omit<GetActivityDetailResponse['schedules'][0], 'id'>,
+  ) => {
+    setSchedulesToAdd((prev) => [...prev, newSchedule]);
+  };
+
+  const handleImageRemove = (imageId: number) => {
+    setSubImageIdsToRemove((prev) => [...prev, imageId]);
+  };
+
+  const handleImageUploadSuccess = (uploadedUrl: string) => {
+    setSubImageUrlsToAdd((prevUrls) => [...prevUrls, uploadedUrl]);
   };
 
   const resetModalMessage = () => {
     setModalMessage('');
     setIsModalOpen(false);
+    router.push('/mypage/myActivities');
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -190,11 +214,10 @@ export default function EditActivityForm() {
               maxWidth="792px"
             />
             <h3>예약 가능한 시간대</h3>
-            <DateTime
+            <EditDateTime
               existingSchedules={activityData.schedules}
-              onScheduleRemove={(scheduleId) =>
-                setScheduleIdsToRemove((prev) => [...prev, scheduleId])
-              }
+              onScheduleRemove={handleScheduleRemove}
+              onScheduleAdd={handleScheduleAdd}
             />
             <h3>배너 이미지</h3>
             <ImageUploader
@@ -213,10 +236,9 @@ export default function EditActivityForm() {
                 name="subImageUrlsToAdd"
                 maxImages={4}
                 label="소개 이미지 등록"
-                existingImages={activityData.subImageUrls}
-                onImageRemove={(imageId) =>
-                  setSubImageIdsToRemove((prev) => [...prev, imageId])
-                }
+                existingImages={activityData.subImages}
+                onImageRemove={handleImageRemove}
+                onSuccess={handleImageUploadSuccess}
               />
             </div>
             <p className="text-custom-gray-800">
