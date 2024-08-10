@@ -1,6 +1,5 @@
 import DateTime from '@/components/ActivitiyForm/DateTime';
 import type { DateTimeInput } from '@/components/ActivitiyForm/DateTime';
-import EditDateTime from '@/components/ActivitiyForm/EditDateTIme';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
@@ -17,7 +16,6 @@ import {
 } from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { GetActivityDetailResponse } from '@trip.zip-api';
 import { Category, PatchMyActivityRequest } from '@trip.zip-api';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useState } from 'react';
