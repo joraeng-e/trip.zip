@@ -1,4 +1,4 @@
-import Signup from '@/pages/signup';
+import Signup from '@/pages/signup/signup';
 import { useMutation } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
