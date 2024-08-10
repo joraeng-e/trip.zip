@@ -62,9 +62,7 @@ export default function DateTime({
 
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
-    return (
-      date && startTime && endTime && date >= todayDate && startTime < endTime
-    );
+    return date && startTime && endTime && date >= todayDate;
   }, [entry, todayDate]);
 
   const isDuplicateEntry = (newEntry: DateTimeInput) => {
@@ -79,6 +77,11 @@ export default function DateTime({
       setError('schedules', {
         type: 'manual',
         message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
+      });
+    } else if (entry.startTime >= entry.endTime) {
+      setError('schedules', {
+        type: 'manual',
+        message: '시작 시간은 종료 시간보다 빨라야 합니다.',
       });
     } else {
       append(entry);

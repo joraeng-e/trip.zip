@@ -26,7 +26,8 @@ export const patchActivitySchema = yup.object().shape({
   subImageIdsToRemove: yup.array().of(yup.number()).default([]),
   subImageUrlsToAdd: yup
     .array()
-    .of(yup.string().url('유효한 URL을 입력해주세요.'))
+    .of(yup.string().url('유효한 URL을 입력해주세요.').defined())
+    .defined()
     .max(4, '최대 4개의 소개 이미지를 등록할 수 있습니다.')
     .default([]),
   scheduleIdsToRemove: yup.array().of(yup.number()).default([]),

@@ -127,6 +127,7 @@ export default function ImageUploader({
               src={url}
               alt="미리보기 이미지"
               fill
+              sizes="206px"
               className="mr-14 rounded-lg object-cover"
             />
             <button

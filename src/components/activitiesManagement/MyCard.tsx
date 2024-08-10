@@ -41,11 +41,11 @@ export default function MyCard({
     },
   });
 
-  useClickOutside(dropdownRef, () => {
-    if (isDropdownOpen) {
-      setIsDropdownOpen(false);
-    }
-  });
+  // useClickOutside(dropdownRef, () => {
+  //   if (isDropdownOpen) {
+  //     setIsDropdownOpen(false);
+  //   }
+  // });
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -66,10 +66,11 @@ export default function MyCard({
           src={bannerImageUrl}
           alt={title}
           layout="fill"
-          objectFit="cover"
+          sizes="153px"
+          className="object-cover"
         />
       </div>
-      <div className="flex flex-1 flex-col justify-between p-16">
+      <div className="flex flex-1 flex-col justify-between p-16 hover:bg-gray-100">
         <div className="flex items-center justify-between">
           <div>
             <div className="mb-4 flex items-center">
@@ -81,10 +82,7 @@ export default function MyCard({
             <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
           </div>
           <div className="relative">
-            <button
-              className="text-gray-400 hover:text-gray-600"
-              onClick={toggleDropdown}
-            >
+            <button onClick={toggleDropdown}>
               <KebabIcon />
             </button>
             {isDropdownOpen && (
