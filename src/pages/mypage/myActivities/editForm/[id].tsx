@@ -24,6 +24,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 export default function EditActivityForm() {
   const router = useRouter();
   const { id } = router.query;
+  const activityId = Number(id);
 
   const [category, setCategory] = useState('');
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
@@ -34,7 +35,6 @@ export default function EditActivityForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const queryClient = useQueryClient();
-  const activityId = typeof id === 'string' ? parseInt(id, 10) : undefined;
 
   const { data: activityData, isLoading } = useQuery({
     queryKey: ['activity', activityId],
@@ -99,12 +99,13 @@ export default function EditActivityForm() {
       setIsModalOpen(true);
       return;
     }
+    const roundedPrice = Math.round(data.price);
 
     const formData: PatchMyActivityRequest = {
       title: data.title,
       category: data.category,
       description: data.description,
-      price: data.price,
+      price: roundedPrice,
       address: data.address,
       bannerImageUrl: data.bannerImageUrl,
       subImageIdsToRemove,
@@ -127,7 +128,7 @@ export default function EditActivityForm() {
     setSubImageIdsToRemove((prev) => [...prev, imageId]);
   };
 
-  const handleImageUploadSuccess = (uploadedUrl: string) => {
+  const handleImageUrlAdd = (uploadedUrl: string) => {
     setSubImageUrlsToAdd((prevUrls) => [...prevUrls, uploadedUrl]);
   };
 
@@ -233,7 +234,7 @@ export default function EditActivityForm() {
                 label="소개 이미지 등록"
                 existingImages={activityData.subImages}
                 onImageRemove={handleImageRemove}
-                onSuccess={handleImageUploadSuccess}
+                onSuccess={handleImageUrlAdd}
               />
             </div>
             <p className="text-custom-gray-800">

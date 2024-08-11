@@ -37,7 +37,6 @@ export default function DateTime({
     trigger,
     setError,
     clearErrors,
-    register,
   } = useFormContext();
   const [schedules, setSchedules] = useState<Schedule[]>(existingSchedules);
   const [entry, setEntry] = useState<DateTimeInput>({
@@ -53,13 +52,6 @@ export default function DateTime({
     }
   }, [existingSchedules, setValue]);
 
-  const isDuplicateEntry = (newEntry: DateTimeInput) => {
-    return schedules.some(
-      ({ date, startTime }) =>
-        date === newEntry.date && startTime === newEntry.startTime,
-    );
-  };
-
   const handleDateTimeInputChange = ({
     target: { id, value },
   }: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,33 +61,54 @@ export default function DateTime({
 
   const isValidEntry = useMemo(() => {
     const { date, startTime, endTime } = entry;
-    return (
-      date && startTime && endTime && date >= todayDate && startTime < endTime
-    );
+    return date && startTime && endTime && date >= todayDate;
   }, [entry, todayDate]);
 
+  const isDuplicateEntry = (newEntry: DateTimeInput) => {
+    return schedules.some(
+      ({ date, startTime }) =>
+        date === newEntry.date && startTime === newEntry.startTime,
+    );
+  };
+
+  const setScheduleError = (message: string) => {
+    setError('schedules', { type: 'manual', message });
+  };
+
+  const updateSchedules = (newSchedule: Schedule) => {
+    setSchedules((prev) => [...prev, newSchedule]);
+    setValue('schedules', [...schedules, newSchedule]);
+  };
+
   const handleAddEntry = async () => {
+    if (!isValidEntry) return;
+
     if (isDuplicateEntry(entry)) {
-      setError('schedules', {
-        type: 'manual',
-        message: '중복된 시작 시간입니다. 다른 시간을 선택해주세요.',
-      });
-    } else {
-      const newSchedule: Schedule = { ...entry, id: Date.now() };
-      if (isEditMode && onScheduleAdd) {
-        onScheduleAdd(entry);
-      }
-      setSchedules([...schedules, newSchedule]);
-      setEntry({ date: todayDate, startTime: '', endTime: '' });
-      setValue('schedules', [...schedules, newSchedule]);
-      await trigger('schedules');
+      setScheduleError('중복된 시작 시간입니다. 다른 시간을 선택해주세요.');
+      return;
     }
+
+    if (entry.startTime >= entry.endTime) {
+      setScheduleError('시작 시간은 종료 시간보다 빨라야 합니다.');
+      return;
+    }
+
+    const newSchedule: Schedule = { ...entry, id: Date.now() };
+
+    if (isEditMode && onScheduleAdd) {
+      onScheduleAdd(entry);
+    }
+
+    updateSchedules(newSchedule);
+    setEntry({ date: todayDate, startTime: '', endTime: '' });
+    await trigger('schedules');
   };
 
   const handleRemoveEntry = (scheduleId: number) => {
     if (isEditMode && onScheduleRemove) {
       onScheduleRemove(scheduleId);
     }
+
     const updatedSchedules = schedules.filter(
       (schedule) => schedule.id !== scheduleId,
     );
