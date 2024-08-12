@@ -2,6 +2,7 @@ import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { postUser } from '@/libs/api/user';
 import { signupSchema } from '@/libs/utils/schemas/signupSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,30 +41,21 @@ export default function Signup() {
     mode: 'all',
   });
 
-  // 모달 메시지에 따른 모달 content 설정 및 폼 제출 후 주소 이동
-  const [modalMessage, setModalMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
-
   const router = useRouter();
 
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: postUser,
-    onSuccess: (data: RegisterResponse) => {
-      console.log('회원가입 성공', data);
-      setModalMessage('가입이 완료되었습니다!');
-      setIsModalOpen(true);
-      setIsSuccessMessage(true);
+    onSuccess: () => {
+      notify('success', '가입 완료!');
+      router.push('/login');
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
         if (error.response.data.message === '중복된 이메일입니다.') {
-          setModalMessage('이미 사용중인 이메일입니다.');
+          notify('error', '이미 사용중인 이메일입니다.');
         } else {
           console.error('회원가입 실패', error);
         }
-        setIsModalOpen(true);
-        setIsSuccessMessage(false);
       }
     },
   });
@@ -76,12 +68,6 @@ export default function Signup() {
       password: data.password,
     };
     mutation.mutate(registerData);
-  };
-
-  const resetModalMessage = () => {
-    setModalMessage('');
-    setIsModalOpen(false);
-    if (isSuccessMessage) router.push('/login');
   };
 
   return (
@@ -143,16 +129,6 @@ export default function Signup() {
               error={errors.confirmPassword}
               onBlur={() => trigger('confirmPassword')}
             />
-            {modalMessage && (
-              <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <Modal.Content>
-                  <Modal.Description className="py-20 text-center">
-                    {modalMessage}
-                  </Modal.Description>
-                  <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
-                </Modal.Content>
-              </Modal.Root>
-            )}
             <Button
               type="submit"
               className="rounded-md"

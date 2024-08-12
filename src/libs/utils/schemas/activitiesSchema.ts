@@ -20,6 +20,8 @@ export const activitiesSchema = yup.object().shape({
     .number()
     .typeError('가격을 입력해주세요.')
     .positive('가격을 0보다 큰 값으로 입력해주세요.')
+    .integer('가격은 정수만 입력 가능합니다.')
+    .max(9999999, '가격은 1000만원 미만이어야 합니다.')
     .required('가격을 입력해주세요.'),
   address: yup.string().required('주소를 입력해주세요.'),
   schedules: yup

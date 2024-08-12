@@ -1,13 +1,14 @@
+import MyCard from '@/components/activitiesManagement/MyCard';
+import Button from '@/components/commons/Button';
+import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
-import NoActivity from '@/components/mypage/NoActivity';
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useMemo, useRef } from 'react';
 
-import MyActivityForm from '../../components/ActivitiyForm';
-import MyCard from '../../components/activitiesManagement/MyCard';
-import Button from '../../components/commons/Button';
-import Modal from '../../components/commons/Modal';
+import EmptyImage from '/public/imgs/empty.png';
 
 const useMyActivities = (size = 20) => {
   return useInfiniteQuery({
@@ -20,8 +21,8 @@ const useMyActivities = (size = 20) => {
 };
 
 export default function MyActivities() {
-  const [showActivityForm, setShowActivityForm] = useState(false);
   const lastCardRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
@@ -64,15 +65,11 @@ export default function MyActivities() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const handleConfirm = () => {
-    setShowActivityForm(true);
+    router.push('myActivities/registerForm');
   };
 
   if (status === 'pending') return <div>로딩 중...</div>;
   if (status === 'error') return <div>에러가 발생했습니다.</div>;
-
-  if (showActivityForm) {
-    return <MyActivityForm />;
-  }
 
   return (
     <MyPageLayout>
@@ -86,16 +83,23 @@ export default function MyActivities() {
               </Button>
             </Modal.Trigger>
             <Modal.Content>
-              <Modal.Description>체험을 등록하시겠습니까?</Modal.Description>
+              <Modal.Description className="text-center">
+                체험을 등록하시겠습니까?
+              </Modal.Description>
               <Modal.Close onConfirm={handleConfirm} confirm>
-                확인
+                예
               </Modal.Close>
             </Modal.Content>
           </Modal.Root>
         </div>
 
         {sortedActivities.length === 0 ? (
-          <NoActivity />
+          <div className="flex flex-col items-center justify-center">
+            <Image src={EmptyImage} alt="빈 이미지" width={200} height={200} />
+            <p className="mt-20 text-2xl-medium text-custom-gray-700">
+              아직 등록한 체험이 없어요
+            </p>
+          </div>
         ) : (
           <>
             {sortedActivities.map((activity, index) => (
