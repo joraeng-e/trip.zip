@@ -1,5 +1,4 @@
 import DateTime from '@/components/ActivitiyForm/DateTime';
-import type { DateTimeInput } from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
@@ -14,6 +13,7 @@ import {
   ActivitiesFormData,
   activitiesSchema,
 } from '@/libs/utils/schemas/activitiesSchema';
+import type { DateTimeInput } from '@/types/datetype';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -258,14 +258,9 @@ export default function EditActivityForm({
               />
             </div>
             <p className="text-custom-gray-800">
-              *이미지는 최대 4개까지 등록 가능합니다.
+              *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          {updateActivityMutation.isError && (
-            <p className="mt-4 text-red-500">
-              체험 수정 중 오류가 발생했습니다.
-            </p>
-          )}
         </form>
       </FormProvider>
     </MyPageLayout>

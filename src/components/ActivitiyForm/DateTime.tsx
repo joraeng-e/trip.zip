@@ -4,14 +4,9 @@ import {
   TimeSeparatorIcon,
 } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
+import type { DateTimeInput } from '@/types/datetype';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-
-export interface DateTimeInput {
-  date: string;
-  startTime: string;
-  endTime: string;
-}
 
 interface Schedule extends DateTimeInput {
   id: number;

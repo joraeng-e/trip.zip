@@ -194,7 +194,7 @@ export default function MyActivityForm() {
               </p>
             )}
             <p className="text-custom-gray-800">
-              *이미지는 최대 4개까지 등록 가능합니다.
+              *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
         </form>

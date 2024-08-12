@@ -27,7 +27,6 @@ export default function MyActivities() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
 
-  // 모든 활동을 최신순으로 정렬
   const sortedActivities = useMemo(() => {
     if (!data) return [];
     return data.pages
@@ -38,16 +37,13 @@ export default function MyActivities() {
       );
   }, [data]);
 
-  //IntersectionObserver의 역할: 마지막 카드가 화면에 보이는가?
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        //더 로드할 페이지가 있고 + 현재 로딩중이 아니면 => 다음 페이지 로드
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      //마지막 카드 전체가 뷰포트에 들어올 때
       { threshold: 1.0 },
     );
 

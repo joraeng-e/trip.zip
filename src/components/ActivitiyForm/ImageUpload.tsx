@@ -37,7 +37,7 @@ export default function ImageUploader({
         return Array.from(new Set(updatedUrls));
       });
       if (onSuccess) {
-        onSuccess(newUrl); // 성공 시 부모 컴포넌트로 URL을 전달
+        onSuccess(newUrl);
       }
     },
     onError: (error) => {
@@ -72,7 +72,7 @@ export default function ImageUploader({
   const handleDelete = (index: number) => {
     const imageToDelete = existingImages[index];
     if (imageToDelete && onImageRemove) {
-      onImageRemove(imageToDelete.id); // 이미지 ID를 부모 컴포넌트로 전달하여 삭제 처리
+      onImageRemove(imageToDelete.id);
     }
 
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
