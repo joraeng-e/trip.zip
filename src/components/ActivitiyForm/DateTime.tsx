@@ -119,8 +119,8 @@ export default function DateTime({
 
   return (
     <div className="space-y-4">
-      <div className="flex max-w-792 flex-wrap items-center justify-between gap-5">
-        <div className="flex w-full max-w-380 flex-col">
+      <div className="flex max-w-792 items-center justify-between gap-5">
+        <div className="flex w-full min-w-50 max-w-380 flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
           </label>
@@ -135,8 +135,8 @@ export default function DateTime({
             onChange={handleDateTimeInputChange}
           />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="startTime" className="mb-1">
+        <div className="flex min-w-50 flex-col">
+          <label htmlFor="startTime" className="mb-1 whitespace-nowrap">
             시작 시간
           </label>
           <input
@@ -152,8 +152,8 @@ export default function DateTime({
         <div className="mt-20 hidden md:block">
           <TimeSeparatorIcon />
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="endTime" className="mb-1">
+        <div className="flex min-w-50 flex-col">
+          <label htmlFor="endTime" className="mb-1 whitespace-nowrap">
             종료 시간
           </label>
           <input

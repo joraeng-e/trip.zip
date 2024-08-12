@@ -85,7 +85,7 @@ export default function ImageUploader({
         <label
           htmlFor={`image-upload-${label}`}
           className={classNames(
-            'flex-center group h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
+            'flex-center group mb-5 h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
             {
               'opacity-50': imagePreviewUrls.length >= maxImages,
               'hover:border-nomad-black': imagePreviewUrls.length < maxImages,
