@@ -19,6 +19,7 @@ function ActivityCard({ data }: { data: Activity }) {
         <Image
           src={imageSrc}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           onError={handleImageError}
           alt="banner"
           placeholder="blur"
@@ -38,7 +39,7 @@ function ActivityCard({ data }: { data: Activity }) {
       </h1>
       <div className="mb-4 mt-12">
         <span className="text-24 font-bold leading-26">
-          ₩ {price.toLocaleString()}{' '}
+          ₩ {price.toLocaleString()}
         </span>
         <span className="leading-24 text-[#a1a1a1]">/ 인</span>
       </div>
@@ -52,16 +53,16 @@ export function ActivityCardSkeleton() {
   return (
     <div className="w-full">
       <div className="relative aspect-square overflow-hidden rounded-[20px] bg-slate-300">
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
+        <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
       </div>
       <div className="relative my-4 h-18 w-1/3 overflow-hidden rounded bg-slate-300 md:my-8 md:h-22 md:w-1/6">
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
+        <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
       </div>
       <div className="relative h-28 w-3/4 overflow-hidden rounded bg-slate-300 md:h-32 md:w-2/3">
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
+        <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
       </div>
       <div className="relative mb-4 mt-12 h-28 w-1/2 overflow-hidden rounded bg-slate-300 md:w-1/3">
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
+        <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent opacity-50" />
       </div>
     </div>
   );
