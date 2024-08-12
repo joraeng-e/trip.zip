@@ -1,6 +1,8 @@
+import { notify } from '@/components/commons/Toast';
 import { SignUpUser } from '@/libs/api/oauth';
 import { randomNickname } from '@/libs/utils/randomNickname';
 import { SignInResponse, SignUpRequest } from '@trip.zip-api';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -27,11 +29,22 @@ export default function Kakao() {
             'kakao',
             signUpData,
           );
+
           console.log('회원가입 성공:', signInResponse);
+          notify('success', '회원가입 성공!');
 
           router.push('/activities');
         } catch (error) {
           console.error('회원가입 오류:', error);
+          if (axios.isAxiosError(error) && error.response) {
+            notify('error', error.response.data.message);
+            if (error.response.data.message === '이미 등록된 사용자입니다.')
+              router.push('/login');
+          } else {
+            notify('error', '회원가입 중 알 수 없는 오류가 발생했습니다.');
+          }
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -40,6 +53,6 @@ export default function Kakao() {
   }, [router.query]);
 
   return (
-    <div>{loading ? <p>로딩 중...</p> : <p>카카오 회원가입 중...</p>}</div>
+    <div>{loading ? <p>로딩 중...</p> : <p>카카오 회원가입 완료!</p>}</div>
   );
 }
