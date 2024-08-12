@@ -80,7 +80,7 @@ export default function MyCard({
           className="object-cover"
         />
       </div>
-      <div className="flex flex-1 flex-col justify-between p-16 hover:bg-gray-100">
+      <div className="flex flex-1 flex-col justify-between p-16 transition-all hover:bg-gray-100">
         <div className="flex items-center justify-between">
           <div>
             <div className="mb-4 flex items-center">
