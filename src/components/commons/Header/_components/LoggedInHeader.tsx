@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
 
+import { notify } from '../../Toast';
 import Notification from './Notification';
 
 export default function LoggedInHeader() {
@@ -26,8 +27,7 @@ export default function LoggedInHeader() {
   const router = useRouter();
 
   const logout = () => {
-    alert('로그아웃');
-    // TODO: toast 로그아웃 띄우기
+    notify('success', '로그아웃 되었습니다!');
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
     deleteCookie('isLogin');

@@ -1,4 +1,5 @@
 import Layout from '@/components/commons/PageLayouts';
+import { StyledToastContainer } from '@/styles/ToastStyle';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -7,7 +8,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import type { ReactElement, ReactNode } from 'react';
 import React, { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { Zoom } from 'react-toastify';
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -74,7 +75,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <QueryClientProvider client={queryClient}>
         {getLayout(<Component {...pageProps} />)}
-        <ToastContainer />
+        <StyledToastContainer limit={1} transition={Zoom} />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>

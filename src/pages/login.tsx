@@ -2,6 +2,7 @@ import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { postLogin } from '@/libs/api/auth';
 import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -39,20 +40,12 @@ export default function Signup() {
     mode: 'all',
   });
 
-  // 모달 메시지에 따른 모달 content 설정 및 폼 제출 후 주소 이동
-  const [modalMessage, setModalMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
-
   const router = useRouter();
 
   const mutation = useMutation<LoginResponse, Error, FormData>({
     mutationFn: postLogin,
     onSuccess: (data: LoginResponse) => {
-      console.log('로그인 성공', data);
-      setModalMessage('로그인 완료!');
-      setIsModalOpen(true);
-      setIsSuccessMessage(true);
+      notify('success', '로그인 완료!');
       setCookie('accessToken', data.accessToken, {
         path: '/',
         secure: true,
@@ -63,6 +56,7 @@ export default function Signup() {
         secure: true,
         sameSite: 'strict',
       });
+      router.push('/activities');
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
@@ -70,29 +64,20 @@ export default function Signup() {
 
         switch (message) {
           case '존재하지 않는 유저입니다.':
-            setModalMessage('존재하지 않는 유저입니다.');
+            notify('error', '존재하지 않는 유저입니다.');
             break;
           case '비밀번호가 일치하지 않습니다.':
-            setModalMessage('비밀번호가 일치하지 않습니다.');
+            notify('error', '비밀번호가 일치하지 않습니다.');
             break;
           default:
             console.error('로그인 실패', error);
         }
-
-        setIsModalOpen(true);
-        setIsSuccessMessage(false);
       }
     },
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     mutation.mutate(data);
-  };
-
-  const resetModalMessage = () => {
-    setModalMessage('');
-    setIsModalOpen(false);
-    if (isSuccessMessage) router.push('/activities');
   };
 
   return (
@@ -136,16 +121,6 @@ export default function Signup() {
               error={errors.password}
               onBlur={() => trigger('password')}
             />
-            {modalMessage && (
-              <Modal.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <Modal.Content>
-                  <Modal.Description className="py-20 text-center">
-                    {modalMessage}
-                  </Modal.Description>
-                  <Modal.Close onConfirm={resetModalMessage}>확인</Modal.Close>
-                </Modal.Content>
-              </Modal.Root>
-            )}
             <Button
               type="submit"
               className="rounded-md"
