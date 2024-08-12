@@ -16,6 +16,7 @@ export function Slide1() {
         src="/imgs/carousel1.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>
@@ -38,6 +39,7 @@ export function Slide2() {
         src="/imgs/carousel2.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>
@@ -60,6 +62,7 @@ export function Slide3() {
         src="/imgs/carousel3.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>

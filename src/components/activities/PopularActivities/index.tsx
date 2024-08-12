@@ -150,6 +150,15 @@ function Content({
     );
   }
 
+  if (data?.length === 0) {
+    return (
+      <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+        체험이 등록되지 않았습니다.
+      </div>
+    );
+    return;
+  }
+
   return (
     <>
       {data?.map((activity) => (

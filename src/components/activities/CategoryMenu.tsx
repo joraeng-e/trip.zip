@@ -1,5 +1,4 @@
 import classNames from '@/libs/utils/classNames';
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 const CATEGORIES = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
@@ -35,14 +34,14 @@ export default function CategoryMenu({
           );
 
           return (
-            <motion.button
+            <button
               key={category}
               type="button"
               className={classnames}
               onClick={() => handleClick(category)}
             >
               {category}
-            </motion.button>
+            </button>
           );
         })}
         <div className="ml-16"></div>

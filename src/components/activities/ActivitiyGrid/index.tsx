@@ -36,6 +36,11 @@ export default function ActivityGrid({
           </>
         )}
       </div>
+      {data?.activities.length === 0 && (
+        <div className="flex-center absolute inset-0 text-18">
+          체험이 등록되지 않았습니다.
+        </div>
+      )}
       {isError && (
         <div className="flex-center absolute inset-0 text-18">
           에러가 발생하였습니다.

@@ -50,7 +50,7 @@ export default memo(PopularActivityCard);
 export function PopularActivityCardSkeleton() {
   return (
     <div className="relative size-186 flex-shrink-0 overflow-hidden rounded-[20px] bg-slate-300 md:size-[384px]">
-      <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50"></div>
+      <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
     </div>
   );
 }
