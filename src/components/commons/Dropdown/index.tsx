@@ -1,8 +1,6 @@
 import useClickOutside from '@/hooks/useClickOutside';
 import React, {
-  Dispatch,
   ReactNode,
-  SetStateAction,
   createContext,
   useCallback,
   useContext,
@@ -17,7 +15,7 @@ import Item from './DropdownItem';
 type DropdownProps = {
   children: ReactNode;
   selected: string;
-  setSelected: Dispatch<SetStateAction<string>>;
+  setSelected: (value: string) => void;
   defaultValue?: string;
   width?: number;
   maxWidth?: number;
@@ -86,7 +84,10 @@ export default function Dropdown({
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
 
-  const handleSelect = useCallback((value: string) => setSelected(value), []);
+  const handleSelect = useCallback(
+    (value: string) => setSelected(value),
+    [setSelected],
+  );
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   useClickOutside(dropdownRef, closeDropdown);

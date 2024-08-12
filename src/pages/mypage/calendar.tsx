@@ -47,7 +47,7 @@ export default function ReservationStatus() {
   };
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
-  const [activityId, setActivityId] = useState<number>();
+  const [activityId, setActivityId] = useState<number>(0);
   const [activityTitle, setActivityTitle] = useState<string>('');
 
   const [monthlyData, setMonthlyData] =
@@ -168,6 +168,7 @@ export default function ReservationStatus() {
             currentMonth={currentMonth}
             days={days}
             monthlyData={monthlyData}
+            activityId={activityId}
           />
         </div>
       </div>
