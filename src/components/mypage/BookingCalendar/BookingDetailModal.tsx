@@ -1,12 +1,13 @@
 import Button from '@/components/commons/Button';
 import Dropdown from '@/components/commons/Dropdown';
+import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,
   getMyActivitiesReservedSchedule,
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
 import { XIcon } from '@/libs/utils/Icon';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type BookingDetailModalProps = {
   activityId: number;
@@ -46,15 +47,6 @@ type Reservation = {
 
 type BookingStatus = 'pending' | 'declined' | 'confirmed' | undefined;
 
-const modalHeader = 'flex h-48 w-full items-center justify-between';
-const modalSection = 'flex flex-col justify-start';
-const modalSectionTitle = 'mb-16 text-18 font-semibold text-custom-black';
-const modalLabel = 'mb-2 text-18 font-normal text-custom-black';
-const modalInfo = 'flex gap-10';
-const modalInfoLabel = 'text-16 font-semibold text-custom-gray-700';
-const modalInfoValue = 'text-16 font-medium text-custom-black';
-const modalActions = 'flex justify-end gap-6';
-
 export default function BookingDetailModal({
   activityId,
   date,
@@ -68,8 +60,13 @@ export default function BookingDetailModal({
   );
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
+  const deviceState = useDeviceState();
+
   useEffect(() => {
     if (isOpen) {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = 'hidden';
+      }
       const fetchBookingDetails = async () => {
         try {
           const response = await getMyActivitiesReservedSchedule({
@@ -85,8 +82,17 @@ export default function BookingDetailModal({
         }
       };
       fetchBookingDetails();
+    } else {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = '';
+      }
     }
-  }, [isOpen, activityId, date]);
+    return () => {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = '';
+      }
+    };
+  }, [isOpen, activityId, date, deviceState]);
 
   useEffect(() => {
     if (selectedSchedule !== null) {
@@ -104,7 +110,7 @@ export default function BookingDetailModal({
       };
       fetchBookingDetailsBySchedule();
     }
-  }, [selectedSchedule, selectedTab, activityId, reservations]);
+  }, [selectedSchedule, selectedTab, activityId]);
 
   if (!isOpen) return null;
 
@@ -154,8 +160,8 @@ export default function BookingDetailModal({
   };
 
   return (
-    <div className="fixed left-0 top-0 z-50 flex h-full w-full flex-col gap-27 bg-white p-24 pb-20 shadow-lg">
-      <div className={modalHeader}>
+    <div className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-20 shadow-lg md:absolute md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429">
+      <div className="flex h-48 w-full items-center justify-between">
         <span className="text-28 font-bold">예약정보</span>
         <button type="button" onClick={onClose}>
           <XIcon className="size-48" />
@@ -202,56 +208,71 @@ export default function BookingDetailModal({
           </span>
         </button>
       </div>
-      <div className="flex h-full flex-col gap-24">
-        <div className={modalSection}>
-          <span className={modalSectionTitle}>예약날짜</span>
-          <span className={modalLabel}>{date}</span>
-        </div>
-        <div className={modalSection}>
-          <span className={modalSectionTitle}>스케줄 선택</span>
-          <Dropdown
-            selected={`${selectedSchedule?.startTime} - ${selectedSchedule?.endTime}`}
-            setSelected={handleScheduleChange}
-            height={56}
-          >
-            <Dropdown.Button
-              className="basic-input flex w-full items-center justify-between"
-              showArrow={true}
+      <div className="flex h-full flex-col overflow-y-auto">
+        <div className="flex flex-col justify-start gap-24">
+          <div className="flex flex-col justify-start">
+            <span className="mb-16 text-18 font-semibold text-custom-black">
+              예약날짜
+            </span>
+            <span className="mb-2 text-18 font-normal text-custom-black">
+              {date}
+            </span>
+          </div>
+          <div className="flex flex-col justify-start">
+            <span className="mb-16 text-18 font-semibold text-custom-black">
+              스케줄 선택
+            </span>
+            <Dropdown
+              selected={`${selectedSchedule?.startTime} - ${selectedSchedule?.endTime}`}
+              setSelected={handleScheduleChange}
+              height={56}
             >
-              {selectedSchedule?.startTime} - {selectedSchedule?.endTime}
-            </Dropdown.Button>
-            <Dropdown.Body>
-              {schedules.map((schedule) => (
-                <Dropdown.Item
-                  key={schedule.scheduleId}
-                  value={String(schedule.scheduleId)}
-                >
-                  {schedule.startTime} - {schedule.endTime}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Body>
-          </Dropdown>
+              <Dropdown.Button
+                className="basic-input flex w-full items-center justify-between"
+                showArrow={true}
+              >
+                {selectedSchedule?.startTime} - {selectedSchedule?.endTime}
+              </Dropdown.Button>
+              <Dropdown.Body>
+                {schedules.map((schedule) => (
+                  <Dropdown.Item
+                    key={schedule.scheduleId}
+                    value={String(schedule.scheduleId)}
+                  >
+                    {schedule.startTime} - {schedule.endTime}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Body>
+            </Dropdown>
+          </div>
         </div>
-        <div className={modalSection}>
-          <span className={modalSectionTitle}>예약내역</span>
-
-          <div className="flex h-[50vh] flex-col gap-16 overflow-y-auto">
+        <div className="mt-16 flex flex-1 flex-col gap-24">
+          <span className="text-18 font-semibold text-custom-black">
+            예약내역
+          </span>
+          <div className="flex flex-1 flex-col gap-16">
             {reservations.map((reservation) => (
               <div
                 key={reservation.id}
                 className="flex flex-col gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
               >
                 <div className="flex gap-10">
-                  <span className={modalInfoLabel}>닉네임</span>
-                  <span className={modalInfoValue}>{reservation.nickname}</span>
+                  <span className="text-16 font-semibold text-custom-gray-700">
+                    닉네임
+                  </span>
+                  <span className="text-16 font-medium text-custom-black">
+                    {reservation.nickname}
+                  </span>
                 </div>
                 <div className="flex gap-10">
-                  <span className={modalInfoLabel}>인원</span>
-                  <span className={modalInfoValue}>
+                  <span className="text-16 font-semibold text-custom-gray-700">
+                    인원
+                  </span>
+                  <span className="text-16 font-medium text-custom-black">
                     {reservation.headCount}
                   </span>
                 </div>
-                <div className={modalActions}>
+                <div className="flex justify-end gap-6">
                   {reservation.status === 'pending' && (
                     <>
                       <Button

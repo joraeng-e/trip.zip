@@ -1,10 +1,11 @@
+import useClickOutside from '@/hooks/useClickOutside';
 import {
   getDaysInMonth,
   getFirstDayOfMonth,
   getLocalDateString,
 } from '@/libs/utils/dateUtils';
 import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import BookingDetailModal from './BookingDetailModal';
 import StatusTag from './BookingStatusTag';
@@ -154,8 +155,11 @@ export default function Calendar({
     setSelectedDate('');
   };
 
+  const modalRef = useRef<HTMLDivElement>(null);
+  useClickOutside(modalRef, handleCloseModal);
+
   return (
-    <div className="grid grid-cols-7 gap-2 border-1 border-custom-gray-400">
+    <div className="grid grid-cols-7 gap-2 rounded-lg border-1 border-custom-gray-400">
       {days.map((day) => (
         <div
           key={day}
@@ -200,12 +204,14 @@ export default function Calendar({
         }),
       )}
       {selectedDate && (
-        <BookingDetailModal
-          activityId={activityId}
-          date={selectedDate}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
+        <div ref={modalRef}>
+          <BookingDetailModal
+            activityId={activityId}
+            date={selectedDate}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+          />
+        </div>
       )}
     </div>
   );

@@ -162,7 +162,7 @@ export default function ReservationStatus() {
             <DoubleArrowNext aria-label="다음 달" className="size-24" />
           </button>
         </div>
-        <div>
+        <div className="relative">
           <Calendar
             currentYear={currentYear}
             currentMonth={currentMonth}
