@@ -28,12 +28,12 @@ export async function SignUpUser(
 // 간편 로그인
 export async function signInUser(
   provider: 'google' | 'kakao',
-  signinData: SignInRequest,
+  signInData: SignInRequest,
 ): Promise<SignInResponse> {
   try {
     const response = await axiosInstance.post<SignInResponse>(
       `/oauth/sign-in/${provider}`,
-      signinData,
+      signInData,
     );
 
     return response.data;

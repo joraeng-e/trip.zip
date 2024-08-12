@@ -1,4 +1,6 @@
+import { KAKAO_SIGNUP_URL } from '@/libs/constants/auth';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 export default function SocialSignup() {
@@ -20,13 +22,15 @@ export default function SocialSignup() {
             />
           </div>
           <div className="h-48 w-48 md:h-72 md:w-72">
-            <Image
-              src="/imgs/kakao.png"
-              width={72}
-              height={72}
-              alt="카카오로 회원가입"
-              className="cursor-pointer"
-            />
+            <Link href={KAKAO_SIGNUP_URL}>
+              <Image
+                src="/imgs/kakao.png"
+                width={72}
+                height={72}
+                alt="카카오로 회원가입"
+                className="cursor-pointer"
+              />
+            </Link>
           </div>
         </div>
       </div>

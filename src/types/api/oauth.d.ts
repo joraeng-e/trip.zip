@@ -11,8 +11,8 @@ declare module '@trip.zip-api' {
   // 간편 회원가입
   type SignUpRequest = {
     nickname: string;
-    redirectUri: string;
-    token: string;
+    redirectUri?: string;
+    token?: string;
   };
 
   type SignUpResponse = {
