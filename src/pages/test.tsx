@@ -1,29 +1,12 @@
-import Header from '@/components/commons/Header';
-import KakaoMap from '@/components/commons/KakaoMap';
-import React, { useState } from 'react';
-import DaumPostcode from 'react-daum-postcode';
-import { Address } from 'react-daum-postcode';
-
-const NONE_ADDRESS = '아직 주소 입력이 되지 않았습니다.';
+import Loading from '@/components/commons/Loading';
+import React, { useEffect, useState } from 'react';
 
 export default function Test() {
-  const [address, setAddress] = useState<string>('');
-
-  const handleAddressSelect = (e: Address) => {
-    setAddress(e.address);
-  };
+  const [loading, setLoading] = useState(true);
 
   return (
-    <div>
-      <Header />
-      <main className="page-container bg-gray-500">
-        <div className="text-xl-bold text-custom-orange-200"></div>
-        <div className="h-500 w-500">
-          <KakaoMap address={address} />
-        </div>
-        <div>{address ? address : NONE_ADDRESS}</div>
-        <DaumPostcode onComplete={handleAddressSelect}></DaumPostcode>
-      </main>
+    <div className="flex w-full items-center justify-center">
+      {loading ? <Loading /> : <h1>로딩 완료! 환영합니다.</h1>}
     </div>
   );
 }
