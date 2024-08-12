@@ -1,3 +1,6 @@
+import DateTime from '@/components/ActivitiyForm/DateTime';
+import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
+import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -14,14 +17,11 @@ import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
 
-import DateTime from '../../../../components/ActivitiyForm/DateTime';
-import ImageUploader from '../../../../components/ActivitiyForm/ImageUpload';
 import Button from '../../../../components/commons/Button';
 import Input from '../../../../components/commons/Input/Input';
 import Textarea from '../../../../components/commons/Input/Textarea';
 import Modal from '../../../../components/commons/Modal';
 import Select from '../../../../components/commons/Select';
-import MyPageLayout from '../../../../components/mypage/MyPageLayout';
 
 export default function MyActivityForm() {
   const router = useRouter();
@@ -62,7 +62,6 @@ export default function MyActivityForm() {
     },
   });
 
-  //폼 제출
   const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
     subImageUrls,
     ...rest
