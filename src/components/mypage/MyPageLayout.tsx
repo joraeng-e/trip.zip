@@ -50,7 +50,15 @@ export function MyPageLayout({ children }: { children: ReactNode }) {
           </div>
         )}
         {(isMobile && isOpen) || (
-          <div className="w-full md:flex-1">{children}</div>
+          <motion.div
+            className={`w-full md:flex-1`}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {children}
+          </motion.div>
         )}
       </div>
     </TabProvider>

@@ -10,7 +10,6 @@ import Pagination from '@/components/commons/Pagination';
 import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -35,31 +34,19 @@ const SORT_VALUE = {
   price_desc: '가격이 높은 순',
 };
 
-interface Props {
-  initialPage: string | null;
-  initialCategory: string | null;
-  initialKeyword: string | null;
-  initialSort: string | null;
-}
-
-export default function Activites({
-  initialPage,
-  initialCategory,
-  initialKeyword,
-  initialSort,
-}: Props) {
+export default function Activites() {
   const router = useRouter();
-  const [page, setPage] = useState(Number(initialPage) || 1);
+  const [page, setPage] = useState(Number(router.query.page) || 1);
   const [category, setCategory] = useState<string | undefined>(
-    initialCategory || undefined,
+    (router.query.category as string | undefined) || undefined,
   );
   const [keyword, setKeyword] = useState<string | undefined>(
-    initialKeyword || undefined,
+    (router.query.keyword as string | undefined) || undefined,
   );
   const [sort, setSort] = useState(
-    initialSort === null
+    router.query.sort
       ? '최신순'
-      : SORT_VALUE[initialSort as keyof typeof SORT_VALUE],
+      : SORT_VALUE[router.query.sort as keyof typeof SORT_VALUE],
   );
   const [totalPages, setTotalPages] = useState<number | undefined>(undefined);
   const deviceState = useDeviceState();
@@ -196,21 +183,4 @@ export default function Activites({
       </div>
     </>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { query } = context;
-  const initialPage = query.page || null;
-  const initialCategory = query.category || null;
-  const initialKeyword = query.keyword || null;
-  const initialSort = query.sort || null;
-
-  return {
-    props: {
-      initialPage,
-      initialCategory,
-      initialKeyword,
-      initialSort,
-    },
-  };
 }
