@@ -15,36 +15,76 @@ import {
   activitiesSchema,
 } from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Category, PatchMyActivityRequest } from '@trip.zip-api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  Category,
+  GetActivityDetailResponse,
+  PatchMyActivityRequest,
+} from '@trip.zip-api';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-export default function EditActivityForm() {
-  const router = useRouter();
-  const { id } = router.query;
+interface EditActivityFormProps {
+  activityData: GetActivityDetailResponse;
+  activityId: number;
+  error?: string;
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params as { id: string };
   const activityId = Number(id);
 
-  const [category, setCategory] = useState('');
+  try {
+    const activityData = await getActivityDetail(activityId);
+
+    if (!activityData) {
+      return { notFound: true };
+    }
+
+    return {
+      props: {
+        activityData,
+        activityId,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching activity data:', error);
+    return {
+      props: {
+        error: 'Failed to load activity data',
+      },
+    };
+  }
+};
+
+export default function EditActivityForm({
+  activityData,
+  activityId,
+  error,
+}: EditActivityFormProps) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const [category, setCategory] = useState(activityData?.category || '');
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
   const [schedulesToAdd, setSchedulesToAdd] = useState<DateTimeInput[]>([]);
-
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
   const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const queryClient = useQueryClient();
-
-  const { data: activityData, isLoading } = useQuery({
-    queryKey: ['activity', activityId],
-    queryFn: () => getActivityDetail(activityId!),
-    enabled: !!activityId,
-  });
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
+    defaultValues: {
+      title: activityData?.title || '',
+      category: activityData?.category || '',
+      description: activityData?.description || '',
+      price: activityData?.price || 0,
+      address: activityData?.address || '',
+    },
   });
 
   const {
@@ -54,30 +94,12 @@ export default function EditActivityForm() {
     formState: { errors },
   } = methods;
 
-  useEffect(() => {
-    if (activityData) {
-      setValue('title', activityData.title);
-      setValue('category', activityData.category);
-      setValue('description', activityData.description);
-      setValue('price', activityData.price);
-      setValue('address', activityData.address);
-      setCategory(activityData.category);
-    }
-  }, [activityData, setValue]);
-
   const updateActivityMutation = useMutation({
-    mutationFn: ({
-      activityId,
-      data,
-    }: {
-      activityId: number;
-      data: PatchMyActivityRequest;
-    }) => patchMyActivity({ activityId, data }),
+    mutationFn: (data: PatchMyActivityRequest) =>
+      patchMyActivity({ activityId, data }),
     onSuccess: () => {
-      if (activityId !== undefined) {
-        queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
-        queryClient.invalidateQueries({ queryKey: ['myActivities'] });
-      }
+      queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
+      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
       setModalMessage('체험이 성공적으로 수정되었습니다.');
       setIsModalOpen(true);
     },
@@ -87,18 +109,15 @@ export default function EditActivityForm() {
     },
   });
 
-  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const selectedCategory = event.target.value as Category;
     setCategory(selectedCategory);
     setValue('category', selectedCategory);
   };
 
   const onSubmit = (data: ActivitiesFormData) => {
-    if (!activityId) {
-      setModalMessage('유효하지 않은 체험 ID입니다.');
-      setIsModalOpen(true);
-      return;
-    }
     const roundedPrice = Math.round(data.price);
 
     const formData: PatchMyActivityRequest = {
@@ -113,7 +132,7 @@ export default function EditActivityForm() {
       scheduleIdsToRemove,
       schedulesToAdd,
     };
-    updateActivityMutation.mutateAsync({ activityId, data: formData });
+    updateActivityMutation.mutate(formData);
   };
 
   const handleScheduleRemove = (scheduleId: number) => {
@@ -138,8 +157,9 @@ export default function EditActivityForm() {
     router.push('/mypage/myActivities');
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!activityData) return <div>체험 정보를 찾을 수 없습니다.</div>;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <MyPageLayout>
@@ -221,7 +241,7 @@ export default function EditActivityForm() {
               maxImages={1}
               label="배너 이미지 등록"
               existingImages={
-                activityData.bannerImageUrl
+                activityData?.bannerImageUrl
                   ? [{ id: 0, imageUrl: activityData.bannerImageUrl }]
                   : []
               }
@@ -232,7 +252,7 @@ export default function EditActivityForm() {
                 name="subImageUrlsToAdd"
                 maxImages={4}
                 label="소개 이미지 등록"
-                existingImages={activityData.subImages}
+                existingImages={activityData?.subImages || []}
                 onImageRemove={handleImageRemove}
                 onSuccess={handleImageUrlAdd}
               />
