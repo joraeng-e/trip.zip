@@ -8,9 +8,21 @@ import CalendarIcon from '/public/icon/calendarIcon.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
 import DoubleArrowNext from '/public/icon/doubleArrowNext.svg';
 import DoubleArrowPrev from '/public/icon/doubleArrowPrev.svg';
+import AutomobileEmoji from '/public/icon/emoji/automobileEmoji.svg';
+import CouchLampEmoji from '/public/icon/emoji/couchLampEmoji.svg';
+import GemEmoji from '/public/icon/emoji/gemEmoji.svg';
+import HeartEmoji from '/public/icon/emoji/heartEmoji.svg';
+import HuggingFaceEmoji from '/public/icon/emoji/huggingFaceEmoji.svg';
+import MoneyWingEmoji from '/public/icon/emoji/moneyWingEmoji.svg';
+import NationalParkEmoji from '/public/icon/emoji/nationalParkEmoji.svg';
+import PartyEmoji from '/public/icon/emoji/partyEmoji.svg';
+import SoccerBallEmoji from '/public/icon/emoji/soccerBallEmoji.svg';
+import SpongeEmoji from '/public/icon/emoji/spongeEmoji.svg';
+import StarEmoji from '/public/icon/emoji/starEmoji.svg';
 import FacebookIcon from '/public/icon/facebookIcon.svg';
 import InstagramIcon from '/public/icon/instagramIcon.svg';
 import KebabIcon from '/public/icon/kebabIcon.svg';
+import LocationIcon from '/public/icon/locationIcon.svg';
 import Logout from '/public/icon/logout.svg';
 import MinusTimeIcon from '/public/icon/minusTimeIcon.svg';
 import NotificationIcon from '/public/icon/notificationIcon.svg';
@@ -58,6 +70,7 @@ export {
   StarOnIcon,
   XIcon,
   PaperPlaneIcon,
+  LocationIcon,
   PaginationArrowLeft,
   PaginationArrowRight,
   PlusIcon,
@@ -67,6 +80,17 @@ export {
   ArrowRight,
   ArrowDown,
   TimeSeparatorIcon,
+  AutomobileEmoji,
+  CouchLampEmoji,
+  GemEmoji,
+  HeartEmoji,
+  HuggingFaceEmoji,
+  MoneyWingEmoji,
+  NationalParkEmoji,
+  PartyEmoji,
+  SoccerBallEmoji,
+  SpongeEmoji,
+  StarEmoji,
   DoubleArrowPrev,
   DoubleArrowNext,
 };
