@@ -1,14 +1,17 @@
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export const useLoading = () => {
-  const [showLoading, setShowLoading] = useState(true);
+  const router = useRouter();
+  const [showLoading, setShowLoading] = useState(false);
   const [hasLoadedPages, setHasLoadedPages] = useState(new Set()); // 로드된 페이지 추적
 
   useEffect(() => {
     const start = (url: string) => {
-      if (hasLoadedPages.has(url)) return; // 이미 로드된 페이지에서는 로딩 시작하지 않음
-      setShowLoading(true);
+      // 쿼리 스트링이 포함된 URL은 로딩 화면을 보이지 않도록 처리
+      if (!hasLoadedPages.has(url) && !url.includes('?')) {
+        setShowLoading(true);
+      }
     };
 
     const end = (url: string) => {
@@ -20,12 +23,23 @@ export const useLoading = () => {
     Router.events.on('routeChangeComplete', end);
     Router.events.on('routeChangeError', end);
 
+    // 쿼리 파라미터 변경 감지
+    const handleQueryChange = (url: string) => {
+      // 쿼리 스트링이 포함된 URL은 로딩 화면을 보이지 않도록 처리
+      if (!hasLoadedPages.has(url) && !url.includes('?')) {
+        setShowLoading(false);
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleQueryChange);
+
     return () => {
       Router.events.off('routeChangeStart', start);
       Router.events.off('routeChangeComplete', end);
       Router.events.off('routeChangeError', end);
+      router.events.off('routeChangeComplete', handleQueryChange);
     };
-  }, [hasLoadedPages]);
+  }, [hasLoadedPages, router.events]);
 
   return showLoading;
 };
