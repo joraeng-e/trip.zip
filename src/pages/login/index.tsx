@@ -3,6 +3,7 @@ import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import { notify } from '@/components/commons/Toast';
+import SocialLogin from '@/components/socialAuth/SocialLogin';
 import { postLogin } from '@/libs/api/auth';
 import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -138,6 +139,7 @@ export default function Signup() {
               회원가입하기
             </Link>
           </div>
+          <SocialLogin />
         </div>
       </div>
     </>
