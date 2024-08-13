@@ -1,10 +1,13 @@
 import TimeSeparatorIcon from '@/../../public/icon/timeSeparatoricon.svg';
 
+
+
 import ArrowDown from '/public/icon/arrowDown.svg';
 import ArrowLeft from '/public/icon/arrowLeft.svg';
 import ArrowRight from '/public/icon/arrowRight.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
+import Cloud from '/public/icon/cloud.svg';
 import DeleteIcon from '/public/icon/deleteIcon.svg';
 import DoubleArrowNext from '/public/icon/doubleArrowNext.svg';
 import DoubleArrowPrev from '/public/icon/doubleArrowPrev.svg';
@@ -33,6 +36,7 @@ import TwitterIcon from '/public/icon/twitterIcon.svg';
 import XIcon from '/public/icon/xIcon.svg';
 import YoutubeIcon from '/public/icon/youtubeIcon.svg';
 import BaseProfile from '/public/imgs/baseProfile.svg';
+
 
 export {
   BedIcon,
@@ -69,4 +73,5 @@ export {
   TimeSeparatorIcon,
   DoubleArrowPrev,
   DoubleArrowNext,
+  Cloud
 };

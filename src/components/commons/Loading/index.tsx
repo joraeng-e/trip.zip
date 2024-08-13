@@ -1,3 +1,4 @@
+import { Cloud } from '@/libs/utils/Icon';
 import React from 'react';
 
 type LoadingProps = {
@@ -29,7 +30,6 @@ export default function Loading({ width = 1000 }: LoadingProps) {
             strokeWidth="2"
           />
         </defs>
-
         {/* 비행 경로를 따라 선을 그리기 위한 경로 */}
         <path
           id="line"
@@ -46,7 +46,6 @@ export default function Loading({ width = 1000 }: LoadingProps) {
             repeatCount="indefinite"
           />
         </path>
-
         {/* 비행기 모양 */}
         <path
           id="plane"
@@ -64,6 +63,48 @@ export default function Loading({ width = 1000 }: LoadingProps) {
             <mpath xlinkHref="#flightPath" />
           </animateMotion>
         </path>
+
+        <g transform="translate(50, 20)">
+          <Cloud width={40} height={40} />
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            from="0 0"
+            to="70 0"
+            dur="7s"
+            repeatCount="indefinite"
+            keyTimes="0; 0.5; 1"
+            values="0 100; 100 90; 0 100"
+          />
+        </g>
+
+        <g transform="translate(150, 50)">
+          <Cloud width={50} height={50} />
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            from="0 0"
+            to="90 0"
+            dur="3s"
+            repeatCount="indefinite"
+            keyTimes="0; 0.5; 1"
+            values="170 30; 200 35; 170 30"
+          />
+        </g>
+
+        <g transform="translate(250, 10)">
+          <Cloud width={35} height={35} />
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            from="0 0"
+            to="100 0"
+            dur="6s"
+            repeatCount="indefinite"
+            keyTimes="0; 0.5; 1"
+            values="300 140; 280 130; 300 140"
+          />
+        </g>
       </svg>
     </div>
   );
