@@ -1,5 +1,6 @@
 import DateTime from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
+import BaseModal from '@/components/ActivityDetail/BaseModal';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Textarea from '@/components/commons/Input/Textarea';
@@ -24,6 +25,7 @@ import {
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, useForm } from 'react-hook-form';
 
 interface EditActivityFormProps {
@@ -74,13 +76,14 @@ export default function EditActivityForm({
   const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
     defaultValues: {
       title: activityData?.title || '',
-      category: activityData?.category || '',
+      category: activityData?.category,
       description: activityData?.description || '',
       price: activityData?.price || 0,
       address: activityData?.address || '',
@@ -115,6 +118,11 @@ export default function EditActivityForm({
     const selectedCategory = event.target.value as Category;
     setCategory(selectedCategory);
     setValue('category', selectedCategory);
+  };
+
+  const handleAddressSelect = (data: Address) => {
+    setValue('address', data.address, { shouldValidate: true });
+    setIsAddressModalOpen(false);
   };
 
   const onSubmit = (data: ActivitiesFormData) => {
@@ -220,14 +228,37 @@ export default function EditActivityForm({
               error={errors.price}
             />
             <h3>주소</h3>
-            <Input
-              name="address"
+            <div className="flex items-center">
+              <Input
+                name="address"
+                type="text"
+                placeholder="주소"
+                register={register('address')}
+                error={errors.address}
+                disabled={true}
+                maxWidth="765px"
+              />
+              <Button
+                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
+                type="button"
+                onClick={() => setIsAddressModalOpen(true)}
+              >
+                검색
+              </Button>
+            </div>
+            <input
+              name="detailAddress"
               type="text"
-              placeholder="주소"
-              register={register('address')}
-              error={errors.address}
-              maxWidth="792px"
+              placeholder="상세 주소"
+              className="basic-input max-w-792"
             />
+            <BaseModal
+              isOpen={isAddressModalOpen}
+              onClose={() => setIsAddressModalOpen(false)}
+              className="w-full max-w-600 px-24 py-45"
+            >
+              <DaumPostcode onComplete={handleAddressSelect} />
+            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime
               isEditMode={true}

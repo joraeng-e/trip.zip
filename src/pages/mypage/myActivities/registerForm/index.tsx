@@ -1,5 +1,6 @@
 import DateTime from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
+import BaseModal from '@/components/ActivityDetail/BaseModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
@@ -14,6 +15,7 @@ import {
 } from '@trip.zip-api';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
 
@@ -30,6 +32,9 @@ export default function MyActivityForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [category, setCategory] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -69,6 +74,7 @@ export default function MyActivityForm() {
     const requestData: PostActivitiesRequest = {
       ...rest,
       category: category as Category,
+      address,
       subImageUrls:
         subImageUrls?.filter((url): url is string => typeof url === 'string') ||
         null,
@@ -84,6 +90,13 @@ export default function MyActivityForm() {
     trigger('category');
   };
 
+  const handleAddressSelect = (data: Address) => {
+    setAddress(data.address);
+    setValue('address', data.address);
+    trigger('address');
+    setIsAddressModalOpen(false);
+  };
+
   const resetModalMessage = () => {
     setModalMessage('');
     setIsModalOpen(false);
@@ -95,7 +108,6 @@ export default function MyActivityForm() {
     category: categoryError,
     description,
     price,
-    address,
     bannerImageUrl,
     subImageUrls,
   } = errors;
@@ -159,14 +171,37 @@ export default function MyActivityForm() {
               error={price}
             />
             <h3>주소</h3>
-            <Input
-              name="address"
+            <div className="flex items-center">
+              <Input
+                name="address"
+                type="text"
+                placeholder="주소"
+                register={register('address')}
+                error={errors.address}
+                disabled={true}
+                maxWidth="765px"
+              />
+              <Button
+                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
+                type="button"
+                onClick={() => setIsAddressModalOpen(true)}
+              >
+                검색
+              </Button>
+            </div>
+            <input
+              name="detailAddress"
               type="text"
-              placeholder="주소"
-              register={register('address')}
-              error={address}
-              maxWidth="792px"
+              placeholder="상세 주소"
+              className="basic-input max-w-792"
             />
+            <BaseModal
+              isOpen={isAddressModalOpen}
+              onClose={() => setIsAddressModalOpen(false)}
+              className="w-full max-w-600 px-24 py-45"
+            >
+              <DaumPostcode onComplete={handleAddressSelect} />
+            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime />
             <h3>배너 이미지</h3>
@@ -194,7 +229,7 @@ export default function MyActivityForm() {
               </p>
             )}
             <p className="text-custom-gray-800">
-              *소개 이미지는 최대 4개까지 등록 가능합니다.
+              *이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
         </form>

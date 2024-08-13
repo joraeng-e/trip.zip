@@ -6,14 +6,7 @@ export const activitiesSchema = yup.object().shape({
   title: yup.string().required('제목을 입력해주세요.'),
   category: yup
     .string()
-    .oneOf([
-      '문화 · 예술',
-      '식음료',
-      '스포츠',
-      '투어',
-      '관광',
-      '웰빙',
-    ] as Category[])
+    .oneOf(['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'] as const)
     .required('카테고리를 선택해주세요.'),
   description: yup.string().required('설명을 입력해주세요.'),
   price: yup
