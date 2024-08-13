@@ -6,7 +6,7 @@ import {
   getMyActivitiesReservedSchedule,
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
-import { XIcon } from '@/libs/utils/Icon';
+import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { useEffect, useRef, useState } from 'react';
 
 type BookingDetailModalProps = {
@@ -160,12 +160,17 @@ export default function BookingDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-20 shadow-lg md:absolute md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429">
-      <div className="flex h-48 w-full items-center justify-between">
-        <span className="text-28 font-bold">예약정보</span>
-        <button type="button" onClick={onClose}>
-          <XIcon className="size-48" />
-        </button>
+    <div className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:absolute md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429">
+      <div className="flex h-48 w-full flex-col items-center">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center">
+            <PaperPlaneIcon className="size-40 opacity-80" />
+            <span className="text-28 font-bold">예약정보</span>
+          </div>
+          <button type="button" onClick={onClose}>
+            <XIcon className="size-48" />
+          </button>
+        </div>
       </div>
       <div className="flex h-43 justify-start border-b-1 border-custom-gray-300">
         <button
@@ -208,7 +213,7 @@ export default function BookingDetailModal({
           </span>
         </button>
       </div>
-      <div className="flex h-full flex-col overflow-y-auto">
+      <div className="flex h-full flex-col overflow-y-auto pb-24">
         <div className="flex flex-col justify-start gap-24">
           <div className="flex flex-col justify-start">
             <span className="mb-16 text-18 font-semibold text-custom-black">
@@ -284,7 +289,7 @@ export default function BookingDetailModal({
                         승인하기
                       </Button>
                       <Button
-                        variant="activeButton"
+                        variant="inactiveButton"
                         hasICon={false}
                         className="h-38 w-82"
                         onClick={() => declineReservation(reservation.id)}

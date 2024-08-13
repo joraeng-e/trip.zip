@@ -1,3 +1,4 @@
+import Empty from '@/../public/imgs/empty.png';
 import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import {
@@ -9,6 +10,7 @@ import {
   Activities,
   GetMyActivitiesReservationDashboardResponse,
 } from '@trip.zip-api';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import Calendar from '../../components/mypage/BookingCalendar/BookingCalendar';
@@ -99,79 +101,101 @@ export default function ReservationStatus() {
     }
   }, [activityTitle, activityList]);
 
+  const NoActivitiesPlaceholder = () => (
+    <div className="flex h-full w-full flex-col">
+      <h2 className="text-32 font-bold">예약 현황</h2>
+      <div className="flex w-full flex-col items-center">
+        <Image
+          className="lg:size-240 size-200"
+          src={Empty}
+          alt="등록된 체험 없음"
+        />
+        <p className="text-24 font-medium text-custom-gray-700">
+          아직 등록한 체험이 없어요
+        </p>
+      </div>
+    </div>
+  );
+
   return (
     <MyPageLayout>
-      <div className="flex h-full w-full min-w-342 flex-col gap-24">
-        <section className="flex flex-col gap-32">
-          <h2 className="text-32 font-bold">예약 현황</h2>
-          <Dropdown
-            selected={activityTitle}
-            setSelected={setActivityTitle}
-            maxWidth={792}
-            height={56}
-          >
-            <Dropdown.Button
-              className="basic-input flex w-full items-center justify-between"
-              showArrow={true}
-            >
-              {activityTitle}
-            </Dropdown.Button>
-            <Dropdown.Body>
-              {activityList?.map((activity, index) => (
-                <Dropdown.Item
-                  key={index}
-                  value={activity.title}
-                  // 첫번째 option 기본값으로 지정
-                  {...(index === 0 && { selected: true })}
+      {activityList.length > 0 ? (
+        <>
+          <div className="flex h-full w-full min-w-342 flex-col gap-24">
+            <section className="flex flex-col gap-32">
+              <h2 className="text-32 font-bold">예약 현황</h2>
+              <Dropdown
+                selected={activityTitle}
+                setSelected={setActivityTitle}
+                maxWidth={792}
+                height={56}
+              >
+                <Dropdown.Button
+                  className="basic-input flex w-full items-center justify-between"
+                  showArrow={true}
                 >
-                  {activity.title}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Body>
-          </Dropdown>
-        </section>
-      </div>
-      <div className="mb-100 mt-24 flex flex-col gap-17">
-        {/* control bar */}
-        <div className="flex h-42 justify-center gap-10">
-          <button
-            type="button"
-            onClick={handleMonthPrev}
-            className="outline-none hover:opacity-40"
-          >
-            <DoubleArrowPrev aria-label="이전 달" className="size-24" />
-          </button>
-          {/* todo: 연도, 날짜 드롭다운 추가 */}
-          <button
-            type="button"
-            className="text-20 font-bold outline-none hover:opacity-40"
-          >
-            {currentYear}년
-          </button>
-          <button
-            type="button"
-            className="text-20 font-bold outline-none hover:opacity-40"
-          >
-            {currentMonth + 1}월
-          </button>
-          <button
-            type="button"
-            onClick={handleMonthNext}
-            className="outline-none hover:opacity-40"
-          >
-            <DoubleArrowNext aria-label="다음 달" className="size-24" />
-          </button>
-        </div>
-        <div className="relative">
-          <Calendar
-            currentYear={currentYear}
-            currentMonth={currentMonth}
-            days={days}
-            monthlyData={monthlyData}
-            activityId={activityId}
-          />
-        </div>
-      </div>
+                  {activityTitle}
+                </Dropdown.Button>
+                <Dropdown.Body>
+                  {activityList?.map((activity, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      value={activity.title}
+                      // 첫번째 option 기본값으로 지정
+                      {...(index === 0 && { selected: true })}
+                    >
+                      {activity.title}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Body>
+              </Dropdown>
+            </section>
+          </div>
+          <div className="mb-100 mt-24 flex flex-col gap-17">
+            {/* control bar */}
+            <div className="flex h-42 justify-center gap-10">
+              <button
+                type="button"
+                onClick={handleMonthPrev}
+                className="outline-none hover:opacity-40"
+              >
+                <DoubleArrowPrev aria-label="이전 달" className="size-24" />
+              </button>
+              {/* todo: 연도, 날짜 드롭다운 추가 */}
+              <button
+                type="button"
+                className="text-20 font-bold outline-none hover:opacity-40"
+              >
+                {currentYear}년
+              </button>
+              <button
+                type="button"
+                className="text-20 font-bold outline-none hover:opacity-40"
+              >
+                {currentMonth + 1}월
+              </button>
+              <button
+                type="button"
+                onClick={handleMonthNext}
+                className="outline-none hover:opacity-40"
+              >
+                <DoubleArrowNext aria-label="다음 달" className="size-24" />
+              </button>
+            </div>
+            <div className="relative">
+              <Calendar
+                currentYear={currentYear}
+                currentMonth={currentMonth}
+                days={days}
+                monthlyData={monthlyData}
+                activityId={activityId}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <NoActivitiesPlaceholder />
+      )}
     </MyPageLayout>
   );
 }
