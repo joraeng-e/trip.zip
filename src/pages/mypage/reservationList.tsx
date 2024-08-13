@@ -2,6 +2,7 @@ import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
+import ReviewModal from '@/components/mypage/ReservationList/ReviewModal/ReviewModal';
 import { getMyReservations } from '@/libs/api/myReservations';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { GetMyReservationsResponse, ReservationStatus } from '@trip.zip-api';
@@ -111,6 +112,7 @@ export default function ReservationList() {
             {isFetchingNextPage && <div>로딩 중...</div>}
           </>
         )}
+        <ReviewModal />
       </div>
     </MyPageLayout>
   );
