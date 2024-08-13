@@ -160,7 +160,7 @@ export default function BookingDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:absolute md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429">
+    <div className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429">
       <div className="flex h-48 w-full flex-col items-center">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center">
@@ -255,11 +255,11 @@ export default function BookingDetailModal({
           <span className="text-18 font-semibold text-custom-black">
             예약내역
           </span>
-          <div className="flex flex-1 flex-col gap-16">
+          <div className="flex flex-col gap-16">
             {reservations.map((reservation) => (
               <div
                 key={reservation.id}
-                className="flex flex-col gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
+                className="flex flex-col justify-center gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
               >
                 <div className="flex gap-10">
                   <span className="text-16 font-semibold text-custom-gray-700">
@@ -277,13 +277,13 @@ export default function BookingDetailModal({
                     {reservation.headCount}
                   </span>
                 </div>
-                <div className="flex justify-end gap-6">
+                <div className="flex w-full justify-end">
                   {reservation.status === 'pending' && (
-                    <>
+                    <div className="flex w-220 gap-6">
                       <Button
                         variant="activeButton"
                         hasICon={false}
-                        className="h-38 w-82"
+                        className="h-38"
                         onClick={() => confirmReservation(reservation.id)}
                       >
                         승인하기
@@ -291,12 +291,12 @@ export default function BookingDetailModal({
                       <Button
                         variant="inactiveButton"
                         hasICon={false}
-                        className="h-38 w-82"
+                        className="h-38"
                         onClick={() => declineReservation(reservation.id)}
                       >
                         거절하기
                       </Button>
-                    </>
+                    </div>
                   )}
                   {reservation.status === 'confirmed' && (
                     <div className="flex-center h-44 w-82 rounded-[26px] bg-custom-orange-100 text-14 font-bold text-custom-orange-200">

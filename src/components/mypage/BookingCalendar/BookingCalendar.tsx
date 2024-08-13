@@ -159,7 +159,9 @@ export default function Calendar({
   useClickOutside(modalRef, handleCloseModal);
 
   return (
-    <div className="grid grid-cols-7 gap-2 rounded-lg border-1 border-custom-gray-400">
+    <div
+      className={`relative grid grid-cols-7 gap-2 rounded-lg border-1 ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}`}
+    >
       {days.map((day) => (
         <div
           key={day}
@@ -175,13 +177,12 @@ export default function Calendar({
             : 'bg-green-400';
           const dateString = getLocalDateString(dateObject.date);
           const hasBooking = !!dateObject.bookingInfo;
-
           return (
             <button
               key={`${weekIndex}-${dateIndex}`}
-              className={`flex h-120 w-full flex-col justify-between border-b-1 border-custom-gray-400 pb-6 pl-6 md:h-154 ${
+              className={`flex h-120 w-full flex-col justify-between border-t-1 border-custom-gray-400 pb-6 pl-6 md:h-154 ${
                 hasBooking ? '' : 'cursor-default opacity-50'
-              }`}
+              } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200' : ''}`}
               type="button"
               onClick={() => handleDateClick(dateString)}
               disabled={!hasBooking}
@@ -204,13 +205,15 @@ export default function Calendar({
         }),
       )}
       {selectedDate && (
-        <div ref={modalRef}>
-          <BookingDetailModal
-            activityId={activityId}
-            date={selectedDate}
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
-          />
+        <div className="flex-center absolute left-0 top-0 flex h-full w-full backdrop-blur-sm">
+          <div ref={modalRef}>
+            <BookingDetailModal
+              activityId={activityId}
+              date={selectedDate}
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+            />
+          </div>
         </div>
       )}
     </div>
