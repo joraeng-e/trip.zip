@@ -16,6 +16,7 @@ type CalendarProps = {
   days: string[];
   monthlyData: GetMyActivitiesReservationDashboardResponse;
   activityId: number;
+  onRefresh: () => void;
 };
 
 type DateObject = {
@@ -44,6 +45,7 @@ export default function Calendar({
   days,
   monthlyData,
   activityId,
+  onRefresh,
 }: CalendarProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
@@ -153,6 +155,7 @@ export default function Calendar({
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedDate('');
+    onRefresh();
   };
 
   const modalRef = useRef<HTMLDivElement>(null);

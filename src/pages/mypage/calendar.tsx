@@ -75,20 +75,20 @@ export default function ReservationStatus() {
     fetchActivities();
   }, []);
 
+  const fetchBookingStatus = async () => {
+    try {
+      const response = await getMyActivitiesReservationDashboard({
+        activityId,
+        year: currentYear.toString(),
+        month: (currentMonth + 1).toString().padStart(2, '0'),
+      });
+      setMonthlyData(response);
+    } catch (error) {
+      console.error('Failed to fetch Monthly Booking Info', error);
+    }
+  };
   useEffect(() => {
     if (activityId === undefined) return;
-    const fetchBookingStatus = async () => {
-      try {
-        const response = await getMyActivitiesReservationDashboard({
-          activityId,
-          year: currentYear.toString(),
-          month: (currentMonth + 1).toString().padStart(2, '0'),
-        });
-        setMonthlyData(response);
-      } catch (error) {
-        console.error('Failed to fetch Monthly Booking Info', error);
-      }
-    };
     fetchBookingStatus();
   }, [activityId, currentMonth, currentYear]);
 
@@ -189,6 +189,7 @@ export default function ReservationStatus() {
                 days={days}
                 monthlyData={monthlyData}
                 activityId={activityId}
+                onRefresh={fetchBookingStatus}
               />
             </div>
           </div>
