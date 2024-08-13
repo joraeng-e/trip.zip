@@ -78,7 +78,7 @@ export default function DateTime() {
 
   return (
     <div className="space-y-4">
-      <div className="flex w-full items-center justify-between gap-5">
+      <div className="flex max-w-792 flex-wrap items-center justify-between gap-5">
         <div className="flex w-full max-w-380 flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
@@ -148,7 +148,7 @@ export default function DateTime() {
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="flex items-center justify-between gap-5"
+            className="flex max-w-792 items-center justify-between gap-5"
           >
             <input
               type="text"

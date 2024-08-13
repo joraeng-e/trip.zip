@@ -1,7 +1,17 @@
+import useClickOutside from '@/hooks/useClickOutside';
+import { deleteMyActivity } from '@/libs/api/myActivities';
 import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useRef, useState } from 'react';
+
+import Modal from '../commons/Modal';
+import { notify } from '../commons/Toast';
 
 interface MyCardProps {
+  id: number;
   bannerImageUrl: string;
   rating: number;
   reviewCount: number;
@@ -9,15 +19,57 @@ interface MyCardProps {
   price: number;
 }
 
+interface ErrorResponse {
+  message: string;
+}
+
 export default function MyCard({
+  id,
   bannerImageUrl,
   rating,
   reviewCount,
   title,
   price,
 }: MyCardProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteMyActivity,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
+      setIsDropdownOpen(false);
+      notify('success', '체험이 성공적으로 삭제되었습니다.');
+    },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      const errorMessage =
+        error.response?.data?.message || '체험 삭제에 실패했습니다.';
+      notify('error', errorMessage);
+    },
+  });
+
+  // useClickOutside(dropdownRef, () => {
+  //   if (isDropdownOpen) {
+  //     setIsDropdownOpen(false);
+  //   }
+  // });
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleEdit = () => {
+    router.push(`myActivities/editForm/${id}`);
+  };
+
+  const handleDelete = () => {
+    deleteMutation.mutate(id);
+  };
+
   return (
-    <div className="mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md hover:bg-gray-100 lg:h-[204px]">
+    <div className="mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
       <div className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]">
         <Image
           src={bannerImageUrl}
@@ -37,11 +89,55 @@ export default function MyCard({
             </div>
             <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
           </div>
-          <div>
-            <button className="text-gray-400 hover:text-gray-600">
+          <div className="relative">
+            <button
+              className="text-gray-400 hover:text-gray-600"
+              onClick={toggleDropdown}
+            >
               <KebabIcon />
-              {/* TODO: 수정,삭제 토글 추가 */}
             </button>
+            {isDropdownOpen && (
+              <div
+                ref={dropdownRef}
+                className="absolute right-0 top-full z-50 mt-2 w-160 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md"
+              >
+                <div className="absolute -top-2 right-20 rotate-90">
+                  <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
+                  <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
+                </div>
+                <Modal.Root>
+                  <Modal.Trigger>
+                    <p className="relative rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                      수정하기
+                    </p>
+                  </Modal.Trigger>
+                  <Modal.Content>
+                    <Modal.Description className="text-center">
+                      체험을 수정하시겠습니까?
+                    </Modal.Description>
+                    <Modal.Close onConfirm={handleEdit} confirm>
+                      예
+                    </Modal.Close>
+                  </Modal.Content>
+                </Modal.Root>
+                <hr className="my-2 border border-gray-200" />
+                <Modal.Root>
+                  <Modal.Trigger>
+                    <p className="z-50 rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                      삭제하기
+                    </p>
+                  </Modal.Trigger>
+                  <Modal.Content>
+                    <Modal.Description className="text-center">
+                      체험을 삭제하시겠습니까?
+                    </Modal.Description>
+                    <Modal.Close onConfirm={handleDelete} confirm>
+                      예
+                    </Modal.Close>
+                  </Modal.Content>
+                </Modal.Root>
+              </div>
+            )}
           </div>
         </div>
         <div className="flex items-center">

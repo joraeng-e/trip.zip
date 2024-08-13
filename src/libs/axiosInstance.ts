@@ -46,8 +46,16 @@ const refreshToken = async () => {
     const { accessToken, refreshToken: newRefreshToken } = response.data;
 
     // 새로운 토큰 저장
-    setCookie('accessToken', accessToken);
-    setCookie('refreshToken', newRefreshToken);
+    setCookie('accessToken', accessToken, {
+      path: '/',
+      secure: true,
+      sameSite: 'strict',
+    });
+    setCookie('refreshToken', newRefreshToken, {
+      path: '/',
+      secure: true,
+      sameSite: 'strict',
+    });
 
     axiosInstance.defaults.headers.common['Authorization'] =
       `Bearer ${accessToken}`;
