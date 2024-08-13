@@ -7,7 +7,7 @@ import {
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type BookingDetailModalProps = {
   activityId: number;
@@ -62,25 +62,27 @@ export default function BookingDetailModal({
 
   const deviceState = useDeviceState();
 
+  const fetchBookingDetails = async () => {
+    try {
+      const response = await getMyActivitiesReservedSchedule({
+        activityId,
+        date,
+      });
+      setSchedules(response);
+      if (response.length > 0) {
+        setSelectedSchedule(response[0]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch booking details', error);
+    }
+  };
+
   useEffect(() => {
     if (isOpen) {
       if (deviceState === 'MOBILE') {
         document.body.style.overflow = 'hidden';
       }
-      const fetchBookingDetails = async () => {
-        try {
-          const response = await getMyActivitiesReservedSchedule({
-            activityId,
-            date,
-          });
-          setSchedules(response);
-          if (response.length > 0) {
-            setSelectedSchedule(response[0]);
-          }
-        } catch (error) {
-          console.error('Failed to fetch booking details', error);
-        }
-      };
+
       fetchBookingDetails();
     } else {
       if (deviceState === 'MOBILE') {
@@ -137,6 +139,7 @@ export default function BookingDetailModal({
           r.id === reservationId ? { ...r, status: 'confirmed' } : r,
         ),
       );
+      fetchBookingDetails();
     } catch (error) {
       console.error('Failed to confirm reservation', error);
     }
@@ -154,6 +157,7 @@ export default function BookingDetailModal({
           r.id === reservationId ? { ...r, status: 'declined' } : r,
         ),
       );
+      fetchBookingDetails();
     } catch (error) {
       console.error('Failed to decline reservation', error);
     }
