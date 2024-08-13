@@ -51,7 +51,9 @@ export default function Layout({
     showFooter = false;
   }
 
-  const isMyPage = MYPAGE_PATHS.some((path) => pathname.startsWith(path));
+  const isMyPage = pathname
+    ? MYPAGE_PATHS.some((path) => pathname.startsWith(path))
+    : false;
 
   const loading = useLoading();
 

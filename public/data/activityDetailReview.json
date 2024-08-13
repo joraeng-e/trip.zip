@@ -5,39 +5,39 @@
     {
       "id": 1,
       "user": {
-        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_740_1722492804011.png",
         "nickname": "사용자1",
         "id": 101
       },
       "activityId": 201,
       "rating": 5,
-      "content": "정말 재미있었어요! 추천합니다.",
+      "content": "정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다.정말 재미있었어요! 추천합니다. #스포츠 #파티룸 #연인추천 #뷰맛집 ",
       "createdAt": "2024-07-28T09:47:16.206Z",
       "updatedAt": "2024-07-28T09:47:16.206Z"
     },
     {
       "id": 2,
       "user": {
-        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_740_1722492804011.png",
         "nickname": "사용자2",
         "id": 102
       },
       "activityId": 201,
       "rating": 4,
-      "content": "좋았지만 몇 가지 아쉬운 점이 있었습니다.",
+      "content": "좋았지만 몇 가지 아쉬운 점이 있었습니다. #친절해요 #청결해요",
       "createdAt": "2024-07-29T09:47:16.206Z",
       "updatedAt": "2024-07-29T09:47:16.206Z"
     },
     {
       "id": 3,
       "user": {
-        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png",
+        "profileImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_740_1722492804011.png",
         "nickname": "사용자3",
         "id": 103
       },
       "activityId": 201,
       "rating": 4,
-      "content": "전반적으로 만족스러웠습니다.",
+      "content": "전반적으로 만족스러웠습니다. #고급스러워요 #합리적이에요",
       "createdAt": "2024-07-30T09:47:16.206Z",
       "updatedAt": "2024-07-30T09:47:16.206Z"
     }

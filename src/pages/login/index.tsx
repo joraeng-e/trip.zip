@@ -3,11 +3,13 @@ import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
-import { postUser } from '@/libs/api/user';
-import { signupSchema } from '@/libs/utils/schemas/signupSchema';
+import SocialLogin from '@/components/socialAuth/SocialLogin';
+import { postLogin } from '@/libs/api/auth';
+import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
-import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
+import { LoginResponse } from '@trip.zip-api';
+import { setCookie } from 'cookies-next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,9 +19,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 type FormData = {
   email: string;
-  nickname: string;
   password: string;
-  confirmPassword: string;
 };
 
 interface ApiError extends Error {
@@ -37,7 +37,7 @@ export default function Signup() {
     formState: { errors, isValid },
     trigger,
   } = useForm<FormData>({
-    resolver: yupResolver(signupSchema),
+    resolver: yupResolver(loginSchema),
     mode: 'all',
   });
 
@@ -45,46 +45,57 @@ export default function Signup() {
 
   const router = useRouter();
 
-  const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
-    mutationFn: postUser,
-    onSuccess: () => {
+  const mutation = useMutation<LoginResponse, Error, FormData>({
+    mutationFn: postLogin,
+    onSuccess: (data: LoginResponse) => {
       setIsLoading(true);
-      notify('success', '가입 완료!');
-      router.push('/login');
+      notify('success', '로그인 완료!');
+      setCookie('accessToken', data.accessToken, {
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+      });
+      setCookie('refreshToken', data.refreshToken, {
+        path: '/',
+        secure: true,
+        sameSite: 'strict',
+      });
+      router.push('/activities');
     },
     onError: (error: ApiError) => {
       if (error.response && error.response.data) {
-        if (error.response.data.message === '중복된 이메일입니다.') {
-          notify('error', '이미 사용중인 이메일입니다.');
-        } else {
-          console.error('회원가입 실패', error);
+        const message = error.response.data.message;
+
+        switch (message) {
+          case '존재하지 않는 유저입니다.':
+            notify('error', '존재하지 않는 유저입니다.');
+            break;
+          case '비밀번호가 일치하지 않습니다.':
+            notify('error', '비밀번호가 일치하지 않습니다.');
+            break;
+          default:
+            console.error('로그인 실패', error);
         }
       }
     },
   });
 
-  // confirmPassword를 제외하고 폼 제출
-  const onSubmit: SubmitHandler<FormData> = ({ confirmPassword, ...data }) => {
-    const registerData: RegisterRequest = {
-      email: data.email,
-      nickname: data.nickname,
-      password: data.password,
-    };
-    mutation.mutate(registerData);
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    mutation.mutate(data);
   };
 
   return (
     <>
       <Head>
-        <title>회원가입 - Trip.zip</title>
+        <title>로그인 - Trip.zip</title>
         <meta
           name="description"
-          content="Trip.zip에 가입해 Trip.zip을 시작해보세요."
+          content="Trip.zip에 로그인해 체험 상품을 예약하세요."
         />
         <meta property="og:title" content="로그인 - Trip.zip" />
         <meta
           property="og:description"
-          content="Trip.zip에 가입해 Trip.zip을 시작해보세요."
+          content="Trip.zip에 로그인해 체험 상품을 예약하세요."
         />
       </Head>
       <div className="page-container">
@@ -106,31 +117,13 @@ export default function Signup() {
               onBlur={() => trigger('email')}
             />
             <Input
-              label="닉네임"
-              name="nickname"
-              type="text"
-              placeholder="닉네임을 입력해 주세요"
-              register={register('nickname')}
-              error={errors.nickname}
-              onBlur={() => trigger('nickname')}
-            />
-            <Input
               label="비밀번호"
               name="password"
               type="password"
-              placeholder="8자 이상 입력해 주세요"
+              placeholder="비밀번호를 입력해 주세요"
               register={register('password')}
               error={errors.password}
               onBlur={() => trigger('password')}
-            />
-            <Input
-              label="비밀번호 확인"
-              name="confirmPassword"
-              type="password"
-              placeholder="비밀번호를 한번 더 입력해 주세요"
-              register={register('confirmPassword')}
-              error={errors.confirmPassword}
-              onBlur={() => trigger('confirmPassword')}
             />
             {isLoading ? (
               <Loading />
@@ -140,19 +133,20 @@ export default function Signup() {
                 className="rounded-md"
                 variant={isValid ? 'activeButton' : 'disabledButton'}
               >
-                회원가입 하기
+                로그인 하기
               </Button>
             )}
           </form>
           <div className="text-md mt-20 flex gap-8">
-            <p>회원이신가요?</p>
+            <p>회원이 아니신가요?</p>
             <Link
-              href="login"
+              href="/signup"
               className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
             >
-              로그인하기
+              회원가입하기
             </Link>
           </div>
+          <SocialLogin />
         </div>
       </div>
     </>

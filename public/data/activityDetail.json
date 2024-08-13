@@ -2,41 +2,113 @@
   "id": 7,
   "userId": 21,
   "title": "함께 배우면 즐거운 스트릿댄스",
-  "description": "둠칫 둠칫 두둠칫",
+  "description": "둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫둠칫 둠칫 두둠칫",
   "category": "투어",
   "price": 10000,
   "address": "서울특별시 강남구 테헤란로 427",
-  "bannerImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/a.png",
+  "bannerImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_740_1722492804011.png",
   "subImageUrls": [
     {
       "id": 2,
-      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png"
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
     },
     {
       "id": 3,
-      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png"
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
     },
     {
       "id": 4,
-      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png"
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
     },
     {
       "id": 5,
-      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png"
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 6,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 7,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 8,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 9,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 10,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 11,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 12,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 13,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
+    },
+    {
+      "id": 14,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423844618.png"
+    },
+    {
+      "id": 15,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423788324.png"
+    },
+    {
+      "id": 16,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722424047095.png"
+    },
+    {
+      "id": 17,
+      "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_704_1722423916255.png"
     }
   ],
   "schedules": [
     {
-      "id": 1,
-      "date": "2023-12-01",
+      "id": 8328,
+      "date": "2024-08-05",
+      "startTime": "13:00",
+      "endTime": "14:00"
+    },
+    {
+      "id": 8329,
+      "date": "2024-08-10",
       "startTime": "12:00",
       "endTime": "13:00"
     },
     {
-      "id": 2,
-      "date": "2023-12-05",
-      "startTime": "12:00",
-      "endTime": "13:00"
+      "id": 8330,
+      "date": "2024-08-13",
+      "startTime": "13:00",
+      "endTime": "14:00"
+    },
+    {
+      "id": 8331,
+      "date": "2024-08-22",
+      "startTime": "14:00",
+      "endTime": "15:00"
+    },
+    {
+      "id": 8332,
+      "date": "2024-08-22",
+      "startTime": "15:00",
+      "endTime": "16:00"
+    },
+    {
+      "id": 8333,
+      "date": "2024-08-22",
+      "startTime": "16:00",
+      "endTime": "17:00"
     }
   ],
   "reviewCount": 5,
