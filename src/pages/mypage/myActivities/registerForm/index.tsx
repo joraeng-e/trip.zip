@@ -1,3 +1,5 @@
+import DateTime from '@/components/ActivitiyForm/DateTime';
+import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -15,13 +17,11 @@ import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
 
-import Button from '../commons/Button';
-import Input from '../commons/Input/Input';
-import Textarea from '../commons/Input/Textarea';
-import Modal from '../commons/Modal';
-import Select from '../commons/Select';
-import DateTime from './FormComponents/DateTime';
-import ImageUploader from './FormComponents/ImageUpload';
+import Button from '../../../../components/commons/Button';
+import Input from '../../../../components/commons/Input/Input';
+import Textarea from '../../../../components/commons/Input/Textarea';
+import Modal from '../../../../components/commons/Modal';
+import Select from '../../../../components/commons/Select';
 
 export default function MyActivityForm() {
   const router = useRouter();
@@ -44,7 +44,6 @@ export default function MyActivityForm() {
     trigger,
   } = methods;
 
-  //post api 성공 or 실패하면 모달이 열려요.
   const { mutate, isPending, isError } = useMutation({
     mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
@@ -61,7 +60,6 @@ export default function MyActivityForm() {
     },
   });
 
-  //폼 제출
   const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
     subImageUrls,
     ...rest
@@ -76,7 +74,6 @@ export default function MyActivityForm() {
     mutate(requestData);
   };
 
-  //카테고리 변경하는 함수, 선택된 카테고리의 값 업데이트 & 유효성 검사
   const handleCategoryChange = ({
     target: { value },
   }: React.ChangeEvent<HTMLSelectElement>) => {
@@ -109,7 +106,7 @@ export default function MyActivityForm() {
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.3 }}
       >
-        <form className="mb-60" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-60 px-15" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 등록</h1>
             {modalMessage && (
