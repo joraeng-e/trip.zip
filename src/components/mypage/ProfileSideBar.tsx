@@ -1,19 +1,13 @@
 import { useTabContext } from '@/context/TabContext';
 import { getUser } from '@/libs/api/user';
-import {
-  BaseProfile,
-  Logout,
-  ProfileAccountIcon,
-  ProfileCalendarIcon,
-  ProfileChecklistIcon,
-  ProfileCogIcon,
-} from '@/libs/utils/Icon';
+import { BaseProfile, Logout, ProfileAccountIcon, ProfileCalendarIcon, ProfileChecklistIcon, ProfileCogIcon } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+
 
 const baseTextStyle =
   'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold transition-all';
@@ -34,7 +28,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   const logout = () => {
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    deleteCookie('isLogin');
+    deleteCookie('isSocialUser');
     router.push('/');
   };
 

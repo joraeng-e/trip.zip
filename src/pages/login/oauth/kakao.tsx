@@ -40,6 +40,11 @@ export default function Kakao() {
             secure: true,
             sameSite: 'strict',
           });
+          setCookie('isSocialUser', true, {
+            path: '/',
+            secure: true,
+            sameSite: 'strict',
+          });
 
           router.push('/activities');
         } catch (error) {

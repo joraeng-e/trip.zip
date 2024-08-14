@@ -30,7 +30,7 @@ export default function LoggedInHeader() {
     notify('success', '로그아웃 되었습니다!');
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    deleteCookie('isLogin');
+    deleteCookie('isSocialUser');
     router.push('/');
   };
 
