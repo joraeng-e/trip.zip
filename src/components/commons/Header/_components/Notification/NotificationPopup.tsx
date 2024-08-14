@@ -31,14 +31,6 @@ export default function NotificationPopup({ closePopup }: Props) {
   const isIntersecting = useIntersectionObserver(sentinelRef);
   const isIntersectingInMobile = useIntersectionObserver(mobileSentinelRef);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
   useEffect(
     function handleScrollFetch() {
       if ((isIntersectingInMobile || isIntersecting) && hasNextPage) {
