@@ -103,7 +103,7 @@ const TabletAndPCUI = forwardRef<HTMLDivElement, UIProps>(
         <div className="mb-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <PaperPlaneIcon width={32} height={32} />
-            <h1 className="text-20 font-bold leading-32">
+            <h1 className="text-20 font-bold leading-32 text-black">
               알림 {!isLoading && `${totalCount}개`}
             </h1>
           </div>

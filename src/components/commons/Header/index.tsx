@@ -39,7 +39,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'}`}
+      className={`fixed top-0 z-50 h-70 w-full transition-all duration-500 ${isHeaderScrollValid ? 'bg-transparent text-white' : 'bg-white text-black shadow-lg'}`}
     >
       <div className="basic-container flex items-center justify-between">
         <Link href="/activities" aria-label="메인페이지로 이동">
