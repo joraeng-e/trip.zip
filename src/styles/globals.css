@@ -71,8 +71,8 @@ input:-webkit-autofill:active {
 
 /* 스크롤바의 핸들 */
 ::-webkit-scrollbar-thumb {
-  background: #ced8d5; /* 핸들 색상 */
-  border-radius: 10px; /* 모서리 둥글게 */
+  background: #ced8d5;
+  border-radius: 10px;
 }
 
 /* 핸들에 마우스를 올렸을 때 */

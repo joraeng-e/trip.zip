@@ -9,7 +9,7 @@ export default function NoActivity() {
     <div className="flex flex-col items-center justify-center">
       <Lottie animationData={EmptyLottie} loop={true} autoplay={true} />
       <p className="mt-20 text-2xl-medium text-custom-gray-700">
-        아직 등록한 체험이 없어요
+        아직 체험이 없어요
       </p>
     </div>
   );
