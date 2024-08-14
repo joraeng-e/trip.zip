@@ -110,7 +110,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
             <p>내 체험 관리</p>
           </div>
         </Link>
-        <Link href="/mypage/reservationStatus">
+        <Link href="/mypage/calendar">
           <div
             className={`${baseTextStyle} ${activeTab === 'reservationStatus' ? activeStyle : textGroupStyle}`}
             onClick={() => handleTabClick('reservationStatus')}

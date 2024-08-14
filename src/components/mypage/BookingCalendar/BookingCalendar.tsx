@@ -1,10 +1,13 @@
+import useClickOutside from '@/hooks/useClickOutside';
 import {
   getDaysInMonth,
   getFirstDayOfMonth,
   getLocalDateString,
 } from '@/libs/utils/dateUtils';
 import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
+import { useRef, useState } from 'react';
 
+import BookingDetailModal from './BookingDetailModal';
 import StatusTag from './BookingStatusTag';
 
 type CalendarProps = {
@@ -12,6 +15,8 @@ type CalendarProps = {
   currentMonth: number;
   days: string[];
   monthlyData: GetMyActivitiesReservationDashboardResponse;
+  activityId: number;
+  onRefresh: () => void;
 };
 
 type DateObject = {
@@ -39,7 +44,12 @@ export default function Calendar({
   currentMonth,
   days,
   monthlyData,
+  activityId,
+  onRefresh,
 }: CalendarProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+
   const today = removeTime(new Date());
 
   // 현재 달의 날짜 계산
@@ -134,8 +144,27 @@ export default function Calendar({
 
   const calendar = generateCalendar();
 
+  const handleDateClick = (date: string) => {
+    // 예약 정보가 있을 때만 모달 열기
+    if (bookingMap.has(date)) {
+      setSelectedDate(date);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDate('');
+    onRefresh();
+  };
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  useClickOutside(modalRef, handleCloseModal);
+
   return (
-    <div className="grid grid-cols-7 gap-2 border-1 border-custom-gray-400">
+    <div
+      className={`relative grid grid-cols-7 gap-2 rounded-lg border-1 ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}`}
+    >
       {days.map((day) => (
         <div
           key={day}
@@ -149,10 +178,17 @@ export default function Calendar({
           const alertClass = isPastDate(dateObject.date, today)
             ? 'bg-custom-gray-800'
             : 'bg-green-400';
+          const dateString = getLocalDateString(dateObject.date);
+          const hasBooking = !!dateObject.bookingInfo;
           return (
-            <div
+            <button
               key={`${weekIndex}-${dateIndex}`}
-              className="flex h-120 w-full flex-col justify-between border-b-1 border-custom-gray-400 pb-6 pl-6 md:h-154"
+              className={`flex h-120 w-full flex-col justify-between border-t-1 border-custom-gray-400 pb-6 pl-6 md:h-154 ${
+                hasBooking ? '' : 'cursor-default opacity-50'
+              } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200' : ''}`}
+              type="button"
+              onClick={() => handleDateClick(dateString)}
+              disabled={!hasBooking}
             >
               <div
                 className={`flex flex-col ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
@@ -161,19 +197,27 @@ export default function Calendar({
                   {dateObject.day}
                 </span>
                 {dateObject.bookingInfo && (
-                  <div
-                    className={`${alertClass} size-8 rounded-full ${new Date()}`}
-                  />
+                  <div className={`${alertClass} size-8 rounded-full`} />
                 )}
               </div>
               {dateObject.bookingInfo && (
-                <>
-                  <StatusTag bookingInfo={dateObject.bookingInfo} />
-                </>
+                <StatusTag bookingInfo={dateObject.bookingInfo} />
               )}
-            </div>
+            </button>
           );
         }),
+      )}
+      {selectedDate && (
+        <div className="flex-center absolute left-0 top-0 flex h-full w-full backdrop-blur-sm">
+          <div ref={modalRef}>
+            <BookingDetailModal
+              activityId={activityId}
+              date={selectedDate}
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

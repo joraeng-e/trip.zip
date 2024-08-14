@@ -1,9 +1,12 @@
 import CheckLottie from '@/../public/lottie/check.json';
 import ErrorLottie from '@/../public/lottie/error.json';
 import { StyledToastContainer } from '@/styles/ToastStyle';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { ToastOptions, ToastPosition, Zoom, toast } from 'react-toastify';
+
+// Lottie 컴포넌트를 클라이언트에서만 렌더링하도록 설정
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 /**
  * Toast 옵션 설정

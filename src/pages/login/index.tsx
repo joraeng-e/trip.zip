@@ -1,8 +1,9 @@
 import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
-import Modal from '@/components/commons/Modal';
+import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
+import SocialLogin from '@/components/socialAuth/SocialLogin';
 import { postLogin } from '@/libs/api/auth';
 import { loginSchema } from '@/libs/utils/schemas/loginSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,11 +41,14 @@ export default function Signup() {
     mode: 'all',
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const mutation = useMutation<LoginResponse, Error, FormData>({
     mutationFn: postLogin,
     onSuccess: (data: LoginResponse) => {
+      setIsLoading(true);
       notify('success', '로그인 완료!');
       setCookie('accessToken', data.accessToken, {
         path: '/',
@@ -121,13 +125,17 @@ export default function Signup() {
               error={errors.password}
               onBlur={() => trigger('password')}
             />
-            <Button
-              type="submit"
-              className="rounded-md"
-              variant={isValid ? 'activeButton' : 'disabledButton'}
-            >
-              로그인 하기
-            </Button>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Button
+                type="submit"
+                className="rounded-md"
+                variant={isValid ? 'activeButton' : 'disabledButton'}
+              >
+                로그인 하기
+              </Button>
+            )}
           </form>
           <div className="text-md mt-20 flex gap-8">
             <p>회원이 아니신가요?</p>
@@ -138,6 +146,7 @@ export default function Signup() {
               회원가입하기
             </Link>
           </div>
+          <SocialLogin />
         </div>
       </div>
     </>

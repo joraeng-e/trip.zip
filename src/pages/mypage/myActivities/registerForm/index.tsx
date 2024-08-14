@@ -1,19 +1,21 @@
 import DateTime from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
+import BaseModal from '@/components/ActivityDetail/BaseModal';
+import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
 import type { ActivitiesFormData } from '@/libs/utils/schemas/activitiesSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Category,
   PostActivitiesRequest,
   PostActivitiesResponse,
 } from '@trip.zip-api';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
 
@@ -25,10 +27,14 @@ import Select from '../../../../components/commons/Select';
 
 export default function MyActivityForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [modalMessage, setModalMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [category, setCategory] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -44,10 +50,11 @@ export default function MyActivityForm() {
     trigger,
   } = methods;
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
+      queryClient.invalidateQueries({ queryKey: ['myActivities'] });
       setModalMessage('체험 등록이 완료되었습니다.');
       setIsModalOpen(true);
       setIsSuccessMessage(true);
@@ -67,6 +74,7 @@ export default function MyActivityForm() {
     const requestData: PostActivitiesRequest = {
       ...rest,
       category: category as Category,
+      address,
       subImageUrls:
         subImageUrls?.filter((url): url is string => typeof url === 'string') ||
         null,
@@ -82,10 +90,17 @@ export default function MyActivityForm() {
     trigger('category');
   };
 
+  const handleAddressSelect = (data: Address) => {
+    setAddress(data.address);
+    setValue('address', data.address);
+    trigger('address');
+    setIsAddressModalOpen(false);
+  };
+
   const resetModalMessage = () => {
     setModalMessage('');
     setIsModalOpen(false);
-    if (isSuccessMessage) router.push('/activities');
+    if (isSuccessMessage) router.push('/mypage/myActivities');
   };
 
   const {
@@ -93,20 +108,14 @@ export default function MyActivityForm() {
     category: categoryError,
     description,
     price,
-    address,
     bannerImageUrl,
     subImageUrls,
   } = errors;
 
   return (
-    <FormProvider {...methods}>
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        transition={{ duration: 0.3 }}
-      >
-        <form className="mb-60 px-15" onSubmit={handleSubmit(onSubmit)}>
+    <MyPageLayout>
+      <FormProvider {...methods}>
+        <form className="mb-60 px-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 등록</h1>
             {modalMessage && (
@@ -155,21 +164,44 @@ export default function MyActivityForm() {
             <h3>가격</h3>
             <Input
               name="price"
-              type="text"
+              type="number"
               placeholder="가격"
               register={register('price')}
               maxWidth="792px"
               error={price}
             />
             <h3>주소</h3>
-            <Input
-              name="address"
+            <div className="flex items-center">
+              <Input
+                name="address"
+                type="text"
+                placeholder="주소"
+                register={register('address')}
+                error={errors.address}
+                disabled={true}
+                maxWidth="765px"
+              />
+              <Button
+                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
+                type="button"
+                onClick={() => setIsAddressModalOpen(true)}
+              >
+                검색
+              </Button>
+            </div>
+            <input
+              name="detailAddress"
               type="text"
-              placeholder="주소"
-              register={register('address')}
-              error={address}
-              maxWidth="792px"
+              placeholder="상세 주소"
+              className="basic-input max-w-792"
             />
+            <BaseModal
+              isOpen={isAddressModalOpen}
+              onClose={() => setIsAddressModalOpen(false)}
+              className="w-full max-w-600 px-24 py-45"
+            >
+              <DaumPostcode onComplete={handleAddressSelect} />
+            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime />
             <h3>배너 이미지</h3>
@@ -200,13 +232,8 @@ export default function MyActivityForm() {
               *이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          {isError && (
-            <p className="mt-4 text-red-500">
-              체험 등록 중 오류가 발생했습니다.
-            </p>
-          )}
         </form>
-      </motion.div>
-    </FormProvider>
+      </FormProvider>
+    </MyPageLayout>
   );
 }
