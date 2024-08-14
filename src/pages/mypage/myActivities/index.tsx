@@ -27,7 +27,6 @@ export default function MyActivities() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
 
-  // 모든 활동을 최신순으로 정렬
   const sortedActivities = useMemo(() => {
     if (!data) return [];
     return data.pages
@@ -38,16 +37,13 @@ export default function MyActivities() {
       );
   }, [data]);
 
-  //IntersectionObserver의 역할: 마지막 카드가 화면에 보이는가?
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        //더 로드할 페이지가 있고 + 현재 로딩중이 아니면 => 다음 페이지 로드
         if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      //마지막 카드 전체가 뷰포트에 들어올 때
       { threshold: 1.0 },
     );
 
@@ -73,7 +69,7 @@ export default function MyActivities() {
 
   return (
     <MyPageLayout>
-      <div className="mb-50">
+      <div className="mb-50 ml-10">
         <div className="mb-24 flex items-center justify-between">
           <h1 className="text-3xl-bold">내 체험 관리</h1>
           <Modal.Root>
@@ -106,6 +102,7 @@ export default function MyActivities() {
               <div
                 ref={index === sortedActivities.length - 1 ? lastCardRef : null}
                 key={activity.id}
+                className="duration-300 ease-in-out hover:scale-105"
               >
                 <MyCard {...activity} />
               </div>

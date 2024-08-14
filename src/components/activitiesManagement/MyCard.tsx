@@ -41,6 +41,7 @@ export default function MyCard({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
       setIsDropdownOpen(false);
+
       notify('success', '체험이 성공적으로 삭제되었습니다.');
     },
     onError: (error: AxiosError<ErrorResponse>) => {
@@ -75,10 +76,11 @@ export default function MyCard({
           src={bannerImageUrl}
           alt={title}
           layout="fill"
-          objectFit="cover"
+          sizes="153px"
+          className="object-cover"
         />
       </div>
-      <div className="flex flex-1 flex-col justify-between p-16">
+      <div className="flex flex-1 flex-col justify-between p-16 transition-all hover:bg-gray-100">
         <div className="flex items-center justify-between">
           <div>
             <div className="mb-4 flex items-center">
@@ -90,16 +92,13 @@ export default function MyCard({
             <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
           </div>
           <div className="relative">
-            <button
-              className="text-gray-400 hover:text-gray-600"
-              onClick={toggleDropdown}
-            >
-              <KebabIcon />
+            <button onClick={toggleDropdown}>
+              <KebabIcon className="md:h-40 md:w-40" />
             </button>
             {isDropdownOpen && (
               <div
                 ref={dropdownRef}
-                className="absolute right-0 top-full z-50 mt-2 w-160 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md"
+                className="absolute right-0 top-full z-50 mt-2 w-110 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-2 shadow-md md:w-140"
               >
                 <div className="absolute -top-2 right-20 rotate-90">
                   <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
@@ -107,7 +106,7 @@ export default function MyCard({
                 </div>
                 <Modal.Root>
                   <Modal.Trigger>
-                    <p className="relative rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                    <p className="relative rounded-md px-4 py-2 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
                       수정하기
                     </p>
                   </Modal.Trigger>
@@ -123,7 +122,7 @@ export default function MyCard({
                 <hr className="my-2 border border-gray-200" />
                 <Modal.Root>
                   <Modal.Trigger>
-                    <p className="z-50 rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                    <p className="z-50 rounded-md px-4 py-2 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
                       삭제하기
                     </p>
                   </Modal.Trigger>
