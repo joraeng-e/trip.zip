@@ -1,5 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
-import DotLoading from '@/components/commons/Loading/dotLoading';
+import DotLoading from '@/components/commons/Loading/DotLoading';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
