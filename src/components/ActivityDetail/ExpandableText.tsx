@@ -2,11 +2,11 @@ import { useState } from 'react';
 
 interface ExpandableTextProps {
   text: string;
-  maxLength: number;
+  maxLength?: number;
 }
 
 export default function ExpandableText(props: ExpandableTextProps) {
-  const { text, maxLength } = props;
+  const { text, maxLength = 100 } = props;
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleTextDisplay = isExpanded
