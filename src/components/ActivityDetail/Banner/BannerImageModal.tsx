@@ -36,8 +36,8 @@ export default function BannerImageModal(props: BannerImageModalProps) {
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} className="mx-40 h-820">
-      <div className="relative flex h-700 w-full items-center justify-center overflow-hidden">
-        <div className="h-full w-full">
+      <div className="relative mt-80 flex h-700 w-auto items-center justify-center overflow-hidden">
+        <div className="h-700 w-1200">
           <Image
             src={images[currentIndex]}
             alt={`image-${currentIndex}`}
