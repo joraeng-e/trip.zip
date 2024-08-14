@@ -3,7 +3,7 @@ import { useState } from 'react';
 interface ExpandableTextProps {
   text: string;
   maxLength?: number;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 export default function ExpandableText(props: ExpandableTextProps) {
