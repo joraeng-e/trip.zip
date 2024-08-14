@@ -1,36 +1,60 @@
-import { GetActivityReviewsResponse } from '@trip.zip-api';
+import { getActivityReviews } from '@/libs/api/activities';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import Pagination from '../../commons/Pagination';
-import ReviewCard from './ReviewCard';
+import ReviewList from './ReviewList';
 import ReviewTitle from './ReviewTitle';
 
-export default function Review(props: GetActivityReviewsResponse) {
-  const { averageRating, totalCount, reviews } = props;
+const SIZE = 5;
+
+export default function Review() {
+  const router = useRouter();
+  const { activityId } = router.query;
+  const ActivityId = Number(activityId);
+
   const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['Review', { ActivityId, page, SIZE }],
+    queryFn: () => getActivityReviews(ActivityId, page, SIZE),
+    placeholderData: keepPreviousData,
+  });
 
   const handlePageChange = (page: number) => {
     setPage(page);
   };
 
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (isError) {
+    return <div>에러가 발생하였습니다.</div>;
+  }
+
+  if (!data) {
+    return <div>데이터를 찾을 수 없습니다.</div>;
+  }
+
+  const totalPages = Math.ceil(data.totalCount / SIZE);
+
   return (
     <div>
       <hr className="contour" />
-      <ReviewTitle averageRating={averageRating} totalCount={totalCount} />
-      {reviews.map((review) => (
-        <ReviewCard
-          key={review.id}
-          user={review.user}
-          rating={review.rating}
-          content={review.content}
-          createdAt={review.createdAt}
-        />
-      ))}
-      <Pagination
-        handlePageChange={handlePageChange}
-        totalPages={10}
-        currentPage={page}
+      <ReviewTitle
+        averageRating={data.averageRating}
+        totalCount={data.totalCount}
       />
+      <ReviewList reviewsData={data} isLoading={isLoading} isError={isError} />
+      <div className="my-40 flex justify-center">
+        <Pagination
+          handlePageChange={handlePageChange}
+          totalPages={totalPages}
+          currentPage={page}
+        />
+      </div>
     </div>
   );
 }
