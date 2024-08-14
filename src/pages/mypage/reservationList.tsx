@@ -66,16 +66,10 @@ export default function ReservationList() {
   return (
     <MyPageLayout>
       <div className="mb-100 h-fit">
-        <div className="mb-30 flex w-full items-center justify-between">
+        <div className="mb-24 flex w-full items-center justify-between">
           <h1 className="text-3xl-bold">예약 내역</h1>
-          <Dropdown
-            selected={value}
-            setSelected={setValue}
-            width={100}
-            maxWidth={160}
-            height={50}
-          >
-            <Dropdown.Button className="w-100 rounded-xl border-2 border-custom-green-200 py-10 md:w-160">
+          <Dropdown selected={value} setSelected={setValue}>
+            <Dropdown.Button className="flex items-center justify-center rounded-xl border-2 border-custom-green-200 px-10 py-5 text-center">
               {value === '' && '전체 보기'}
               {value === 'pending' && '예약 신청'}
               {value === 'canceled' && '예약 취소'}
