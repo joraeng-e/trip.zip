@@ -102,8 +102,13 @@ export default function Activites() {
   const handleCategoryClick = (category: string | undefined) => {
     setPage(1);
     setSort('최신순');
-    setCategory(category);
-    updateQueryParams({ page: 1, sort: 'latest', category });
+    if (category === '전체') {
+      setCategory(undefined);
+      updateQueryParams({ page: 1, sort: 'latest', category: undefined });
+    } else {
+      setCategory(category);
+      updateQueryParams({ page: 1, sort: 'latest', category });
+    }
   };
 
   const handleKeyword = (keyword: string) => {
