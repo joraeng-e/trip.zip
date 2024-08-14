@@ -1,9 +1,11 @@
 import Button from '@/components/commons/Button';
+import { notify } from '@/components/commons/Toast';
 import useClickOutside from '@/hooks/useClickOutside';
 import { postReview } from '@/libs/api/myReservations';
 import { XIcon } from '@/libs/utils/Icon';
 import { formatNumber } from '@/libs/utils/formatNumber';
 import { Reservation } from '@trip.zip-api';
+import { isAxiosError } from 'axios';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 
@@ -30,13 +32,29 @@ export default function ReviewModal({
     setRating(rating);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const reviewData = {
       rating: rating,
       content: content,
     };
-    postReview({ reservationId: reservation.id, review: reviewData });
+    try {
+      const response = await postReview({
+        reservationId: reservation.id,
+        review: reviewData,
+      });
+      notify('success', '리뷰가 등록되었습니다.');
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const errorMessage =
+          error.response?.data?.message || '알 수 없는 오류 발생';
+        notify('error', errorMessage);
+      } else {
+        notify('error', '알 수 없는 오류 발생');
+      }
+    } finally {
+      onClose();
+    }
   };
 
   return (
@@ -56,7 +74,7 @@ export default function ReviewModal({
           </div>
           <form className="flex h-full flex-col gap-12" onSubmit={handleSubmit}>
             <div className="flex gap-8">
-              <div className="relative size-100 overflow-hidden rounded-xl bg-custom-gray-300">
+              <div className="relative size-100 overflow-hidden rounded-xl border-none bg-custom-gray-300 md:size-120">
                 <Image
                   className="object-cover"
                   src={reservation.activity.bannerImageUrl}
@@ -65,15 +83,15 @@ export default function ReviewModal({
                 />
               </div>
               <div className="flex flex-col gap-6">
-                <span className="text-16 font-bold text-nomad-black">
+                <span className="text-16 font-bold text-nomad-black md:text-20">
                   {reservation.activity.title}
                 </span>
-                <span className="text-14 font-normal text-nomad-black">
+                <span className="text-14 font-normal text-nomad-black md:text-16">
                   {reservation.date} / {reservation.startTime}-
                   {reservation.endTime} / {reservation.headCount}명
                 </span>
                 <hr />
-                <span className="text-20 font-bold text-nomad-black">
+                <span className="text-20 font-bold text-nomad-black md:text-32">
                   ₩ {formatNumber(reservation.totalPrice)}
                 </span>
               </div>
@@ -83,9 +101,10 @@ export default function ReviewModal({
             </div>
             <div className="relative h-full w-full">
               <textarea
-                className="relative h-full w-full flex-1 resize-none overflow-y-auto border-1 border-custom-gray-700 p-10 pb-20"
+                className="relative h-full w-full flex-1 resize-none overflow-y-auto rounded-md border-1 border-custom-gray-500 p-10 pb-20"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                placeholder="후기를 작성해주세요"
               ></textarea>
               <span className="absolute bottom-5 right-10">
                 {content.length}
