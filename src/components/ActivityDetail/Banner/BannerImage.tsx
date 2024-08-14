@@ -1,3 +1,4 @@
+import NoImage from '@/../public/imgs/no-img.png';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +22,6 @@ export default function BannerImage(props: ImageProps) {
     setIsModalOpen(false);
   };
 
-  // 바깥 스크롤 비활성화
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -36,23 +36,75 @@ export default function BannerImage(props: ImageProps) {
 
   const Images = [bannerImageUrl, ...(subImageUrl || [])];
 
+  const commonImageClass =
+    'object-cover transition duration-300 group-hover:brightness-75';
+  const commonContainerClass = 'group relative h-500 w-full';
+  const smallImageClass = 'group relative h-250 w-full';
+
   return (
     <div className="hidden pt-10 md:block">
       <div
         className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className} relative`}
       >
-        {/* 배너 이미지: 전체 그리드 열 차지 */}
-        <div className="group relative col-span-1 h-500 overflow-hidden md:col-span-1">
+        <div className={commonContainerClass}>
           <Image
             src={bannerImageUrl}
             alt="banner"
             fill
-            className="rounded-l-xl object-cover transition duration-300 group-hover:brightness-75"
+            className={`rounded-l-xl ${commonImageClass}`}
           />
         </div>
 
-        {/* 서브 이미지: 오른쪽 절반 차지, 최대 4개 */}
-        {subImageUrl && subImageUrl.length > 0 && (
+        {subImageUrl && subImageUrl.length === 1 && (
+          <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className={commonContainerClass}>
+              <Image
+                src={subImageUrl[0]}
+                alt="sub-image-0"
+                fill
+                className={`rounded-r-xl ${commonImageClass}`}
+              />
+            </div>
+          </div>
+        )}
+
+        {subImageUrl && subImageUrl.length === 2 && (
+          <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className={commonContainerClass}>
+              <Image
+                src={subImageUrl[0]}
+                alt="sub-image-0"
+                fill
+                className={`rounded-r-xl ${commonImageClass}`}
+              />
+            </div>
+          </div>
+        )}
+
+        {subImageUrl && subImageUrl.length === 3 && (
+          <div className="col-span-1 grid grid-cols-2 gap-2">
+            {subImageUrl.slice(0, 3).map((url, index) => (
+              <div key={index} className={smallImageClass}>
+                <Image
+                  src={url}
+                  alt={`sub-image-${index}`}
+                  fill
+                  className={commonImageClass}
+                />
+              </div>
+            ))}
+            <div className={smallImageClass}>
+              <Image
+                src={NoImage}
+                alt="base-profile"
+                fill
+                className={`rounded-br-xl ${commonImageClass}`}
+              />
+            </div>
+          </div>
+        )}
+
+        {subImageUrl && subImageUrl.length > 3 && (
           <div className="col-span-1 grid grid-cols-2 gap-2">
             {subImageUrl.slice(0, 4).map((url, index) => {
               const roundedClass =
@@ -61,14 +113,13 @@ export default function BannerImage(props: ImageProps) {
                   : index === 3
                     ? 'rounded-br-xl'
                     : '';
-
               return (
-                <div key={index} className="group relative h-250 w-full">
+                <div key={index} className={smallImageClass}>
                   <Image
                     src={url}
                     alt={`sub-image-${index}`}
                     fill
-                    className={`object-cover transition duration-300 group-hover:brightness-75 ${roundedClass}`}
+                    className={`${commonImageClass} ${roundedClass}`}
                   />
                 </div>
               );
@@ -78,9 +129,9 @@ export default function BannerImage(props: ImageProps) {
 
         <button
           onClick={handleOpenModal}
-          className="absolute bottom-20 right-20 h-40 w-120 rounded-3xl bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
+          className="absolute bottom-20 right-20 h-40 w-120 rounded-3xl border border-custom-gray-400 bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
         >
-          사진 모두 보기
+          사진 전체 보기
         </button>
         <div className="max-w-1200">
           <ImageModal
