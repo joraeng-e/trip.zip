@@ -25,8 +25,7 @@ export default function ActivityDetail() {
   });
 
   const subImageUrls =
-    data?.subImageUrls?.map((image) => image.imageUrl).filter((url) => url) ||
-    [];
+    data?.subImages?.map((image) => image.imageUrl).filter((url) => url) || [];
 
   const sectionRefs = {
     title: useRef<HTMLDivElement>(null),
