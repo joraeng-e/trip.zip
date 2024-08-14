@@ -1,33 +1,39 @@
-import React, { useState } from 'react';
-import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
 type RatingProps = {
   starSize: number;
   onClick: (rating: number) => void;
 };
 
-export default function Rating({ starSize, onClick }: RatingProps) {
+const StarIcon = React.memo(
+  ({ starSize, isFilled }: { starSize: number; isFilled: boolean }) => {
+    const Icon = isFilled ? FaStar : FaRegStar;
+    return <Icon size={starSize} className="text-yellow-500" />;
+  },
+);
+
+StarIcon.displayName = 'StarIcon';
+
+const Rating: React.FC<RatingProps> = ({ starSize, onClick }) => {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
 
-  const getStarIcon = (star: number) => {
-    if (hoverRating >= star || (!hoverRating && rating >= star)) {
-      return <FaStar size={starSize} className="text-yellow-500" />;
-    } else if (hoverRating + 0.5 === star || rating + 0.5 === star) {
-      return <FaStarHalfAlt size={starSize} className="text-yellow-500" />;
-    } else {
-      return <FaRegStar size={starSize} className="text-yellow-500" />;
-    }
+  const handleClickStar = useCallback(
+    (star: number) => {
+      setRating(star);
+      onClick(star);
+    },
+    [onClick],
+  );
+
+  const getStarStatus = (star: number) => {
+    return hoverRating >= star || rating >= star;
   };
 
-  const handleClickStar = (star: number) => {
-    setRating(star);
-    onClick(star);
-  };
-
-  return (
-    <div className="flex space-x-2">
-      {[1, 2, 3, 4, 5].map((star) => (
+  const starIcons = useMemo(
+    () =>
+      [1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
           type="button"
@@ -36,9 +42,13 @@ export default function Rating({ starSize, onClick }: RatingProps) {
           onClick={() => handleClickStar(star)}
           className="focus:outline-none"
         >
-          {getStarIcon(star)}
+          <StarIcon starSize={starSize} isFilled={getStarStatus(star)} />
         </button>
-      ))}
-    </div>
+      )),
+    [hoverRating, rating, starSize, handleClickStar],
   );
-}
+
+  return <div className="flex">{starIcons}</div>;
+};
+
+export default Rating;

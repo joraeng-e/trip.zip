@@ -1,8 +1,10 @@
 import Button from '@/components/commons/Button';
 import useClickOutside from '@/hooks/useClickOutside';
+import { postReview } from '@/libs/api/myReservations';
 import { XIcon } from '@/libs/utils/Icon';
 import { formatNumber } from '@/libs/utils/formatNumber';
 import { Reservation } from '@trip.zip-api';
+import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 
 import Rating from './Rating';
@@ -30,13 +32,11 @@ export default function ReviewModal({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
     const reviewData = {
       rating: rating,
       content: content,
     };
-
-    console.log(reviewData);
+    postReview({ reservationId: reservation.id, review: reviewData });
   };
 
   return (
@@ -56,11 +56,12 @@ export default function ReviewModal({
           </div>
           <form className="flex h-full flex-col gap-12" onSubmit={handleSubmit}>
             <div className="flex gap-8">
-              <div className="size-100 overflow-hidden rounded-xl bg-custom-gray-300">
-                <img
-                  className="h-full w-full object-cover"
+              <div className="relative size-100 overflow-hidden rounded-xl bg-custom-gray-300">
+                <Image
+                  className="object-cover"
                   src={reservation.activity.bannerImageUrl}
                   alt="액티비티이미지"
+                  layout="fill"
                 />
               </div>
               <div className="flex flex-col gap-6">
@@ -86,7 +87,7 @@ export default function ReviewModal({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               ></textarea>
-              <span className="absolute bottom-10 right-10">
+              <span className="absolute bottom-5 right-10">
                 {content.length}
               </span>
             </div>
