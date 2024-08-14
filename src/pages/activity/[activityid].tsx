@@ -6,6 +6,7 @@ import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
 import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
+import type { GetActivityDetailResponse } from '@trip.zip-api';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -14,7 +15,7 @@ export default function ActivityDetail() {
   const router = useRouter();
   const { ActivityId } = router.query;
 
-  const subImageUrls = DetailData.subImageUrls
+  const subImageUrls = DetailData.subImages
     .map((image) => image.imageUrl)
     .filter((url) => url);
 
@@ -108,7 +109,7 @@ export default function ActivityDetail() {
           <div className="mt-10 flex">
             <DetailContent
               sectionRefs={sectionRefs}
-              detailData={DetailData}
+              detailData={DetailData as GetActivityDetailResponse}
               reviewData={ReviewData}
             />
             <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
