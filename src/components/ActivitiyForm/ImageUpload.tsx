@@ -10,26 +10,35 @@ interface ImageUploadProps {
   name: string;
   maxImages?: number;
   label?: string;
+  existingImages?: { id: number; imageUrl: string }[];
+  onImageRemove?: (imageId: number) => void;
+  onSuccess?: (uploadedUrl: string) => void;
 }
 
 export default function ImageUploader({
   name,
   maxImages = 1,
   label = '이미지 등록',
+  existingImages = [],
+  onImageRemove,
+  onSuccess,
 }: ImageUploadProps) {
   const { setValue } = useFormContext();
-  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>([]);
+  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>(
+    existingImages.map((img) => img.imageUrl),
+  );
 
   const imageUploadMutation = useMutation({
     mutationFn: postActivityImage,
     onSuccess: (data) => {
+      const newUrl = data.activityImageUrl;
       setImagePreviewUrls((prevUrls) => {
-        const updatedUrls = [...prevUrls, data.activityImageUrl].slice(
-          0,
-          maxImages,
-        );
+        const updatedUrls = [...prevUrls, newUrl].slice(0, maxImages);
         return Array.from(new Set(updatedUrls));
       });
+      if (onSuccess) {
+        onSuccess(newUrl);
+      }
     },
     onError: (error) => {
       console.error('이미지 업로드 실패:', error);
@@ -61,6 +70,11 @@ export default function ImageUploader({
   };
 
   const handleDelete = (index: number) => {
+    const imageToDelete = existingImages[index];
+    if (imageToDelete && onImageRemove) {
+      onImageRemove(imageToDelete.id);
+    }
+
     const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
     setImagePreviewUrls(updatedUrls);
   };
@@ -71,7 +85,7 @@ export default function ImageUploader({
         <label
           htmlFor={`image-upload-${label}`}
           className={classNames(
-            'flex-center group h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
+            'flex-center group mb-5 h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
             {
               'opacity-50': imagePreviewUrls.length >= maxImages,
               'hover:border-nomad-black': imagePreviewUrls.length < maxImages,
@@ -117,6 +131,7 @@ export default function ImageUploader({
               src={url}
               alt="미리보기 이미지"
               fill
+              sizes="206px"
               className="mr-14 rounded-lg object-cover"
             />
             <button

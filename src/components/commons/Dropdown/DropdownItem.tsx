@@ -26,8 +26,8 @@ const Item: React.FC<ItemProps> = ({ children, value, ...rest }) => {
   return (
     <li
       {...rest}
-      style={{ height: itemHeight }}
-      className="flex-center flex h-auto w-full cursor-pointer justify-between rounded-lg py-3 hover:bg-custom-gray-300"
+      style={{ minHeight: itemHeight }}
+      className="flex-center flex w-full cursor-pointer justify-between rounded-lg py-3 hover:bg-custom-gray-300 active:bg-custom-gray-400"
       onClick={onSelect}
     >
       <span className="w-full text-center text-14 font-light md:text-18">

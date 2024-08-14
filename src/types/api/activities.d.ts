@@ -70,7 +70,7 @@ declare module '@trip.zip-api' {
     userId: number;
     title: string;
     description: string;
-    category: string;
+    category: Category;
     price: number;
     address: string;
     bannerImageUrl: string;

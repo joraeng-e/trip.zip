@@ -1,6 +1,7 @@
 import { SVGMotionProps, motion } from 'framer-motion';
 import React from 'react';
 
+
 type PathProps = SVGMotionProps<SVGPathElement>;
 
 const Path: React.FC<PathProps> = (props) => (
@@ -20,7 +21,7 @@ type MenuToggleProps = {
 export const MenuToggle = ({ toggle }: MenuToggleProps) => (
   <button
     onClick={toggle}
-    className="absolute left-29 top-100 mb-20 cursor-pointer"
+    className="absolute left-11 top-82 flex h-60 w-60 cursor-pointer items-center justify-center rounded-full"
   >
     <svg width="23" height="23" viewBox="0 0 23 23">
       <Path
