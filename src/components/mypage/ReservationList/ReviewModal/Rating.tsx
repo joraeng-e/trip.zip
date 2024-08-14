@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 type RatingProps = {
-  starSize: number; // 별의 크기 (px 단위)
+  starSize: number;
+  onClick: (rating: number) => void;
 };
 
-export default function Rating({ starSize }: RatingProps) {
+export default function Rating({ starSize, onClick }: RatingProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
 
@@ -19,6 +20,11 @@ export default function Rating({ starSize }: RatingProps) {
     }
   };
 
+  const handleClickStar = (star: number) => {
+    setRating(star);
+    onClick(star);
+  };
+
   return (
     <div className="flex space-x-2">
       {[1, 2, 3, 4, 5].map((star) => (
@@ -27,7 +33,7 @@ export default function Rating({ starSize }: RatingProps) {
           type="button"
           onMouseEnter={() => setHoverRating(star)}
           onMouseLeave={() => setHoverRating(0)}
-          onClick={() => setRating(star)}
+          onClick={() => handleClickStar(star)}
           className="focus:outline-none"
         >
           {getStarIcon(star)}
