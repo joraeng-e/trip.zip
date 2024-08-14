@@ -91,6 +91,7 @@ export default function ProfileImage({
             className="h-full w-full object-cover"
             width={160}
             height={160}
+            priority
           />
         ) : (
           <BaseProfile className="h-full w-full object-cover" />
