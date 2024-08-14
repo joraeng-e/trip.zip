@@ -38,6 +38,7 @@ export default function ProfileImage({
       handleImageChange(file);
       setPreviewImageUrl(URL.createObjectURL(file));
       setSelectedImage(file);
+      setIsEditBoxVisible(false);
     }
   };
 
