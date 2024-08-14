@@ -1,6 +1,7 @@
 import { TabProvider } from '@/context/TabContext';
 import { useMediaQuery } from '@/hooks/useMediaQeury';
 import { motion, useCycle } from 'framer-motion';
+import Head from 'next/head';
 import React, { ReactNode } from 'react';
 
 import { MenuToggle } from './MenuToggle';
@@ -30,38 +31,43 @@ export function MyPageLayout({ children }: { children: ReactNode }) {
   const isMobile = useMediaQuery('(max-width: 767px)');
 
   return (
-    <TabProvider>
-      <div
-        className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
-      >
-        <div className="sticky top-100 hidden md:block">
-          <ProfileSideBar toggleOpen={toggleOpen} />
-        </div>
-        {isMobile && (
-          <div className="flex">
-            <motion.nav initial={false} animate={isOpen ? 'open' : 'closed'}>
-              <MenuToggle toggle={() => toggleOpen()} />
-              <motion.div
-                className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100"
-                variants={sidebar}
-              ></motion.div>
-              {isOpen && <ProfileSideBar toggleOpen={toggleOpen} />}
-            </motion.nav>
+    <>
+      <Head>
+        <title>마이페이지 - Trip.zip</title>
+      </Head>
+      <TabProvider>
+        <div
+          className={`page-container min-screen flex pt-50 md:gap-20 ${isMobile ? 'flex-col items-center' : 'flex-row items-start'}`}
+        >
+          <div className="sticky top-100 hidden md:block">
+            <ProfileSideBar toggleOpen={toggleOpen} />
           </div>
-        )}
-        {(isMobile && isOpen) || (
-          <motion.div
-            className={`w-full md:flex-1`}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            transition={{ duration: 0.3 }}
-          >
-            {children}
-          </motion.div>
-        )}
-      </div>
-    </TabProvider>
+          {isMobile && (
+            <div className="flex">
+              <motion.nav initial={false} animate={isOpen ? 'open' : 'closed'}>
+                <MenuToggle toggle={() => toggleOpen()} />
+                <motion.div
+                  className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100"
+                  variants={sidebar}
+                ></motion.div>
+                {isOpen && <ProfileSideBar toggleOpen={toggleOpen} />}
+              </motion.nav>
+            </div>
+          )}
+          {(isMobile && isOpen) || (
+            <motion.div
+              className={`w-full md:flex-1`}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.3 }}
+            >
+              {children}
+            </motion.div>
+          )}
+        </div>
+      </TabProvider>
+    </>
   );
 }
 
