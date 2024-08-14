@@ -1,14 +1,21 @@
+import { ArrowDown } from '@/libs/utils/Icon';
 import { ReactNode } from 'react';
 
 import { useDropdownContext } from '.';
 
 type ButtonProps = {
   children: ReactNode;
+  showArrow?: boolean;
   className?: string;
 };
 
-export default function Button({ children, className, ...rest }: ButtonProps) {
-  const { toggleDropdown } = useDropdownContext();
+export default function Button({
+  children,
+  className,
+  showArrow = false,
+  ...rest
+}: ButtonProps) {
+  const { toggleDropdown, isOpen } = useDropdownContext();
 
   return (
     <button
@@ -18,6 +25,11 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
       type="button"
     >
       {children}
+      <ArrowDown
+        className={`${showArrow ? '' : 'invisible'} transition-transform duration-300 ${
+          isOpen ? 'rotate-180' : ''
+        }`}
+      />
     </button>
 
     // <button
