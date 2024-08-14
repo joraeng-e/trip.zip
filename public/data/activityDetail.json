@@ -6,8 +6,13 @@
   "category": "투어",
   "price": 10000,
   "address": "서울특별시 강남구 테헤란로 427",
+<<<<<<< HEAD
   "bannerImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/a.png",
   "subImageUrls": [
+=======
+  "bannerImageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/6-8_740_1722492804011.png",
+  "subImages": [
+>>>>>>> b43a42b (🐛 JE-77-fix: 타입 오류)
     {
       "id": 2,
       "imageUrl": "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/globalnomad/activity_registration_image/b.png"
