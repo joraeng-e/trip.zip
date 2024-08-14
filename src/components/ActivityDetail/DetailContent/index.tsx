@@ -31,12 +31,10 @@ export default function DetailContent(props: DetailContentProps) {
       />
       <div ref={sectionRefs.description} />
       <Description description={data.description} />
-
       <div ref={sectionRefs.address} />
       <Address address={data.address} />
-
       <div ref={sectionRefs.review} />
-      <Review />
+      <Review sectionRefs={sectionRefs} />
     </div>
   );
 }

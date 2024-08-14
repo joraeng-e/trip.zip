@@ -1,5 +1,5 @@
 import { getActivityReviews } from '@/libs/api/activities';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -9,33 +9,47 @@ import ReviewTitle from './ReviewTitle';
 
 const SIZE = 5;
 
-export default function Review() {
+interface ReviewProps {
+  sectionRefs: {
+    review: React.RefObject<HTMLDivElement>;
+  };
+}
+
+export default function Review(props: ReviewProps) {
   const router = useRouter();
   const { activityId } = router.query;
   const ActivityId = Number(activityId);
+  const { sectionRefs } = props; // sectionRefs props로 받기
 
-  const [page, setPage] = useState(1);
-
-  const { data, isLoading, isError } = useQuery({
+  const [page, setPage] = useState<number>(1);
+  const { data, isError } = useQuery({
     queryKey: ['Review', { ActivityId, page, SIZE }],
-    queryFn: () => getActivityReviews(ActivityId, page, SIZE),
-    placeholderData: keepPreviousData,
+    queryFn: () =>
+      page > 0
+        ? getActivityReviews(ActivityId, page, SIZE)
+        : Promise.resolve(null),
+    enabled: page > 0,
   });
 
-  const handlePageChange = (page: number) => {
-    setPage(page);
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+      // 페이지 변경 시 스크롤 조정
+      if (sectionRefs.review.current) {
+        const headerHeight = 150; // 헤더의 높이 (px)
+        const scrollToPosition =
+          sectionRefs.review.current.getBoundingClientRect().top +
+          window.scrollY -
+          headerHeight;
+        window.scrollTo({
+          top: scrollToPosition,
+        });
+      }
+    }
   };
 
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
-  if (isError) {
-    return <div>에러가 발생하였습니다.</div>;
-  }
-
   if (!data) {
-    return <div>데이터를 찾을 수 없습니다.</div>;
+    return <div></div>;
   }
 
   const totalPages = Math.ceil(data.totalCount / SIZE);
@@ -47,7 +61,7 @@ export default function Review() {
         averageRating={data.averageRating}
         totalCount={data.totalCount}
       />
-      <ReviewList reviewsData={data} isLoading={isLoading} isError={isError} />
+      <ReviewList reviewsData={data} isError={isError} />
       <div className="my-40 flex justify-center">
         <Pagination
           handlePageChange={handlePageChange}
