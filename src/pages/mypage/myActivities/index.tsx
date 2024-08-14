@@ -1,5 +1,6 @@
 import MyCard from '@/components/activitiesManagement/MyCard';
 import Button from '@/components/commons/Button';
+import DotLoading from '@/components/commons/Loading/dotLoading';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
@@ -103,7 +104,7 @@ export default function MyActivities() {
                 <MyCard {...activity} />
               </div>
             ))}
-            {isFetchingNextPage && <div>로딩 중...</div>}
+            {isFetchingNextPage && <DotLoading />}
           </>
         )}
       </div>

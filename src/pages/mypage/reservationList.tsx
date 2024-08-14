@@ -1,4 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
+import DotLoading from '@/components/commons/Loading/dotLoading';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
@@ -102,7 +103,7 @@ export default function ReservationList() {
                 <ReservationCard reservation={reservation} />
               </div>
             ))}
-            {isFetchingNextPage && <div>로딩 중...</div>}
+            {isFetchingNextPage && <DotLoading />}
           </>
         )}
       </div>
