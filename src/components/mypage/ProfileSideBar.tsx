@@ -46,6 +46,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   useEffect(() => {

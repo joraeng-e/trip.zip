@@ -18,6 +18,7 @@ export default function LoggedInHeader() {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   const handleProfileClick = () => {
@@ -30,7 +31,6 @@ export default function LoggedInHeader() {
     notify('success', '로그아웃 되었습니다!');
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    deleteCookie('isLogin');
     router.push('/');
   };
 
