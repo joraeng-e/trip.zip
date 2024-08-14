@@ -93,12 +93,12 @@ export default function MyCard({
           </div>
           <div className="relative">
             <button onClick={toggleDropdown}>
-              <KebabIcon />
+              <KebabIcon className="md:h-40 md:w-40" />
             </button>
             {isDropdownOpen && (
               <div
                 ref={dropdownRef}
-                className="absolute right-0 top-full z-50 mt-2 w-160 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md"
+                className="absolute right-0 top-full z-50 mt-2 w-110 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-2 shadow-md md:w-140"
               >
                 <div className="absolute -top-2 right-20 rotate-90">
                   <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
@@ -106,7 +106,7 @@ export default function MyCard({
                 </div>
                 <Modal.Root>
                   <Modal.Trigger>
-                    <p className="relative rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                    <p className="relative rounded-md px-4 py-2 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
                       수정하기
                     </p>
                   </Modal.Trigger>
@@ -122,7 +122,7 @@ export default function MyCard({
                 <hr className="my-2 border border-gray-200" />
                 <Modal.Root>
                   <Modal.Trigger>
-                    <p className="z-50 rounded-md px-4 py-4 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
+                    <p className="z-50 rounded-md px-4 py-2 text-center text-lg-medium transition-all hover:bg-custom-gray-300">
                       삭제하기
                     </p>
                   </Modal.Trigger>
