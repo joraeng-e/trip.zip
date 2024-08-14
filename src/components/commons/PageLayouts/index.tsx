@@ -1,3 +1,4 @@
+import { useLoading } from '@/hooks/useLoading';
 import { getUser } from '@/libs/api/user';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
@@ -6,6 +7,7 @@ import { ReactNode } from 'react';
 
 import Footer from '../Footer';
 import Header from '../Header';
+import Loading from '../Loading';
 
 type LayoutProps = {
   children: ReactNode;
@@ -53,21 +55,27 @@ export default function Layout({
     ? MYPAGE_PATHS.some((path) => pathname.startsWith(path))
     : false;
 
+  const loading = useLoading();
+
   return (
     <>
       {showHeader && <Header />}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={router.pathname}
-          initial={isMyPage ? undefined : { opacity: 0, y: -50 }}
-          animate={isMyPage ? undefined : { opacity: 1, y: 0 }}
-          exit={isMyPage ? undefined : { opacity: 0, y: -50 }}
-          transition={{ duration: 0.3 }}
-        >
-          {children}
-          {showFooter && <Footer />}
-        </motion.div>
-      </AnimatePresence>
+      {loading ? (
+        <Loading />
+      ) : (
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={router.pathname}
+            initial={isMyPage ? undefined : { opacity: 0, y: -50 }}
+            animate={isMyPage ? undefined : { opacity: 1, y: 0 }}
+            exit={isMyPage ? undefined : { opacity: 0, y: -50 }}
+            transition={{ duration: 0.3 }}
+          >
+            {children}
+            {showFooter && <Footer />}
+          </motion.div>
+        </AnimatePresence>
+      )}
     </>
   );
 }

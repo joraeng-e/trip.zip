@@ -1,7 +1,7 @@
 import tripZip from '@/../public/logo/tripZip.png';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
-import Modal from '@/components/commons/Modal';
+import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import SocialSignup from '@/components/socialAuth/SocialSignup';
 import { postUser } from '@/libs/api/user';
@@ -42,11 +42,14 @@ export default function Signup() {
     mode: 'all',
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const router = useRouter();
 
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({
     mutationFn: postUser,
     onSuccess: () => {
+      setIsLoading(true);
       notify('success', '가입 완료!');
       router.push('/login');
     },
@@ -130,13 +133,17 @@ export default function Signup() {
               error={errors.confirmPassword}
               onBlur={() => trigger('confirmPassword')}
             />
-            <Button
-              type="submit"
-              className="rounded-md"
-              variant={isValid ? 'activeButton' : 'disabledButton'}
-            >
-              회원가입 하기
-            </Button>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Button
+                type="submit"
+                className="rounded-md"
+                variant={isValid ? 'activeButton' : 'disabledButton'}
+              >
+                회원가입 하기
+              </Button>
+            )}
           </form>
           <div className="text-md mt-20 flex gap-8">
             <p>회원이신가요?</p>
