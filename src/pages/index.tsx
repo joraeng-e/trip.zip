@@ -5,6 +5,7 @@ import RouteLottie from '@/../../public/lottie/route.json';
 import TravelLottie from '@/../../public/lottie/travel.json';
 import TravellingLottie from '@/../../public/lottie/travelling.json';
 import Button from '@/components/commons/Button';
+import StartButton from '@/components/commons/Button/StartButton';
 import CarouselInfinity from '@/components/landing/InfiniteCarousel';
 import { motion, useInView } from 'framer-motion';
 import Lottie from 'lottie-react';
@@ -104,11 +105,7 @@ export default function Index() {
           transition={{ repeat: Infinity, duration: 1.5 }}
           className="absolute left-1/2 top-2/3 z-20 -ml-90 -translate-x-1/2 -translate-y-1/2"
         >
-          <Link href="/activities">
-            <button className="ml-15 max-w-200 rounded-2xl border-2 border-white border-opacity-60 bg-gray-200 bg-opacity-60 p-10 px-40 text-lg-bold hover:bg-opacity-90 hover:duration-500">
-              START
-            </button>
-          </Link>
+          <StartButton />
         </motion.div>
       </div>
       <div className="relative flex items-center justify-center">
