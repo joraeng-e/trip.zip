@@ -2,23 +2,26 @@ import { getActivities } from '@/libs/api/activities';
 import { RoundStar } from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { GetActivitiesResponse } from '@trip.zip-api';
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import { Activity } from '../activities/type';
 
+type ActivityWithPosition = Activity & { position: number };
+
 function Card({ data }: { data: Activity }) {
   const { title, price, rating, reviewCount, bannerImageUrl } = data;
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden rounded-[20px] shadow-lg">
       <Image
         src={bannerImageUrl}
         alt="banner"
-        fill
-        className="absolute inset-0 rounded-[20px] object-cover brightness-75 filter"
+        layout="fill"
+        objectFit="cover"
+        className="brightness-75"
       />
-
-      <div className="absolute inset-0 flex flex-col justify-end p-15">
+      <div className="absolute inset-0 flex h-full flex-col justify-end p-15">
         <div className="text-xs sm:text-sm flex items-center gap-2 font-semibold text-white">
           <RoundStar />
           <span>
@@ -49,9 +52,20 @@ function useActivities() {
 
 export default function CarouselInfinity() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPc, setIsPc] = useState(false);
   const { data, isLoading, isError } = useActivities();
 
   const activities = data?.activities || [];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsPc(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -68,36 +82,77 @@ export default function CarouselInfinity() {
       </div>
     );
 
-  const getVisibleActivities = () => {
-    const visibleActivities = [];
-    for (let i = -1; i <= 1; i++) {
-      const index = (currentIndex + i + activities.length) % activities.length;
-      visibleActivities.push(activities[index]);
+  const getVisibleActivities = (): ActivityWithPosition[] => {
+    const positions = isPc ? [-2, -1, 0, 1, 2] : [-1, 0, 1];
+    return positions.map((offset) => {
+      const index =
+        (currentIndex + offset + activities.length) % activities.length;
+      return { ...activities[index], position: offset };
+    });
+  };
+
+  const getCardStyle = (position: number, isPc: boolean) => {
+    if (!isPc) {
+      return {
+        scale: position === 0 ? 1 : 0.9,
+        opacity: position === 0 ? 1 : 0.5,
+        zIndex: position === 0 ? 20 : 10,
+        width: position === 0 ? 300 : 240,
+        height: position === 0 ? 300 : 240,
+      };
     }
-    return visibleActivities;
+
+    // PC version
+    if (position === 0) {
+      return { scale: 1, opacity: 1, zIndex: 30, width: 300, height: 300 };
+    } else if (Math.abs(position) === 1) {
+      return { scale: 0.85, opacity: 0.7, zIndex: 20, width: 270, height: 270 };
+    } else {
+      return { scale: 0.7, opacity: 0.5, zIndex: 10, width: 240, height: 240 };
+    }
   };
 
   return (
-    <div className="relative flex items-center justify-center">
-      <div className="flex overflow-hidden">
-        {getVisibleActivities().map((activity, index) => {
-          const isCenter = index === 1;
-          let sizeClasses = isCenter
-            ? 'w-[140px] h-[140px] sm:w-[200px] sm:h-[200px] md:w-[300px] md:h-[300px] lg:w-[390px] lg:h-[390px]'
-            : 'w-[120px] h-[120px] sm:w-[180px] sm:h-[180px] md:w-[260px] md:h-[260px] lg:w-[350px] lg:h-[350px]';
-          let opacityClasses = isCenter ? 'opacity-100' : 'opacity-70';
-          let scaleClasses = isCenter ? 'scale-100' : 'scale-90';
-          let zIndexClasses = isCenter ? 'z-20' : 'z-10';
-
-          return (
-            <div
-              key={activity.id}
-              className={`${sizeClasses} ${opacityClasses} ${scaleClasses} ${zIndexClasses} m-1 flex-shrink-0 transform items-center justify-center rounded-[20px] transition-all duration-[800ms] ease-in-out`}
-            >
-              <Card data={activity} />
-            </div>
-          );
-        })}
+    <div className="relative h-[480px] w-full overflow-hidden">
+      <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+        <AnimatePresence initial={false}>
+          {getVisibleActivities().map((activity) => {
+            const cardStyle = getCardStyle(activity.position, isPc);
+            return (
+              <motion.div
+                key={`${activity.id}-${activity.position}`}
+                initial={{
+                  x: `${activity.position * (isPc ? 110 : 90)}%`,
+                  scale: cardStyle.scale,
+                  opacity: cardStyle.opacity,
+                }}
+                animate={{
+                  x: `${activity.position * (isPc ? 100 : 90)}%`,
+                  scale: cardStyle.scale,
+                  opacity: cardStyle.opacity,
+                  zIndex: cardStyle.zIndex,
+                }}
+                exit={{
+                  x: `${activity.position * (isPc ? -110 : -90)}%`,
+                  scale: cardStyle.scale,
+                  opacity: 0,
+                }}
+                transition={{
+                  x: { type: 'spring', stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.3 },
+                  scale: { duration: 0.3 },
+                }}
+                className="absolute rounded-[10px]"
+                style={{
+                  width: `${cardStyle.width}px`,
+                  height: `${cardStyle.height}px`,
+                }}
+              >
+                <Card data={activity} />
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
   );
