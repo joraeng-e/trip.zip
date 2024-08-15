@@ -49,7 +49,7 @@ export default function ReservationStatus() {
   };
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
-  const [activityId, setActivityId] = useState<number>(0);
+  const [activityId, setActivityId] = useState<number>();
   const [activityTitle, setActivityTitle] = useState<string>('');
 
   const [monthlyData, setMonthlyData] =
