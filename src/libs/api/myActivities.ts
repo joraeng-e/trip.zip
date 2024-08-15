@@ -4,6 +4,7 @@ import {
   GetMyActivitiesReservedScheduleResponse,
   GetMyActivitiesResponse,
   PatchMyActivitiesReservationResponse,
+  PatchMyActivityRequest,
   PatchMyActivityResponse,
 } from '@trip.zip-api';
 
@@ -198,7 +199,7 @@ export async function patchMyActivity({
   data,
 }: {
   activityId: number;
-  data: FormData;
+  data: PatchMyActivityRequest;
 }): Promise<PatchMyActivityResponse> {
   try {
     const response = await axiosInstance.patch<PatchMyActivityResponse>(
@@ -206,7 +207,7 @@ export async function patchMyActivity({
       data,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       },
     );
