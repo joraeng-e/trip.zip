@@ -1,4 +1,4 @@
-import Empty from '@/../public/imgs/empty.png';
+import Empty from '@/../public/imgs/empty.webp';
 import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import {
@@ -49,7 +49,7 @@ export default function ReservationStatus() {
   };
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
-  const [activityId, setActivityId] = useState<number>();
+  const [activityId, setActivityId] = useState<number>(0);
   const [activityTitle, setActivityTitle] = useState<string>('');
 
   const [monthlyData, setMonthlyData] =
@@ -76,6 +76,7 @@ export default function ReservationStatus() {
   }, []);
 
   const fetchBookingStatus = async () => {
+    if (activityId === 0) return;
     try {
       const response = await getMyActivitiesReservationDashboard({
         activityId,
@@ -88,7 +89,6 @@ export default function ReservationStatus() {
     }
   };
   useEffect(() => {
-    if (activityId === undefined) return;
     fetchBookingStatus();
   }, [activityId, currentMonth, currentYear]);
 
@@ -100,22 +100,6 @@ export default function ReservationStatus() {
       setActivityId(selectedActivity.id);
     }
   }, [activityTitle, activityList]);
-
-  const NoActivitiesPlaceholder = () => (
-    <div className="flex h-full w-full flex-col">
-      <h2 className="text-32 font-bold">예약 현황</h2>
-      <div className="flex w-full flex-col items-center">
-        <Image
-          className="lg:size-240 size-200"
-          src={Empty}
-          alt="등록된 체험 없음"
-        />
-        <p className="text-24 font-medium text-custom-gray-700">
-          아직 등록한 체험이 없어요
-        </p>
-      </div>
-    </div>
-  );
 
   return (
     <MyPageLayout>
@@ -195,7 +179,19 @@ export default function ReservationStatus() {
           </div>
         </>
       ) : (
-        <NoActivitiesPlaceholder />
+        <div className="flex h-full w-full flex-col">
+          <h2 className="text-32 font-bold">예약 현황</h2>
+          <div className="flex w-full flex-col items-center">
+            <Image
+              className="lg:size-240 size-200"
+              src={Empty}
+              alt="등록된 체험 없음"
+            />
+            <p className="text-24 font-medium text-custom-gray-700">
+              아직 등록한 체험이 없어요
+            </p>
+          </div>
+        </div>
       )}
     </MyPageLayout>
   );

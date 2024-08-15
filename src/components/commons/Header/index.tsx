@@ -1,4 +1,4 @@
-import tripZip from '@/../public/logo/tripZip.png';
+import tripZip from '@/../public/logo/tripZip.webp';
 import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -43,7 +43,13 @@ export default function Header() {
     >
       <div className="basic-container flex items-center justify-between">
         <Link href="/activities" aria-label="메인페이지로 이동">
-          <Image src={tripZip} alt="trip.zip" width={130} height={20} />
+          <Image
+            src={tripZip}
+            alt="trip.zip"
+            width={130}
+            height={20}
+            priority
+          />
         </Link>
         {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
       </div>
