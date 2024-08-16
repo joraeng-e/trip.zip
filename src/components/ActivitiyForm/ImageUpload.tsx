@@ -138,11 +138,11 @@ export default function ImageUploader({
             <button
               type="button"
               onClick={() => handleDelete(index)}
-              className="absolute right-3 top-3 h-25 w-25 place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
+              className="absolute right-3 top-3 flex h-25 w-25 items-center justify-center place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
             >
               <XIcon
                 aria-label="삭제 아이콘"
-                className="h-32 w-32 fill-current text-green-950"
+                className="size-24 fill-current text-green-950"
               />
             </button>
           </div>
