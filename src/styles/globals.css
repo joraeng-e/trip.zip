@@ -14,6 +14,15 @@
   font-family: 'Pretendard-Regular';
 }
 
+body {
+  background-color: white;
+}
+
+body.dark {
+  background-color: #1b1b1b;
+  color: white;
+}
+
 @layer components {
   .basic-container {
     @apply mx-auto w-full max-w-1200 px-16;
@@ -35,6 +44,9 @@
   }
   .dark-base {
     @apply transition-all duration-500 dark:bg-custom-black dark:text-white;
+  }
+  .dark-border {
+    @apply dark:border-2 dark:border-white;
   }
 }
 
