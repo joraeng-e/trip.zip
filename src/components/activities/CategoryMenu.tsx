@@ -1,7 +1,15 @@
 import classNames from '@/libs/utils/classNames';
 import { useState } from 'react';
 
-const CATEGORIES = ['문화 · 예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
+const CATEGORIES = [
+  '전체',
+  '문화 · 예술',
+  '식음료',
+  '스포츠',
+  '투어',
+  '관광',
+  '웰빙',
+];
 
 export default function CategoryMenu({
   currentCategory,
@@ -11,13 +19,12 @@ export default function CategoryMenu({
   handleCategoryClick: (category: string | undefined) => void;
 }) {
   const [activeCategory, setActiveCategory] = useState<string | undefined>(
-    currentCategory,
+    currentCategory ?? '전체',
   );
 
   const handleClick = (category: string) => {
-    const newCategory = activeCategory === category ? undefined : category;
-    setActiveCategory(newCategory);
-    handleCategoryClick(newCategory);
+    setActiveCategory(category);
+    handleCategoryClick(category);
   };
 
   return (
@@ -28,7 +35,8 @@ export default function CategoryMenu({
             'flex-shrink-0 rounded-[15px] border border-custom-green-200 px-10 py-8 leading-26 md:px-36 md:py-16 md:text-18 xl:px-48',
             {
               'bg-custom-green-200 text-white': activeCategory === category,
-              'bg-white text-custom-green-200': activeCategory !== category,
+              'bg-white text-custom-green-200 hover:bg-[#125742] hover:text-white':
+                activeCategory !== category,
             },
           );
 

@@ -1,9 +1,4 @@
-import DetailData from '@/../public/data/activityDetail.json';
-import ReviewData from '@/../public/data/activityDetailReview.json';
-import {
-  GetActivityDetailResponse,
-  GetActivityReviewsResponse,
-} from '@trip.zip-api';
+import { GetActivityDetailResponse } from '@trip.zip-api';
 import React from 'react';
 
 import Review from '../Reivew';
@@ -18,32 +13,28 @@ interface DetailContentProps {
     review: React.RefObject<HTMLDivElement>;
   };
   detailData: GetActivityDetailResponse;
-  reviewData: GetActivityReviewsResponse;
 }
 
 export default function DetailContent(props: DetailContentProps) {
   const { sectionRefs } = props;
+
+  const data = props.detailData;
+
   return (
     <div className="flex-1">
       <Title
-        title={DetailData.title}
-        address={DetailData.address}
-        category={DetailData.category}
-        rating={DetailData.rating}
-        reviewCount={DetailData.reviewCount}
+        title={data.title}
+        address={data.address}
+        category={data.category}
+        rating={data.rating}
+        reviewCount={data.reviewCount}
       />
       <div ref={sectionRefs.description} />
-      <Description description={DetailData.description} />
-
+      <Description description={data.description} />
       <div ref={sectionRefs.address} />
-      <Address address={DetailData.address} />
-
+      <Address address={data.address} />
       <div ref={sectionRefs.review} />
-      <Review
-        averageRating={ReviewData.averageRating}
-        totalCount={ReviewData.totalCount}
-        reviews={ReviewData.reviews}
-      />
+      <Review sectionRefs={sectionRefs} />
     </div>
   );
 }

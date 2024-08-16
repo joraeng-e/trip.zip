@@ -1,6 +1,7 @@
 import {
   GetActivitiesResponse,
   GetActivityDetailResponse,
+  GetActivityReviewsResponse,
   GetAvailableScheduleResponse,
   PostActivitiesImageResponse,
   PostActivitiesRequest,
@@ -124,15 +125,15 @@ export async function getActivityReviews(
   activityId: number,
   page: number,
   size: number,
-): Promise<GetAvailableScheduleResponse> {
+): Promise<GetActivityReviewsResponse> {
   try {
     const params = new URLSearchParams({
       page: page.toString(),
       size: size.toString(),
     });
 
-    const response = await axiosInstance.get<GetAvailableScheduleResponse>(
-      `/activities/${activityId}/available-schedule`,
+    const response = await axiosInstance.get<GetActivityReviewsResponse>(
+      `/activities/${activityId}/reviews`,
       {
         params,
       },
