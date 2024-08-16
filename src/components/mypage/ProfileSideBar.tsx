@@ -46,6 +46,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
 
   return (
     <div className="flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344">
-      <div className="relative flex items-center justify-center gap-24 md:gap-10 lg:gap-24">
+      <div className="relative flex items-center justify-center gap-24 md:flex-col md:gap-10 lg:flex-row lg:gap-24">
         <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
           {userInfo?.profileImageUrl ? (
             <Image
@@ -70,9 +71,13 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
             <BaseProfile className="h-full w-full object-cover" />
           )}
         </div>
-        <div className="flex flex-col">
-          <p className="text-2xl-bold">{userInfo?.nickname}</p>
-          <p>{userInfo?.email}</p>
+        <div className="flex flex-col md:text-center lg:text-left">
+          <p className="text-2xl-bold md:text-xl-bold lg:text-2xl-bold">
+            {userInfo?.nickname}
+          </p>
+          <p className="text-md-medium md:text-sm-medium lg:text-md-medium">
+            {userInfo?.email}
+          </p>
         </div>
       </div>
       <div className="flex w-full flex-col gap-12 px-12">

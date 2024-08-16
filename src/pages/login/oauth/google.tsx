@@ -1,3 +1,4 @@
+import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import { signInUser } from '@/libs/api/oauth';
 import { SignInRequest, SignInResponse } from '@trip.zip-api';
@@ -82,5 +83,5 @@ export default function Google() {
     handleOAuthCallback();
   }, [router.query]);
 
-  return <div>{loading ? <p>로딩 중...</p> : <p>구글 로그인 완료!</p>}</div>;
+  return <div>{loading && <Loading />}</div>;
 }

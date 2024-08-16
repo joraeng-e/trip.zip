@@ -18,6 +18,7 @@ export default function LoggedInHeader() {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   const handleProfileClick = () => {
@@ -30,7 +31,6 @@ export default function LoggedInHeader() {
     notify('success', '로그아웃 되었습니다!');
     deleteCookie('accessToken');
     deleteCookie('refreshToken');
-    deleteCookie('isLogin');
     router.push('/');
   };
 
@@ -72,13 +72,13 @@ export default function LoggedInHeader() {
               <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
             </div>
             <Link href="/mypage">
-              <p className="rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300">
+              <p className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300">
                 마이페이지
               </p>
             </Link>
             <hr className="my-2 border border-gray-200" />
             <p
-              className="rounded-md p-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+              className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300"
               onClick={logout}
             >
               로그아웃
