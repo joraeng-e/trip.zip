@@ -6,7 +6,6 @@ import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservat
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import { getActivityDetail } from '@/libs/api/activities';
 import { useQuery } from '@tanstack/react-query';
-import type { GetActivityDetailResponse } from '@trip.zip-api';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -15,10 +14,6 @@ export default function ActivityDetail() {
   const router = useRouter();
   const { activityId } = router.query;
   const ActivityId = Number(activityId);
-
-  const subImageUrls = DetailData.subImages
-    .map((image) => image.imageUrl)
-    .filter((url) => url);
 
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title');
