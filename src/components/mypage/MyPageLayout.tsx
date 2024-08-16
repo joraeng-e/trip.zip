@@ -47,7 +47,7 @@ export function MyPageLayout({ children }: { children: ReactNode }) {
               <motion.nav initial={false} animate={isOpen ? 'open' : 'closed'}>
                 <MenuToggle toggle={() => toggleOpen()} />
                 <motion.div
-                  className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100"
+                  className="absolute bottom-0 left-0 top-70 -z-10 w-full bg-custom-green-100 dark:bg-nomad-black"
                   variants={sidebar}
                 ></motion.div>
                 {isOpen && <ProfileSideBar toggleOpen={toggleOpen} />}

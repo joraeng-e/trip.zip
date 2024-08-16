@@ -230,7 +230,7 @@ export default function Info() {
               disabled={isSocialUser}
             />
             {isSocialUser && (
-              <p className="-mt-10 text-sm-medium text-custom-green-200">
+              <p className="-mt-10 text-sm-medium text-custom-green-200 dark:text-custom-green-100">
                 *소셜 로그인 유저는 닉네임과 프로필만 변경 가능합니다.
               </p>
             )}

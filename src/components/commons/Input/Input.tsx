@@ -80,7 +80,7 @@ export default function Input({
           {...register}
           onBlur={handleBlur}
           disabled={disabled}
-          className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'} ${disabled && 'cursor-not-allowed'}`}
+          className={`dark-base h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'} ${disabled && 'cursor-not-allowed dark:bg-custom-gray-800'}`}
         />
       )}
       {type === 'password' && (
