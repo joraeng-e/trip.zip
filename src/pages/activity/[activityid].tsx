@@ -5,6 +5,7 @@ import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs
 import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import { getActivityDetail } from '@/libs/api/activities';
+import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -17,12 +18,24 @@ export default function ActivityDetail() {
 
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title');
+  const [isSameUser, setIsSameUser] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['details', ActivityId],
     queryFn: () => getActivityDetail(ActivityId),
     enabled: !!ActivityId,
   });
+
+  const { data: userData, error: userError } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  });
+
+  useEffect(() => {
+    if (userData && data) {
+      setIsSameUser(userData.id === data.userId);
+    }
+  }, [userData, data]);
 
   const subImageUrls =
     data?.subImages?.map((image) => image.imageUrl).filter((url) => url) || [];
@@ -124,11 +137,16 @@ export default function ActivityDetail() {
             subImageUrl={subImageUrls}
           />
           <div className="mt-10 flex">
-            <DetailContent sectionRefs={sectionRefs} detailData={data} />
+            <DetailContent
+              sectionRefs={sectionRefs}
+              detailData={data}
+              isSameUser={isSameUser}
+            />
             <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar
                 price={data.price}
                 schedules={data.schedules}
+                isSameUser={isSameUser} // 상태 전달
               />
             </div>
           </div>
