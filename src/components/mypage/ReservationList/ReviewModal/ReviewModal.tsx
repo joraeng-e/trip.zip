@@ -34,6 +34,10 @@ export default function ReviewModal({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (rating <= 0) {
+      notify('error', '별점을 선택해주세요');
+      return;
+    }
     const reviewData = {
       rating: rating,
       content: content,
@@ -111,6 +115,7 @@ export default function ReviewModal({
               </span>
             </div>
             <Button
+              style={{ height: '54px' }}
               className="mt-12 h-54"
               type="submit"
               variant="activeButton"
