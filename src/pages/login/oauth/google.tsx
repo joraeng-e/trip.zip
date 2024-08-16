@@ -69,6 +69,11 @@ export default function Google() {
             secure: true,
             sameSite: 'strict',
           });
+          setCookie('isSocialUser', true, {
+            path: '/',
+            secure: true,
+            sameSite: 'strict',
+          });
 
           router.push('/activities');
         } catch (error) {

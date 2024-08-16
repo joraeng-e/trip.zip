@@ -8,6 +8,7 @@ type PasswordInputProps = {
   register: UseFormRegisterReturn;
   error?: FieldError;
   onBlur?: () => void;
+  disabled?: boolean;
 };
 
 /**
@@ -18,6 +19,7 @@ type PasswordInputProps = {
  * @param {UseFormRegisterReturn} register - react-hook-form의 register 함수 반환값
  * @param {FieldError} [error] - 입력 필드의 에러 정보 (선택적)
  * @param {() => void} [onBlur] - 포커스 아웃 시 호출되는 함수
+ * @param {boolean} disabled - 커서 접근 X
  * @returns {JSX.Element} - 렌더링된 PasswordInput 컴포넌트
  *
  * @author 김보미
@@ -29,6 +31,7 @@ export default function PasswordInput({
   register,
   error,
   onBlur,
+  disabled = false,
 }: PasswordInputProps) {
   const [isVisibilityIcon, setIsVisibilityIcon] = useState(false);
   const [isVibrating, setIsVibrating] = useState(false);
@@ -52,7 +55,8 @@ export default function PasswordInput({
         placeholder={placeholder}
         {...register}
         onBlur={handleBlur}
-        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'}`}
+        disabled={disabled}
+        className={`h-58 rounded-md border-2 px-16 outline-none focus:border-custom-green-200 ${isVibrating && 'animate-vibration'} ${error && 'border-red-400'} ${disabled && 'cursor-not-allowed'}`}
       />
       {isVisibilityIcon ? (
         <PasswordOnIcon
