@@ -39,6 +39,7 @@ export default function Info() {
   const { data: userInfo, refetch } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   const {

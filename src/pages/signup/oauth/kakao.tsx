@@ -1,3 +1,4 @@
+import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import { SignUpUser } from '@/libs/api/oauth';
 import { randomNickname } from '@/libs/utils/randomNickname';
@@ -52,7 +53,5 @@ export default function Kakao() {
     handleOAuthCallback();
   }, [router.query]);
 
-  return (
-    <div>{loading ? <p>로딩 중...</p> : <p>카카오 회원가입 완료!</p>}</div>
-  );
+  return <div>{loading && <Loading />}</div>;
 }
