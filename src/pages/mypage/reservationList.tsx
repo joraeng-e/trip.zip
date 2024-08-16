@@ -3,15 +3,24 @@ import DotLoading from '@/components/commons/Loading/DotLoading';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import ReservationCard from '@/components/mypage/ReservationList/ReservationCard';
+import ReviewModal from '@/components/mypage/ReservationList/ReviewModal/ReviewModal';
 import { getMyReservations } from '@/libs/api/myReservations';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { GetMyReservationsResponse, ReservationStatus } from '@trip.zip-api';
+import {
+  GetMyReservationsResponse,
+  Reservation,
+  ReservationStatus,
+} from '@trip.zip-api';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const CARD_PER_PAGE = 5;
 
 export default function ReservationList() {
   const [value, setValue] = useState<string>('');
+
+  const [reviewReservation, setReviewReservation] = useState<Reservation>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
+
   const lastCardRef = useRef<HTMLDivElement | null>(null);
 
   // 필터가 없을 경우 전체를 조회하도록 status 설정
@@ -64,6 +73,15 @@ export default function ReservationList() {
     };
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
+  const handleClickReview = (reservation: Reservation) => {
+    setReviewReservation(reservation);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <MyPageLayout>
       <div className="mb-100 h-fit">
@@ -100,11 +118,21 @@ export default function ReservationList() {
                 }
                 key={reservation.id}
               >
-                <ReservationCard reservation={reservation} />
+                <ReservationCard
+                  reservation={reservation}
+                  onReviewClick={handleClickReview}
+                />
               </div>
             ))}
             {isFetchingNextPage && <DotLoading />}
           </>
+        )}
+        {isModalOpen && reviewReservation && (
+          <ReviewModal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            reservation={reviewReservation}
+          />
         )}
       </div>
     </MyPageLayout>

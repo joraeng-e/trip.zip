@@ -1,5 +1,4 @@
 import {
-  Category,
   GetMyActivitiesReservationDashboardResponse,
   GetMyActivitiesReservationsResponse,
   GetMyActivitiesReservedScheduleResponse,

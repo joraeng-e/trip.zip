@@ -8,9 +8,13 @@ import React from 'react';
 
 type ReservationCardProps = {
   reservation: Reservation;
+  onReviewClick: (reservation: Reservation) => void;
 };
 
-export default function ReservationCard({ reservation }: ReservationCardProps) {
+export default function ReservationCard({
+  reservation,
+  onReviewClick,
+}: ReservationCardProps) {
   const {
     activity: { bannerImageUrl, title },
     id,
@@ -63,7 +67,14 @@ export default function ReservationCard({ reservation }: ReservationCardProps) {
           </>
         );
       case 'completed':
-        return <Button className="max-w-100 rounded-md">후기 작성</Button>;
+        return (
+          <Button
+            className="max-w-100 rounded-md"
+            onClick={() => onReviewClick(reservation)}
+          >
+            후기 작성
+          </Button>
+        );
       default:
         return;
     }
