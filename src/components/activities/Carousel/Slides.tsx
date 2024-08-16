@@ -1,65 +1,102 @@
+import { Bagel_Fat_One, Gowun_Batang, Gugi } from 'next/font/google';
 import Image from 'next/image';
+import Link from 'next/link';
 
-export function Slide1() {
+const gowunBatang = Gowun_Batang({ weight: '700', subsets: ['latin'] });
+const bagelFatOne = Bagel_Fat_One({ weight: '400', subsets: ['latin'] });
+const gugi = Gugi({ weight: '400', subsets: ['latin'] });
+
+export function SummerSlide() {
   return (
     <>
-      <div className="ml-24 mt-74 text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
-        <h1 className="text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80">
-          함께 배우면 즐거운
-          <br /> 스트릿 댄스
+      <div className="ml-20 mt-64 text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
+        <h1
+          className={`text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80 ${bagelFatOne.className}`}
+        >
+          여름휴가.zip
         </h1>
-        <span className="text-bold mt-8 text-14 leading-26 md:text-20">
-          8월의 인기 체험 BEST
-        </span>
+        <div className="text-bold mt-8 flex flex-col text-14 md:text-20">
+          <span>무더운 여름</span>
+          <span className="-mt-6 md:-mt-4">시원한 여행 패키지</span>
+        </div>
+        <Link
+          href="/"
+          className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
+        >
+          체험 보러가기 &#8594;
+        </Link>
       </div>
       <Image
-        src="/imgs/carousel1.png"
+        src="/imgs/carousel/summer.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>
   );
 }
 
-export function Slide2() {
+export function SeoulSlide() {
   return (
     <>
-      <div className="mr-24 mt-74 text-right text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
-        <h1 className="text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80">
-          위워크에서 <br />
-          코딩하기
+      <div className="mr-20 mt-64 text-right text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
+        <h1
+          className={`text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80 ${gugi.className}`}
+        >
+          서울 나들이.zip
         </h1>
-        <span className="text-bold mt-8 text-14 leading-26 md:text-20">
-          영준님 출석 바람
+        <span
+          className={`text-bold mt-8 block text-14 leading-26 md:text-20 ${gugi.className}`}
+        >
+          서울 방방곡곡
         </span>
+        <div className="flex justify-end">
+          <Link
+            href="/"
+            className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
+          >
+            체험 보러가기 &#8594;
+          </Link>
+        </div>
       </div>
       <Image
-        src="/imgs/carousel2.png"
+        src="/imgs/carousel/seoul.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>
   );
 }
 
-export function Slide3() {
+export function RestaurantSlide() {
   return (
     <>
-      <div className="ml-24 mt-74 text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
-        <h1 className="text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80">
-          2024 파리 올림픽 <br />
-          100배 즐기기
+      <div className="ml-20 mt-64 text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
+        <h1
+          className={`text-24 font-bold leading-28 md:text-54 md:leading-64 xl:text-68 xl:leading-80 ${gowunBatang.className}`}
+        >
+          맛.zip
         </h1>
-        <span className="text-bold mt-8 text-14 leading-26 md:text-20">
-          올해의 체험 선정
+        <span
+          className={`text-bold mt-8 block text-14 leading-26 md:text-20 ${gowunBatang.className}`}
+        >
+          어머 이건 찍어야 돼
         </span>
+        <Link
+          href="/"
+          className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
+        >
+          체험 보러가기 &#8594;
+        </Link>
       </div>
       <Image
-        src="/imgs/carousel3.png"
+        src="/imgs/carousel/steak.png"
         alt="carousel"
         fill
+        priority
         className="-z-10 object-cover"
       />
     </>

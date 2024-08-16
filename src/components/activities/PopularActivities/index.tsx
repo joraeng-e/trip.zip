@@ -2,53 +2,15 @@ import useDeviceState from '@/hooks/useDeviceState';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { getActivities } from '@/libs/api/activities';
 import Device from '@/libs/constants/device';
-import { ArrowLeft, ArrowRight, RoundStar } from '@/libs/utils/Icon';
+import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { GetActivitiesResponse } from '@trip.zip-api';
-import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Activity } from '../type';
+import PopularActivityCard, { PopularActivityCardSkeleton } from './Card';
 
-function PopularActivityCard({ data }: { data: Activity }) {
-  const { title, price, rating, reviewCount, bannerImageUrl } = data;
-  return (
-    <div className="relative h-186 w-[280px] flex-shrink-0 snap-start md:h-[384px] md:w-[384px]">
-      <Image
-        src={bannerImageUrl}
-        alt="banner"
-        fill
-        className="absolute inset-0 rounded-[20px] object-cover brightness-75 filter"
-      />
-
-      <div className="absolute inset-0 flex flex-col justify-end p-16 md:p-24">
-        <div className="flex items-center gap-2 text-12 font-semibold text-white md:text-16">
-          <RoundStar />
-          <span>
-            {rating} ({reviewCount})
-          </span>
-        </div>
-        <h1 className="mt-4 line-clamp-2 text-16 font-bold text-white md:mt-8 md:text-24">
-          {title}
-        </h1>
-        <div className="mt-4 md:mt-8">
-          <span className="text-16 font-bold text-white md:text-24">
-            ₩ {price.toLocaleString()}
-          </span>
-          <span className="text-12 text-[#a1a1a1] md:text-16">/ 인</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PopularActivityCardSkeleton() {
-  return (
-    <div className="animate-pulse h-186 w-[280px] flex-shrink-0 rounded-[20px] bg-gray-200 md:h-[384px] md:w-[384px]" />
-  );
-}
-
-export default function PopularActivities() {
+function PopularActivities() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(Number.POSITIVE_INFINITY);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -86,24 +48,37 @@ export default function PopularActivities() {
     if (totalPages > currentPage) setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  useEffect(() => {
-    if (data) setTotalPages(Math.floor(data.pages[0].totalCount / 3));
-  }, [data]);
-
-  useEffect(() => {
-    if (deviceState === Device.PC) return;
-    if (isIntersecting && hasNextPage) {
-      fetchNextPage();
-      setCurrentPage((prevPage) => prevPage + 1);
+  const currentActivities = useMemo(() => {
+    if (deviceState === Device.PC) {
+      return data?.pages[currentPage]?.activities || [];
+    } else {
+      return data?.pages.flatMap((page) => page.activities) || [];
     }
-  }, [isIntersecting, hasNextPage, deviceState, fetchNextPage]);
+  }, [deviceState, data, currentPage]);
 
-  let currentActivities: Activity[];
-  if (deviceState === Device.PC) {
-    currentActivities = data?.pages[currentPage]?.activities || [];
-  } else {
-    currentActivities = data?.pages.flatMap((page) => page.activities) || [];
-  }
+  useEffect(
+    function updateTotalPages() {
+      if (!data) return;
+      const totalCount = data.pages[0].totalCount;
+      const newTotalPages =
+        totalCount % 3 === 0 && totalCount !== 0
+          ? Math.floor(totalCount / 3) - 1
+          : Math.floor(totalCount / 3);
+      setTotalPages(newTotalPages);
+    },
+    [data],
+  );
+
+  useEffect(
+    function handleScrollFetch() {
+      if (deviceState === Device.PC) return;
+      if (isIntersecting && hasNextPage) {
+        fetchNextPage();
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    },
+    [isIntersecting, hasNextPage, deviceState],
+  );
 
   return (
     <div className="mt-24 md:mt-18 xl:mt-32">
@@ -132,27 +107,19 @@ export default function PopularActivities() {
       </div>
 
       <div className="no-scrollbar -m-20 flex snap-x gap-16 overflow-x-auto scroll-smooth p-20 md:gap-32 xl:gap-24">
-        {isLoading ? (
-          <>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <PopularActivityCardSkeleton key={index} />
-            ))}
-          </>
-        ) : isError ? (
-          <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
-            에러가 발생하였습니다.
-          </div>
+        {data?.pages.length !== 0 ? (
+          <Content
+            isLoading={isLoading}
+            isFetchingNextPage={isFetchingNextPage}
+            isError={isError}
+            data={currentActivities}
+          />
         ) : (
-          <>
-            {currentActivities.map((activity) => (
-              <PopularActivityCard key={activity.id} data={activity} />
-            ))}
-            {isFetchingNextPage &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <PopularActivityCardSkeleton key={`fetching-${index}`} />
-              ))}
-          </>
+          <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+            체험이 등록되지 않았습니다.
+          </div>
         )}
+
         {!isError && (
           <div
             ref={sentinelRef}
@@ -161,5 +128,54 @@ export default function PopularActivities() {
         )}
       </div>
     </div>
+  );
+}
+
+export default memo(PopularActivities);
+
+interface ContentProps {
+  isLoading: boolean;
+  isFetchingNextPage: boolean;
+  isError: boolean;
+  data: Activity[] | undefined;
+}
+
+function Content({
+  isLoading,
+  isFetchingNextPage,
+  isError,
+  data,
+}: ContentProps) {
+  if (isLoading) {
+    return (
+      <>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <PopularActivityCardSkeleton key={index} />
+        ))}
+      </>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+        에러가 발생하였습니다.
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {data?.map((activity) => (
+        <PopularActivityCard key={activity.id} data={activity} />
+      ))}
+      {isFetchingNextPage && (
+        <>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <PopularActivityCardSkeleton key={`fetching-${index}`} />
+          ))}
+        </>
+      )}
+    </>
   );
 }

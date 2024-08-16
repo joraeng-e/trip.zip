@@ -9,7 +9,12 @@ import SearchResult from '@/components/activities/Search/SearchResult';
 import Pagination from '@/components/commons/Pagination';
 import useDeviceState from '@/hooks/useDeviceState';
 import { getActivities } from '@/libs/api/activities';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  QueryClient,
+  dehydrate,
+  keepPreviousData,
+  useQuery,
+} from '@tanstack/react-query';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -97,8 +102,13 @@ export default function Activites() {
   const handleCategoryClick = (category: string | undefined) => {
     setPage(1);
     setSort('최신순');
-    setCategory(category);
-    updateQueryParams({ page: 1, sort: 'latest', category });
+    if (category === '전체') {
+      setCategory(undefined);
+      updateQueryParams({ page: 1, sort: 'latest', category: undefined });
+    } else {
+      setCategory(category);
+      updateQueryParams({ page: 1, sort: 'latest', category });
+    }
   };
 
   const handleKeyword = (keyword: string) => {
@@ -183,4 +193,24 @@ export default function Activites() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['activities', 'popular'],
+    queryFn: () =>
+      getActivities({
+        sort: 'most_reviewed',
+        size: 3,
+        method: 'cursor',
+      }),
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }

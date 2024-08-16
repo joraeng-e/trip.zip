@@ -50,7 +50,14 @@ export default function Layout({
     showHeader = false;
   }
 
-  if (pathname === '/login' || pathname === '/signup') {
+  if (
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/login/oauth/kakao' ||
+    pathname === '/signup/oauth/kakao' ||
+    pathname === '/login/oauth/google' ||
+    pathname === '/signup/oauth/google'
+  ) {
     showHeader = false;
     showFooter = false;
   }
