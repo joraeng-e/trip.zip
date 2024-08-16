@@ -20,7 +20,7 @@ export default function DropdownContainer({ value, setValue }: Props) {
       maxWidth={130}
       height={deviceState === Device.Mobile ? 41 : 59}
     >
-      <Dropdown.Button className="h-43 w-130 rounded-[15px] border border-custom-green-200 bg-white text-custom-green-200 md:h-59">
+      <Dropdown.Button className="flex h-43 w-130 items-center justify-between rounded-[15px] border border-custom-green-200 bg-white px-20 text-custom-green-200 md:h-59">
         가격
       </Dropdown.Button>
       <Dropdown.Body>
