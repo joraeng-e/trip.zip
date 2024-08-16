@@ -46,7 +46,7 @@ body.dark {
     @apply transition-all duration-500 dark:bg-custom-black dark:text-white;
   }
   .dark-border {
-    @apply dark:border-2 dark:border-white;
+    @apply dark:border-[1.5px] dark:border-white;
   }
 }
 
