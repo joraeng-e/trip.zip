@@ -1,6 +1,4 @@
-import { KebabIcon } from '@/libs/utils/Icon';
-import { LocationIcon } from '@/libs/utils/Icon';
-import React from 'react';
+import { KebabIcon, LocationIcon } from '@/libs/utils/Icon';
 import { FaStar } from 'react-icons/fa';
 
 interface TitleProps {
@@ -9,10 +7,11 @@ interface TitleProps {
   category: string;
   rating: number;
   reviewCount: number;
+  isSameUser: boolean;
 }
 
 export default function Title(props: TitleProps) {
-  const { title, address, category, rating, reviewCount } = props;
+  const { title, address, category, rating, reviewCount, isSameUser } = props;
 
   const handleClickClipboard = () => {
     navigator.clipboard.writeText(address).then(() => {
@@ -24,7 +23,8 @@ export default function Title(props: TitleProps) {
     <div className="mx-16 mt-16 flex-col">
       <div className="text-md-regular text-nomad-black">{category}</div>
       <div className="mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
-        {title} <KebabIcon className="" />
+        {title}
+        {isSameUser && <KebabIcon className="" />}
       </div>
       <div className="flex gap-12 text-md-regular text-custom-black">
         <FaStar className="mt-4 text-yellow-500" />
