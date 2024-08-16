@@ -113,34 +113,34 @@ export default function CarouselInfinity() {
   };
 
   return (
-    <div className="relative h-[480px] w-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden">
       <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
         <AnimatePresence initial={false}>
           {getVisibleActivities().map((activity) => {
             const cardStyle = getCardStyle(activity.position, isPc);
             return (
               <motion.div
-                key={`${activity.id}-${activity.position}`}
+                key={`${activity.id}`}
                 initial={{
-                  x: `${activity.position * (isPc ? 110 : 90)}%`,
+                  x: `${(activity.position + 1) * (isPc ? 110 : 90)}%`,
                   scale: cardStyle.scale,
                   opacity: cardStyle.opacity,
                 }}
                 animate={{
-                  x: `${activity.position * (isPc ? 100 : 90)}%`,
+                  x: `${activity.position * (isPc ? 110 : 90)}%`,
                   scale: cardStyle.scale,
                   opacity: cardStyle.opacity,
                   zIndex: cardStyle.zIndex,
                 }}
                 exit={{
-                  x: `${activity.position * (isPc ? -110 : -90)}%`,
+                  x: `${activity.position * (isPc ? 110 : 90)}%`,
                   scale: cardStyle.scale,
-                  opacity: 0,
+                  opacity: cardStyle.opacity,
                 }}
                 transition={{
                   x: { type: 'spring', stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.3 },
-                  scale: { duration: 0.3 },
+                  opacity: { duration: 0.5 },
+                  scale: { duration: 0.5 },
                 }}
                 className="absolute rounded-[10px]"
                 style={{

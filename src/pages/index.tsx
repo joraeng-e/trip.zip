@@ -116,10 +116,10 @@ export default function Index() {
       </div>
 
       <div className="bg-gray-100 pb-200 pt-100">
+        <div className="mb-200 flex h-300 flex-col items-center justify-center gap-40">
+          <CarouselInfinity />
+        </div>
         <div className="container mx-auto lg:px-200">
-          <div className="mb-200 flex h-300 flex-col items-center justify-center gap-40">
-            <CarouselInfinity />
-          </div>
           <motion.section
             ref={rightToLeftRef}
             initial="hidden"
