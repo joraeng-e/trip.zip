@@ -22,6 +22,8 @@ function PopularActivityCard({ data }: { data: Activity }) {
         src={imageSrc}
         alt="banner"
         fill
+        fetchPriority="high"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         onError={handleImageError}
         placeholder="blur"
         blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
@@ -50,7 +52,7 @@ export default memo(PopularActivityCard);
 export function PopularActivityCardSkeleton() {
   return (
     <div className="relative size-186 flex-shrink-0 overflow-hidden rounded-[20px] bg-slate-300 md:size-[384px]">
-      <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50"></div>
+      <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-50" />
     </div>
   );
 }

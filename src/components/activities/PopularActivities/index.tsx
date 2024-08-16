@@ -5,7 +5,7 @@ import Device from '@/libs/constants/device';
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { GetActivitiesResponse } from '@trip.zip-api';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Activity } from '../type';
 import PopularActivityCard, { PopularActivityCardSkeleton } from './Card';
@@ -48,9 +48,23 @@ function PopularActivities() {
     if (totalPages > currentPage) setCurrentPage((prevPage) => prevPage + 1);
   };
 
+  const currentActivities = useMemo(() => {
+    if (deviceState === Device.PC) {
+      return data?.pages[currentPage]?.activities || [];
+    } else {
+      return data?.pages.flatMap((page) => page.activities) || [];
+    }
+  }, [deviceState, data, currentPage]);
+
   useEffect(
     function updateTotalPages() {
-      if (data) setTotalPages(Math.floor(data.pages[0].totalCount / 3));
+      if (!data) return;
+      const totalCount = data.pages[0].totalCount;
+      const newTotalPages =
+        totalCount % 3 === 0 && totalCount !== 0
+          ? Math.floor(totalCount / 3) - 1
+          : Math.floor(totalCount / 3);
+      setTotalPages(newTotalPages);
     },
     [data],
   );
@@ -65,13 +79,6 @@ function PopularActivities() {
     },
     [isIntersecting, hasNextPage, deviceState],
   );
-
-  let currentActivities: Activity[];
-  if (deviceState === Device.PC) {
-    currentActivities = data?.pages[currentPage]?.activities || [];
-  } else {
-    currentActivities = data?.pages.flatMap((page) => page.activities) || [];
-  }
 
   return (
     <div className="mt-24 md:mt-18 xl:mt-32">
@@ -100,12 +107,19 @@ function PopularActivities() {
       </div>
 
       <div className="no-scrollbar -m-20 flex snap-x gap-16 overflow-x-auto scroll-smooth p-20 md:gap-32 xl:gap-24">
-        <Content
-          isLoading={isLoading}
-          isFetchingNextPage={isFetchingNextPage}
-          isError={isError}
-          data={currentActivities}
-        />
+        {data?.pages.length !== 0 ? (
+          <Content
+            isLoading={isLoading}
+            isFetchingNextPage={isFetchingNextPage}
+            isError={isError}
+            data={currentActivities}
+          />
+        ) : (
+          <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+            체험이 등록되지 않았습니다.
+          </div>
+        )}
+
         {!isError && (
           <div
             ref={sentinelRef}
