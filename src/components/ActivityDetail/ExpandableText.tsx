@@ -2,11 +2,12 @@ import { useState } from 'react';
 
 interface ExpandableTextProps {
   text: string;
-  maxLength: number;
+  maxLength?: number;
+  isLoading?: boolean;
 }
 
 export default function ExpandableText(props: ExpandableTextProps) {
-  const { text, maxLength } = props;
+  const { text, maxLength = 100, isLoading } = props;
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleTextDisplay = isExpanded
@@ -17,8 +18,17 @@ export default function ExpandableText(props: ExpandableTextProps) {
 
   return (
     <div>
-      <div>{handleTextDisplay}</div>
-      {text.length > maxLength && (
+      <div>
+        {isLoading ? (
+          <>
+            <div className="relative h-30"></div>
+            <div className="relative h-30"></div>
+          </>
+        ) : (
+          handleTextDisplay
+        )}
+      </div>
+      {!isLoading && text.length > maxLength && (
         <button
           className="mt-2 text-custom-gray-700"
           onClick={() => setIsExpanded((prev) => !prev)}

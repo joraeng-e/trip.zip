@@ -28,33 +28,38 @@ const tags = [
 ];
 
 interface ActivityTagsProps {
-  extractedTags: string[]; // props를 수정
+  extractedTags: string[];
+  isLoading: boolean;
 }
 
 export default function ActivityTags(props: ActivityTagsProps) {
-  const { extractedTags } = props;
+  const { extractedTags, isLoading } = props;
 
   return (
     <div className="my-16">
-      <div className="flex flex-wrap gap-10">
-        {tags
-          .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
-          .map(({ name, emoji }) => (
-            <motion.div
-              key={name}
-              className="flex items-center rounded-lg border border-custom-gray-400 p-12"
-              whileHover={{
-                scale: 1.05,
-                transition: { duration: 0.3 },
-              }}
-            >
-              {emoji}
-              <span className="mx-4 text-lg-medium text-nomad-black">
-                {name}
-              </span>
-            </motion.div>
-          ))}
-      </div>
+      {isLoading ? (
+        <div className="relative my-4 h-40"></div>
+      ) : (
+        <div className="flex flex-wrap gap-10">
+          {tags
+            .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
+            .map(({ name, emoji }) => (
+              <motion.div
+                key={name}
+                className="flex items-center rounded-lg border border-custom-gray-400 p-12"
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.3 },
+                }}
+              >
+                {emoji}
+                <span className="mx-4 text-lg-medium text-nomad-black">
+                  {name}
+                </span>
+              </motion.div>
+            ))}
+        </div>
+      )}
     </div>
   );
 }
