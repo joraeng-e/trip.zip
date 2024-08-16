@@ -8,6 +8,7 @@ import { myInfoSchema } from '@/libs/utils/schemas/myInfoSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { PostProfileImageResponse } from '@trip.zip-api';
+import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -38,6 +39,7 @@ export default function Info() {
   const { data: userInfo, refetch } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
   });
 
   const {
@@ -164,6 +166,8 @@ export default function Info() {
     }
   };
 
+  const isSocialUser = getCookie('isSocialUser') === 'true';
+
   return (
     <MyPageLayout>
       <div className="mb-100 h-fit">
@@ -212,6 +216,7 @@ export default function Info() {
               error={errors.newPassword}
               maxWidth="792px"
               onBlur={() => trigger('newPassword')}
+              disabled={isSocialUser}
             />
             <Input
               label="비밀번호 재입력"
@@ -222,8 +227,15 @@ export default function Info() {
               error={errors.reEnterPassword}
               maxWidth="792px"
               onBlur={() => trigger('reEnterPassword')}
+              disabled={isSocialUser}
             />
+            {isSocialUser && (
+              <p className="-mt-10 text-sm-medium text-custom-green-200">
+                *소셜 로그인 유저는 닉네임과 프로필만 변경 가능합니다.
+              </p>
+            )}
           </div>
+
           <ProfileImage
             profileImageUrl={profileImageUrl}
             handleImageChange={handleImageChange}

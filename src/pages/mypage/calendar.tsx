@@ -1,6 +1,6 @@
-import Empty from '@/../public/imgs/empty.png';
 import Dropdown from '@/components/commons/Dropdown';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import NoActivity from '@/components/mypage/NoActivity';
 import {
   getMyActivitiesReservationDashboard,
   getMyAllActivities,
@@ -101,29 +101,13 @@ export default function ReservationStatus() {
     }
   }, [activityTitle, activityList]);
 
-  const NoActivitiesPlaceholder = () => (
-    <div className="flex h-full w-full flex-col">
-      <h2 className="text-32 font-bold">예약 현황</h2>
-      <div className="flex w-full flex-col items-center">
-        <Image
-          className="lg:size-240 size-200"
-          src={Empty}
-          alt="등록된 체험 없음"
-        />
-        <p className="text-24 font-medium text-custom-gray-700">
-          아직 등록한 체험이 없어요
-        </p>
-      </div>
-    </div>
-  );
-
   return (
     <MyPageLayout>
+      <h1 className="mb-24 text-3xl-bold">예약 현황</h1>
       {activityList.length > 0 ? (
         <>
           <div className="flex h-full w-full min-w-342 flex-col gap-24">
             <section className="flex flex-col gap-32">
-              <h2 className="text-32 font-bold">예약 현황</h2>
               <Dropdown
                 selected={activityTitle}
                 setSelected={setActivityTitle}
@@ -195,7 +179,7 @@ export default function ReservationStatus() {
           </div>
         </>
       ) : (
-        <NoActivitiesPlaceholder />
+        <NoActivity />
       )}
     </MyPageLayout>
   );
