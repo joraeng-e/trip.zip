@@ -46,7 +46,7 @@ export default function Header() {
         <Link href="/activities" aria-label="메인페이지로 이동">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-20">
           <DarkMode />
           {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
         </div>
