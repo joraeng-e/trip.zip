@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
+import DarkMode from './_components/DarkMode';
 import LoggedInHeader from './_components/LoggedInHeader';
 import LoggedOutHeader from './_components/LoggedOutHeader';
 
@@ -45,7 +46,10 @@ export default function Header() {
         <Link href="/activities" aria-label="메인페이지로 이동">
           <Image src={tripZip} alt="trip.zip" width={130} height={20} />
         </Link>
-        {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
+        <div className="flex items-center gap-10">
+          <DarkMode />
+          {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
+        </div>
       </div>
     </header>
   );
