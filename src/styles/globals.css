@@ -23,6 +23,11 @@ body.dark {
   color: white;
 }
 
+body.dark input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #1b1b1b inset;
+  -webkit-text-fill-color: white;
+}
+
 @layer components {
   .basic-container {
     @apply mx-auto w-full max-w-1200 px-16;

@@ -37,7 +37,7 @@ export default function SearchBox({
             내가 원하는 체험은
           </label>
           <div className="absolute top-4">
-            <BedIcon />
+            <BedIcon className="fill-custom-green-200 dark:fill-white" />
           </div>
           <input
             id="activity-search"
@@ -45,7 +45,7 @@ export default function SearchBox({
             onChange={handleInputChange}
             value={inputValue}
             placeholder="키워드를 입력하세요"
-            className="h-full w-full rounded-[4px] border border-custom-gray-700 pl-48 pr-12 text-14 text-nomad-black outline-none focus:border-[1.5px] focus:border-[#1e5920] md:text-16 dark:border-none dark:focus:border-none"
+            className="dark-base dark-border h-full w-full rounded-[4px] border-[1.5px] border-custom-gray-700 pl-48 pr-12 text-14 text-nomad-black outline-none focus:border-[1.5px] focus:border-[#1e5920] md:text-16"
           />
         </div>
 
