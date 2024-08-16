@@ -33,6 +33,9 @@
   .min-screen {
     min-height: calc(100vh - 284px);
   }
+  .dark-base {
+    @apply transition-all duration-500 dark:bg-custom-black dark:text-white;
+  }
 }
 
 /* input number일 때 화살표 없애기 */
