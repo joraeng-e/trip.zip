@@ -3,10 +3,10 @@ import React from 'react';
 
 export default function DarkMode() {
   const { isDarkMode, toggleMode } = useDarkMode();
-  console.log(isDarkMode);
+
   return (
     <div
-      className="toggle-button cursor-pointer rounded-md border-[1.5px] border-custom-black bg-custom-black p-2 transition-transform duration-500 dark:border-white dark:bg-white"
+      className="toggle-button cursor-pointer rounded-md border-[1.5px] border-custom-black bg-white p-2 transition-transform duration-500 dark:border-white dark:bg-custom-black"
       onClick={toggleMode}
     >
       <svg width="30" height="30" viewBox="0 0 100 100" className="relative">
@@ -14,13 +14,13 @@ export default function DarkMode() {
           id="moon"
           d="M50 15A35 35 0 1 0 85 50A35 45 0 0 1 50 15Z"
           className={`transform transition-transform duration-500 ${
-            isDarkMode ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+            isDarkMode ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
           } fill-custom-black`}
         />
         <g
           id="sun"
           className={`transform transition-transform duration-500 ${
-            isDarkMode ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
+            isDarkMode ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
           }`}
         >
           <circle cx="50" cy="50" r="20" fill="white" />
