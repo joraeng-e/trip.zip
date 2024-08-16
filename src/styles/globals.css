@@ -35,6 +35,19 @@
   }
 }
 
+@keyframes darkenBg {
+  0% {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.animate-darken {
+  animation: darkenBg 3s ease-in-out forwards;
+}
+
 /* input number일 때 화살표 없애기 */
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {

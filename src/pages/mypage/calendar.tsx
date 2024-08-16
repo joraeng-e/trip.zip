@@ -76,6 +76,7 @@ export default function ReservationStatus() {
   }, []);
 
   const fetchBookingStatus = async () => {
+    if (activityId === 0) return;
     try {
       const response = await getMyActivitiesReservationDashboard({
         activityId,
@@ -88,7 +89,6 @@ export default function ReservationStatus() {
     }
   };
   useEffect(() => {
-    if (activityId === undefined) return;
     fetchBookingStatus();
   }, [activityId, currentMonth, currentYear]);
 
