@@ -1,19 +1,19 @@
 import Carousel from '@/components/commons/Carousel';
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 
-import { Slide1, Slide2, Slide3 } from './Slides';
+import { RestaurantSlide, SeoulSlide, SummerSlide } from './Slides';
 
 export default function CarouselContainer() {
   return (
     <Carousel.Root>
       <Carousel.Slide>
-        <Slide1 />
+        <SummerSlide />
       </Carousel.Slide>
       <Carousel.Slide>
-        <Slide2 />
+        <SeoulSlide />
       </Carousel.Slide>
       <Carousel.Slide>
-        <Slide3 />
+        <RestaurantSlide />
       </Carousel.Slide>
 
       <Carousel.Navigator>

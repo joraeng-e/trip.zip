@@ -19,6 +19,7 @@ function ActivityCard({ data }: { data: Activity }) {
         <Image
           src={imageSrc}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           onError={handleImageError}
           alt="banner"
           placeholder="blur"
@@ -38,7 +39,7 @@ function ActivityCard({ data }: { data: Activity }) {
       </h1>
       <div className="mb-4 mt-12">
         <span className="text-24 font-bold leading-26">
-          ₩ {price.toLocaleString()}{' '}
+          ₩ {price.toLocaleString()}
         </span>
         <span className="leading-24 text-[#a1a1a1]">/ 인</span>
       </div>

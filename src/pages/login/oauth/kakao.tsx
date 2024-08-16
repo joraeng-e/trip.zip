@@ -1,3 +1,4 @@
+import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import { signInUser } from '@/libs/api/oauth';
 import { SignInRequest, SignInResponse } from '@trip.zip-api';
@@ -40,6 +41,11 @@ export default function Kakao() {
             secure: true,
             sameSite: 'strict',
           });
+          setCookie('isSocialUser', true, {
+            path: '/',
+            secure: true,
+            sameSite: 'strict',
+          });
 
           router.push('/activities');
         } catch (error) {
@@ -54,5 +60,5 @@ export default function Kakao() {
     handleOAuthCallback();
   }, [router.query]);
 
-  return <div>{loading ? <p>로딩 중...</p> : <p>카카오 로그인 완료!</p>}</div>;
+  return <div>{loading && <Loading />}</div>;
 }

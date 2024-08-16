@@ -12,7 +12,7 @@ type ButtonProps = {
 export default function Button({
   children,
   className,
-  showArrow = false,
+  showArrow = true,
   ...rest
 }: ButtonProps) {
   const { toggleDropdown, isOpen } = useDropdownContext();

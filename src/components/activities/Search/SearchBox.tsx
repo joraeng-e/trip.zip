@@ -29,10 +29,10 @@ export default function SearchBox({
       </h1>
 
       <form onSubmit={handleSubmit} className="mt-15 flex h-56 gap-12 md:mt-20">
-        <div className="relative flex-grow">
+        <div className="group relative flex-grow">
           <label
             htmlFor="activity-search"
-            className="absolute -top-14 right-20 bg-white leading-26 text-custom-gray-800 md:left-34 md:right-auto md:px-10 xl:left-40"
+            className="absolute -top-14 right-20 bg-white leading-26 text-custom-gray-800 group-focus-within:text-custom-green-200 md:left-34 md:right-auto md:px-10 xl:left-40"
           >
             내가 원하는 체험은
           </label>

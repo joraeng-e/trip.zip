@@ -62,3 +62,20 @@ input:-webkit-autofill:active {
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* 전체 스크롤바 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* 스크롤바의 핸들 */
+::-webkit-scrollbar-thumb {
+  background: #ced8d5;
+  border-radius: 10px;
+}
+
+/* 핸들에 마우스를 올렸을 때 */
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}

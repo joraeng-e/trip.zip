@@ -22,7 +22,7 @@ export function PrevButton() {
       type="button"
       disabled={disabled}
       aria-label="prev"
-      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
+      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55"
       onClick={handlePrevClick}
     >
       <div className="size-15 md:size-21">
@@ -55,7 +55,7 @@ export function NextButton() {
       disabled={disabled}
       aria-label="next"
       onClick={handleNextClick}
-      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:border-custom-gray-300 md:size-55"
+      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55"
     >
       <div className="size-15 md:size-21">
         <PaginationArrowRight
