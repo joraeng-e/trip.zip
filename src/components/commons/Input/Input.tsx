@@ -24,6 +24,7 @@ type InputProps = {
  * @param {FieldError} [error] - 입력 필드의 에러 정보
  * @param {string} [maxWidth='640px'] - 반응형을 위한 입력 필드 컨테이너의 최대 너비. 기본값 640px
  * @param {() => void} [onBlur] - 포커스 아웃 시 호출되는 함수
+ * @param {boolean} disabled - 커서 접근 X
  * @returns {JSX.Element} - 렌더링된 Input 컴포넌트
  * @example
  * const { register, handleSubmit, formState: { errors }, onBlur } = useForm<FormData>({
@@ -89,6 +90,7 @@ export default function Input({
           register={register}
           error={error}
           onBlur={handleBlur}
+          disabled={disabled}
         />
       )}
       {error && (

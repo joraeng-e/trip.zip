@@ -144,7 +144,7 @@ export default function CarouselRoot({
 
   return (
     <CarouselContext.Provider value={contextValue}>
-      <div className="group/carousel relative h-240 w-full overflow-hidden md:h-550">
+      <div className="group/carousel relative h-240 w-full cursor-pointer select-none overflow-hidden md:h-550">
         <div
           ref={sliderRef}
           className={`flex size-full transition-transform duration-500 ease-in-out ${!hasMultipleSlides && 'justify-center'}`}
