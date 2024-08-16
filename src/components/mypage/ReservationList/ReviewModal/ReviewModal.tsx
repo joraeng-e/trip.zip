@@ -114,15 +114,11 @@ export default function ReviewModal({
                 {content.length}
               </span>
             </div>
-            <Button
-              style={{ height: '54px' }}
-              className="mt-12 h-54"
-              type="submit"
-              variant="activeButton"
-              hasICon
-            >
-              작성하기
-            </Button>
+            <div className="mt-12 h-54 md:h-56">
+              <Button type="submit" variant="activeButton" hasICon>
+                작성하기
+              </Button>
+            </div>
           </form>
         </div>
       </div>
