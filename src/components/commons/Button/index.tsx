@@ -48,7 +48,7 @@ export default function Button({
   const variantStyles = {
     activeButton: {
       baseClassName:
-        'w-full h-full md:text-xl flex-center cursor-pointer rounded-full bg-nomad-black py-7 text-center font-semibold text-custom-gray-100 shadow-lg hover:shadow-md hover:shadow-gray-400 md:py-11 dark:border-white dark:border-2',
+        'w-full h-full md:text-xl flex-center cursor-pointer rounded-full bg-nomad-black py-7 text-center font-semibold text-custom-gray-100 shadow-lg hover:shadow-md hover:shadow-gray-400 md:py-11 dark:border-white dark:border-[1.5px]',
       whileHover: {
         backgroundImage: 'linear-gradient(90deg, #47815b 0%, #112211 100%)',
       },
