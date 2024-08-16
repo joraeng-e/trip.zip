@@ -107,7 +107,7 @@ export default function ProfileImage({
       </motion.div>
       {isEditBoxVisible && (
         <motion.div
-          className="absolute -bottom-100 left-50 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-160 md:left-0 md:right-0 dark:bg-custom-black dark:text-white"
+          className="absolute -bottom-100 left-50 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-130 md:left-0 md:right-0 dark:bg-custom-black dark:text-white"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
