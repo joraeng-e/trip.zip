@@ -122,9 +122,12 @@ export default function DateTime({
           <input
             id="date"
             type="date"
-            className={classNames('basic-input max-w-380 cursor-pointer', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-380 cursor-pointer',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.date}
             min={todayDate}
             onChange={handleDateTimeInputChange}
@@ -137,9 +140,12 @@ export default function DateTime({
           <input
             id="startTime"
             type="time"
-            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-150 cursor-pointer p-10',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.startTime}
             onChange={handleDateTimeInputChange}
           />
@@ -154,9 +160,12 @@ export default function DateTime({
           <input
             id="endTime"
             type="time"
-            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-150 cursor-pointer p-10',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.endTime}
             onChange={handleDateTimeInputChange}
           />
