@@ -20,7 +20,7 @@ export function SummerSlide() {
           <span className="-mt-6 md:-mt-4">시원한 여행 패키지</span>
         </div>
         <Link
-          href="/"
+          href="/recommend/summer"
           className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
         >
           체험 보러가기 &#8594;
@@ -53,7 +53,7 @@ export function SeoulSlide() {
         </span>
         <div className="flex justify-end">
           <Link
-            href="/"
+            href="/recommend/seoul"
             className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
           >
             체험 보러가기 &#8594;
@@ -71,7 +71,7 @@ export function SeoulSlide() {
   );
 }
 
-export function RestaurantSlide() {
+export function FoodTourSlide() {
   return (
     <>
       <div className="ml-20 mt-64 text-white md:ml-32 md:mt-144 xl:mx-auto xl:mt-160 xl:w-1200">
@@ -86,7 +86,7 @@ export function RestaurantSlide() {
           어머 이건 찍어야 돼
         </span>
         <Link
-          href="/"
+          href="/recommend/food-tour"
           className="mt-4 block w-fit rounded-xl bg-custom-gray-200 px-12 py-6 text-12 text-nomad-black hover:bg-custom-gray-300 md:mt-20 md:rounded-2xl md:px-20 md:text-16"
         >
           체험 보러가기 &#8594;
