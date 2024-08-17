@@ -29,6 +29,7 @@ export default function DetailContent(props: DetailContentProps) {
         category={data.category}
         rating={data.rating}
         reviewCount={data.reviewCount}
+        id={data.id}
         isSameUser={isSameUser}
       />
       <div ref={sectionRefs.description} />
