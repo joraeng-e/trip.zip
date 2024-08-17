@@ -1,5 +1,6 @@
 import { XIcon } from '@/libs/utils/Icon';
 import { ModalProps } from '@/types/modaltype';
+import { motion } from 'framer-motion';
 import { useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -47,7 +48,12 @@ export default function ModalContent(props: ModalContentProps) {
   const renderPortal = () => {
     if (currentOpenState) {
       return createPortal(
-        <div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           {popover ? (
             <div
               style={{
@@ -71,7 +77,7 @@ export default function ModalContent(props: ModalContentProps) {
               onClick={handleClickOverlay}
             >
               <div
-                className={`min-w-300 relative z-50 h-auto w-auto flex-col rounded-lg bg-custom-gray-100 p-20 ${className}`}
+                className={`relative z-50 h-auto w-auto min-w-300 flex-col rounded-lg bg-custom-gray-100 p-20 ${className}`}
               >
                 {icon && (
                   <XIcon
@@ -83,7 +89,7 @@ export default function ModalContent(props: ModalContentProps) {
               </div>
             </div>
           )}
-        </div>,
+        </motion.div>,
         document.body,
       );
     }
