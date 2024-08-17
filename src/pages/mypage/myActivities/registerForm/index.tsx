@@ -14,17 +14,17 @@ import {
   PostActivitiesResponse,
 } from '@trip.zip-api';
 import '@uiw/react-markdown-preview/markdown.css';
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor, { commands } from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
+import remarkGfm from 'remark-gfm';
 
 import Button from '../../../../components/commons/Button';
 import Input from '../../../../components/commons/Input/Input';
-import Textarea from '../../../../components/commons/Input/Textarea';
 import Modal from '../../../../components/commons/Modal';
 import Select from '../../../../components/commons/Select';
 
@@ -52,7 +52,6 @@ export default function MyActivityForm() {
     setValue,
     formState: { errors },
     trigger,
-    control,
   } = methods;
 
   const { mutate, isPending } = useMutation({
@@ -109,10 +108,13 @@ export default function MyActivityForm() {
     if (isSuccessMessage) router.push('/mypage/myActivities');
   };
 
+  const customCommands = commands
+    .getCommands()
+    .filter((command) => command.name !== 'image');
+
   const {
     title,
     category: categoryError,
-    description,
     price,
     bannerImageUrl,
     subImageUrls,
@@ -166,8 +168,11 @@ export default function MyActivityForm() {
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
-                trigger('description');
               }}
+              previewOptions={{
+                remarkPlugins: [remarkGfm],
+              }}
+              commands={customCommands}
               data-color-mode="light"
             />
             {errors.description && (

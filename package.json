@@ -32,6 +32,7 @@
     "react-kakao-maps-sdk": "^1.1.27",
     "react-markdown": "^9.0.1",
     "react-toastify": "^10.0.5",
+    "remark-gfm": "^4.0.0",
     "styled-components": "^6.1.12",
     "vercel": "^35.2.1",
     "yup": "^1.4.0"
