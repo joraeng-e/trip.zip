@@ -12,6 +12,7 @@ interface ReservationSideBarProps {
     startTime: string;
     endTime: string;
   }[];
+  isSameUser: boolean;
   className?: string;
 }
 
@@ -20,7 +21,7 @@ type ValuePiece = Date | null;
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function ReservationSideBar(props: ReservationSideBarProps) {
-  const { price, schedules, className } = props;
+  const { price, schedules, isSameUser, className } = props;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -61,11 +62,17 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     return ''; // 스케줄이 있는 경우
   };
 
-  const handleButtonClick = (
+  const handleScheduleClick = (
     index: number,
     schedule: { startTime: string; endTime: string },
   ) => {
     setActiveIndex(index);
+
+    if (isSameUser) {
+      alert('같은 사용자입니다. 다른 알림이 표시됩니다!');
+    } else {
+      alert(`선택한 예약 시간: ${schedule.startTime} ~ ${schedule.endTime}`);
+    }
   };
 
   return (
@@ -97,7 +104,8 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
         <Schedule
           selectedSchedules={selectedSchedules}
           activeIndex={activeIndex}
-          handleButtonClick={handleButtonClick}
+          isSameUser={isSameUser}
+          handleScheduleClick={handleScheduleClick}
         />
       )}
     </div>

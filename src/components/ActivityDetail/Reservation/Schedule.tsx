@@ -3,14 +3,16 @@ import Button from '@/components/commons/Button';
 interface ScheduleProps {
   selectedSchedules: { startTime: string; endTime: string }[];
   activeIndex: number | null;
-  handleButtonClick: (
+  isSameUser: boolean;
+  handleScheduleClick: (
     index: number,
     schedule: { startTime: string; endTime: string },
   ) => void;
 }
 
 export default function Schedule(props: ScheduleProps) {
-  const { selectedSchedules, activeIndex, handleButtonClick } = props;
+  const { selectedSchedules, activeIndex, isSameUser, handleScheduleClick } =
+    props;
   return (
     <>
       <hr className="contour mx-0" />
@@ -20,7 +22,7 @@ export default function Schedule(props: ScheduleProps) {
           <button
             key={index}
             className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${activeIndex === index ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200' : 'text-custom-black'}`}
-            onClick={() => handleButtonClick(index, schedule)}
+            onClick={() => handleScheduleClick(index, schedule)}
           >
             {schedule.startTime} ~ {schedule.endTime}
           </button>
@@ -29,9 +31,15 @@ export default function Schedule(props: ScheduleProps) {
       <Button
         variant="activeButton"
         className="mt-4 h-36 rounded-md text-md-bold"
-        onClick={() => alert('Button Clicked!')}
+        onClick={() => {
+          if (isSameUser) {
+            alert('체험 수정하기 버튼 클릭됨!');
+          } else {
+            alert('예약하기 버튼 클릭됨!');
+          }
+        }}
       >
-        예약하기
+        {isSameUser ? '체험 수정하기' : '예약하기'}
       </Button>
     </>
   );
