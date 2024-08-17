@@ -10,7 +10,6 @@ import {
   Activities,
   GetMyActivitiesReservationDashboardResponse,
 } from '@trip.zip-api';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import Calendar from '../../components/mypage/BookingCalendar/BookingCalendar';
