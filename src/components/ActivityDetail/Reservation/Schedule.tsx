@@ -1,6 +1,8 @@
 import Button from '@/components/commons/Button';
 import { GetAvailableScheduleResponse } from '@trip.zip-api';
+import { getCookie } from 'cookies-next';
 import router from 'next/router';
+import { useEffect, useState } from 'react';
 
 interface ScheduleProps {
   selectedSchedules: { startTime: string; endTime: string; id: number }[];
@@ -22,12 +24,24 @@ export default function Schedule(props: ScheduleProps) {
     bookableSchedule,
   } = props;
 
+  const [loggedIn, setLoggedIn] = useState(false);
+
   const bookableIds = new Set<number>();
   bookableSchedule.forEach((schedule) => {
     schedule.times.forEach((time) => {
       bookableIds.add(time.id);
     });
   });
+
+  const checkLoginState = () => {
+    // 쿠키에서 accessToken을 확인해 로그인 상태 결정
+    const accessToken = getCookie('accessToken');
+    setLoggedIn(!!accessToken);
+  };
+
+  useEffect(() => {
+    checkLoginState();
+  }, []);
 
   return (
     <>
@@ -63,7 +77,9 @@ export default function Schedule(props: ScheduleProps) {
         variant="activeButton"
         className="mt-4 h-36 rounded-md text-md-bold"
         onClick={() => {
-          if (isSameUser) {
+          if (!loggedIn) {
+            router.push('/login');
+          } else if (isSameUser) {
             router.push('/mypage/myActivities');
           } else {
             alert('예약하기 버튼 클릭됨!');
