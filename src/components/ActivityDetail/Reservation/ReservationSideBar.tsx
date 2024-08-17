@@ -2,6 +2,7 @@ import { CalendarStyle } from '@/styles/CalendarStyle';
 import moment from 'moment';
 import { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
 import Schedule from './Schedule';
 
@@ -17,14 +18,13 @@ interface ReservationSideBarProps {
 }
 
 type ValuePiece = Date | null;
-
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function ReservationSideBar(props: ReservationSideBarProps) {
   const { price, schedules, isSameUser, className } = props;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
+  const [guestCount, setGuestCount] = useState<number>(1);
   const today = new Date();
   const [date, setDate] = useState<Value>(today);
   const [selectedSchedules, setSelectedSchedules] = useState<
@@ -67,7 +67,6 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     schedule: { startTime: string; endTime: string },
   ) => {
     setActiveIndex(index);
-
     if (isSameUser) {
       alert('같은 사용자입니다. 다른 알림이 표시됩니다!');
     } else {
@@ -75,14 +74,40 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     }
   };
 
+  // 총 금액 계산
+  const totalPrice = price * guestCount;
+
+  // 인원 수 조절 함수
+  const increaseGuestCount = () => {
+    setGuestCount((prevCount) => prevCount + 1);
+  };
+
+  const decreaseGuestCount = () => {
+    setGuestCount((prevCount) => (prevCount > 1 ? prevCount - 1 : prevCount));
+  };
+
   return (
     <div
       className={`w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
     >
-      <div className="my-10 text-center text-2xl-bold">
-        {price}
-        <span className="text-lg-regular text-custom-gray-700"> / 인</span>
+      <div className="relative my-20 text-center text-2xl-bold">
+        {totalPrice} {/* 총 금액 표시 */}
+        <span className="text-lg-regular text-custom-gray-700">
+          {' '}
+          / {guestCount}명
+        </span>
+        <div className="absolute -top-4 right-0 flex-col items-center justify-center">
+          <FaAngleUp
+            onClick={increaseGuestCount}
+            className="size-20 cursor-pointer"
+          />
+          <FaAngleDown
+            onClick={decreaseGuestCount}
+            className={`size-20 cursor-pointer ${guestCount <= 1 ? 'cursor-not-allowed text-gray-400' : 'cursor-pointer'}`}
+          />
+        </div>
       </div>
+
       <div>
         <CalendarStyle
           locale="ko"
