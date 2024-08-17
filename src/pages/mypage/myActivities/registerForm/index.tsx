@@ -13,6 +13,9 @@ import {
   PostActivitiesRequest,
   PostActivitiesResponse,
 } from '@trip.zip-api';
+import '@uiw/react-markdown-preview/markdown.css';
+import MDEditor from '@uiw/react-md-editor';
+import '@uiw/react-md-editor/markdown-editor.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import DaumPostcode, { Address } from 'react-daum-postcode';
@@ -34,6 +37,7 @@ export default function MyActivityForm() {
   const [category, setCategory] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [markdownValue, setMarkdownValue] = useState('');
 
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
@@ -48,6 +52,7 @@ export default function MyActivityForm() {
     setValue,
     formState: { errors },
     trigger,
+    control,
   } = methods;
 
   const { mutate, isPending } = useMutation({
@@ -73,6 +78,7 @@ export default function MyActivityForm() {
   }) => {
     const requestData: PostActivitiesRequest = {
       ...rest,
+      description: markdownValue,
       category: category as Category,
       address,
       subImageUrls:
@@ -154,13 +160,21 @@ export default function MyActivityForm() {
               error={categoryError?.message}
               maxWidth="792px"
             />
-            <Textarea
-              name="description"
-              placeholder="설명"
-              register={register('description')}
-              error={description}
-              maxWidth="792px"
+            <h3>설명</h3>
+            <MDEditor
+              value={markdownValue}
+              onChange={(val) => {
+                setMarkdownValue(val || '');
+                setValue('description', val || '');
+                trigger('description');
+              }}
+              data-color-mode="light"
             />
+            {errors.description && (
+              <p className="mt-2 text-xs-regular text-custom-red-200">
+                {errors.description.message}
+              </p>
+            )}
             <h3>가격</h3>
             <Input
               name="price"

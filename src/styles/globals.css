@@ -79,3 +79,12 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
 }
+
+/* 마크다운 */
+.w-md-editor-preview ol {
+  list-style-type: decimal;
+}
+
+.w-md-editor-preview ul {
+  list-style-type: disc;
+}
