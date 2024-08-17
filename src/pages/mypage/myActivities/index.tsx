@@ -9,7 +9,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useRef } from 'react';
 
-const useMyActivities = (size = 20) => {
+const useMyActivities = (size = 10) => {
   return useInfiniteQuery({
     queryKey: ['myActivities', size],
     queryFn: ({ pageParam }: { pageParam?: number }) =>
@@ -96,7 +96,6 @@ export default function MyActivities() {
               <div
                 ref={index === sortedActivities.length - 1 ? lastCardRef : null}
                 key={activity.id}
-                className="duration-300 ease-in-out hover:scale-105"
               >
                 <MyCard {...activity} />
               </div>
