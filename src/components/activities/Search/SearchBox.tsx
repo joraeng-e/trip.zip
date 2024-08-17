@@ -23,8 +23,8 @@ export default function SearchBox({
   };
 
   return (
-    <div className="dark-base dark-border rounded-2xl bg-white px-24 py-16 shadow-xl md:px-24 md:py-35">
-      <h1 className="text-16 font-bold leading-26 text-nomad-black md:text-20 md:leading-32 dark:text-white">
+    <div className="dark-base dark-border rounded-2xl border-[1.5px] border-white bg-white px-24 py-16 shadow-xl md:px-24 md:py-35">
+      <h1 className="text-16 font-bold leading-26 text-nomad-black dark:text-white md:text-20 md:leading-32">
         무엇을 체험하고 싶으신가요?
       </h1>
 
@@ -32,7 +32,7 @@ export default function SearchBox({
         <div className="group relative flex-grow">
           <label
             htmlFor="activity-search"
-            className="dark-base absolute -top-14 right-20 bg-white leading-26 text-custom-gray-800 group-focus-within:text-custom-green-200 md:left-34 md:right-auto md:px-10 xl:left-40 dark:group-focus-within:text-white"
+            className="dark-base absolute -top-14 right-20 bg-white leading-26 text-custom-gray-800 group-focus-within:text-custom-green-200 dark:group-focus-within:text-white md:left-34 md:right-auto md:px-10 xl:left-40"
           >
             내가 원하는 체험은
           </label>
