@@ -17,8 +17,8 @@ interface ReviewProps {
 
 export default function Review(props: ReviewProps) {
   const router = useRouter();
-  const { activityId } = router.query;
-  const ActivityId = Number(activityId);
+  const { activityid } = router.query;
+  const ActivityId = Number(activityid);
   const { sectionRefs } = props;
 
   const [page, setPage] = useState<number>(1);

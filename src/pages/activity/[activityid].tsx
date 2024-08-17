@@ -13,8 +13,8 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function ActivityDetail() {
   const router = useRouter();
-  const { activityId } = router.query;
-  const ActivityId = Number(activityId);
+  const { activityid } = router.query;
+  const ActivityId = Number(activityid);
 
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title');
