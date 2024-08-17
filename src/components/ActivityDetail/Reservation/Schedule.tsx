@@ -1,39 +1,70 @@
 import Button from '@/components/commons/Button';
+import { GetAvailableScheduleResponse } from '@trip.zip-api';
+import router from 'next/router';
 
 interface ScheduleProps {
-  selectedSchedules: { startTime: string; endTime: string }[];
+  selectedSchedules: { startTime: string; endTime: string; id: number }[];
   activeIndex: number | null;
   isSameUser: boolean;
+  bookableSchedule: GetAvailableScheduleResponse;
   handleScheduleClick: (
     index: number,
-    schedule: { startTime: string; endTime: string },
+    schedule: { startTime: string; endTime: string; id: number },
   ) => void;
 }
 
 export default function Schedule(props: ScheduleProps) {
-  const { selectedSchedules, activeIndex, isSameUser, handleScheduleClick } =
-    props;
+  const {
+    selectedSchedules,
+    activeIndex,
+    isSameUser,
+    handleScheduleClick,
+    bookableSchedule,
+  } = props;
+
+  const bookableIds = new Set<number>();
+  bookableSchedule.forEach((schedule) => {
+    schedule.times.forEach((time) => {
+      bookableIds.add(time.id);
+    });
+  });
+
   return (
     <>
       <hr className="contour mx-0" />
       <div className="text-lg-bold text-nomad-black">예약 가능 시간</div>
       <div className="my-16 grid grid-cols-2 gap-10">
-        {selectedSchedules.map((schedule, index) => (
-          <button
-            key={index}
-            className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${activeIndex === index ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200' : 'text-custom-black'}`}
-            onClick={() => handleScheduleClick(index, schedule)}
-          >
-            {schedule.startTime} ~ {schedule.endTime}
-          </button>
-        ))}
+        {selectedSchedules.map((schedule, index) => {
+          const isBookable = bookableIds.has(schedule.id);
+
+          return (
+            <button
+              key={index}
+              className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${
+                activeIndex === index
+                  ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200'
+                  : isBookable
+                    ? 'text-custom-black'
+                    : 'cursor-not-allowed bg-custom-gray-200 text-custom-gray-700 line-through hover:bg-custom-gray-200'
+              }`}
+              onClick={() => {
+                if (isBookable) {
+                  handleScheduleClick(index, schedule);
+                }
+              }}
+              disabled={!isBookable}
+            >
+              {schedule.startTime} ~ {schedule.endTime}
+            </button>
+          );
+        })}
       </div>
       <Button
         variant="activeButton"
         className="mt-4 h-36 rounded-md text-md-bold"
         onClick={() => {
           if (isSameUser) {
-            alert('체험 수정하기 버튼 클릭됨!');
+            router.push('/mypage/myActivities');
           } else {
             alert('예약하기 버튼 클릭됨!');
           }

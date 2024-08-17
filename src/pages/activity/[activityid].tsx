@@ -146,6 +146,7 @@ export default function ActivityDetail() {
               <ReservationSideBar
                 price={data.price}
                 schedules={data.schedules}
+                id={data.id}
                 isSameUser={isSameUser} // 상태 전달
               />
             </div>

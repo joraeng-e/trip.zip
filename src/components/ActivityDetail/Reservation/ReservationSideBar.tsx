@@ -1,6 +1,8 @@
+import { getAvailableSchedule } from '@/libs/api/activities';
 import { CalendarStyle } from '@/styles/CalendarStyle';
+import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
@@ -8,7 +10,9 @@ import Schedule from './Schedule';
 
 interface ReservationSideBarProps {
   price: number;
+  id: number;
   schedules: {
+    id: number;
     date: string;
     startTime: string;
     endTime: string;
@@ -17,19 +21,26 @@ interface ReservationSideBarProps {
   className?: string;
 }
 
-type ValuePiece = Date | null;
-export type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 export default function ReservationSideBar(props: ReservationSideBarProps) {
-  const { price, schedules, isSameUser, className } = props;
+  const { price, isSameUser, className, schedules, id } = props;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [guestCount, setGuestCount] = useState<number>(1);
   const today = new Date();
-  const [date, setDate] = useState<Value>(today);
+  const [date, setDate] = useState<Date>(today);
   const [selectedSchedules, setSelectedSchedules] = useState<
-    { startTime: string; endTime: string }[] | null
+    { startTime: string; endTime: string; id: number }[] | null
   >(null);
+
+  const { data } = useQuery({
+    queryKey: ['availableSchedule', date],
+    queryFn: () => {
+      const year = moment(date).year().toString();
+      const month = (moment(date).month() + 1).toString().padStart(2, '0');
+
+      return getAvailableSchedule(id, year, month);
+    },
+  });
 
   const isScheduledDate = (date: Date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
@@ -37,47 +48,48 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
   };
 
   const handleDateClick = (
-    value: Value,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     const dateValue = Array.isArray(value) ? value[0] : value;
 
     if (dateValue) {
       const formattedDate = moment(dateValue).format('YYYY-MM-DD');
-      const filteredSchedules = schedules.filter(
-        (schedule) => schedule.date === formattedDate,
-      );
+      const filteredSchedules = schedules
+        .filter((schedule) => schedule.date === formattedDate)
+        .map((schedule) => ({
+          startTime: schedule.startTime,
+          endTime: schedule.endTime,
+          id: schedule.id,
+        }));
 
       setSelectedSchedules(
         filteredSchedules.length > 0 ? filteredSchedules : null,
       );
       setDate(dateValue);
+      console.log(Date, 'data 변경됨 ');
     }
+    console.log('호출되었음');
   };
 
   const tileClassName = ({ date }: { date: Date }) => {
     if (!isScheduledDate(date)) {
-      return 'text-gray-400 line-through not-scheduled'; // 스케줄이 없는 경우
+      return 'text-gray-400 line-through not-scheduled';
     }
-    return ''; // 스케줄이 있는 경우
+    return '';
   };
 
   const handleScheduleClick = (
     index: number,
-    schedule: { startTime: string; endTime: string },
+    schedule: { startTime: string; endTime: string; id: number },
   ) => {
     setActiveIndex(index);
-    if (isSameUser) {
-      alert('같은 사용자입니다. 다른 알림이 표시됩니다!');
-    } else {
-      alert(`선택한 예약 시간: ${schedule.startTime} ~ ${schedule.endTime}`);
-    }
+    console.log(`선택한 스케줄 ID: ${schedule.id}`);
   };
 
-  // 총 금액 계산
   const totalPrice = price * guestCount;
 
-  // 인원 수 조절 함수
   const increaseGuestCount = () => {
     setGuestCount((prevCount) => prevCount + 1);
   };
@@ -91,9 +103,8 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
       className={`w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
     >
       <div className="relative my-20 text-center text-2xl-bold">
-        {totalPrice} {/* 총 금액 표시 */}
+        {totalPrice}
         <span className="text-lg-regular text-custom-gray-700">
-          {' '}
           / {guestCount}명
         </span>
         <div className="absolute -top-4 right-0 flex-col items-center justify-center">
@@ -125,12 +136,13 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
           tileClassName={tileClassName}
         />
       </div>
-      {selectedSchedules && selectedSchedules.length > 0 && (
+      {selectedSchedules && selectedSchedules.length > 0 && data && (
         <Schedule
           selectedSchedules={selectedSchedules}
           activeIndex={activeIndex}
           isSameUser={isSameUser}
           handleScheduleClick={handleScheduleClick}
+          bookableSchedule={data}
         />
       )}
     </div>
