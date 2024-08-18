@@ -44,7 +44,11 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
 
   const isScheduledDate = (date: Date) => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
-    return schedules.some((schedule) => schedule.date === formattedDate);
+    const isPastDate = moment(date).isBefore(moment(), 'day');
+    return (
+      !isPastDate &&
+      schedules.some((schedule) => schedule.date === formattedDate)
+    );
   };
 
   const handleDateClick = (
@@ -74,6 +78,11 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
   };
 
   const tileClassName = ({ date }: { date: Date }) => {
+    const isPastDate = moment(date).isBefore(moment(), 'day');
+    if (isPastDate) {
+      return 'text-gray-400 line-through not-scheduled';
+    }
+
     if (!isScheduledDate(date)) {
       return 'text-gray-400 line-through not-scheduled';
     }
@@ -143,6 +152,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
           isSameUser={isSameUser}
           handleScheduleClick={handleScheduleClick}
           bookableSchedule={data}
+          guestCount={guestCount}
         />
       )}
     </div>
