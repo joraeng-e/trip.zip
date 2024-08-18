@@ -58,7 +58,7 @@ export default function Schedule(props: ScheduleProps) {
   const activityId = Number(activityid);
 
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
     null,
   );
@@ -125,7 +125,6 @@ export default function Schedule(props: ScheduleProps) {
       <div className="my-16 grid grid-cols-2 gap-10">
         {selectedSchedules.map((schedule, index) => {
           const isBookable = bookableIds.has(schedule.id);
-
           return (
             <button
               key={index}
@@ -139,7 +138,7 @@ export default function Schedule(props: ScheduleProps) {
               onClick={() => {
                 if (isBookable) {
                   handleScheduleClick(index, schedule);
-                  setSelectedScheduleId(schedule.id); // 선택한 스케줄 ID 저장
+                  setSelectedScheduleId(schedule.id);
                 }
               }}
               disabled={!isBookable}
@@ -153,61 +152,88 @@ export default function Schedule(props: ScheduleProps) {
       <Button
         variant="activeButton"
         className="mt-4 h-36 rounded-md text-md-bold"
-        onClick={handleReservationClick} // 클릭 핸들러 변경
+        onClick={handleReservationClick}
       >
         {isSameUser ? '체험 수정하기' : '예약하기'}
       </Button>
 
-      {/* 모달 컴포넌트 추가 */}
-      <BaseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="p-6">
-          <h2 className="text-lg font-bold">예약 확인</h2>
-          <div className="flex">
-            {/* 왼쪽: 배너 이미지 */}
-            <div className="mr-4">
-              <Image
-                src={bannerImageUrl}
-                alt={title}
-                width={200}
-                height={200}
-                className="rounded-md"
-              />
-            </div>
+      <BaseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        className="relative z-[999] mx-40 h-auto w-800 p-20 text-nomad-black"
+      >
+        <div className="">
+          <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
 
-            {/* 오른쪽: 제목, 주소, 평점, 가격 */}
-            <div className="flex-1">
-              <h3 className="text-xl font-bold">{title}</h3>
-              <p className="text-md text-gray-600">{address}</p>
-              <div className="flex items-center">
-                <FaStar className="mt-1 text-yellow-500" />
-                <span className="ml-1">{rating}</span>
+          <div className="mt-4 rounded-lg bg-white p-4 shadow-lg">
+            <div className="flex">
+              <div className="relative mr-4 h-200 w-200">
+                <Image src={bannerImageUrl} alt={title} fill />
               </div>
-              <p className="text-lg font-semibold">가격: {price} 원</p>
+
+              <div className="relative mx-20 my-10 flex-1">
+                <h3 className="text-xl-bold">{title}</h3>
+                <p className="mt-6 text-md-semibold text-custom-gray-700">
+                  {address}
+                </p>
+                <div className="mt-10 flex items-center">
+                  <FaStar className="mb-0 text-yellow-500" />
+                  <span className="ml-4 text-md-regular">{rating}</span>
+                </div>
+                <p className="absolute bottom-0 right-0 text-2xl-semibold">
+                  {price} 원
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="mt-6">
-            <h4 className="text-lg font-bold">예약 내용</h4>
-            <div>예약자: {userInfo?.nickname}</div>
-            <div>이메일: {userInfo?.email}</div>
-            <div>인원 수: {guestCount}</div>
-            <div>
-              예약일시: {moment(selectedDate).format('YYYY년 MM월 DD일')} /{' '}
-              {selectedSchedules
-                .map(
-                  (schedule) => `${schedule.startTime} ~ ${schedule.endTime}`,
-                )
-                .join(', ')}
+          <div className="">
+            <div className="my-20 rounded-lg py-20 shadow-lg">
+              <h4 className="ml-20 text-xl-bold">예약자 정보</h4>
+              <div className="my-10 ml-20">
+                <div className="mb-4 text-lg-medium">
+                  예약자: {userInfo?.nickname}
+                </div>
+                <div className="text-lg-medium">이메일: {userInfo?.email}</div>
+              </div>
             </div>
-            <div>총 상품 금액: {guestCount * price} 원</div>
+
+            <div className="my-20 rounded-lg py-20 shadow-lg">
+              <h4 className="ml-20 text-xl-bold">예약 내용</h4>
+              <div className="mt-2 flex justify-between">
+                <div className="my-10 ml-20">
+                  <div className="mb-4 text-lg-medium">
+                    인원 수: {guestCount}
+                  </div>
+                  <div className="text-lg-medium">
+                    예약일시: {moment(selectedDate).format('YYYY년 MM월 DD일')}{' '}
+                    /{'  '}
+                    {selectedSchedules
+                      .map(
+                        (schedule) =>
+                          `${schedule.startTime} ~ ${schedule.endTime}`,
+                      )
+                      .join(', ')}
+                  </div>
+                </div>
+              </div>
+              <hr className="contour" />
+              <div className="mx-20 mt-10 flex justify-between text-xl-bold">
+                총 상품 금액
+                <div className="text-custom-green-300">
+                  {guestCount * price} 원
+                </div>
+              </div>
+            </div>
           </div>
 
           <Button
             variant="activeButton"
             className="mt-4"
             onClick={handleSubmitReservation}
+            hasICon
           >
-            확인
+            예약하기
           </Button>
         </div>
       </BaseModal>
