@@ -96,15 +96,15 @@ export default function ActivityDetail() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 중일 때 표시할 내용
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>오류가 발생했습니다: {error.message}</div>; // 오류 처리
+    return <div>오류가 발생했습니다: {error.message}</div>;
   }
 
   if (!data) {
-    return <div>데이터를 찾을 수 없습니다. {ActivityId}</div>; // 데이터가 없을 때 처리
+    return <div>데이터를 찾을 수 없습니다. {ActivityId}</div>;
   }
 
   return (
@@ -143,10 +143,7 @@ export default function ActivityDetail() {
               isSameUser={isSameUser}
             />
             <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
-              <ReservationSideBar
-                detailData={data}
-                isSameUser={isSameUser} // 상태 전달
-              />
+              <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
           <MobileReservationFooter data={data} isSameUser={isSameUser} />

@@ -25,7 +25,7 @@ export default function MobileReservationModal(
         detailData={data}
         className="relative bottom-0 w-400"
         isSameUser={isSameUser}
-        onReservationComplete={handleReservationComplete} // 핸들러 전달
+        onReservationComplete={handleReservationComplete}
       />
     </BaseModal>
   );

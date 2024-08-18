@@ -27,7 +27,7 @@ interface ScheduleProps {
     index: number,
     schedule: { startTime: string; endTime: string; id: number },
   ) => void;
-  onReservationComplete?: () => void; // 예약 완료 핸들러 추가
+  onReservationComplete?: () => void;
   detailData: GetActivityDetailResponse;
   selectedDate: Date;
 }
