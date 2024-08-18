@@ -1,6 +1,7 @@
 import { getAvailableSchedule } from '@/libs/api/activities';
 import { CalendarStyle } from '@/styles/CalendarStyle';
 import { useQuery } from '@tanstack/react-query';
+import { GetActivityDetailResponse } from '@trip.zip-api';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
@@ -9,20 +10,16 @@ import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import Schedule from './Schedule';
 
 interface ReservationSideBarProps {
-  price: number;
-  id: number;
-  schedules: {
-    id: number;
-    date: string;
-    startTime: string;
-    endTime: string;
-  }[];
+  detailData: GetActivityDetailResponse;
   isSameUser: boolean;
   className?: string;
+  onReservationComplete?: () => void;
 }
 
 export default function ReservationSideBar(props: ReservationSideBarProps) {
-  const { price, isSameUser, className, schedules, id } = props;
+  const { isSameUser, className, detailData, onReservationComplete } = props;
+
+  const { schedules, id, price } = detailData;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [guestCount, setGuestCount] = useState<number>(1);
@@ -111,19 +108,19 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     <div
       className={`w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
     >
-      <div className="relative my-20 text-center text-2xl-bold">
-        {totalPrice}
-        <span className="text-lg-regular text-custom-gray-700">
-          / {guestCount}명
+      <div className="relative my-20 flex items-center justify-center text-center text-2xl-bold">
+        {totalPrice} /
+        <span className="ml-10 mt-4 text-lg-regular text-custom-gray-700">
+          {guestCount}명
         </span>
-        <div className="absolute -top-4 right-0 flex-col items-center justify-center">
+        <div className="ml-10 flex-col items-center justify-center">
           <FaAngleUp
             onClick={increaseGuestCount}
-            className="size-20 cursor-pointer"
+            className="size-16 cursor-pointer"
           />
           <FaAngleDown
             onClick={decreaseGuestCount}
-            className={`size-20 cursor-pointer ${guestCount <= 1 ? 'cursor-not-allowed text-gray-400' : 'cursor-pointer'}`}
+            className={`size-16 cursor-pointer ${guestCount <= 1 ? 'cursor-not-allowed text-gray-400' : 'cursor-pointer'}`}
           />
         </div>
       </div>
@@ -153,6 +150,9 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
           handleScheduleClick={handleScheduleClick}
           bookableSchedule={data}
           guestCount={guestCount}
+          onReservationComplete={onReservationComplete}
+          detailData={detailData}
+          selectedDate={date}
         />
       )}
     </div>

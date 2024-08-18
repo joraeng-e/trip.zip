@@ -2,7 +2,7 @@ import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
 import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
-import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
+import MobileReservationFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import { getActivityDetail } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
@@ -144,14 +144,12 @@ export default function ActivityDetail() {
             />
             <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar
-                price={data.price}
-                schedules={data.schedules}
-                id={data.id}
+                detailData={data}
                 isSameUser={isSameUser} // 상태 전달
               />
             </div>
           </div>
-          <MobileFooter />
+          <MobileReservationFooter data={data} isSameUser={isSameUser} />
         </div>
       </div>
     </>
