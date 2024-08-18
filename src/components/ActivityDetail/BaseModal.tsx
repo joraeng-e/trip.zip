@@ -1,5 +1,6 @@
 import { XIcon } from '@/libs/utils/Icon';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface BaseModalProps {
   isOpen: boolean;
@@ -10,6 +11,18 @@ interface BaseModalProps {
 
 export default function BaseModal(props: BaseModalProps) {
   const { isOpen, onClose, className, children } = props;
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
