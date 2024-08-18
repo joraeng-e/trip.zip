@@ -1,14 +1,19 @@
 import Button from '@/components/commons/Button';
-import Toast, { notify } from '@/components/commons/Toast';
+import { notify } from '@/components/commons/Toast';
 import { postReservations } from '@/libs/api/activities';
-import { useMutation } from '@tanstack/react-query';
+import { getUser } from '@/libs/api/user';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
+  GetActivityDetailResponse,
   GetAvailableScheduleResponse,
   PostReservationsRequest,
 } from '@trip.zip-api';
 import { getCookie } from 'cookies-next';
-import router, { useRouter } from 'next/router';
+import moment from 'moment';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { FaStar } from 'react-icons/fa';
 
 import BaseModal from '../BaseModal';
 
@@ -22,6 +27,9 @@ interface ScheduleProps {
     index: number,
     schedule: { startTime: string; endTime: string; id: number },
   ) => void;
+  onReservationComplete?: () => void; // 예약 완료 핸들러 추가
+  detailData: GetActivityDetailResponse;
+  selectedDate: Date;
 }
 
 export default function Schedule(props: ScheduleProps) {
@@ -32,7 +40,18 @@ export default function Schedule(props: ScheduleProps) {
     handleScheduleClick,
     bookableSchedule,
     guestCount,
+    onReservationComplete,
+    detailData,
+    selectedDate,
   } = props;
+
+  const { bannerImageUrl, title, address, rating, price } = detailData;
+
+  const { data: userInfo } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getUser,
+    staleTime: 0,
+  });
 
   const router = useRouter();
   const { activityid } = router.query;
@@ -42,7 +61,7 @@ export default function Schedule(props: ScheduleProps) {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
     null,
-  ); // 선택한 스케줄 ID
+  );
 
   const bookableIds = new Set<number>();
   bookableSchedule.forEach((schedule) => {
@@ -70,10 +89,16 @@ export default function Schedule(props: ScheduleProps) {
     mutationFn: postReservations,
     onSuccess: () => {
       setIsModalOpen(false);
+      if (onReservationComplete) {
+        onReservationComplete();
+      }
       notify('success', '예약이 성공적으로 완료되었습니다.');
     },
     onError: (error: Error) => {
       setIsModalOpen(false);
+      if (onReservationComplete) {
+        onReservationComplete();
+      }
       notify('error', error.message);
       console.log(error);
     },
@@ -137,15 +162,46 @@ export default function Schedule(props: ScheduleProps) {
       <BaseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-6">
           <h2 className="text-lg font-bold">예약 확인</h2>
+          <div className="flex">
+            {/* 왼쪽: 배너 이미지 */}
+            <div className="mr-4">
+              <Image
+                src={bannerImageUrl}
+                alt={title}
+                width={200}
+                height={200}
+                className="rounded-md"
+              />
+            </div>
 
-          <div>손님 수: {guestCount}</div>
-          <div>활동 ID: {activityId}</div>
-          <div>선택한 스케줄 ID:</div>
-          <ul>
-            {selectedSchedules.map((schedule) => (
-              <li key={schedule.id}>{schedule.id}</li>
-            ))}
-          </ul>
+            {/* 오른쪽: 제목, 주소, 평점, 가격 */}
+            <div className="flex-1">
+              <h3 className="text-xl font-bold">{title}</h3>
+              <p className="text-md text-gray-600">{address}</p>
+              <div className="flex items-center">
+                <FaStar className="mt-1 text-yellow-500" />
+                <span className="ml-1">{rating}</span>
+              </div>
+              <p className="text-lg font-semibold">가격: {price} 원</p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <h4 className="text-lg font-bold">예약 내용</h4>
+            <div>예약자: {userInfo?.nickname}</div>
+            <div>이메일: {userInfo?.email}</div>
+            <div>인원 수: {guestCount}</div>
+            <div>
+              예약일시: {moment(selectedDate).format('YYYY년 MM월 DD일')} /{' '}
+              {selectedSchedules
+                .map(
+                  (schedule) => `${schedule.startTime} ~ ${schedule.endTime}`,
+                )
+                .join(', ')}
+            </div>
+            <div>총 상품 금액: {guestCount * price} 원</div>
+          </div>
+
           <Button
             variant="activeButton"
             className="mt-4"
