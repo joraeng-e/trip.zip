@@ -111,7 +111,7 @@ export default function Select({
   return (
     <div ref={containerRef} style={{ maxWidth, position: 'relative' }}>
       <div
-        className={`basic-input w-full ${
+        className={`basic-input w-full dark:bg-custom-black dark:text-white ${
           error ? 'border-red-400' : ''
         } flex cursor-pointer items-center justify-between ${
           value ? 'text-black' : 'text-gray-400'

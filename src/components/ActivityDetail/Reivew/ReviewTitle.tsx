@@ -1,7 +1,9 @@
 import EmptyReview from '@/../public/lottie/emptyReview.json';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface ReviewTitleProps {
   averageRating: number;

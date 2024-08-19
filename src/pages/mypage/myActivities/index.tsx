@@ -73,7 +73,7 @@ export default function MyActivities() {
           <h1 className="text-3xl-bold">내 체험 관리</h1>
           <Modal.Root>
             <Modal.Trigger>
-              <Button className="max-w-120 rounded-md px-16 py-10">
+              <Button className="max-w-150 rounded-md px-16 py-10">
                 체험 등록하기
               </Button>
             </Modal.Trigger>

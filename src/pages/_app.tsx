@@ -1,4 +1,5 @@
 import Layout from '@/components/commons/PageLayouts';
+import { DarkModeProvider } from '@/context/DarkModeContext';
 import { StyledToastContainer } from '@/styles/ToastStyle';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -74,8 +75,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="icon" href="/logo/tripzipFavicon.png" type="image/png" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        {getLayout(<Component {...pageProps} />)}
-        <StyledToastContainer limit={1} transition={Zoom} />
+        <DarkModeProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <StyledToastContainer limit={1} transition={Zoom} />
+        </DarkModeProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
