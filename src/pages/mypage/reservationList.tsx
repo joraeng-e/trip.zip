@@ -28,7 +28,7 @@ export default function ReservationList() {
     value === '' ? undefined : (value as ReservationStatus);
 
   // useInfiniteQuery를 사용해 페이지 단위로 예약 데이터 조회
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GetMyReservationsResponse>({
       queryKey: ['reservations', value],
       queryFn: ({ pageParam = undefined }) =>
@@ -124,7 +124,6 @@ export default function ReservationList() {
                 <ReservationCard
                   reservation={reservation}
                   onReviewClick={handleClickReview}
-                  refetch={refetch}
                 />
               </div>
             ))}
