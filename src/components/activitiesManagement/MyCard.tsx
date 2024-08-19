@@ -4,6 +4,7 @@ import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 
@@ -70,8 +71,11 @@ export default function MyCard({
   };
 
   return (
-    <div className="mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
-      <div className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]">
+    <div className="dark-border mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
+      <Link
+        href={`/activity/${id}`}
+        className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]"
+      >
         <Image
           src={bannerImageUrl}
           alt={title}
@@ -79,7 +83,7 @@ export default function MyCard({
           sizes="153px"
           className="object-cover"
         />
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col justify-between p-16 transition-all hover:bg-gray-100 dark:hover:bg-custom-gray-800">
         <div className="flex items-center justify-between">
           <div>
@@ -89,7 +93,12 @@ export default function MyCard({
                 {rating} ({reviewCount})
               </span>
             </div>
-            <h3 className="text-2lg-bold lg:text-xl-bold">{title}</h3>
+            <Link
+              href={`/activity/${id}`}
+              className="text-2lg-bold lg:text-xl-bold"
+            >
+              {title}
+            </Link>
           </div>
           <div className="relative">
             <button onClick={toggleDropdown}>
