@@ -160,7 +160,7 @@ export default function Schedule(props: ScheduleProps) {
       <BaseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        className="relative z-[999] mx-40 h-auto w-800 p-20 text-nomad-black"
+        className="mx-40 h-auto w-800 p-20 text-nomad-black"
       >
         <div className="">
           <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
