@@ -7,10 +7,10 @@ const linkTextStyle =
 export default function LoggedOutHeader() {
   return (
     <div className="flex gap-16">
-      <Link href="login" className={linkTextStyle}>
+      <Link href="/login" className={linkTextStyle}>
         로그인
       </Link>
-      <Link href="signup" className={linkTextStyle}>
+      <Link href="/signup" className={linkTextStyle}>
         회원가입
       </Link>
     </div>

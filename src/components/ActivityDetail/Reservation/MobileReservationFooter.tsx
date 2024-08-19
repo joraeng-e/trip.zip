@@ -1,9 +1,18 @@
+import { GetActivityDetailResponse } from '@trip.zip-api';
 import { useState } from 'react';
 
 import Button from '../../commons/Button';
 import MobileReservationModal from './MobileReservationModal';
 
-export default function MobileReservationFooter() {
+interface MobileReservationFooterProps {
+  data: GetActivityDetailResponse;
+  isSameUser: boolean;
+}
+
+export default function MobileReservationFooter(
+  props: MobileReservationFooterProps,
+) {
+  const { data, isSameUser } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -29,6 +38,8 @@ export default function MobileReservationFooter() {
         <MobileReservationModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
+          data={data}
+          isSameUser={isSameUser}
         />
       </div>
     </>

@@ -53,6 +53,7 @@ export default function ModalContent(props: ModalContentProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
+          className="fixed z-50"
         >
           {popover ? (
             <div
@@ -60,7 +61,7 @@ export default function ModalContent(props: ModalContentProps) {
                 top: position.y,
                 left: position.x - 100,
               }}
-              className={`dark-base dark-border absolute h-400 w-400 rounded-xl bg-custom-green-100 px-20 py-24 shadow-lg ${className}`}
+              className={`dark-base dark-border absolute h-400 w-400 rounded-xl bg-custom-green-100 px-20 py-24 shadow-lg ${className} `}
             >
               {icon && (
                 <XIcon

@@ -1,10 +1,12 @@
 import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { patchMyReservationStatus } from '@/libs/api/myReservations';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Reservation } from '@trip.zip-api';
 import Image from 'next/image';
-import React from 'react';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
 type ReservationCardProps = {
   reservation: Reservation;
@@ -26,10 +28,41 @@ export default function ReservationCard({
     headCount,
   } = reservation;
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: () => patchMyReservationStatus(id, 'canceled'),
+    onSuccess: () => {
+      notify('success', '예약이 취소되었습니다.');
+      queryClient.invalidateQueries({ queryKey: ['reservations'] });
+    },
+    onError: (error: Error) => {
+      alert(`예약 취소 중 오류 발생: ${error.message}`);
+    },
+  });
+
+  const [isExpired, setIsExpired] = useState(false);
+
+  useEffect(() => {
+    const now = new Date();
+    const reservationEndTime = new Date(`${date} ${endTime}`);
+
+    if (now > reservationEndTime && status !== 'canceled') {
+      setIsExpired(true);
+    }
+  }, [date, endTime, status]);
+
   const statusValue = (status: string) => {
     switch (status) {
       case 'pending':
-        return <p className="font-bold text-custom-blue-200">예약 완료</p>;
+        return (
+          <>
+            {isExpired ? (
+              <p className="font-bold text-purple-500">마감 완료</p>
+            ) : (
+              <p className="font-bold text-custom-blue-200">예약 완료</p>
+            )}
+          </>
+        );
       case 'canceled':
         return <p className="font-bold text-custom-gray-700">예약 취소</p>;
       case 'confirmed':
@@ -48,12 +81,21 @@ export default function ReservationCard({
           <>
             <Modal.Root>
               <Modal.Trigger>
-                <Button
-                  variant="inactiveButton"
-                  className="max-w-120 rounded-md px-16 py-10"
-                >
-                  예약 취소
-                </Button>
+                {isExpired ? (
+                  <Button
+                    variant="disabledButton"
+                    className="max-w-120 rounded-md px-16 py-10"
+                  >
+                    마감 완료{' '}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="inactiveButton"
+                    className="max-w-120 rounded-md px-16 py-10"
+                  >
+                    예약 취소
+                  </Button>
+                )}
               </Modal.Trigger>
               <Modal.Content>
                 <Modal.Description className="text-center">
@@ -80,37 +122,37 @@ export default function ReservationCard({
     }
   };
 
-  const mutation = useMutation({
-    mutationFn: () => patchMyReservationStatus(id, 'canceled'),
-    onSuccess: () => {
-      alert('예약이 성공적으로 취소되었습니다.');
-    },
-    onError: (error: Error) => {
-      alert(`예약 취소 중 오류 발생: ${error.message}`);
-    },
-  });
-
   return (
-    <div className="mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
-      <div className="relative h-full w-128 flex-shrink-0 md:w-156 lg:w-204">
-        <Image
-          src={bannerImageUrl}
-          alt={title}
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
-      <div className="flex w-full flex-col justify-between py-10">
-        <p className="mb-2 text-gray-600">{statusValue(status)}</p>
-        <h2 className="text-xl mb-2 text-lg-semibold">{title}</h2>
-        <p className="text-gray-600">
-          {date} {startTime} - {endTime} {headCount}명
-        </p>
-        <div className="flex items-baseline justify-between pb-10 pr-10 md:pr-20">
-          <p className="mb-2 text-md-semibold md:text-xl-semibold">
-            ₩{totalPrice.toLocaleString()}
+    <div className="relative">
+      <div className="dark-border mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
+        <Link
+          href={`/activity/${id}`}
+          className="relative h-full w-128 flex-shrink-0 md:w-156 lg:w-204"
+        >
+          <Image
+            src={bannerImageUrl}
+            alt={title}
+            layout="fill"
+            objectFit="cover"
+          />
+        </Link>
+        <div className="flex w-full flex-col justify-between py-10">
+          <p className="mb-2 text-gray-600">{statusValue(status)}</p>
+          <Link
+            href={`/activity/${id}`}
+            className="text-2lg-bold lg:text-xl-bold"
+          >
+            {title}
+          </Link>
+          <p className="text-gray-600">
+            {date} {startTime} - {endTime} ({headCount}명)
           </p>
-          {statusButton(status)}
+          <div className="flex items-baseline justify-between pb-10 pr-10 md:pr-20">
+            <p className="mb-2 text-md-semibold md:text-xl-semibold">
+              ₩{totalPrice.toLocaleString()}
+            </p>
+            {statusButton(status)}
+          </div>
         </div>
       </div>
     </div>

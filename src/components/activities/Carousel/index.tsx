@@ -1,7 +1,7 @@
 import Carousel from '@/components/commons/Carousel';
 import { ArrowLeft, ArrowRight } from '@/libs/utils/Icon';
 
-import { RestaurantSlide, SeoulSlide, SummerSlide } from './Slides';
+import { FoodTourSlide, SeoulSlide, SummerSlide } from './Slides';
 
 export default function CarouselContainer() {
   return (
@@ -13,7 +13,7 @@ export default function CarouselContainer() {
         <SeoulSlide />
       </Carousel.Slide>
       <Carousel.Slide>
-        <RestaurantSlide />
+        <FoodTourSlide />
       </Carousel.Slide>
 
       <Carousel.Navigator>

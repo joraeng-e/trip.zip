@@ -2,9 +2,11 @@ import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
 import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
-import MobileFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
+import MobileReservationFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
+import Loading from '@/components/commons/Loading';
 import { getActivityDetail } from '@/libs/api/activities';
+import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -12,17 +14,29 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function ActivityDetail() {
   const router = useRouter();
-  const { activityId } = router.query;
-  const ActivityId = Number(activityId);
+  const { activityid } = router.query;
+  const ActivityId = Number(activityid);
 
   const [showHeader, setShowHeader] = useState(false);
   const [activeSection, setActiveSection] = useState('title');
+  const [isSameUser, setIsSameUser] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['details', ActivityId],
     queryFn: () => getActivityDetail(ActivityId),
     enabled: !!ActivityId,
   });
+
+  const { data: userData, error: userError } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  });
+
+  useEffect(() => {
+    if (userData && data) {
+      setIsSameUser(userData.id === data.userId);
+    }
+  }, [userData, data]);
 
   const subImageUrls =
     data?.subImages?.map((image) => image.imageUrl).filter((url) => url) || [];
@@ -83,15 +97,15 @@ export default function ActivityDetail() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 중일 때 표시할 내용
+    return <Loading />;
   }
 
   if (error) {
-    return <div>오류가 발생했습니다: {error.message}</div>; // 오류 처리
+    return <div>오류가 발생했습니다: {error.message}</div>;
   }
 
   if (!data) {
-    return <div>데이터를 찾을 수 없습니다. {ActivityId}</div>; // 데이터가 없을 때 처리
+    return <div>데이터를 찾을 수 없습니다. {ActivityId}</div>;
   }
 
   return (
@@ -124,15 +138,16 @@ export default function ActivityDetail() {
             subImageUrl={subImageUrls}
           />
           <div className="mt-10 flex">
-            <DetailContent sectionRefs={sectionRefs} detailData={data} />
+            <DetailContent
+              sectionRefs={sectionRefs}
+              detailData={data}
+              isSameUser={isSameUser}
+            />
             <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
-              <ReservationSideBar
-                price={data.price}
-                schedules={data.schedules}
-              />
+              <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
-          <MobileFooter />
+          <MobileReservationFooter data={data} isSameUser={isSameUser} />
         </div>
       </div>
     </>

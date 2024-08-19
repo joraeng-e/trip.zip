@@ -1,4 +1,5 @@
-import ExpandableText from '../ExpandableText';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface DescriptionProps {
   description: string;
@@ -14,7 +15,9 @@ export default function Description(props: DescriptionProps) {
       <div className="m-16">
         <h2 className="mb-16 mt-20 text-xl-bold text-nomad-black">체험 설명</h2>
         <div className="text-lg-regular text-nomad-black">
-          <ExpandableText text={description} maxLength={maxLength} />
+          <div className="markdown-content">
+            <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
+          </div>
         </div>
       </div>
     </>

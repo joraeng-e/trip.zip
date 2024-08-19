@@ -1,6 +1,7 @@
-import { KebabIcon } from '@/libs/utils/Icon';
-import { LocationIcon } from '@/libs/utils/Icon';
-import React from 'react';
+import Dropdown from '@/components/commons/Dropdown';
+import { KebabIcon, LocationIcon } from '@/libs/utils/Icon';
+import router from 'next/router';
+import { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 
 interface TitleProps {
@@ -9,10 +10,21 @@ interface TitleProps {
   category: string;
   rating: number;
   reviewCount: number;
+  id?: number;
+  isSameUser: boolean;
 }
 
 export default function Title(props: TitleProps) {
-  const { title, address, category, rating, reviewCount } = props;
+  const { title, address, category, rating, reviewCount, isSameUser } = props;
+
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    if (value) {
+      router.push('/mypage/myActivities');
+      setValue('');
+    }
+  }, [value]);
 
   const handleClickClipboard = () => {
     navigator.clipboard.writeText(address).then(() => {
@@ -23,8 +35,35 @@ export default function Title(props: TitleProps) {
   return (
     <div className="mx-16 mt-16 flex-col">
       <div className="text-md-regular text-nomad-black">{category}</div>
-      <div className="mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
-        {title} <KebabIcon className="" />
+      <div className="relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
+        {title}
+        {isSameUser && (
+          <Dropdown
+            selected={value}
+            setSelected={setValue}
+            width={130}
+            maxWidth={130}
+          >
+            <Dropdown.Button
+              showArrow={false}
+              className="relative flex w-130 items-center md:h-59"
+            >
+              <KebabIcon className="absolute left-106" />
+            </Dropdown.Button>
+            <Dropdown.Body>
+              <Dropdown.Item value="edit">
+                <span className="text-14 text-custom-gray-800">
+                  체험 수정하기
+                </span>
+              </Dropdown.Item>
+              <Dropdown.Item value="delete">
+                <span className="text-14 text-custom-gray-800">
+                  체험 삭제하기
+                </span>
+              </Dropdown.Item>
+            </Dropdown.Body>
+          </Dropdown>
+        )}
       </div>
       <div className="flex gap-12 text-md-regular text-custom-black">
         <FaStar className="mt-4 text-yellow-500" />
