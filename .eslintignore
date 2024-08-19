@@ -6,3 +6,5 @@ dist
 !.prettierrc.js
 *.css
 coverage
+next.config.js
+public
