@@ -31,14 +31,6 @@ export default function NotificationPopup({ closePopup }: Props) {
   const isIntersecting = useIntersectionObserver(sentinelRef);
   const isIntersectingInMobile = useIntersectionObserver(mobileSentinelRef);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
   useEffect(
     function handleScrollFetch() {
       if ((isIntersectingInMobile || isIntersecting) && hasNextPage) {
@@ -98,7 +90,7 @@ const TabletAndPCUI = forwardRef<HTMLDivElement, UIProps>(
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="absolute right-100 top-full z-50 mt-20 min-h-160 w-[368px] rounded-[10px] bg-custom-green-100 px-20 py-24 shadow-lg xl:right-0 dark:bg-nomad-black"
+        className="absolute right-100 top-full z-50 mt-20 min-h-160 w-[368px] rounded-[10px] bg-custom-green-100 px-20 py-24 shadow-lg dark:bg-nomad-black xl:right-0"
       >
         <div className="mb-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -146,7 +138,7 @@ const MobileUI = forwardRef<HTMLDivElement, UIProps>(
             </h1>
           </div>
           <button type="button" onClick={closePopup}>
-            <XIcon />
+            <XIcon className="size-30 fill-white" />
           </button>
         </div>
 
