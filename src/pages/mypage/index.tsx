@@ -60,9 +60,6 @@ export default function Info() {
     null,
   );
 
-  console.log('profileImageUrl', profileImageUrl);
-  console.log('newProfileImageFile', newProfileImageFile);
-
   const router = useRouter();
 
   useEffect(() => {
