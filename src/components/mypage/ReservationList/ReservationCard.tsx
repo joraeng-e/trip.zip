@@ -1,19 +1,22 @@
 import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { patchMyReservationStatus } from '@/libs/api/myReservations';
 import { useMutation } from '@tanstack/react-query';
 import { Reservation } from '@trip.zip-api';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type ReservationCardProps = {
   reservation: Reservation;
   onReviewClick: (reservation: Reservation) => void;
+  refetch: () => void;
 };
 
 export default function ReservationCard({
   reservation,
   onReviewClick,
+  refetch,
 }: ReservationCardProps) {
   const {
     activity: { bannerImageUrl, title },
@@ -25,6 +28,24 @@ export default function ReservationCard({
     totalPrice,
     headCount,
   } = reservation;
+
+  const mutation = useMutation({
+    mutationFn: () => patchMyReservationStatus(id, 'canceled'),
+    onSuccess: () => {
+      notify('success', '예약이 취소되었습니다.');
+      refetch();
+    },
+    onError: (error: Error) => {
+      alert(`예약 취소 중 오류 발생: ${error.message}`);
+    },
+  });
+
+  const now = new Date();
+  const reservationEndTime = new Date(`${date} ${endTime}`);
+
+  if (now > reservationEndTime && status !== 'canceled') {
+    mutation.mutate();
+  }
 
   const statusValue = (status: string) => {
     switch (status) {
@@ -79,16 +100,6 @@ export default function ReservationCard({
         return;
     }
   };
-
-  const mutation = useMutation({
-    mutationFn: () => patchMyReservationStatus(id, 'canceled'),
-    onSuccess: () => {
-      alert('예약이 성공적으로 취소되었습니다.');
-    },
-    onError: (error: Error) => {
-      alert(`예약 취소 중 오류 발생: ${error.message}`);
-    },
-  });
 
   return (
     <div className="dark-border mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
