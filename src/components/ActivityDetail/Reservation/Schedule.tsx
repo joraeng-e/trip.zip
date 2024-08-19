@@ -77,11 +77,15 @@ export default function Schedule(props: ScheduleProps) {
 
   const handleReservationClick = () => {
     if (!loggedIn) {
-      router.push('/login');
-    } else if (isSameUser) {
-      router.push('/mypage/myActivities');
-    } else {
-      setIsModalOpen(true);
+      if (!loggedIn) {
+        notify('warning', '로그인이 필요한 서비스입니다.', () => {
+          router.push('/login');
+        });
+      } else if (isSameUser) {
+        router.push('/mypage/myActivities');
+      } else {
+        setIsModalOpen(true);
+      }
     }
   };
 
@@ -165,12 +169,12 @@ export default function Schedule(props: ScheduleProps) {
             className="mt-4 h-36 rounded-md text-md-bold"
             onClick={() => {
               if (isSameUser) {
-                handleReservationClick(); // 체험 수정하기
+                handleReservationClick();
               } else {
                 if (selectedScheduleId === null) {
-                  notify('warning', '스케줄을 선택해 주세요.'); // 알림 띄우기
+                  notify('warning', '스케줄을 선택해 주세요.');
                 } else {
-                  handleReservationClick(); // 예약하기
+                  handleReservationClick();
                 }
               }
             }}
