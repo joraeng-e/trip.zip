@@ -87,7 +87,7 @@ export default function Signup() {
           content="Trip.zip에 가입해 Trip.zip을 시작해보세요."
         />
       </Head>
-      <div className="page-container">
+      <div className="page-container mb-50">
         <div className="flex flex-col items-center justify-center">
           <Logo />
           <form
@@ -146,7 +146,7 @@ export default function Signup() {
             <p>회원이신가요?</p>
             <Link
               href="login"
-              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
+              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2 dark:text-custom-green-100 dark:decoration-custom-green-100"
             >
               로그인하기
             </Link>

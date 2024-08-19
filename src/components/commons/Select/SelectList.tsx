@@ -45,7 +45,7 @@ export default function SelectList({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="absolute z-10 mt-1 w-full rounded border border-gray-300 bg-white shadow-lg"
+          className="dark-border absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg"
           role="listbox"
         >
           {options.map((option, index) => (

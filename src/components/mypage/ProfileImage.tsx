@@ -99,7 +99,7 @@ export default function ProfileImage({
         )}
       </div>
       <motion.div
-        className="flex-center absolute left-120 top-150 h-44 w-44 cursor-pointer rounded-full bg-custom-green-200 md:right-0"
+        className="flex-center dark-border absolute left-120 top-150 h-44 w-44 cursor-pointer rounded-full bg-custom-green-200 md:right-0"
         whileHover={whileHover}
         onClick={handleEditClick}
       >
@@ -107,7 +107,7 @@ export default function ProfileImage({
       </motion.div>
       {isEditBoxVisible && (
         <motion.div
-          className="absolute -bottom-100 left-50 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:left-0 md:right-0"
+          className="absolute -bottom-100 left-50 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-130 md:left-0 md:right-0 dark:bg-custom-black dark:text-white"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -126,7 +126,7 @@ export default function ProfileImage({
               onChange={handleImgChange}
             />
             <p
-              className="relative cursor-pointer rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+              className="relative cursor-pointer rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300 dark:hover:bg-custom-gray-800"
               onClick={handleImageClick}
             >
               이미지 업로드
@@ -134,7 +134,7 @@ export default function ProfileImage({
           </div>
           <hr className="my-2 border border-gray-200" />
           <p
-            className="z-50 rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300"
+            className="z-50 rounded-md px-4 py-4 text-center text-sm-medium transition-all hover:bg-custom-gray-300 dark:hover:bg-custom-gray-800"
             onClick={handleChangeToDefaultImage}
           >
             기본 이미지로 변경

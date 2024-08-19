@@ -22,7 +22,7 @@ export function PrevButton() {
       type="button"
       disabled={disabled}
       aria-label="prev"
-      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55"
+      className="dark-base dark-border flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55 dark:hover:bg-custom-black"
       onClick={handlePrevClick}
     >
       <div className="size-15 md:size-21">
@@ -55,7 +55,7 @@ export function NextButton() {
       disabled={disabled}
       aria-label="next"
       onClick={handleNextClick}
-      className="flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55"
+      className="dark-base dark-border flex-center size-40 rounded-[15px] border border-custom-green-200 bg-white hover:bg-gray-100 disabled:cursor-not-allowed disabled:border-custom-gray-300 disabled:hover:bg-white md:size-55 dark:hover:bg-custom-black"
     >
       <div className="size-15 md:size-21">
         <PaginationArrowRight
@@ -111,10 +111,11 @@ function PageItem({ page }: { page: number }) {
   };
 
   const classnames = classNames(
-    'flex-center rounded-[15px] size-40 md:size-55',
+    'flex-center rounded-[15px] size-40 md:size-55 dark-base dark-border',
     {
-      'bg-custom-green-200 text-white hover:bg-[#0b553e]': currentPage === page,
-      'bg-white hover:bg-gray-100 border border-custom-green-200':
+      'bg-custom-green-200 dark:bg-custom-green-200 text-white hover:bg-[#0b553e]':
+        currentPage === page,
+      'bg-white hover:bg-gray-100 dark:hover:bg-[#0b553e] border border-custom-green-200':
         currentPage !== page,
     },
   );

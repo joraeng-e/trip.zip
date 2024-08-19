@@ -8,7 +8,7 @@ export default function SocialLogin() {
     <>
       <hr className="relative top-62 -z-10 w-full max-w-640 border-1" />
       <div className="mt-50">
-        <p className="bg-white px-30 text-custom-gray-700">
+        <p className="bg-white px-30 text-custom-gray-700 dark:bg-custom-black">
           SNS 계정으로 로그인하기
         </p>
         <div className="flex items-center justify-center gap-10 pt-30">
@@ -19,7 +19,7 @@ export default function SocialLogin() {
                 width={72}
                 height={72}
                 alt="구글로 로그인"
-                className="cursor-pointer"
+                className="cursor-pointer rounded-full bg-white"
               />{' '}
             </Link>
           </div>
@@ -30,7 +30,7 @@ export default function SocialLogin() {
                 width={72}
                 height={72}
                 alt="카카오로 로그인"
-                className="cursor-pointer"
+                className="cursor-pointer rounded-full bg-white"
               />
             </Link>
           </div>

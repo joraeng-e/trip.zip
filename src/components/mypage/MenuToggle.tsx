@@ -7,7 +7,7 @@ const Path: React.FC<PathProps> = (props) => (
   <motion.path
     fill="transparent"
     strokeWidth="3"
-    stroke="#000"
+    stroke="currentColor"
     strokeLinecap="round"
     {...props}
   />

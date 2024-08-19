@@ -6,6 +6,7 @@ import { XIcon } from '@/libs/utils/Icon';
 import { formatNumber } from '@/libs/utils/formatNumber';
 import { Reservation } from '@trip.zip-api';
 import { isAxiosError } from 'axios';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 
@@ -34,6 +35,10 @@ export default function ReviewModal({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (rating <= 0) {
+      notify('error', '별점을 선택해주세요');
+      return;
+    }
     const reviewData = {
       rating: rating,
       content: content,
@@ -59,7 +64,13 @@ export default function ReviewModal({
 
   return (
     isOpen && (
-      <div className="flex-center fixed left-0 top-0 z-50 h-full w-full backdrop-blur-sm">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex-center fixed left-0 top-0 z-50 h-full w-full backdrop-blur-sm"
+      >
         <div
           ref={modalRef}
           className="flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-697 lg:w-429"
@@ -110,17 +121,14 @@ export default function ReviewModal({
                 {content.length}
               </span>
             </div>
-            <Button
-              className="mt-12 h-54"
-              type="submit"
-              variant="activeButton"
-              hasICon
-            >
-              작성하기
-            </Button>
+            <div className="mt-12 h-54 md:h-56">
+              <Button type="submit" variant="activeButton" hasICon>
+                작성하기
+              </Button>
+            </div>
           </form>
         </div>
-      </div>
+      </motion.div>
     )
   );
 }
