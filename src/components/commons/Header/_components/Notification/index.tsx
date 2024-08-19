@@ -53,13 +53,13 @@ export default function Notification() {
         aria-label="알림"
         onClick={toggleNotificationPopup}
       >
-        <NotificationIcon />
+        <NotificationIcon className="fill-custom-black dark:fill-white" />
 
         {data && data?.totalCount > 0 && (
           <span className="absolute right-2 top-0 flex h-8 w-8">
             <span className="relative inline-flex h-8 w-8 rounded-full bg-custom-green-300 ring-1 ring-white" />
             {isNotificationUpdate && (
-              <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-custom-green-300 opacity-75" />
+              <span className="absolute inline-flex h-8 w-8 animate-ping rounded-full bg-custom-green-300 opacity-75" />
             )}
           </span>
         )}

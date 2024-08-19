@@ -122,9 +122,12 @@ export default function DateTime({
           <input
             id="date"
             type="date"
-            className={classNames('basic-input max-w-380 cursor-pointer', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-380 cursor-pointer',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.date}
             min={todayDate}
             onChange={handleDateTimeInputChange}
@@ -137,15 +140,18 @@ export default function DateTime({
           <input
             id="startTime"
             type="time"
-            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-150 cursor-pointer p-10',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.startTime}
             onChange={handleDateTimeInputChange}
           />
         </div>
         <div className="mt-20 hidden md:block">
-          <TimeSeparatorIcon />
+          <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
         </div>
         <div className="flex min-w-50 flex-col">
           <label htmlFor="endTime" className="mb-1 whitespace-nowrap">
@@ -154,9 +160,12 @@ export default function DateTime({
           <input
             id="endTime"
             type="time"
-            className={classNames('basic-input max-w-150 cursor-pointer p-10', {
-              'border-red-500': !!errors.schedules?.message,
-            })}
+            className={classNames(
+              'dark-base basic-input max-w-150 cursor-pointer p-10',
+              {
+                'border-red-500': !!errors.schedules?.message,
+              },
+            )}
             value={entry.endTime}
             onChange={handleDateTimeInputChange}
           />
@@ -189,22 +198,22 @@ export default function DateTime({
             <input
               type="text"
               readOnly
-              className="basic-input w-full max-w-380"
+              className="dark-base basic-input w-full max-w-380"
               value={schedule.date}
             />
             <input
               type="text"
               readOnly
-              className="basic-input w-full max-w-136"
+              className="dark-base basic-input w-full max-w-136"
               value={schedule.startTime}
             />
             <div className="hidden md:block">
-              <TimeSeparatorIcon />
+              <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
             </div>
             <input
               type="text"
               readOnly
-              className="basic-input w-full max-w-136"
+              className="dark-base basic-input w-full max-w-136"
               value={schedule.endTime}
             />
             <button

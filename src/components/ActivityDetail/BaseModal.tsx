@@ -30,7 +30,7 @@ export default function BaseModal(props: BaseModalProps) {
           >
             <XIcon
               onClick={onClose}
-              className="absolute right-20 top-20 z-50 w-20 cursor-pointer"
+              className="absolute right-20 top-20 z-50 w-20 cursor-pointer fill-white"
             />
             {children}
           </motion.div>

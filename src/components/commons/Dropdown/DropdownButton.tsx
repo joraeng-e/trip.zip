@@ -20,7 +20,7 @@ export default function Button({
   return (
     <button
       {...rest}
-      className={`${className} outline-none`}
+      className={`${className} dark-base dark-border outline-none`}
       onClick={toggleDropdown}
       type="button"
     >

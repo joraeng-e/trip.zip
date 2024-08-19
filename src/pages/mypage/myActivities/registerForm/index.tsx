@@ -182,7 +182,7 @@ export default function MyActivityForm() {
                 maxWidth="765px"
               />
               <Button
-                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
+                className="ml-10 max-w-80 rounded-md"
                 type="button"
                 onClick={() => setIsAddressModalOpen(true)}
               >
@@ -193,7 +193,7 @@ export default function MyActivityForm() {
               name="detailAddress"
               type="text"
               placeholder="상세 주소"
-              className="basic-input max-w-792"
+              className="dark-base basic-input max-w-792"
             />
             <BaseModal
               isOpen={isAddressModalOpen}

@@ -141,7 +141,7 @@ export default function Signup() {
             <p>회원이 아니신가요?</p>
             <Link
               href="/signup"
-              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
+              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2 dark:text-custom-green-100 dark:decoration-custom-green-100"
             >
               회원가입하기
             </Link>
