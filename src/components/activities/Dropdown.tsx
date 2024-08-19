@@ -25,10 +25,14 @@ export default function DropdownContainer({ value, setValue }: Props) {
       </Dropdown.Button>
       <Dropdown.Body>
         <Dropdown.Item value="가격이 낮은 순">
-          <span className="text-14 text-custom-gray-800">가격이 낮은 순</span>
+          <span className="text-14 text-custom-gray-800 dark:text-white">
+            가격이 낮은 순
+          </span>
         </Dropdown.Item>
         <Dropdown.Item value="가격이 높은 순">
-          <span className="text-14 text-custom-gray-800">가격이 높은 순</span>
+          <span className="text-14 text-custom-gray-800 dark:text-white">
+            가격이 높은 순
+          </span>
         </Dropdown.Item>
       </Dropdown.Body>
     </Dropdown>

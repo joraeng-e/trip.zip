@@ -83,7 +83,7 @@ function PopularActivities() {
   return (
     <div className="mt-24 md:mt-18 xl:mt-32">
       <div className="flex-center mb-16 justify-between">
-        <h1 className="text-18 font-semibold text-nomad-black md:text-36">
+        <h1 className="text-18 font-semibold text-nomad-black md:text-36 dark:text-white">
           🔥인기 체험
         </h1>
         <div className="flex-center hidden xl:flex">
@@ -115,7 +115,7 @@ function PopularActivities() {
             data={currentActivities}
           />
         ) : (
-          <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+          <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px] dark:text-white">
             체험이 등록되지 않았습니다.
           </div>
         )}
@@ -158,7 +158,7 @@ function Content({
 
   if (isError) {
     return (
-      <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px]">
+      <div className="flex-center h-186 flex-shrink-0 flex-grow text-18 md:h-[384px] dark:text-white">
         에러가 발생하였습니다.
       </div>
     );

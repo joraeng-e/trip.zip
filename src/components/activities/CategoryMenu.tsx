@@ -32,10 +32,11 @@ export default function CategoryMenu({
       <div className="no-scrollbar flex w-full gap-8 overflow-x-auto md:gap-14 xl:gap-24">
         {CATEGORIES.map((category) => {
           const classnames = classNames(
-            'flex-shrink-0 rounded-[15px] border border-custom-green-200 px-10 py-8 leading-26 md:px-36 md:py-16 md:text-18 xl:px-48',
+            'dark-base dark-border flex-shrink-0 rounded-[15px] border-[1.5px] border-custom-green-200 px-10 py-8 leading-26 md:px-36 md:py-16 md:text-18 xl:px-48',
             {
-              'bg-custom-green-200 text-white': activeCategory === category,
-              'bg-white text-custom-green-200 hover:bg-[#125742] hover:text-white':
+              'bg-custom-green-200 dark:bg-custom-green-200 text-white':
+                activeCategory === category,
+              'bg-white text-custom-green-200 hover:bg-[#125742] dark:hover:bg-custom-green-200 hover:text-white':
                 activeCategory !== category,
             },
           );
@@ -53,7 +54,7 @@ export default function CategoryMenu({
         })}
         <div className="ml-16"></div>
       </div>
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-50 bg-gradient-to-l from-white to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-50 bg-gradient-to-l from-white to-transparent dark:from-custom-gray-800" />
     </div>
   );
 }

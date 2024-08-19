@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: white;
+}
+
+body.dark {
+  background-color: #1b1b1b;
+  color: white;
+}
+
+body.dark input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #1b1b1b inset;
+  -webkit-text-fill-color: white;
+}
+
 @layer components {
   .basic-container {
     @apply mx-auto w-full max-w-1200 px-16;
@@ -20,6 +34,12 @@
   }
   .min-screen {
     min-height: calc(100vh - 284px);
+  }
+  .dark-base {
+    @apply transition-all duration-500 dark:bg-custom-black dark:text-white;
+  }
+  .dark-border {
+    @apply dark:border-[1.5px] dark:border-white;
   }
 }
 

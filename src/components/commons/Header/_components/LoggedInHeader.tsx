@@ -62,7 +62,7 @@ export default function LoggedInHeader() {
         <p className="font-semibold">{userInfo?.nickname}</p>
         {isProfileBoxVisible && (
           <motion.div
-            className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:right-0 md:w-110"
+            className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:right-0 md:w-110 dark:bg-custom-black dark:text-white"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -73,13 +73,13 @@ export default function LoggedInHeader() {
               <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />
             </div>
             <Link href="/mypage">
-              <p className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300">
+              <p className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300 dark:hover:bg-custom-gray-800">
                 마이페이지
               </p>
             </Link>
             <hr className="my-2 border border-gray-200" />
             <p
-              className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300"
+              className="rounded-md p-4 text-center text-md-medium transition-all hover:bg-custom-gray-300 dark:hover:bg-custom-gray-800"
               onClick={logout}
             >
               로그아웃

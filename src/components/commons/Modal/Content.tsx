@@ -54,7 +54,7 @@ export default function ModalContent(props: ModalContentProps) {
                 top: position.y,
                 left: position.x - 100,
               }}
-              className={`absolute h-400 w-400 rounded-xl bg-custom-green-100 px-20 py-24 shadow-lg ${className}`}
+              className={`dark-base dark-border absolute h-400 w-400 rounded-xl bg-custom-green-100 px-20 py-24 shadow-lg ${className}`}
             >
               {icon && (
                 <XIcon
@@ -71,7 +71,7 @@ export default function ModalContent(props: ModalContentProps) {
               onClick={handleClickOverlay}
             >
               <div
-                className={`min-w-300 relative z-50 h-auto w-auto flex-col rounded-lg bg-custom-gray-100 p-20 ${className}`}
+                className={`dark-base dark-border relative z-50 h-auto w-auto min-w-300 flex-col rounded-lg bg-custom-gray-100 p-20 ${className}`}
               >
                 {icon && (
                   <XIcon
