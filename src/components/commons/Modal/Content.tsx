@@ -1,5 +1,6 @@
 import { XIcon } from '@/libs/utils/Icon';
 import { ModalProps } from '@/types/modaltype';
+import { motion } from 'framer-motion';
 import { useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -47,7 +48,12 @@ export default function ModalContent(props: ModalContentProps) {
   const renderPortal = () => {
     if (currentOpenState) {
       return createPortal(
-        <div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           {popover ? (
             <div
               style={{
@@ -83,7 +89,7 @@ export default function ModalContent(props: ModalContentProps) {
               </div>
             </div>
           )}
-        </div>,
+        </motion.div>,
         document.body,
       );
     }
