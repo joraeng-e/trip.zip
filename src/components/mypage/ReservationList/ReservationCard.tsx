@@ -91,7 +91,7 @@ export default function ReservationCard({
   });
 
   return (
-    <div className="mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
+    <div className="dark-border mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
       <div className="relative h-full w-128 flex-shrink-0 md:w-156 lg:w-204">
         <Image
           src={bannerImageUrl}

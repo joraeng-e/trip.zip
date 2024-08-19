@@ -70,7 +70,7 @@ export default function MyCard({
   };
 
   return (
-    <div className="mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
+    <div className="dark-border mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
       <div className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]">
         <Image
           src={bannerImageUrl}
