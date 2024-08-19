@@ -43,6 +43,20 @@ export const CalendarStyle = styled(Calendar)`
     color: black;
   }
 
+  .react-calendar__tile--now:hover {
+    background-color: #e6e6e6;
+  }
+
+  .react-calendar__tile--active {
+    background: #00ac07;
+    color: white;
+  }
+
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #00ac07;
+  }
+
   .not-scheduled {
     color: #cbc9cf;
     text-decoration-line: line-through;

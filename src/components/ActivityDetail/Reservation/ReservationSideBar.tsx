@@ -23,8 +23,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [guestCount, setGuestCount] = useState<number>(1);
-  const today = new Date();
-  const [date, setDate] = useState<Date>(today);
+  const [date, setDate] = useState<Date | null>(null);
   const [selectedSchedules, setSelectedSchedules] = useState<
     { startTime: string; endTime: string; id: number }[] | null
   >(null);

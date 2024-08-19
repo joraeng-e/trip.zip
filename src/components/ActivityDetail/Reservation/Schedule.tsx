@@ -29,7 +29,7 @@ interface ScheduleProps {
   ) => void;
   onReservationComplete?: () => void;
   detailData: GetActivityDetailResponse;
-  selectedDate: Date;
+  selectedDate: Date | null;
 }
 
 export default function Schedule(props: ScheduleProps) {
@@ -123,30 +123,35 @@ export default function Schedule(props: ScheduleProps) {
       <hr className="contour mx-0" />
       <div className="text-lg-bold text-nomad-black">예약 가능 시간</div>
       <div className="my-16 grid grid-cols-2 gap-10">
-        {selectedSchedules.map((schedule, index) => {
-          const isBookable = bookableIds.has(schedule.id);
-          return (
-            <button
-              key={index}
-              className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${
-                activeIndex === index
-                  ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200'
-                  : isBookable
-                    ? 'text-custom-black'
-                    : 'cursor-not-allowed bg-custom-gray-200 text-custom-gray-700 line-through hover:bg-custom-gray-200'
-              }`}
-              onClick={() => {
-                if (isBookable) {
-                  handleScheduleClick(index, schedule);
-                  setSelectedScheduleId(schedule.id);
-                }
-              }}
-              disabled={!isBookable}
-            >
-              {schedule.startTime} ~ {schedule.endTime}
-            </button>
-          );
-        })}
+        {selectedSchedules.length === 0 ||
+        !selectedSchedules.some((schedule) => bookableIds.has(schedule.id)) ? (
+          <div className="text-red-500">예약이 마감되었습니다.</div>
+        ) : (
+          selectedSchedules.map((schedule, index) => {
+            const isBookable = bookableIds.has(schedule.id);
+            return (
+              <button
+                key={index}
+                className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${
+                  activeIndex === index
+                    ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200'
+                    : isBookable
+                      ? 'text-custom-black'
+                      : 'cursor-not-allowed bg-custom-gray-200 text-custom-gray-700 line-through hover:bg-custom-gray-200'
+                }`}
+                onClick={() => {
+                  if (isBookable) {
+                    handleScheduleClick(index, schedule);
+                    setSelectedScheduleId(schedule.id);
+                  }
+                }}
+                disabled={!isBookable}
+              >
+                {schedule.startTime} ~ {schedule.endTime}
+              </button>
+            );
+          })
+        )}
       </div>
 
       <Button
@@ -160,9 +165,9 @@ export default function Schedule(props: ScheduleProps) {
       <BaseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        className="mx-40 h-auto w-800 p-20 text-nomad-black"
+        className="mx-40 h-auto p-20 text-nomad-black"
       >
-        <div className="">
+        <div className="w-800">
           <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
 
           <div className="mt-4 rounded-lg bg-white p-4 shadow-lg">
