@@ -45,11 +45,14 @@ export default function ActivityGuide({
       </div>
 
       <section className="flex flex-col text-nomad-black">
-        <h1 className="text-28 font-bold md:text-32 xl:text-40">
+        <h1 className="text-28 font-bold dark:text-white md:text-32 xl:text-40">
           {data?.title}
         </h1>
 
-        <p className="mt-6" dangerouslySetInnerHTML={{ __html: description }} />
+        <p
+          className="mt-6 dark:text-white"
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
 
         <div className="flex flex-wrap gap-6">
           {tags?.map((tag) => (

@@ -138,7 +138,7 @@ const MobileUI = forwardRef<HTMLDivElement, UIProps>(
             </h1>
           </div>
           <button type="button" onClick={closePopup}>
-            <XIcon />
+            <XIcon className="size-30 fill-white" />
           </button>
         </div>
 
