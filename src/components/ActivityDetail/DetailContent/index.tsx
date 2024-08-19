@@ -13,10 +13,11 @@ interface DetailContentProps {
     review: React.RefObject<HTMLDivElement>;
   };
   detailData: GetActivityDetailResponse;
+  isSameUser: boolean;
 }
 
 export default function DetailContent(props: DetailContentProps) {
-  const { sectionRefs } = props;
+  const { sectionRefs, isSameUser } = props;
 
   const data = props.detailData;
 
@@ -28,6 +29,8 @@ export default function DetailContent(props: DetailContentProps) {
         category={data.category}
         rating={data.rating}
         reviewCount={data.reviewCount}
+        id={data.id}
+        isSameUser={isSameUser}
       />
       <div ref={sectionRefs.description} />
       <Description description={data.description} />

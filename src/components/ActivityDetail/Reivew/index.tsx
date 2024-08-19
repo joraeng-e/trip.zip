@@ -17,9 +17,9 @@ interface ReviewProps {
 
 export default function Review(props: ReviewProps) {
   const router = useRouter();
-  const { activityId } = router.query;
-  const ActivityId = Number(activityId);
-  const { sectionRefs } = props; // sectionRefs props로 받기
+  const { activityid } = router.query;
+  const ActivityId = Number(activityid);
+  const { sectionRefs } = props;
 
   const [page, setPage] = useState<number>(1);
   const { data, isError } = useQuery({
