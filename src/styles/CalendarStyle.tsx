@@ -29,6 +29,15 @@ export const CalendarStyle = styled(Calendar)`
     color: black;
   }
 
+  .react-calendar__month-view__weekdays abbr {
+    text-decoration: none;
+    font-weight: 800;
+  }
+
+  .react-calendar__month-view__weekdays__weekday--weekend abbr[title='일요일'] {
+    color: #ff472e;
+  }
+
   .react-calendar__tile--now {
     background-color: white;
     color: black;
@@ -36,7 +45,16 @@ export const CalendarStyle = styled(Calendar)`
 
   .react-calendar__tile--now:hover {
     background-color: #e6e6e6;
-    color: black;
+  }
+
+  .react-calendar__tile--active {
+    background: #00ac07;
+    color: white;
+  }
+
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background: #00ac07;
   }
 
   .not-scheduled {

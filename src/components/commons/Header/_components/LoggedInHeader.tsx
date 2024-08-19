@@ -62,7 +62,7 @@ export default function LoggedInHeader() {
         <p className="font-semibold">{userInfo?.nickname}</p>
         {isProfileBoxVisible && (
           <motion.div
-            className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md md:bottom-135 md:right-0 md:w-110 dark:bg-custom-black dark:text-white"
+            className="absolute right-0 top-50 z-10 h-fit w-fit cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-4 shadow-md dark:bg-custom-black dark:text-white md:bottom-135 md:right-0 md:w-110"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}

@@ -9,6 +9,7 @@ import {
   PostReservationsRequest,
   PostReservationsResponse,
 } from '@trip.zip-api';
+import axios from 'axios';
 
 import axiosInstance from '../axiosInstance';
 
@@ -162,7 +163,12 @@ export async function postReservations({
     return response.data;
   } catch (error) {
     console.error('postReservations 함수에서 오류 발생:', error);
-    throw error;
+    let errorMessage = '예약 요청 중 오류가 발생했습니다.';
+    if (axios.isAxiosError(error) && error.response && error.response.data) {
+      errorMessage = error.response.data.message || errorMessage;
+    }
+
+    throw new Error(errorMessage);
   }
 }
 

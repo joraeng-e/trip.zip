@@ -4,7 +4,7 @@ interface ThumbnailImageProps {
   src: string;
   alt: string;
   onClick: () => void;
-  className?: string; // className을 선택적 속성으로 설정
+  className?: string;
 }
 
 export default function ThumbnailImage(props: ThumbnailImageProps) {
