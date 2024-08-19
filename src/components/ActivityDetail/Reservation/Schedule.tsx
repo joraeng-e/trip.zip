@@ -77,15 +77,13 @@ export default function Schedule(props: ScheduleProps) {
 
   const handleReservationClick = () => {
     if (!loggedIn) {
-      if (!loggedIn) {
-        notify('warning', '로그인이 필요한 서비스입니다.', () => {
-          router.push('/login');
-        });
-      } else if (isSameUser) {
-        router.push('/mypage/myActivities');
-      } else {
-        setIsModalOpen(true);
-      }
+      notify('warning', '로그인이 필요한 서비스입니다.', () => {
+        router.push('/login');
+      });
+    } else if (isSameUser) {
+      router.push('/mypage/myActivities');
+    } else {
+      setIsModalOpen(true);
     }
   };
 
