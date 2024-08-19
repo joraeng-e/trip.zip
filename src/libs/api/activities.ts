@@ -18,7 +18,7 @@ export async function getActivities({
   cursorId,
   category,
   keyword,
-  sort = 'most_reviewed',
+  sort = 'latest',
   page = 1,
   size = 20,
 }: {

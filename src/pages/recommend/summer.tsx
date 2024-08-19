@@ -55,21 +55,21 @@ export default function SummerRecommend() {
         </Introduction>
 
         <ActivityGuide
-          id={2399}
+          id={2451}
           description="맑고 푸른 바다에서 수영과 해변 활동을 즐길 수 있는 최고의 장소입니다."
           tags={['속초', '해수욕장']}
         />
         <ActivityGuide
-          id={2398}
+          id={2214}
           direction="right"
           description="루피 쿠키 만들기 체험은 어린이와 가족이 함께 즐길 수 있는 재미있고 창의적인 활동입니다.<br />사랑스러운 루피 캐릭터를 테마로 한 쿠키를 직접 만들어 보며, baking의 기초를 배우고, 특별한 추억을 만들어보세요!"
         />
         <ActivityGuide
-          id={2183}
+          id={2452}
           description="속초 중앙시장은 동해안의 신선한 해산물과 다양한 지역 특산물을 만나볼 수 있는 전통 시장입니다.<br />이곳은 속초의 대표적인 먹거리 명소로, 지역 주민들과 관광객들이 함께 찾는 활기찬 장소입니다.<br />시장은 다양한 음식점과 상점들이 즐비해 있어, 속초의 맛과 문화를 체험할 수 있는 최적의 장소입니다."
         />
         <ActivityGuide
-          id={1985}
+          id={2454}
           direction="right"
           description="속초 해수욕장은 여름철에 다양한 수상 액티비티를 즐길 수 있는 인기 장소입니다.<br />특히 '빠지'(바다에서의 수상 액티비티) 체험은 많은 관광객들에게 사랑받고 있습니다."
         />

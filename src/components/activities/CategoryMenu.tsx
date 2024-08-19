@@ -29,10 +29,10 @@ export default function CategoryMenu({
 
   return (
     <div className="relative min-w-0 flex-1">
-      <div className="no-scrollbar flex w-full gap-8 overflow-x-auto md:gap-14 xl:gap-24">
+      <div className="no-scrollbar flex w-full gap-8 overflow-x-auto md:gap-14 xl:gap-12">
         {CATEGORIES.map((category) => {
           const classnames = classNames(
-            'flex-shrink-0 rounded-[15px] border border-custom-green-200 px-10 py-8 leading-26 md:px-36 md:py-16 md:text-18 xl:px-48',
+            'flex-shrink-0 rounded-[15px] border border-custom-green-200 px-10 py-8 leading-26 md:px-36 md:py-16 md:text-18 xl:px-36',
             {
               'bg-custom-green-200 text-white': activeCategory === category,
               'bg-white text-custom-green-200 hover:bg-[#125742] hover:text-white':
