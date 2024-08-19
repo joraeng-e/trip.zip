@@ -106,7 +106,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
 
   return (
     <div
-      className={`z-50 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
+      className={`z-40 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black ${className || 'sticky top-160'}`}
     >
       <div className="relative my-20 flex items-center justify-center text-center text-2xl-bold">
         {totalPrice} /
