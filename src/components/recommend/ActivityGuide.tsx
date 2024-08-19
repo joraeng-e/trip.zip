@@ -20,7 +20,7 @@ export default function ActivityGuide({
   description,
 }: Props) {
   const router = useRouter();
-  const { data } = useQuery<GetActivityDetailResponse, Error>({
+  const { data, isError } = useQuery<GetActivityDetailResponse, Error>({
     queryKey: ['recommend', id],
     queryFn: () => getActivityDetail(id),
   });

@@ -54,7 +54,7 @@ export default function CategoryMenu({
         })}
         <div className="ml-16"></div>
       </div>
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-50 bg-gradient-to-l from-white to-transparent dark:from-custom-gray-800" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-50 bg-gradient-to-l from-white to-transparent dark:hidden dark:from-custom-gray-800" />
     </div>
   );
 }
