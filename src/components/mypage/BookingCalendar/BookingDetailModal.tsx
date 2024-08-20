@@ -1,5 +1,6 @@
 import Button from '@/components/commons/Button';
 import Dropdown from '@/components/commons/Dropdown';
+import Modal from '@/components/commons/Modal';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,

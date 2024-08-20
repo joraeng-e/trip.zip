@@ -163,7 +163,7 @@ export default function Calendar({
 
   return (
     <div
-      className={`relative grid grid-cols-7 gap-2 rounded-lg border-1 ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}`}
+      className={`grid grid-cols-7 gap-2 rounded-lg border-1 ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}`}
     >
       {days.map((day) => (
         <div
