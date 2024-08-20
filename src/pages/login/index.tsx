@@ -1,4 +1,4 @@
-import tripZip from '@/../public/logo/tripZip.png';
+import Logo from '@/components/auths/Logo';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Loading from '@/components/commons/Loading';
@@ -11,7 +11,6 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginResponse } from '@trip.zip-api';
 import { setCookie } from 'cookies-next';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -100,9 +99,7 @@ export default function Signup() {
       </Head>
       <div className="page-container">
         <div className="flex flex-col items-center justify-center">
-          <Link href="/" aria-label="메인페이지로 이동">
-            <Image src={tripZip} alt="trip.zip" width={300} height={20} />
-          </Link>
+          <Logo />
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex w-full max-w-640 flex-col gap-16"
