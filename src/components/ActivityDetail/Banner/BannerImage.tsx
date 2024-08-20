@@ -1,6 +1,6 @@
 import NoImage from '@/../public/imgs/no-img.png';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import ImageModal from './BannerImageModal';
 import BlurBannerImage from './BlurBannerImage';
@@ -22,18 +22,6 @@ export default function BannerImage(props: ImageProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isModalOpen]);
 
   const Images = [bannerImageUrl, ...(subImageUrl || [])];
 
@@ -137,7 +125,7 @@ export default function BannerImage(props: ImageProps) {
 
           <button
             onClick={handleOpenModal}
-            className="absolute bottom-20 right-20 z-50 h-40 w-120 rounded-3xl border border-custom-gray-400 bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
+            className="absolute bottom-20 right-20 h-40 w-120 rounded-3xl border border-custom-gray-400 bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
           >
             사진 전체 보기
           </button>

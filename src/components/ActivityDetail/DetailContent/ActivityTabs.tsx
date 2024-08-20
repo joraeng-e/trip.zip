@@ -16,7 +16,7 @@ export default function ActivityTabs(props: ActivityHeaderProps) {
     `mr-4 mt-2 w-100 border-b-2 transition-all duration-300 ${activeSection === section ? 'border-b-2 border-blue-600' : 'border-b border-transparent'}`;
 
   return (
-    <div className="sticky top-70 z-50 hidden h-70 w-full border-y-1 border-custom-gray-200 bg-white transition-all duration-500 md:block">
+    <div className="sticky top-70 z-20 hidden h-70 w-full border-y-1 border-custom-gray-200 bg-white transition-all duration-500 md:block">
       <div className="basic-container margin-20 flex h-full items-center justify-between">
         <div className="flex h-full space-x-4">
           <button
