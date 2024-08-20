@@ -59,7 +59,7 @@ export default function Index() {
       <Head>
         <title>Trip.zip</title>
         <meta name="description" content="Trip.zip을 시작해보세요." />
-        <meta property="og:title" content="로그인 - Trip.zip" />
+        <meta property="og:title" content="HOME - Trip.zip" />
         <meta
           property="og:description"
           content="Trip.zip과 함께 특별한 여행을 계획해보세요."
