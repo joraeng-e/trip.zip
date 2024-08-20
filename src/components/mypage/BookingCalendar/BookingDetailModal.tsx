@@ -1,6 +1,4 @@
-import Button from '@/components/commons/Button';
 import Dropdown from '@/components/commons/Dropdown';
-import Modal from '@/components/commons/Modal';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,
@@ -10,6 +8,8 @@ import {
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+
+import BookingDetailCard from './BookingDetailCard';
 
 type BookingDetailModalProps = {
   activityId: number;
@@ -29,7 +29,7 @@ type Schedule = {
   };
 };
 
-type Reservation = {
+export type Reservation = {
   id: number;
   status: string;
   totalPrice: number;
@@ -269,59 +269,11 @@ export default function BookingDetailModal({
           </span>
           <div className="flex flex-col gap-16">
             {reservations.map((reservation) => (
-              <div
-                key={reservation.id}
-                className="flex flex-col justify-center gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
-              >
-                <div className="flex gap-10">
-                  <span className="text-16 font-semibold text-custom-gray-700">
-                    닉네임
-                  </span>
-                  <span className="text-16 font-medium text-custom-black">
-                    {reservation.nickname}
-                  </span>
-                </div>
-                <div className="flex gap-10">
-                  <span className="text-16 font-semibold text-custom-gray-700">
-                    인원
-                  </span>
-                  <span className="text-16 font-medium text-custom-black">
-                    {reservation.headCount}
-                  </span>
-                </div>
-                <div className="flex w-full justify-end">
-                  {reservation.status === 'pending' && (
-                    <div className="flex w-220 gap-6">
-                      <Button
-                        variant="activeButton"
-                        hasICon={false}
-                        className="h-38"
-                        onClick={() => confirmReservation(reservation.id)}
-                      >
-                        승인하기
-                      </Button>
-                      <Button
-                        variant="inactiveButton"
-                        hasICon={false}
-                        className="h-38"
-                        onClick={() => declineReservation(reservation.id)}
-                      >
-                        거절하기
-                      </Button>
-                    </div>
-                  )}
-                  {reservation.status === 'confirmed' && (
-                    <div className="flex-center h-44 w-82 rounded-[26px] bg-custom-orange-100 text-14 font-bold text-custom-orange-200">
-                      <span>예약 승인</span>
-                    </div>
-                  )}
-                  {reservation.status === 'declined' && (
-                    <div className="flex-center h-44 w-82 rounded-[26px] bg-custom-red-100 text-14 font-bold text-custom-red-200">
-                      <span>예약 거절</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <BookingDetailCard
+                reservation={reservation}
+                onConfirm={confirmReservation}
+                onDecline={declineReservation}
+              />
             ))}
           </div>
         </div>
