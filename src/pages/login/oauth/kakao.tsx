@@ -55,7 +55,13 @@ export default function Kakao() {
             error.response &&
             error.response.status === 401
           ) {
-            notify('warning', ' 계정이 없는 경우 회원가입을 진행해 주세요.');
+            notify(
+              'warning',
+              '계정이 없는 경우 회원가입을 진행해 주세요.',
+              () => {
+                router.push('/signup');
+              },
+            );
             router.push('/signup');
           }
           console.error('로그인 오류:', error);
