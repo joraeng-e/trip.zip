@@ -88,7 +88,8 @@ export default function ImageUploader({
             'flex-center group mb-5 h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
             {
               'opacity-50': imagePreviewUrls.length >= maxImages,
-              'hover:border-nomad-black': imagePreviewUrls.length < maxImages,
+              'hover:border-nomad-black dark:hover:border-custom-gray-800':
+                imagePreviewUrls.length < maxImages,
             },
           )}
           style={{
@@ -103,9 +104,9 @@ export default function ImageUploader({
             <>
               <PlusIcon
                 aria-label="등록 아이콘"
-                className="h-48 w-48 text-gray-400 group-hover:text-nomad-black"
+                className="h-48 w-48 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800"
               />
-              <span className="mt-1 text-gray-400 group-hover:text-nomad-black">
+              <span className="mt-1 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800">
                 {label}
               </span>
             </>
@@ -137,11 +138,11 @@ export default function ImageUploader({
             <button
               type="button"
               onClick={() => handleDelete(index)}
-              className="absolute right-3 top-3 h-25 w-25 place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
+              className="absolute right-3 top-3 flex h-25 w-25 items-center justify-center place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
             >
               <XIcon
                 aria-label="삭제 아이콘"
-                className="h-32 w-32 fill-current text-green-950"
+                className="size-24 fill-current text-green-950"
               />
             </button>
           </div>

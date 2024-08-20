@@ -31,14 +31,6 @@ export default function NotificationPopup({ closePopup }: Props) {
   const isIntersecting = useIntersectionObserver(sentinelRef);
   const isIntersectingInMobile = useIntersectionObserver(mobileSentinelRef);
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
   useEffect(
     function handleScrollFetch() {
       if ((isIntersectingInMobile || isIntersecting) && hasNextPage) {
@@ -98,7 +90,7 @@ const TabletAndPCUI = forwardRef<HTMLDivElement, UIProps>(
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3 }}
-        className="absolute right-100 top-full z-50 mt-20 min-h-160 w-[368px] rounded-[10px] bg-custom-green-100 px-20 py-24 shadow-lg xl:right-0"
+        className="absolute right-100 top-full z-50 mt-20 min-h-160 w-[368px] rounded-[10px] bg-custom-green-100 px-20 py-24 shadow-lg dark:bg-nomad-black xl:right-0"
       >
         <div className="mb-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -108,7 +100,7 @@ const TabletAndPCUI = forwardRef<HTMLDivElement, UIProps>(
             </h1>
           </div>
           <button type="button" onClick={closePopup}>
-            <XIcon />
+            <XIcon className="size-30 fill-white" />
           </button>
         </div>
 
@@ -146,13 +138,13 @@ const MobileUI = forwardRef<HTMLDivElement, UIProps>(
             </h1>
           </div>
           <button type="button" onClick={closePopup}>
-            <XIcon />
+            <XIcon className="size-30 fill-white" />
           </button>
         </div>
 
         <div className="flex flex-col gap-8">
           {data.length === 0 && (
-            <h1 className="flex-center mt-20 text-custom-gray-800">
+            <h1 className="flex-center mt-20 text-custom-gray-800 dark:text-white">
               알림이 없습니다.
             </h1>
           )}
@@ -160,7 +152,9 @@ const MobileUI = forwardRef<HTMLDivElement, UIProps>(
             <NotificationItem key={each.id} data={each} />
           ))}
           {isError && (
-            <h1 className="flex-center mt-20">에러가 발생했습니다.</h1>
+            <h1 className="flex-center mt-20 dark:text-white">
+              에러가 발생했습니다.
+            </h1>
           )}
 
           <div ref={ref} className="h-10 w-full flex-shrink-0" />

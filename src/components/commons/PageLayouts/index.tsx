@@ -1,14 +1,14 @@
 import { useLoading } from '@/hooks/useLoading';
-import { getUser } from '@/libs/api/user';
+import { getCookie } from 'cookies-next';
 import { AnimatePresence, motion } from 'framer-motion';
-import localFont from 'next/font/local';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import Footer from '../Footer';
 import Header from '../Header';
 import Loading from '../Loading';
+import { notify } from '../Toast';
 
 type LayoutProps = {
   children: ReactNode;
@@ -16,7 +16,6 @@ type LayoutProps = {
   showFooter?: boolean;
 };
 
-const PRIVATE_PATHS = ['/private'];
 const MYPAGE_PATHS = [
   '/mypage',
   '/mypage/info',
@@ -24,36 +23,14 @@ const MYPAGE_PATHS = [
   '/mypage/myActivities',
   '/mypage/reservationStatus',
 ];
-
-const pretendard = localFont({
-  src: [
-    {
-      path: '../../../../public/font/Pretendard-Bold.subset.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../../../../public/font/Pretendard-SemiBold.subset.woff2',
-      weight: '600',
-      style: 'normal',
-    },
-    {
-      path: '../../../../public/font/Pretendard-Medium.subset.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../../../../public/font/Pretendard-Regular.subset.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../../../public/font/Pretendard-Light.subset.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-  ],
-});
+const AUTH_PATHS = [
+  '/login',
+  '/signup',
+  '/login/oauth/kakao',
+  '/signup/oauth/kakao',
+  '/login/oauth/google',
+  '/signup/oauth/google',
+];
 
 /**
  * 페이지 컴포넌트를 감싸는 레이아웃 컴포넌트입니다🙇🏻‍♂️
@@ -72,23 +49,21 @@ export default function Layout({
   const pathname = usePathname();
   const router = useRouter();
 
-  if (PRIVATE_PATHS.includes(pathname)) {
-    const result = getUser();
-    if (!result) router.push('/login');
-  }
+  useEffect(() => {
+    if (MYPAGE_PATHS.includes(pathname)) {
+      const token = getCookie('accessToken');
+      if (!token) {
+        notify('warning', '로그인이 필요한 서비스입니다.');
+        router.push('/login');
+      }
+    }
+  }, [pathname, router]);
 
   if (pathname === '/') {
     showHeader = false;
   }
 
-  if (
-    pathname === '/login' ||
-    pathname === '/signup' ||
-    pathname === '/login/oauth/kakao' ||
-    pathname === '/signup/oauth/kakao' ||
-    pathname === '/login/oauth/google' ||
-    pathname === '/signup/oauth/google'
-  ) {
+  if (AUTH_PATHS.includes(pathname)) {
     showHeader = false;
     showFooter = false;
   }
@@ -100,7 +75,7 @@ export default function Layout({
   const loading = useLoading();
 
   return (
-    <main className={`${pretendard.className}`}>
+    <>
       {showHeader && <Header />}
       {loading ? (
         <Loading />
@@ -118,6 +93,6 @@ export default function Layout({
           </motion.div>
         </AnimatePresence>
       )}
-    </main>
+    </>
   );
 }

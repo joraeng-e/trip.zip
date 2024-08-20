@@ -1,13 +1,19 @@
 import { useTabContext } from '@/context/TabContext';
 import { getUser } from '@/libs/api/user';
-import { BaseProfile, Logout, ProfileAccountIcon, ProfileCalendarIcon, ProfileChecklistIcon, ProfileCogIcon } from '@/libs/utils/Icon';
+import {
+  BaseProfile,
+  Logout,
+  ProfileAccountIcon,
+  ProfileCalendarIcon,
+  ProfileChecklistIcon,
+  ProfileCogIcon,
+} from '@/libs/utils/Icon';
 import { useQuery } from '@tanstack/react-query';
 import { deleteCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-
 
 const baseTextStyle =
   'group flex cursor-pointer items-center gap-12 rounded-xl px-20 py-8 text-lg-bold transition-all';
@@ -50,7 +56,7 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
   }, [router.pathname, setActiveTab]);
 
   return (
-    <div className="flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344">
+    <div className="dark-base flex-center mb-30 h-fit w-344 flex-col gap-20 rounded-xl border-2 bg-white py-20 shadow-lg md:w-250 lg:w-344">
       <div className="relative flex items-center justify-center gap-24 md:flex-col md:gap-10 lg:flex-row lg:gap-24">
         <div className="relative h-80 w-80 overflow-hidden rounded-full border-2">
           {userInfo?.profileImageUrl ? (
@@ -125,8 +131,8 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
           className={`text-black ${baseTextStyle} hover:bg-custom-green-100`}
           onClick={logout}
         >
-          <Logout className="h-20 w-20" />
-          <p>로그아웃</p>
+          <Logout className="size-20" />
+          <p className="text-custom-gray-800">로그아웃</p>
         </div>
       </div>
     </div>

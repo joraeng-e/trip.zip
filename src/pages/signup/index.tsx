@@ -1,4 +1,4 @@
-import tripZip from '@/../public/logo/tripZip.png';
+import Logo from '@/components/auths/Logo';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Loading from '@/components/commons/Loading';
@@ -10,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
 import { RegisterRequest, RegisterResponse } from '@trip.zip-api';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -88,11 +87,9 @@ export default function Signup() {
           content="Trip.zip에 가입해 Trip.zip을 시작해보세요."
         />
       </Head>
-      <div className="page-container">
+      <div className="page-container mb-50">
         <div className="flex flex-col items-center justify-center">
-          <Link href="/" aria-label="메인페이지로 이동">
-            <Image src={tripZip} alt="trip.zip" width={300} height={20} />
-          </Link>
+          <Logo />
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex w-full max-w-640 flex-col gap-16"
@@ -149,7 +146,7 @@ export default function Signup() {
             <p>회원이신가요?</p>
             <Link
               href="login"
-              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2"
+              className="text-custom-green-200 underline decoration-custom-green-200 underline-offset-2 dark:text-custom-green-100 dark:decoration-custom-green-100"
             >
               로그인하기
             </Link>

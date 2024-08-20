@@ -106,6 +106,9 @@ export default function ReservationList() {
             </Dropdown.Body>
           </Dropdown>
         </div>
+        <p className="mb-10 text-sm-medium text-custom-green-200 dark:text-custom-green-100">
+          *예약 날짜가 지나면 자동으로 예약 취소가 됩니다.
+        </p>
 
         {sortedReservations.length === 0 ? (
           <NoActivity />

@@ -133,10 +133,16 @@ export default function Info() {
   const onSubmit = async (data: FormData) => {
     const { nickname, newPassword, profileImageUrl } = data;
 
+    // 사용자가 현재 기본 이미지를 사용하는지 확인
+    const isCurrentImageDefault = userInfo?.profileImageUrl === null;
+    const isSettingDefaultImage =
+      !newProfileImageFile && profileImageUrl === null;
+
     if (
       nickname === userInfo?.nickname &&
       !newPassword &&
-      !newProfileImageFile
+      !newProfileImageFile &&
+      isCurrentImageDefault === isSettingDefaultImage
     ) {
       notify('warning', '변경된 정보가 없습니다.');
     } else {
@@ -149,8 +155,11 @@ export default function Info() {
       imageData.append('image', newProfileImageFile);
       imgMutation.mutate(imageData);
     } else {
-      // 이미지가 변경되지 않는 경우
-      updateProfileInfo({ profileImageUrl });
+      // 이미지가 변경되지 않거나 기본 이미지로 설정된 경우
+      const finalProfileImageUrl = isSettingDefaultImage
+        ? null
+        : profileImageUrl;
+      updateProfileInfo({ profileImageUrl: finalProfileImageUrl });
     }
   };
 
@@ -161,6 +170,7 @@ export default function Info() {
       setProfileImageUrl(objectUrl);
       setValue('profileImageUrl', objectUrl);
     } else {
+      setNewProfileImageFile(null);
       setProfileImageUrl(null);
       setValue('profileImageUrl', null);
     }
@@ -230,7 +240,7 @@ export default function Info() {
               disabled={isSocialUser}
             />
             {isSocialUser && (
-              <p className="-mt-10 text-sm-medium text-custom-green-200">
+              <p className="-mt-10 text-sm-medium text-custom-green-200 dark:text-custom-green-100">
                 *소셜 로그인 유저는 닉네임과 프로필만 변경 가능합니다.
               </p>
             )}

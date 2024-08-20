@@ -8,7 +8,6 @@ interface AddressProps {
 }
 
 export default function Address({ address }: AddressProps) {
-  // 주소를 클립보드에 복사하는 함수
   const handleClickClipboard = () => {
     navigator.clipboard.writeText(address).then(() => {
       alert('주소가 클립보드에 복사되었습니다!');
