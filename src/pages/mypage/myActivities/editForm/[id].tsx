@@ -3,7 +3,6 @@ import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
-import Textarea from '@/components/commons/Input/Textarea';
 import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
@@ -22,11 +21,15 @@ import {
   GetActivityDetailResponse,
   PatchMyActivityRequest,
 } from '@trip.zip-api';
+import '@uiw/react-markdown-preview/markdown.css';
+import MDEditor, { commands } from '@uiw/react-md-editor';
+import '@uiw/react-md-editor/markdown-editor.css';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, useForm } from 'react-hook-form';
+import remarkGfm from 'remark-gfm';
 
 interface EditActivityFormProps {
   activityData: GetActivityDetailResponse;
@@ -77,6 +80,9 @@ export default function EditActivityForm({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [markdownValue, setMarkdownValue] = useState(
+    activityData?.description || '',
+  );
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -124,6 +130,10 @@ export default function EditActivityForm({
     setValue('address', data.address, { shouldValidate: true });
     setIsAddressModalOpen(false);
   };
+
+  const customCommands = commands
+    .getCommands()
+    .filter((command) => command.name !== 'image');
 
   const onSubmit = (data: ActivitiesFormData) => {
     const roundedPrice = Math.round(data.price);
@@ -211,13 +221,24 @@ export default function EditActivityForm({
               error={errors.category?.message}
               maxWidth="792px"
             />
-            <Textarea
-              name="description"
-              placeholder="설명"
-              register={register('description')}
-              error={errors.description}
-              maxWidth="792px"
+            <h3>설명</h3>
+            <MDEditor
+              value={markdownValue}
+              onChange={(val) => {
+                setMarkdownValue(val || '');
+                setValue('description', val || '');
+              }}
+              previewOptions={{
+                remarkPlugins: [remarkGfm],
+              }}
+              commands={customCommands}
+              data-color-mode="light"
             />
+            {errors.description && (
+              <p className="mt-2 text-xs-regular text-custom-red-200">
+                {errors.description.message}
+              </p>
+            )}
             <h3>가격</h3>
             <Input
               name="price"

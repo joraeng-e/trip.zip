@@ -112,3 +112,57 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
 }
+
+/* 마크다운 */
+.w-md-editor-preview ol {
+  list-style-type: decimal;
+  color: #112211;
+}
+
+.w-md-editor-preview ul {
+  list-style-type: disc;
+  color: #112211;
+}
+
+.markdown-content h1 {
+  font-size: 32px;
+  margin: 20px 0;
+}
+
+.markdown-content h2 {
+  font-size: 24px;
+  margin: 18px 0;
+}
+
+.markdown-content h3 {
+  font-size: 20px;
+  margin: 16px 0;
+}
+
+.markdown-content blockquote {
+  padding-left: 16px;
+  border-left: 4px solid #ccc;
+  color: #112211;
+  margin: 20px 0;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+  margin-left: 24px;
+  color: #112211;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+  margin-left: 24px;
+  color: #112211;
+}
+
+.markdown-content p {
+  margin: 16px 0;
+}
+
+.markdown-content li {
+  margin-bottom: 8px;
+  color: #112211;
+}

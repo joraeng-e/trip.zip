@@ -80,23 +80,23 @@ export default function ReservationCard({
         return (
           <>
             <Modal.Root>
-              <Modal.Trigger>
-                {isExpired ? (
-                  <Button
-                    variant="disabledButton"
-                    className="max-w-120 rounded-md px-16 py-10"
-                  >
-                    마감 완료{' '}
-                  </Button>
-                ) : (
+              {isExpired ? (
+                <Button
+                  variant="disabledButton"
+                  className="max-w-120 rounded-md px-16 py-10"
+                >
+                  마감 완료
+                </Button>
+              ) : (
+                <Modal.Trigger>
                   <Button
                     variant="inactiveButton"
                     className="max-w-120 rounded-md px-16 py-10"
                   >
                     예약 취소
                   </Button>
-                )}
-              </Modal.Trigger>
+                </Modal.Trigger>
+              )}
               <Modal.Content>
                 <Modal.Description className="text-center">
                   예약을 취소하시겠어요?

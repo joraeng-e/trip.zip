@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^3.9.0",
     "@tanstack/react-query": "^5.51.15",
     "@tanstack/react-query-devtools": "^5.51.15",
+    "@uiw/react-md-editor": "^4.0.4",
     "axios": "^1.7.2",
     "cookies-next": "^4.2.1",
     "framer-motion": "^11.3.18",

@@ -1,4 +1,3 @@
-import useClickOutside from '@/hooks/useClickOutside';
 import { deleteMyActivity } from '@/libs/api/myActivities';
 import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import Modal from '../commons/Modal';
 import { notify } from '../commons/Toast';
@@ -51,12 +52,6 @@ export default function MyCard({
       notify('error', errorMessage);
     },
   });
-
-  // useClickOutside(dropdownRef, () => {
-  //   if (isDropdownOpen) {
-  //     setIsDropdownOpen(false);
-  //   }
-  // });
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
