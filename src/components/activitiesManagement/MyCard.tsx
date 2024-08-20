@@ -18,7 +18,6 @@ interface MyCardProps {
   reviewCount: number;
   title: string;
   price: number;
-  description: string;
 }
 
 interface ErrorResponse {
@@ -32,7 +31,6 @@ export default function MyCard({
   reviewCount,
   title,
   price,
-  description,
 }: MyCardProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -67,7 +65,7 @@ export default function MyCard({
   };
 
   return (
-    <div className="mb-16 flex h-full max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-full">
+    <div className="mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
       <div className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]">
         <Image
           src={bannerImageUrl}
@@ -141,9 +139,6 @@ export default function MyCard({
             ₩{price.toLocaleString()}
           </p>
           <span className="ml-4 text-lg-medium text-custom-gray-800">/인</span>
-        </div>
-        <div className="markdown-content">
-          <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
         </div>
       </div>
     </div>
