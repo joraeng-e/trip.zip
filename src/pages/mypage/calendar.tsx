@@ -105,7 +105,7 @@ export default function ReservationStatus() {
       <h1 className="mb-24 text-3xl-bold">예약 현황</h1>
       {activityList.length > 0 ? (
         <>
-          <div className="flex h-full w-full min-w-342 flex-col gap-24">
+          <div className="relative flex h-full w-full min-w-342 flex-col gap-24">
             <section className="flex flex-col gap-32">
               <Dropdown
                 selected={activityTitle}

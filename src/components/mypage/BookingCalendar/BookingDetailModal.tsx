@@ -80,25 +80,6 @@ export default function BookingDetailModal({
   };
 
   useEffect(() => {
-    if (isOpen) {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = 'hidden';
-      }
-
-      fetchBookingDetails();
-    } else {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
-    }
-    return () => {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
-    };
-  }, [isOpen, activityId, date, deviceState]);
-
-  useEffect(() => {
     if (selectedSchedule !== null) {
       const fetchBookingDetailsBySchedule = async () => {
         try {
@@ -180,7 +161,7 @@ export default function BookingDetailModal({
             <span className="text-28 font-bold">예약정보</span>
           </div>
           <button type="button" onClick={onClose}>
-            <XIcon className="size-48" />
+            <XIcon className="size-48 fill-custom-gray-500" />
           </button>
         </div>
       </div>
@@ -270,6 +251,7 @@ export default function BookingDetailModal({
           <div className="flex flex-col gap-16">
             {reservations.map((reservation) => (
               <BookingDetailCard
+                key={reservation.id}
                 reservation={reservation}
                 onConfirm={confirmReservation}
                 onDecline={declineReservation}
