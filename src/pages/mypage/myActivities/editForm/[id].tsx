@@ -307,14 +307,24 @@ export default function EditActivityForm({
               *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          <Button
-            type="submit"
-            className="mt-20 rounded-md"
-            hasICon={true}
-            disabled={updateActivityMutation.isPending}
-          >
-            {updateActivityMutation.isPending ? '수정 중...' : '수정하기'}
-          </Button>
+          <div className="flex items-center justify-end gap-10">
+            <Button
+              type="button"
+              className="mt-20 max-w-120 rounded-md"
+              variant="inactiveButton"
+              onClick={() => router.back()}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              className="mt-20 max-w-120 rounded-md"
+              hasICon={true}
+              disabled={updateActivityMutation.isPending}
+            >
+              {updateActivityMutation.isPending ? '수정 중...' : '수정'}
+            </Button>
+          </div>
         </form>
       </FormProvider>
     </MyPageLayout>
