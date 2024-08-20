@@ -80,6 +80,25 @@ export default function BookingDetailModal({
   };
 
   useEffect(() => {
+    if (isOpen) {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = 'hidden';
+      }
+
+      fetchBookingDetails();
+    } else {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = '';
+      }
+    }
+    return () => {
+      if (deviceState === 'MOBILE') {
+        document.body.style.overflow = '';
+      }
+    };
+  }, [isOpen, activityId, date, deviceState]);
+
+  useEffect(() => {
     if (selectedSchedule !== null) {
       const fetchBookingDetailsBySchedule = async () => {
         try {
@@ -152,7 +171,7 @@ export default function BookingDetailModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429"
+      className="absolute inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-697 md:w-429 md:rounded-lg md:border-1"
     >
       <div className="flex h-48 w-full flex-col items-center">
         <div className="flex w-full items-center justify-between">
