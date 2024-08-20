@@ -1,0 +1,23 @@
+{
+  "theme_color": "#0b3b2d",
+  "background_color": "#112211",
+  "display": "standalone",
+  "lang": "ko-KR",
+  "name": "Trip.zip",
+  "short_name": "Trip.zip",
+  "description": "체험 상품을 보고 간단하게 예약할 수 있는 서비스",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/logo/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

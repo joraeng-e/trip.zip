@@ -4,6 +4,7 @@ export default function Document() {
   return (
     <Html lang="ko">
       <Head>
+        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/logo/tripzipFavicon.webp" type="image/webp" />
       </Head>
       <body>
