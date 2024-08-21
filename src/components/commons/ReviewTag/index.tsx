@@ -53,7 +53,7 @@ export default function ActivityTags(props: ActivityTagsProps) {
                 }}
               >
                 {emoji}
-                <span className="mx-4 text-lg-medium text-nomad-black">
+                <span className="mx-4 text-lg-medium text-nomad-black dark:text-white">
                   {name}
                 </span>
               </motion.div>

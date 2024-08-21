@@ -53,6 +53,11 @@ body.dark input:-webkit-autofill {
   .dark-border {
     @apply dark:border-[1.5px] dark:border-white;
   }
+  .markdown-content ul,
+  .markdown-content ol,
+  .markdown-content li {
+    @apply text-nomad-black dark:text-white;
+  }
 }
 
 @keyframes darkenBg {
