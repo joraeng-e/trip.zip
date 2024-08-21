@@ -4,18 +4,17 @@ import {
   isPastDate,
   removeTime,
 } from '@/libs/utils/dateUtils';
-import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
 import { useRef, useState } from 'react';
 
 import BookingDetailModal from '../BookingDetailModal.tsx/BookingDetailModal';
-import StatusTag from '../BookingStatusTag';
-import { generateCalendar } from '../generateCalendar';
+import StatusTag from './BookingStatusTag';
+import { generateCalendar } from './generateCalendar';
 
 type CalendarProps = {
   currentYear: number;
   currentMonth: number;
   days: string[];
-  monthlyData: GetMyActivitiesReservationDashboardResponse;
+  dataMap: Map<string, Record<string, string>>;
   activityId: number;
   onRefresh: () => void;
 };
@@ -24,7 +23,7 @@ export default function Calendar({
   currentYear,
   currentMonth,
   days,
-  monthlyData,
+  dataMap,
   activityId,
   onRefresh,
 }: CalendarProps) {
@@ -33,29 +32,16 @@ export default function Calendar({
 
   const today = removeTime(new Date());
 
-  // 날짜 별 예약정보 리스트업
-  const bookingMap = new Map<string, Record<string, string>>();
-
-  monthlyData.forEach((booking) => {
-    const transformedReservations = {
-      completed: String(booking.reservations.completed),
-      confirmed: String(booking.reservations.confirmed),
-      pending: String(booking.reservations.pending),
-    };
-
-    bookingMap.set(booking.date, transformedReservations);
-  });
-
   // 캘린더 생성
   const calendar = generateCalendar({
     currentYear,
     currentMonth,
-    dataMap: bookingMap,
+    dataMap: dataMap,
   });
 
   const handleDateClick = (date: string) => {
     // 예약 정보가 있을 때만 모달 열기
-    if (bookingMap.has(date)) {
+    if (dataMap.has(date)) {
       setSelectedDate(date);
       setIsModalOpen(true);
     }

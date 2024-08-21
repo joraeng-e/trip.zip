@@ -1,8 +1,8 @@
 import Button from '@/components/commons/Button';
 import { useState } from 'react';
 
-import ConfirmationModal from '../ConfirmationModal';
 import { Reservation } from './BookingDetailModal';
+import ConfirmationModal from './ConfirmationModal';
 
 type BookingDetailCardProps = {
   reservation: Reservation;

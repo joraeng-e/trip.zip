@@ -100,6 +100,19 @@ export default function ReservationStatus() {
     }
   }, [activityTitle, activityList]);
 
+  // 날짜 별 예약정보 리스트업
+  const bookingMap = new Map<string, Record<string, string>>();
+
+  monthlyData.forEach((booking) => {
+    const transformedReservations = {
+      completed: String(booking.reservations.completed),
+      confirmed: String(booking.reservations.confirmed),
+      pending: String(booking.reservations.pending),
+    };
+
+    bookingMap.set(booking.date, transformedReservations);
+  });
+
   return (
     <MyPageLayout>
       <h1 className="mb-24 text-3xl-bold">예약 현황</h1>
@@ -176,7 +189,7 @@ export default function ReservationStatus() {
                 currentYear={currentYear}
                 currentMonth={currentMonth}
                 days={days}
-                monthlyData={monthlyData}
+                dataMap={bookingMap}
                 activityId={activityId}
                 onRefresh={fetchBookingStatus}
               />
