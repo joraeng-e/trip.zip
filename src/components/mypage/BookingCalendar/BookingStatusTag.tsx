@@ -9,7 +9,7 @@ const statusTag =
 
 export default function StatusTag({ bookingInfo }: StatusTagProps) {
   return (
-    <>
+    <div className="flex w-full flex-col gap-2">
       {Number(bookingInfo.completed) > 0 && (
         <div className={`${statusTag} bg-custom-gray-300 text-custom-gray-800`}>
           <span>완료</span>
@@ -30,6 +30,6 @@ export default function StatusTag({ bookingInfo }: StatusTagProps) {
           <span>{bookingInfo.pending}</span>
         </div>
       )}
-    </>
+    </div>
   );
 }

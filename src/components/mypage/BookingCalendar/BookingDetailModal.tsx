@@ -1,5 +1,4 @@
 import Dropdown from '@/components/commons/Dropdown';
-import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,
   getMyActivitiesReservedSchedule,
