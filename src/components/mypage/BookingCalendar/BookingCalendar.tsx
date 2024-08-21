@@ -185,7 +185,7 @@ export default function Calendar({
               key={`${weekIndex}-${dateIndex}`}
               className={`flex h-120 w-full flex-col justify-between border-t-1 border-custom-gray-400 pb-6 pl-6 md:h-154 ${
                 hasBooking ? '' : 'cursor-default opacity-50'
-              } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200' : ''}`}
+              } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200 dark:bg-custom-green-200' : ''}`}
               type="button"
               onClick={() => handleDateClick(dateString)}
               disabled={!hasBooking}
