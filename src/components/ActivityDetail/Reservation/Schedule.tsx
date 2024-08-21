@@ -123,7 +123,9 @@ export default function Schedule(props: ScheduleProps) {
   return (
     <>
       <hr className="contour mx-0" />
-      <div className="text-lg-bold text-nomad-black">예약 가능 시간</div>
+      <div className="text-lg-bold text-nomad-black dark:text-white">
+        예약 가능 시간
+      </div>
 
       {selectedSchedules.length === 0 ||
       !selectedSchedules.some((schedule) => bookableIds.has(schedule.id)) ? (
@@ -137,7 +139,7 @@ export default function Schedule(props: ScheduleProps) {
               return (
                 <button
                   key={index}
-                  className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${
+                  className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 dark:text-white dark:hover:bg-custom-gray-800 ${
                     isSelected
                       ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200'
                       : isBookable

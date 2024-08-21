@@ -8,14 +8,9 @@ export const CalendarStyle = styled(Calendar)`
   margin: 10px 0px;
   padding: 6px;
 
-  /* 기본 배경 색상 */
-  background-color: ${({ theme }) => theme.backgroundColor};
-  color: ${({ theme }) => theme.textColor};
-
-  /* 다크 모드 배경 색상 */
   .dark & {
     background-color: #1b1b1b;
-    color: #ffffff;
+    color: #fff;
   }
 
   .react-calendar__tile {
@@ -27,28 +22,37 @@ export const CalendarStyle = styled(Calendar)`
     color: black;
   }
 
-  /* 다크 모드 양옆 화살표 버튼 스타일 */
-  .dark .react-calendar__navigation {
-    background-color: #1b1b1b !important; /* !important 추가 */
-    color: white !important; /* !important 추가 */
+  .react-calendar__navigation {
+    background-color: #fff;
+    color: black;
+  }
+
+  .dark & .react-calendar__navigation {
+    background-color: #1b1b1b !important;
+    color: white !important;
+  }
+
+  .dark & .react-calendar__navigation__label {
+    background-color: #1b1b1b !important;
+    color: white !important;
   }
 
   .react-calendar__navigation__arrow {
-    color: inherit !important; /* !important 추가 */
-    border: none !important; /* !important 추가 */
-    background: transparent !important; /* !important 추가 */
+    color: inherit !important;
+    border: none !important;
+    background: transparent !important;
   }
 
-  .dark .react-calendar__navigation__arrow {
-    color: white !important; /* !important 추가 */
+  .dark & .react-calendar__navigation__arrow {
+    color: white !important;
   }
 
   .react-calendar__navigation button:hover {
     background-color: transparent;
   }
 
-  .dark .react-calendar__navigation button:hover {
-    background-color: #333333 !important; /* !important 추가 */
+  .dark & .react-calendar__navigation button:hover {
+    background-color: #4b4b4b !important;
   }
 
   .react-calendar__navigation button:focus {
@@ -56,9 +60,9 @@ export const CalendarStyle = styled(Calendar)`
     color: black;
   }
 
-  .dark .react-calendar__navigation button:focus {
-    background-color: #1b1b1b !important; /* !important 추가 */
-    color: white !important; /* !important 추가 */
+  .dark & .react-calendar__navigation button:focus {
+    background-color: #1b1b1b !important;
+    color: white !important;
   }
 
   .react-calendar__navigation button:disabled {
@@ -66,9 +70,9 @@ export const CalendarStyle = styled(Calendar)`
     color: black;
   }
 
-  .dark .react-calendar__navigation button:disabled {
-    background-color: #1b1b1b !important; /* !important 추가 */
-    color: #666666 !important; /* !important 추가 */
+  .dark & .react-calendar__navigation button:disabled {
+    background-color: #1b1b1b !important;
+    color: #4b4b4b !important;
   }
 
   .react-calendar__month-view__weekdays abbr {
@@ -87,6 +91,7 @@ export const CalendarStyle = styled(Calendar)`
 
   .react-calendar__tile--now:hover {
     background-color: #e6e6e6;
+    color: black;
   }
 
   .react-calendar__tile--active {
