@@ -114,7 +114,7 @@ function TabletAndPCUI({ data, mutation }: UIProps) {
           className="hidden opacity-50 md:block"
           onClick={handleDelete}
         >
-          <XIcon />
+          <XIcon className="size-24 fill-custom-gray-600" />
         </button>
       </div>
 
