@@ -1,8 +1,4 @@
-type BookingInfo = {
-  completed: number;
-  confirmed: number;
-  pending: number;
-};
+type BookingInfo = Record<string, string>;
 
 type StatusTagProps = {
   bookingInfo: BookingInfo;
@@ -13,14 +9,14 @@ const statusTag =
 
 export default function StatusTag({ bookingInfo }: StatusTagProps) {
   return (
-    <>
-      {bookingInfo.completed > 0 && (
+    <div className="flex w-full flex-col gap-2">
+      {Number(bookingInfo.completed) > 0 && (
         <div className={`${statusTag} bg-custom-gray-300 text-custom-gray-800`}>
           <span>완료</span>
           <span>{bookingInfo.completed}</span>
         </div>
       )}
-      {bookingInfo.confirmed > 0 && (
+      {Number(bookingInfo.confirmed) > 0 && (
         <div
           className={`${statusTag} bg-custom-orange-100 text-custom-orange-200`}
         >
@@ -28,12 +24,12 @@ export default function StatusTag({ bookingInfo }: StatusTagProps) {
           <span>{bookingInfo.confirmed}</span>
         </div>
       )}
-      {bookingInfo.pending > 0 && (
+      {Number(bookingInfo.pending) > 0 && (
         <div className={`${statusTag} bg-custom-blue-300 text-white`}>
           <span>대기</span>
           <span>{bookingInfo.pending}</span>
         </div>
       )}
-    </>
+    </div>
   );
 }
