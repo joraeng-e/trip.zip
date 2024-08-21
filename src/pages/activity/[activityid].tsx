@@ -2,7 +2,7 @@ import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
 import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
-import MobileReservationFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
+import MobileReservation from '@/components/ActivityDetail/Reservation/MobileReservation';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Loading from '@/components/commons/Loading';
 import { getActivityDetail } from '@/libs/api/activities';
@@ -150,7 +150,7 @@ export default function ActivityDetail() {
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
-          <MobileReservationFooter data={data} isSameUser={isSameUser} />
+          <MobileReservation data={data} isSameUser={isSameUser} />
         </div>
       </div>
     </>

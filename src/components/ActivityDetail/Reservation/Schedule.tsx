@@ -178,9 +178,9 @@ export default function Schedule(props: ScheduleProps) {
           </Button>
         </Modal.Trigger>
 
-        <Modal.Content>
+        <Modal.Content className="mx-20 w-full max-w-800">
           <Modal.Description>
-            <div className="h-auto w-800">
+            <div className="h-auto">
               <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
 
               <div className="dark-base dark-border mt-20 rounded-lg bg-white shadow-lg">
