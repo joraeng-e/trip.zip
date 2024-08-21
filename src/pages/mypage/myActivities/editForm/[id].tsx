@@ -195,14 +195,6 @@ export default function EditActivityForm({
                 </Modal.Content>
               </Modal.Root>
             )}
-            <Button
-              type="submit"
-              className="max-w-120 rounded-md"
-              hasICon={true}
-              disabled={updateActivityMutation.isPending}
-            >
-              {updateActivityMutation.isPending ? '수정 중...' : '수정하기'}
-            </Button>
           </div>
           <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
             <Input
@@ -259,13 +251,15 @@ export default function EditActivityForm({
                 disabled={true}
                 maxWidth="765px"
               />
-              <Button
-                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
-                type="button"
-                onClick={() => setIsAddressModalOpen(true)}
-              >
-                검색
-              </Button>
+              <div className="mt-4 h-58 w-80">
+                <Button
+                  className="ml-10 h-full rounded-md"
+                  type="button"
+                  onClick={() => setIsAddressModalOpen(true)}
+                >
+                  검색
+                </Button>
+              </div>
             </div>
             <input
               name="detailAddress"
@@ -312,6 +306,24 @@ export default function EditActivityForm({
             <p className="text-custom-gray-800">
               *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
+          </div>
+          <div className="flex items-center justify-end gap-10">
+            <Button
+              type="button"
+              className="mt-20 max-w-120 rounded-md"
+              variant="inactiveButton"
+              onClick={() => router.back()}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              className="mt-20 max-w-120 rounded-md"
+              hasICon={true}
+              disabled={updateActivityMutation.isPending}
+            >
+              {updateActivityMutation.isPending ? '수정 중...' : '수정'}
+            </Button>
           </div>
         </form>
       </FormProvider>
