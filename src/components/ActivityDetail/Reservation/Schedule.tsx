@@ -12,7 +12,7 @@ import { getCookie } from 'cookies-next';
 import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 
 import BaseModal from '../BaseModal';
@@ -47,21 +47,21 @@ export default function Schedule(props: ScheduleProps) {
 
   const { bannerImageUrl, title, address, rating, price } = detailData;
 
-  const { data: userInfo } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: getUser,
-    staleTime: 0,
-  });
-
   const router = useRouter();
   const { activityid } = router.query;
   const activityId = Number(activityid);
 
-  const [loggedIn, setLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
     null,
   );
+
+  const { data: userData } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getUser,
+    staleTime: 0,
+    enabled: !!getCookie('refreshToken'),
+  });
 
   const bookableIds = new Set<number>();
   bookableSchedule.forEach((schedule) => {
@@ -70,13 +70,8 @@ export default function Schedule(props: ScheduleProps) {
     });
   });
 
-  const checkLoginState = () => {
-    const accessToken = getCookie('accessToken');
-    setLoggedIn(!!accessToken);
-  };
-
   const handleReservationClick = () => {
-    if (!loggedIn) {
+    if (!getCookie('refreshToken')) {
       notify('warning', '로그인이 필요한 서비스입니다.', () => {
         router.push('/login');
       });
@@ -95,7 +90,6 @@ export default function Schedule(props: ScheduleProps) {
       setIsModalOpen(false);
       if (onReservationComplete) {
         onReservationComplete();
-        // 예약 신청 성공 시, 예약 목록을 무효화하여 최신 데이터를 가져옴
         queryClient.invalidateQueries({ queryKey: ['reservations'] });
       }
       notify('success', '예약이 성공적으로 완료되었습니다.');
@@ -119,10 +113,6 @@ export default function Schedule(props: ScheduleProps) {
       mutation.mutate({ activityId, data });
     }
   };
-
-  useEffect(() => {
-    checkLoginState();
-  }, []);
 
   return (
     <>
@@ -228,9 +218,9 @@ export default function Schedule(props: ScheduleProps) {
               <h4 className="ml-20 text-xl-bold">예약자 정보</h4>
               <div className="my-10 ml-20">
                 <div className="mb-4 text-lg-medium">
-                  예약자: {userInfo?.nickname}
+                  예약자: {userData?.nickname}
                 </div>
-                <div className="text-lg-medium">이메일: {userInfo?.email}</div>
+                <div className="text-lg-medium">이메일: {userData?.email}</div>
               </div>
             </div>
 

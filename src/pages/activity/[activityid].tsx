@@ -8,6 +8,7 @@ import Loading from '@/components/commons/Loading';
 import { getActivityDetail } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
+import { getCookie } from 'cookies-next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -27,9 +28,11 @@ export default function ActivityDetail() {
     enabled: !!ActivityId,
   });
 
-  const { data: userData, error: userError } = useQuery({
-    queryKey: ['user'],
+  const { data: userData } = useQuery({
+    queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
+    enabled: !!getCookie('refreshToken'),
   });
 
   useEffect(() => {
