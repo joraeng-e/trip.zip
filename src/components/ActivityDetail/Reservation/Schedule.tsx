@@ -2,7 +2,7 @@ import Button from '@/components/commons/Button';
 import { notify } from '@/components/commons/Toast';
 import { postReservations } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   GetActivityDetailResponse,
   GetAvailableScheduleResponse,
@@ -87,12 +87,16 @@ export default function Schedule(props: ScheduleProps) {
     }
   };
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: postReservations,
     onSuccess: () => {
       setIsModalOpen(false);
       if (onReservationComplete) {
         onReservationComplete();
+        // 예약 신청 성공 시, 예약 목록을 무효화하여 최신 데이터를 가져옴
+        queryClient.invalidateQueries({ queryKey: ['reservations'] });
       }
       notify('success', '예약이 성공적으로 완료되었습니다.');
     },
