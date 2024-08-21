@@ -7,9 +7,9 @@ import {
 import { GetMyActivitiesReservationDashboardResponse } from '@trip.zip-api';
 import { useRef, useState } from 'react';
 
-import BookingDetailModal from './BookingDetailModal';
-import StatusTag from './BookingStatusTag';
-import { generateCalendar } from './generateCalendar';
+import BookingDetailModal from '../BookingDetailModal.tsx/BookingDetailModal';
+import StatusTag from '../BookingStatusTag';
+import { generateCalendar } from '../generateCalendar';
 
 type CalendarProps = {
   currentYear: number;

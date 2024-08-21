@@ -12,7 +12,7 @@ import {
 } from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
-import Calendar from '../../components/mypage/BookingCalendar/BookingCalendar';
+import Calendar from '../../components/mypage/BookingCalendar/Calendar/BookingCalendar';
 
 type ActivityListItem = {
   id: number;
