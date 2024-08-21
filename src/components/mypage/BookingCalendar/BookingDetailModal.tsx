@@ -1,6 +1,4 @@
-import Button from '@/components/commons/Button';
 import Dropdown from '@/components/commons/Dropdown';
-import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,
   getMyActivitiesReservedSchedule,
@@ -9,6 +7,8 @@ import {
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+
+import BookingDetailCard from './BookingDetailCard';
 
 type BookingDetailModalProps = {
   activityId: number;
@@ -28,7 +28,7 @@ type Schedule = {
   };
 };
 
-type Reservation = {
+export type Reservation = {
   id: number;
   status: string;
   totalPrice: number;
@@ -61,8 +61,6 @@ export default function BookingDetailModal({
   );
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
-  const deviceState = useDeviceState();
-
   const fetchBookingDetails = async () => {
     try {
       const response = await getMyActivitiesReservedSchedule({
@@ -80,22 +78,9 @@ export default function BookingDetailModal({
 
   useEffect(() => {
     if (isOpen) {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = 'hidden';
-      }
-
       fetchBookingDetails();
-    } else {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
     }
-    return () => {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
-    };
-  }, [isOpen, activityId, date, deviceState]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (selectedSchedule !== null) {
@@ -170,7 +155,7 @@ export default function BookingDetailModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="fixed inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-full md:rounded-lg md:border-1 lg:h-697 lg:w-429"
+      className="dark-base dark-border absolute inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden rounded-lg border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-697 md:w-429 md:border-1"
     >
       <div className="flex h-48 w-full flex-col items-center">
         <div className="flex w-full items-center justify-between">
@@ -179,7 +164,7 @@ export default function BookingDetailModal({
             <span className="text-28 font-bold">예약정보</span>
           </div>
           <button type="button" onClick={onClose}>
-            <XIcon className="size-48" />
+            <XIcon className="size-48 fill-custom-gray-500" />
           </button>
         </div>
       </div>
@@ -188,7 +173,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'pending'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('pending')}
@@ -201,7 +186,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'confirmed'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('confirmed')}
@@ -214,7 +199,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'declined'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('declined')}
@@ -227,17 +212,11 @@ export default function BookingDetailModal({
       <div className="flex h-full flex-col overflow-y-auto pb-24">
         <div className="flex flex-col justify-start gap-24">
           <div className="flex flex-col justify-start">
-            <span className="mb-16 text-18 font-semibold text-custom-black">
-              예약날짜
-            </span>
-            <span className="mb-2 text-18 font-normal text-custom-black">
-              {date}
-            </span>
+            <span className="mb-16 text-18 font-semibold">예약날짜</span>
+            <span className="mb-2 text-18 font-normal">{date}</span>
           </div>
           <div className="flex flex-col justify-start">
-            <span className="mb-16 text-18 font-semibold text-custom-black">
-              스케줄 선택
-            </span>
+            <span className="mb-16 text-18 font-semibold">스케줄 선택</span>
             <Dropdown
               selected={`${selectedSchedule?.startTime} - ${selectedSchedule?.endTime}`}
               setSelected={handleScheduleChange}
@@ -263,65 +242,20 @@ export default function BookingDetailModal({
           </div>
         </div>
         <div className="mt-16 flex flex-1 flex-col gap-24">
-          <span className="text-18 font-semibold text-custom-black">
-            예약내역
-          </span>
+          <span className="text-18 font-semibold">예약내역</span>
           <div className="flex flex-col gap-16">
-            {reservations.map((reservation) => (
-              <div
-                key={reservation.id}
-                className="flex flex-col justify-center gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
-              >
-                <div className="flex gap-10">
-                  <span className="text-16 font-semibold text-custom-gray-700">
-                    닉네임
-                  </span>
-                  <span className="text-16 font-medium text-custom-black">
-                    {reservation.nickname}
-                  </span>
-                </div>
-                <div className="flex gap-10">
-                  <span className="text-16 font-semibold text-custom-gray-700">
-                    인원
-                  </span>
-                  <span className="text-16 font-medium text-custom-black">
-                    {reservation.headCount}
-                  </span>
-                </div>
-                <div className="flex w-full justify-end">
-                  {reservation.status === 'pending' && (
-                    <div className="flex w-220 gap-6">
-                      <Button
-                        variant="activeButton"
-                        hasICon={false}
-                        className="h-38"
-                        onClick={() => confirmReservation(reservation.id)}
-                      >
-                        승인하기
-                      </Button>
-                      <Button
-                        variant="inactiveButton"
-                        hasICon={false}
-                        className="h-38"
-                        onClick={() => declineReservation(reservation.id)}
-                      >
-                        거절하기
-                      </Button>
-                    </div>
-                  )}
-                  {reservation.status === 'confirmed' && (
-                    <div className="flex-center h-44 w-82 rounded-[26px] bg-custom-orange-100 text-14 font-bold text-custom-orange-200">
-                      <span>예약 승인</span>
-                    </div>
-                  )}
-                  {reservation.status === 'declined' && (
-                    <div className="flex-center h-44 w-82 rounded-[26px] bg-custom-red-100 text-14 font-bold text-custom-red-200">
-                      <span>예약 거절</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+            {reservations.length > 0 ? (
+              reservations.map((reservation) => (
+                <BookingDetailCard
+                  key={reservation.id}
+                  reservation={reservation}
+                  onConfirm={confirmReservation}
+                  onDecline={declineReservation}
+                />
+              ))
+            ) : (
+              <span className="opacity-80">해당 일정에 예약이 없습니다</span>
+            )}
           </div>
         </div>
       </div>
