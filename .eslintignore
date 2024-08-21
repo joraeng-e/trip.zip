@@ -7,4 +7,3 @@ dist
 *.css
 coverage
 next.config.js
-public
