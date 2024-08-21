@@ -244,14 +244,18 @@ export default function BookingDetailModal({
         <div className="mt-16 flex flex-1 flex-col gap-24">
           <span className="text-18 font-semibold">예약내역</span>
           <div className="flex flex-col gap-16">
-            {reservations.map((reservation) => (
-              <BookingDetailCard
-                key={reservation.id}
-                reservation={reservation}
-                onConfirm={confirmReservation}
-                onDecline={declineReservation}
-              />
-            ))}
+            {reservations.length > 0 ? (
+              reservations.map((reservation) => (
+                <BookingDetailCard
+                  key={reservation.id}
+                  reservation={reservation}
+                  onConfirm={confirmReservation}
+                  onDecline={declineReservation}
+                />
+              ))
+            ) : (
+              <span className="opacity-80">해당 일정에 예약이 없습니다</span>
+            )}
           </div>
         </div>
       </div>
