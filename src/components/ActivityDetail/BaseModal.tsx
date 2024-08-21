@@ -36,9 +36,9 @@ export default function BaseModal(props: BaseModalProps) {
         >
           <motion.div
             className={`relative h-auto max-h-full w-auto max-w-1200 overflow-auto rounded-md bg-white ${className}`}
-            initial={{ scale: 0.5 }}
+            initial={{ scale: 1 }}
             animate={{ scale: 1 }}
-            exit={{ scale: 0.5 }}
+            exit={{ scale: 1 }}
             onClick={(e) => e.stopPropagation()}
           >
             <XIcon

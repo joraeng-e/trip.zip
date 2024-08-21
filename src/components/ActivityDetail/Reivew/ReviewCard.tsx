@@ -44,7 +44,7 @@ function ReviewCard(props: ReviewCardProps) {
               />
             </div>
             <div>
-              <div className="text-lg-bold text-nomad-black">
+              <div className="dark-base text-lg-bold text-nomad-black">
                 {data.user.nickname}
               </div>
               <div className="text-lg-regular text-custom-gray-500">
@@ -54,11 +54,11 @@ function ReviewCard(props: ReviewCardProps) {
           </div>
           <div className="relative my-10 flex items-center gap-12">
             <StarRating rating={data.rating} />
-            <div className="pt-2 text-lg-regular text-custom-gray-700">
+            <div className="text-lg-regular text-custom-gray-700">
               {data.rating}
             </div>
           </div>
-          <div className="mt-2 text-lg-regular text-nomad-black">
+          <div className="dark-base mt-2 text-lg-regular text-nomad-black">
             <ExpandableText text={textWithoutTags} isLoading={isLoading} />
           </div>
           <ActivityTags extractedTags={extractedTags} isLoading={isLoading} />

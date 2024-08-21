@@ -13,10 +13,14 @@ export default function Description(props: DescriptionProps) {
     <>
       <div className="contour"></div>
       <div className="m-16">
-        <h2 className="mb-16 mt-20 text-xl-bold text-nomad-black">체험 설명</h2>
-        <div className="text-lg-regular text-nomad-black">
-          <div className="markdown-content">
-            <Markdown remarkPlugins={[remarkGfm]}>{description}</Markdown>
+        <h2 className="dark-base mb-16 mt-20 text-xl-bold text-nomad-black">
+          체험 설명
+        </h2>
+        <div className="dark-base text-lg-regular text-nomad-black">
+          <div className="markdown-content dark-base">
+            <Markdown remarkPlugins={[remarkGfm]} className="dark-base">
+              {description}
+            </Markdown>
           </div>
         </div>
       </div>

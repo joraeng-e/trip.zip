@@ -3,6 +3,7 @@ import { KebabIcon, LocationIcon } from '@/libs/utils/Icon';
 import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import { FaLocationDot } from 'react-icons/fa6';
 
 interface TitleProps {
   title: string;
@@ -34,8 +35,10 @@ export default function Title(props: TitleProps) {
 
   return (
     <div className="mx-16 mt-16 flex-col">
-      <div className="text-md-regular text-nomad-black">{category}</div>
-      <div className="relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
+      <div className="dark-base text-md-regular text-nomad-black">
+        {category}
+      </div>
+      <div className="dark-base relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
         {title}
         {isSameUser && (
           <Dropdown
@@ -46,18 +49,18 @@ export default function Title(props: TitleProps) {
           >
             <Dropdown.Button
               showArrow={false}
-              className="relative flex w-130 items-center md:h-59"
+              className="relative flex w-130 items-center border-none md:h-59"
             >
               <KebabIcon className="absolute left-106" />
             </Dropdown.Button>
             <Dropdown.Body>
               <Dropdown.Item value="edit">
-                <span className="text-14 text-custom-gray-800">
+                <span className="text-14 text-custom-gray-800 dark:text-white">
                   체험 수정하기
                 </span>
               </Dropdown.Item>
               <Dropdown.Item value="delete">
-                <span className="text-14 text-custom-gray-800">
+                <span className="text-14 text-custom-gray-800 dark:text-white">
                   체험 삭제하기
                 </span>
               </Dropdown.Item>
@@ -65,14 +68,14 @@ export default function Title(props: TitleProps) {
           </Dropdown>
         )}
       </div>
-      <div className="flex gap-12 text-md-regular text-custom-black">
+      <div className="dark-base flex gap-12 text-md-regular text-custom-black">
         <FaStar className="mt-4 text-yellow-500" />
         {rating}({reviewCount})
         <div
-          className="flex cursor-pointer items-center gap-12"
+          className="dark-base flex cursor-pointer items-center gap-12"
           onClick={handleClickClipboard}
         >
-          <LocationIcon />
+          <FaLocationDot className="dark:text-white" />
           <div>{address}</div>
         </div>
       </div>

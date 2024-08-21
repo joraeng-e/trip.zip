@@ -46,14 +46,14 @@ export default function ActivityTags(props: ActivityTagsProps) {
             .map(({ name, emoji }) => (
               <motion.div
                 key={name}
-                className="flex items-center rounded-lg border border-custom-gray-400 p-12"
+                className="dark-border flex items-center rounded-lg border border-custom-gray-400 p-12"
                 whileHover={{
                   scale: 1.05,
                   transition: { duration: 0.3 },
                 }}
               >
                 {emoji}
-                <span className="mx-4 text-lg-medium text-nomad-black">
+                <span className="dark-base mx-4 text-lg-medium text-nomad-black">
                   {name}
                 </span>
               </motion.div>
