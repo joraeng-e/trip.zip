@@ -38,10 +38,18 @@ export default function ConfirmationModal({
           {message}
         </p>
         <div className="flex gap-6">
-          <Button variant="inactiveButton" onClick={onCancel}>
+          <Button
+            className="rounded-md"
+            variant="inactiveButton"
+            onClick={onCancel}
+          >
             취소
           </Button>
-          <Button variant="activeButton" onClick={onConfirm}>
+          <Button
+            className="rounded-md"
+            variant="activeButton"
+            onClick={onConfirm}
+          >
             확인
           </Button>
         </div>

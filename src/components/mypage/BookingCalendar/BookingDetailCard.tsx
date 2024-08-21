@@ -57,7 +57,7 @@ export default function BookingDetailCard({
             <Button
               variant="activeButton"
               hasICon={false}
-              className="h-38"
+              className="h-38 rounded-md"
               onClick={() => handleClickAction('confirm')}
             >
               승인하기
@@ -65,7 +65,7 @@ export default function BookingDetailCard({
             <Button
               variant="inactiveButton"
               hasICon={false}
-              className="h-38"
+              className="h-38 rounded-md"
               onClick={() => handleClickAction('decline')}
             >
               거절하기
