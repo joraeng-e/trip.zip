@@ -21,6 +21,12 @@ type ActivityListItem = {
 
 export default function ReservationStatus() {
   const days = ['일', '월', '화', '수', '목', '금', '토'];
+  const prevIcon = (
+    <DoubleArrowPrev aria-label="이전 달" className="size-24 dark:invert" />
+  );
+  const nextIcon = (
+    <DoubleArrowNext aria-label="다음 달" className="size-24 dark:invert" />
+  );
 
   const today = new Date();
   const yearNow = today.getFullYear();
@@ -28,24 +34,6 @@ export default function ReservationStatus() {
 
   const [currentYear, setCurrentYear] = useState(yearNow);
   const [currentMonth, setCurrentMonth] = useState(monthNow);
-
-  const handleMonthPrev = () => {
-    if (currentMonth === 0) {
-      setCurrentYear(currentYear - 1);
-      setCurrentMonth(11); // 12월로 설정
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
-  };
-
-  const handleMonthNext = () => {
-    if (currentMonth === 11) {
-      setCurrentYear(currentYear + 1);
-      setCurrentMonth(0); // 1월로 설정
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
-  };
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
   const [activityId, setActivityId] = useState<number>(0);
@@ -89,7 +77,7 @@ export default function ReservationStatus() {
   };
   useEffect(() => {
     fetchBookingStatus();
-  }, [activityId, currentMonth, currentYear]);
+  }, [activityId, currentYear, currentMonth]);
 
   useEffect(() => {
     const selectedActivity = activityList.find(
@@ -147,53 +135,19 @@ export default function ReservationStatus() {
               </Dropdown>
             </section>
           </div>
-          <div className="mb-100 mt-24 flex flex-col gap-17">
-            {/* control bar */}
-            <div className="flex h-42 justify-center gap-10">
-              <button
-                type="button"
-                onClick={handleMonthPrev}
-                className="outline-none hover:opacity-40"
-              >
-                <DoubleArrowPrev
-                  aria-label="이전 달"
-                  className="size-24 dark:invert"
-                />
-              </button>
-              {/* todo: 연도, 날짜 드롭다운 추가 */}
-              <button
-                type="button"
-                className="text-20 font-bold outline-none hover:opacity-40"
-              >
-                {currentYear}년
-              </button>
-              <button
-                type="button"
-                className="text-20 font-bold outline-none hover:opacity-40"
-              >
-                {currentMonth + 1}월
-              </button>
-              <button
-                type="button"
-                onClick={handleMonthNext}
-                className="outline-none hover:opacity-40"
-              >
-                <DoubleArrowNext
-                  aria-label="다음 달"
-                  className="size-24 dark:invert"
-                />
-              </button>
-            </div>
-            <div className="relative">
-              <Calendar
-                currentYear={currentYear}
-                currentMonth={currentMonth}
-                days={days}
-                dataMap={bookingMap}
-                activityId={activityId}
-                onRefresh={fetchBookingStatus}
-              />
-            </div>
+          <div className="relative mb-100 mt-24">
+            <Calendar
+              year={currentYear}
+              month={currentMonth}
+              onChangeYear={setCurrentYear}
+              onChangeMonth={setCurrentMonth}
+              days={days}
+              dataMap={bookingMap}
+              activityId={activityId}
+              onRefresh={fetchBookingStatus}
+              prevIcon={prevIcon}
+              nextIcon={nextIcon}
+            />
           </div>
         </>
       ) : (
