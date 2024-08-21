@@ -194,13 +194,18 @@ export default function Schedule(props: ScheduleProps) {
         <div className="w-800">
           <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
 
-          <div className="mt-4 rounded-lg bg-white p-4 shadow-lg">
+          <div className="mt-20 rounded-lg bg-white shadow-lg">
             <div className="flex">
               <div className="relative mr-4 h-200 w-200">
-                <Image src={bannerImageUrl} alt={title} fill />
+                <Image
+                  src={bannerImageUrl}
+                  alt={title}
+                  fill
+                  className="rounded-l-md"
+                />
               </div>
 
-              <div className="relative mx-20 my-10 flex-1">
+              <div className="relative mx-20 my-14 flex-1 p-4">
                 <h3 className="text-xl-bold">{title}</h3>
                 <p className="mt-6 text-md-semibold text-custom-gray-700">
                   {address}
@@ -258,7 +263,7 @@ export default function Schedule(props: ScheduleProps) {
 
           <Button
             variant="activeButton"
-            className="mt-4"
+            className="mt-4 rounded-md"
             onClick={handleSubmitReservation}
             hasICon
           >
