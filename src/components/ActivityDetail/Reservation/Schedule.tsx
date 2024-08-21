@@ -210,7 +210,7 @@ export default function Schedule(props: ScheduleProps) {
                   <span className="ml-4 text-md-regular">{rating}</span>
                 </div>
                 <p className="absolute bottom-0 right-0 text-2xl-semibold">
-                  {price} 원
+                  {price.toLocaleString()} 원
                 </p>
               </div>
             </div>
@@ -250,7 +250,7 @@ export default function Schedule(props: ScheduleProps) {
               <div className="mx-20 mt-10 flex justify-between text-xl-bold">
                 총 상품 금액
                 <div className="text-custom-green-300">
-                  {guestCount * price} 원
+                  {(guestCount * price).toLocaleString()} 원
                 </div>
               </div>
             </div>
