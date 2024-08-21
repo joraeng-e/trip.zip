@@ -233,13 +233,10 @@ export default function Schedule(props: ScheduleProps) {
                   </div>
                   <div className="text-lg-medium">
                     예약일시: {moment(selectedDate).format('YYYY년 MM월 DD일')}{' '}
-                    /{'  '}
-                    {selectedSchedules
-                      .map(
-                        (schedule) =>
-                          `${schedule.startTime} ~ ${schedule.endTime}`,
-                      )
-                      .join(', ')}
+                    /{' '}
+                    {activeIndex !== null && selectedSchedules[activeIndex]
+                      ? `${selectedSchedules[activeIndex].startTime} ~ ${selectedSchedules[activeIndex].endTime}`
+                      : '선택된 일정이 없습니다.'}
                   </div>
                 </div>
               </div>
