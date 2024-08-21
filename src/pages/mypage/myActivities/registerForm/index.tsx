@@ -73,10 +73,13 @@ export default function MyActivityForm() {
 
   const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
     subImageUrls,
+    price,
     ...rest
   }) => {
+    const roundedPrice = Math.round(price);
     const requestData: PostActivitiesRequest = {
       ...rest,
+      price: roundedPrice,
       description: markdownValue,
       category: category as Category,
       address,
@@ -248,7 +251,7 @@ export default function MyActivityForm() {
               </p>
             )}
             <p className="text-custom-gray-800">
-              *이미지는 최대 4개까지 등록 가능합니다.
+              *소개이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
         </form>

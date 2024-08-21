@@ -6,8 +6,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 import Modal from '../commons/Modal';
 import { notify } from '../commons/Toast';
@@ -90,7 +88,7 @@ export default function MyCard({
             </div>
             <Link
               href={`/activity/${id}`}
-              className="text-2lg-bold lg:text-xl-bold"
+              className="text-lg-bold lg:text-xl-bold"
             >
               {title}
             </Link>

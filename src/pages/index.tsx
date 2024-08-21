@@ -84,14 +84,16 @@ export default function Index() {
           >
             여행 계획을 쉽고 빠르게 -
           </motion.span>
+
           <Lottie
             animationData={RouteLottie}
-            className="absoulte ml-25 max-w-176 md:ml-30 md:max-w-210"
+            className="absoulte ml-25 hidden max-w-176 md:ml-30 md:block md:max-w-210 lg:block"
+            loop={false}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="-ml-5 -mt-87 px-10 drop-shadow-lg md:-mt-105"
+            className="-ml-5 -mt-50 px-10 drop-shadow-lg md:-mt-105"
           >
             <Image
               src={Tripzip}
