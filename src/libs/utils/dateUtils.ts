@@ -64,3 +64,12 @@ export const formatTimeAgo = (beforeTime: string) => {
 
   return hoursDifference > 0 ? `${hoursDifference}시간 전` : '방금 전';
 };
+
+export const removeTime = (date: Date) => {
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+export const isPastDate = (date: Date, today: Date) => {
+  return removeTime(new Date(date)) < today;
+};
