@@ -171,7 +171,7 @@ export default function BookingDetailModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="absolute inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-697 md:w-429 md:rounded-lg md:border-1"
+      className="dark-base dark-border absolute inset-0 z-50 flex max-h-screen flex-col gap-39 overflow-hidden rounded-lg border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:relative md:h-697 md:w-429 md:border-1"
     >
       <div className="flex h-48 w-full flex-col items-center">
         <div className="flex w-full items-center justify-between">
@@ -189,7 +189,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'pending'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('pending')}
@@ -202,7 +202,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'confirmed'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('confirmed')}
@@ -215,7 +215,7 @@ export default function BookingDetailModal({
           type="button"
           className={`flex h-42 w-72 justify-center text-18 font-semibold ${
             selectedTab === 'declined'
-              ? 'border-b-2 border-custom-green-200 text-custom-green-200'
+              ? 'border-b-2 border-custom-green-200 text-custom-green-200 dark:border-custom-gray-300 dark:text-white'
               : 'text-gray-500'
           }`}
           onClick={() => handleTabChange('declined')}
@@ -228,17 +228,11 @@ export default function BookingDetailModal({
       <div className="flex h-full flex-col overflow-y-auto pb-24">
         <div className="flex flex-col justify-start gap-24">
           <div className="flex flex-col justify-start">
-            <span className="mb-16 text-18 font-semibold text-custom-black">
-              예약날짜
-            </span>
-            <span className="mb-2 text-18 font-normal text-custom-black">
-              {date}
-            </span>
+            <span className="mb-16 text-18 font-semibold">예약날짜</span>
+            <span className="mb-2 text-18 font-normal">{date}</span>
           </div>
           <div className="flex flex-col justify-start">
-            <span className="mb-16 text-18 font-semibold text-custom-black">
-              스케줄 선택
-            </span>
+            <span className="mb-16 text-18 font-semibold">스케줄 선택</span>
             <Dropdown
               selected={`${selectedSchedule?.startTime} - ${selectedSchedule?.endTime}`}
               setSelected={handleScheduleChange}
@@ -264,9 +258,7 @@ export default function BookingDetailModal({
           </div>
         </div>
         <div className="mt-16 flex flex-1 flex-col gap-24">
-          <span className="text-18 font-semibold text-custom-black">
-            예약내역
-          </span>
+          <span className="text-18 font-semibold">예약내역</span>
           <div className="flex flex-col gap-16">
             {reservations.map((reservation) => (
               <BookingDetailCard

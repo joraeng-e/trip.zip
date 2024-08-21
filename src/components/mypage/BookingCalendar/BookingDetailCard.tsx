@@ -38,18 +38,16 @@ export default function BookingDetailCard({
       className="flex flex-col justify-center gap-6 rounded-xl border-1 border-custom-gray-300 p-16"
     >
       <div className="flex gap-10">
-        <span className="text-16 font-semibold text-custom-gray-700">
+        <span className="text-16 font-semibold text-custom-gray-700 dark:text-custom-gray-400">
           닉네임
         </span>
-        <span className="text-16 font-medium text-custom-black">
-          {reservation.nickname}
-        </span>
+        <span className="text-16 font-medium">{reservation.nickname}</span>
       </div>
       <div className="flex gap-10">
-        <span className="text-16 font-semibold text-custom-gray-700">인원</span>
-        <span className="text-16 font-medium text-custom-black">
-          {reservation.headCount}
+        <span className="text-16 font-semibold text-custom-gray-700 dark:text-custom-gray-400">
+          인원
         </span>
+        <span className="text-16 font-medium">{reservation.headCount}</span>
       </div>
       <div className="flex w-full justify-end">
         {reservation.status === 'pending' && (
