@@ -128,7 +128,7 @@ export default function Index() {
             animate={isInView ? 'visible' : 'hidden'}
             variants={rightToLeftVariants}
             transition={{ duration: 0.5 }}
-            className="mb-200 flex flex-col items-center justify-between gap-12 md:flex-row"
+            className="my-200 flex flex-col items-center justify-between gap-12 md:flex-row"
           >
             <div className="md:w-1/2">
               <Lottie
@@ -151,7 +151,7 @@ export default function Index() {
             animate={isLeftToRightInView ? 'visible' : 'hidden'}
             variants={leftToRightVariants}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-200 flex flex-col items-center justify-between gap-12 md:flex-row-reverse"
+            className="my-200 flex flex-col items-center justify-between gap-12 md:flex-row-reverse"
           >
             <div className="md:w-1/2">
               <Lottie
@@ -178,7 +178,7 @@ export default function Index() {
                 : { opacity: 0, y: 50 }
             }
             transition={{ duration: 0.8 }}
-            className="mt-200 flex flex-col items-center justify-center text-center"
+            className="my-200 flex flex-col items-center justify-center text-center"
           >
             <Lottie
               animationData={TravelLottie}
