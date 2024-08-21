@@ -7,6 +7,7 @@ import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { getActivityDetail } from '@/libs/api/activities';
+import { postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import {
@@ -76,13 +77,14 @@ export default function EditActivityForm({
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
   const [schedulesToAdd, setSchedulesToAdd] = useState<DateTimeInput[]>([]);
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
-  const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState(
     activityData?.description || '',
   );
+  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
+  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -104,8 +106,23 @@ export default function EditActivityForm({
   } = methods;
 
   const updateActivityMutation = useMutation({
-    mutationFn: (data: PatchMyActivityRequest) =>
-      patchMyActivity({ activityId, data }),
+    mutationFn: async (data: PatchMyActivityRequest) => {
+      if (bannerImageFile) {
+        const bannerResponse = await postActivityImage(bannerImageFile);
+        data.bannerImageUrl = bannerResponse.activityImageUrl;
+      }
+
+      if (subImageFiles.length > 0) {
+        const subImageResponses = await Promise.all(
+          subImageFiles.map((file) => postActivityImage(file)),
+        );
+        data.subImageUrlsToAdd = subImageResponses.map(
+          (response) => response.activityImageUrl,
+        );
+      }
+
+      return patchMyActivity({ activityId, data });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -146,7 +163,7 @@ export default function EditActivityForm({
       address: data.address,
       bannerImageUrl: data.bannerImageUrl,
       subImageIdsToRemove,
-      subImageUrlsToAdd,
+      subImageUrlsToAdd: [],
       scheduleIdsToRemove,
       schedulesToAdd,
     };
@@ -161,12 +178,18 @@ export default function EditActivityForm({
     setSchedulesToAdd((prev) => [...prev, newSchedule]);
   };
 
-  const handleImageRemove = (imageId: number) => {
-    setSubImageIdsToRemove((prev) => [...prev, imageId]);
+  const handleBannerImageSelect = (files: File[]) => {
+    if (files.length > 0) {
+      setBannerImageFile(files[0]);
+    }
   };
 
-  const handleImageUrlAdd = (uploadedUrl: string) => {
-    setSubImageUrlsToAdd((prevUrls) => [...prevUrls, uploadedUrl]);
+  const handleSubImageSelect = (files: File[]) => {
+    setSubImageFiles((prev) => [...prev, ...files]);
+  };
+
+  const handleImageRemove = (imageId: number) => {
+    setSubImageIdsToRemove((prev) => [...prev, imageId]);
   };
 
   const resetModalMessage = () => {
@@ -223,6 +246,7 @@ export default function EditActivityForm({
             />
             <h3>설명</h3>
             <MDEditor
+              className="[&_.w-md-editor-text]:h-400"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
@@ -233,6 +257,7 @@ export default function EditActivityForm({
               }}
               commands={customCommands}
               data-color-mode="light"
+              highlightEnable={false}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -297,6 +322,7 @@ export default function EditActivityForm({
                   ? [{ id: 0, imageUrl: activityData.bannerImageUrl }]
                   : []
               }
+              onFilesSelected={handleBannerImageSelect}
             />
             <h3>소개 이미지</h3>
             <div className="flex flex-wrap">
@@ -306,7 +332,7 @@ export default function EditActivityForm({
                 label="소개 이미지 등록"
                 existingImages={activityData?.subImages || []}
                 onImageRemove={handleImageRemove}
-                onSuccess={handleImageUrlAdd}
+                onFilesSelected={handleSubImageSelect}
               />
             </div>
             <p className="text-custom-gray-800">
