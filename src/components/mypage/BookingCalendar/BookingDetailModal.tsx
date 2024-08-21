@@ -62,8 +62,6 @@ export default function BookingDetailModal({
   );
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
-  const deviceState = useDeviceState();
-
   const fetchBookingDetails = async () => {
     try {
       const response = await getMyActivitiesReservedSchedule({
@@ -81,22 +79,9 @@ export default function BookingDetailModal({
 
   useEffect(() => {
     if (isOpen) {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = 'hidden';
-      }
-
       fetchBookingDetails();
-    } else {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
     }
-    return () => {
-      if (deviceState === 'MOBILE') {
-        document.body.style.overflow = '';
-      }
-    };
-  }, [isOpen, activityId, date, deviceState]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (selectedSchedule !== null) {
