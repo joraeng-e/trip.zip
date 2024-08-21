@@ -34,7 +34,9 @@ export default function ConfirmationModal({
         ref={modalRef}
         className="flex h-140 w-280 flex-col justify-between rounded-lg bg-white p-28 pb-15 shadow-lg"
       >
-        <p className="text-lg mb-4 font-medium text-gray-800">{message}</p>
+        <p className="text-lg mb-4 text-center font-medium text-gray-800">
+          {message}
+        </p>
         <div className="flex gap-6">
           <Button variant="inactiveButton" onClick={onCancel}>
             취소
