@@ -100,7 +100,7 @@ function TabletAndPCUI({ data, mutation }: UIProps) {
 
   return (
     <div
-      className={`flex min-h-[105px] w-full flex-col rounded-[5px] bg-white px-12 py-16 md:min-h-[126px] ${
+      className={`flex min-h-[105px] w-full flex-col rounded-[5px] bg-white px-12 py-16 dark:bg-custom-green-100 md:min-h-[126px] ${
         isDeleting && 'animate-fadeout'
       }`}
     >
