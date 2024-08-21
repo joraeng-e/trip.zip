@@ -31,6 +31,8 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
   const { data } = useQuery({
     queryKey: ['availableSchedule', date],
     queryFn: () => {
+      if (!date) return undefined;
+
       const year = moment(date).year().toString();
       const month = (moment(date).month() + 1).toString().padStart(2, '0');
 
