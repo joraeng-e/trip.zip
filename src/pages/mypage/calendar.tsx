@@ -142,7 +142,10 @@ export default function ReservationStatus() {
                 onClick={handleMonthPrev}
                 className="outline-none hover:opacity-40"
               >
-                <DoubleArrowPrev aria-label="이전 달" className="size-24" />
+                <DoubleArrowPrev
+                  aria-label="이전 달"
+                  className="size-24 dark:invert"
+                />
               </button>
               {/* todo: 연도, 날짜 드롭다운 추가 */}
               <button
@@ -162,7 +165,10 @@ export default function ReservationStatus() {
                 onClick={handleMonthNext}
                 className="outline-none hover:opacity-40"
               >
-                <DoubleArrowNext aria-label="다음 달" className="size-24" />
+                <DoubleArrowNext
+                  aria-label="다음 달"
+                  className="size-24 dark:invert"
+                />
               </button>
             </div>
             <div className="relative">
