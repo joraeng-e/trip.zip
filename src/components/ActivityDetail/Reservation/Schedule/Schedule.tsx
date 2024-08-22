@@ -81,7 +81,6 @@ export default function Schedule(props: ScheduleProps) {
         onReservationComplete();
       }
       notify('error', error.message);
-      console.log(error);
     },
   });
 
