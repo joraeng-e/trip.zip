@@ -71,7 +71,7 @@ body.dark input:-webkit-autofill {
   .markdown-content strong,
   .markdown-content em,
   .markdown-content code {
-    @apply text-nomad-black dark:text-white;
+    @apply text-black dark:text-white;
   }
 }
 
