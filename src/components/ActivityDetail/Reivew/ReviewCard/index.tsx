@@ -28,17 +28,19 @@ function ReviewCard(props: ReviewCardProps) {
   return (
     <div className="contour">
       <div>
-        <div className="pt-12">
+        <div className="my-40 flex">
           <ReviewUser
             nickname={data.user.nickname}
             profileImageUrl={data.user.profileImageUrl}
             createdAt={data.createdAt}
           />
-          <ReviewRating rating={data.rating} />
-          <div className="dark-base mt-2 text-lg-regular text-nomad-black">
-            <ExpandableText text={textWithoutTags} isLoading={isLoading} />
+          <div>
+            <ReviewRating rating={data.rating} />
+            <div className="dark-base my-20 text-lg-regular text-nomad-black">
+              <ExpandableText text={textWithoutTags} isLoading={isLoading} />
+            </div>
+            <ActivityTags extractedTags={extractedTags} isLoading={isLoading} />
           </div>
-          <ActivityTags extractedTags={extractedTags} isLoading={isLoading} />
         </div>
       </div>
     </div>

@@ -56,23 +56,20 @@ export default function Review(props: ReviewProps) {
 
   return (
     <>
-      <div>
-        <hr className="contour" />
-        <ReviewTitle
-          averageRating={data.averageRating}
-          totalCount={data.totalCount}
-        />
-        <ReviewList reviewsData={data} isError={isError} />
-        {totalPages !== 0 && (
-          <div className="my-40 flex justify-center">
-            <Pagination
-              handlePageChange={handlePageChange}
-              totalPages={totalPages}
-              currentPage={page}
-            />
-          </div>
-        )}
-      </div>
+      <ReviewTitle
+        averageRating={data.averageRating}
+        totalCount={data.totalCount}
+      />
+      <ReviewList reviewsData={data} isError={isError} />
+      {totalPages !== 0 && (
+        <div className="my-40 flex justify-center">
+          <Pagination
+            handlePageChange={handlePageChange}
+            totalPages={totalPages}
+            currentPage={page}
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -10,7 +10,7 @@ interface ReviewUserProps {
 export default function ReviewUser(props: ReviewUserProps) {
   const { nickname, profileImageUrl, createdAt } = props;
   return (
-    <div className="flex items-center gap-12">
+    <div className="mt-4 flex min-w-300 gap-12">
       <div className="relative h-40 w-40 overflow-hidden rounded-full">
         <Image
           src={profileImageUrl ? profileImageUrl : BaseImage}
