@@ -7,7 +7,7 @@ interface ReviewRatingProps {
 export default function ReviewRating(props: ReviewRatingProps) {
   const { rating } = props;
   return (
-    <div className="relative my-10 flex items-center gap-12">
+    <div className="relative flex items-center gap-12 text-center">
       <StarRating rating={rating} />
       <div className="text-lg-regular text-custom-gray-700">{rating}</div>
     </div>

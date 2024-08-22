@@ -36,11 +36,11 @@ export default function ActivityTags(props: ActivityTagsProps) {
   const { extractedTags, isLoading } = props;
 
   return (
-    <div className="my-16">
+    <div className="">
       {isLoading ? (
-        <div className="relative my-4 h-40"></div>
+        <div className="relative h-40"></div>
       ) : (
-        <div className="flex flex-wrap gap-10">
+        <div className="mb-10 mt-30 flex flex-wrap gap-12">
           {tags
             .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
             .map(({ name, emoji }) => (
@@ -53,7 +53,7 @@ export default function ActivityTags(props: ActivityTagsProps) {
                 }}
               >
                 {emoji}
-                <span className="mx-4 text-lg-medium text-nomad-black dark:text-white">
+                <span className="text-lg-medium text-nomad-black dark:text-white">
                   {name}
                 </span>
               </motion.div>
