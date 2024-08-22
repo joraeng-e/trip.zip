@@ -16,13 +16,10 @@ export default function DateCell({ dateObject, onClickDate }: DateCellProps) {
   const dateString = getLocalDateString(dateObject.date);
   const hasBooking = !!dateObject.scheduleInfo;
 
-  const handleDateClick = (date: string) => {
-    // 예약 정보가 있을 때만 모달 열기
-    // if (dataMap.has(date)) {
-    //   setSelectedDate(date);
-    //   setIsModalOpen(true);
-    // }
-    console.log(date);
+  const handleClick = () => {
+    if (onClickDate) {
+      onClickDate(dateString);
+    }
   };
 
   return (
@@ -31,7 +28,7 @@ export default function DateCell({ dateObject, onClickDate }: DateCellProps) {
         hasBooking ? '' : 'cursor-default opacity-50'
       } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200 dark:bg-custom-green-200' : ''}`}
       type="button"
-      onClick={() => handleDateClick('clicked!')}
+      onClick={handleClick}
       disabled={!hasBooking}
     >
       <div

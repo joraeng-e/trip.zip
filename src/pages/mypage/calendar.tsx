@@ -1,4 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
+import BookingDetailModal from '@/components/mypage/BookingCalendar/BookingDetailModal.tsx/BookingDetailModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import {
@@ -37,6 +38,9 @@ export default function ReservationStatus() {
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
   const [activityId, setActivityId] = useState<number>(0);
   const [activityTitle, setActivityTitle] = useState<string>('');
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   const [monthlyData, setMonthlyData] =
     useState<GetMyActivitiesReservationDashboardResponse>([]);
@@ -100,6 +104,17 @@ export default function ReservationStatus() {
     bookingMap.set(booking.date, transformedReservations);
   });
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDate('');
+    fetchBookingStatus();
+  };
+
+  const handleDateClick = (date: string) => {
+    setSelectedDate(date);
+    setIsModalOpen(true);
+  };
+
   return (
     <MyPageLayout>
       <h1 className="mb-24 text-3xl-bold">예약 현황</h1>
@@ -140,10 +155,20 @@ export default function ReservationStatus() {
               onChangeMonth={setCurrentMonth}
               dayFormat={'eng'}
               dataMap={bookingMap}
-              onRefresh={fetchBookingStatus}
               prevIcon={prevIcon}
               nextIcon={nextIcon}
+              onClickDate={handleDateClick}
             />
+            {isModalOpen && (
+              <div className="md:flex-center absolute inset-0 md:backdrop-blur-sm">
+                <BookingDetailModal
+                  activityId={activityId}
+                  date={selectedDate}
+                  isOpen={isModalOpen}
+                  onClose={handleCloseModal}
+                />
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -152,3 +177,5 @@ export default function ReservationStatus() {
     </MyPageLayout>
   );
 }
+
+// ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}

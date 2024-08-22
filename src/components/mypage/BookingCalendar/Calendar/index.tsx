@@ -1,13 +1,6 @@
-import useClickOutside from '@/hooks/useClickOutside';
-import {
-  getLocalDateString,
-  isPastDate,
-  removeTime,
-} from '@/libs/utils/dateUtils';
-import { ReactNode, useRef, useState } from 'react';
+import { removeTime } from '@/libs/utils/dateUtils';
+import { ReactNode, useState } from 'react';
 
-import BookingDetailModal from '../BookingDetailModal.tsx/BookingDetailModal';
-import StatusTag from '../BookingDetailModal.tsx/BookingStatusTag';
 import ControlBar from './ControlBar';
 import DateCell from './DateCell';
 import { generateCalendar } from './generateCalendar';
@@ -19,24 +12,24 @@ type CalendarProps = {
   onChangeMonth: (month: number) => void;
   dayFormat?: 'kor' | 'eng';
   dataMap: Map<string, Record<string, string>>;
-  onRefresh: () => void;
   prevIcon?: ReactNode;
   nextIcon?: ReactNode;
+  onClickDate?: (date: string) => void;
 };
 
 const DAYS_KOR = ['일', '월', '화', '수', '목', '금', '토'];
 const DAYS_ENG = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
 export default function Calendar({
-  year,
-  month,
+  year = 1998,
+  month = 9,
   onChangeYear,
   onChangeMonth,
   dayFormat,
   dataMap,
-  onRefresh,
   prevIcon,
   nextIcon,
+  onClickDate,
 }: CalendarProps) {
   const handleMonthPrev = () => {
     if (month === 0) {
@@ -56,9 +49,6 @@ export default function Calendar({
     }
   };
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<string>('');
-
   const today = removeTime(new Date());
   const days = dayFormat === 'kor' ? DAYS_KOR : DAYS_ENG;
 
@@ -68,12 +58,6 @@ export default function Calendar({
     currentMonth: month,
     dataMap: dataMap,
   });
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setSelectedDate('');
-    onRefresh();
-  };
 
   return (
     <>
@@ -85,9 +69,7 @@ export default function Calendar({
         prevIcon={prevIcon}
         nextIcon={nextIcon}
       />
-      <div
-        className={`grid grid-cols-7 gap-2 rounded-lg border-1 ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}`}
-      >
+      <div className={`grid grid-cols-7 gap-2 rounded-lg border-1`}>
         {days.map((day) => (
           <div
             key={day}
@@ -102,6 +84,7 @@ export default function Calendar({
               <DateCell
                 key={`${weekIndex}-${dateIndex}`}
                 dateObject={dateObject}
+                onClickDate={onClickDate}
               />
             );
           }),
