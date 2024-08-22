@@ -107,14 +107,6 @@ export default function MyActivityForm() {
     mutate(requestData);
   };
 
-  const handleCategoryChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(value as Category);
-    setValue('category', value as Category);
-    trigger('category');
-  };
-
   const handleAddressSelect = (data: Address) => {
     setAddress(data.address);
     setValue('address', data.address);
@@ -178,7 +170,11 @@ export default function MyActivityForm() {
             />
             <Select
               value={category}
-              onChange={handleCategoryChange}
+              onChange={(value) => {
+                setCategory(value as Category);
+                setValue('category', value as Category);
+                trigger('category');
+              }}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
               error={categoryError?.message}

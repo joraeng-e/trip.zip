@@ -138,14 +138,6 @@ export default function EditActivityForm({
     },
   });
 
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const selectedCategory = event.target.value as Category;
-    setCategory(selectedCategory);
-    setValue('category', selectedCategory);
-  };
-
   const handleAddressSelect = (data: Address) => {
     setValue('address', data.address, { shouldValidate: true });
     setIsAddressModalOpen(false);
@@ -233,7 +225,11 @@ export default function EditActivityForm({
             />
             <Select
               value={category}
-              onChange={handleCategoryChange}
+              onChange={(value) => {
+                const selectedCategory = value as Category;
+                setCategory(selectedCategory);
+                setValue('category', selectedCategory);
+              }}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
               error={errors.category?.message}
