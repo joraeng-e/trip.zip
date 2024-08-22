@@ -9,6 +9,7 @@ import { ReactNode, useRef, useState } from 'react';
 import BookingDetailModal from '../BookingDetailModal.tsx/BookingDetailModal';
 import StatusTag from './BookingStatusTag';
 import ControlBar from './ControlBar';
+import DateCell from './DateCell';
 import { generateCalendar } from './generateCalendar';
 
 type CalendarProps = {
@@ -66,14 +67,6 @@ export default function Calendar({
     dataMap: dataMap,
   });
 
-  const handleDateClick = (date: string) => {
-    // 예약 정보가 있을 때만 모달 열기
-    if (dataMap.has(date)) {
-      setSelectedDate(date);
-      setIsModalOpen(true);
-    }
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedDate('');
@@ -106,35 +99,11 @@ export default function Calendar({
         ))}
         {calendar.map((week, weekIndex) =>
           week.map((dateObject, dateIndex) => {
-            const alertClass = isPastDate(dateObject.date, today)
-              ? 'bg-custom-gray-800'
-              : 'bg-green-400';
-            const dateString = getLocalDateString(dateObject.date);
-            const hasBooking = !!dateObject.scheduleInfo;
             return (
-              <button
+              <DateCell
                 key={`${weekIndex}-${dateIndex}`}
-                className={`flex h-120 w-full flex-col justify-between border-t-1 border-custom-gray-400 pb-6 pl-6 md:h-154 ${
-                  hasBooking ? '' : 'cursor-default opacity-50'
-                } ${dateString === getLocalDateString(today) ? 'bg-custom-gray-200 dark:bg-custom-green-200' : ''}`}
-                type="button"
-                onClick={() => handleDateClick(dateString)}
-                disabled={!hasBooking}
-              >
-                <div
-                  className={`flex flex-col ${dateObject.isCurrentMonth ? '' : 'opacity-30'}`}
-                >
-                  <span className="text-17 font-medium md:text-21">
-                    {dateObject.day}
-                  </span>
-                  {dateObject.scheduleInfo && (
-                    <div className={`${alertClass} size-8 rounded-full`} />
-                  )}
-                </div>
-                {dateObject.scheduleInfo && (
-                  <StatusTag bookingInfo={dateObject.scheduleInfo} />
-                )}
-              </button>
+                dateObject={dateObject}
+              />
             );
           }),
         )}
