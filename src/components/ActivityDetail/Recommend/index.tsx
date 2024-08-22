@@ -4,7 +4,7 @@ import { Category } from '@trip.zip-api';
 import { EmblaOptionsType } from 'embla-carousel';
 import router from 'next/router';
 
-import EmblaCarousel from './EmblaCarousel';
+import RecommendCarousel from './RecommendCarousel';
 
 interface RecommendProps {
   category: Category;
@@ -48,7 +48,7 @@ export default function Recommend(props: RecommendProps) {
         {category}과 관련된 다른 체험을 보고 싶다면?
       </div>
       {filteredActivities.length > 0 && (
-        <EmblaCarousel
+        <RecommendCarousel
           slides={SLIDES}
           options={OPTIONS}
           data={filteredActivities}

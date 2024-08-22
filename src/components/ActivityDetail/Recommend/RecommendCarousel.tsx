@@ -5,14 +5,14 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { NextButton, PrevButton, usePrevNextButtons } from './ArrowButton';
 import RecommendCard from './RecommendCard';
 
-type EmblaCarouselProps = {
+type RecommendCarouselProps = {
   slides: number[];
   options?: EmblaOptionsType;
   data: ActivityData[];
   id: number;
 };
 
-export default function EmblaCarousel(props: EmblaCarouselProps) {
+export default function RecommendCarousel(props: RecommendCarouselProps) {
   const { slides, options, data, id } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
