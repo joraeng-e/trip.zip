@@ -2,7 +2,7 @@ import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
 import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
-import EmblaCarousel from '@/components/ActivityDetail/Recommend/simpleSlider';
+import Recommend from '@/components/ActivityDetail/Recommend';
 import MobileReservation from '@/components/ActivityDetail/Reservation/MobileReservation';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Loading from '@/components/commons/Loading';
@@ -10,14 +10,9 @@ import { getActivityDetail } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
-import { EmblaOptionsType } from 'embla-carousel';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-
-const OPTIONS: EmblaOptionsType = { align: 'start' };
-const SLIDE_COUNT = 10;
-const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
 
 export default function ActivityDetail() {
   const router = useRouter();
@@ -156,9 +151,9 @@ export default function ActivityDetail() {
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
+          <Recommend category={data.category} />
           <MobileReservation data={data} isSameUser={isSameUser} />
         </div>
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} />
       </div>
     </>
   );
