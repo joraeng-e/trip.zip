@@ -44,7 +44,7 @@ export default function BannerImage(props: ImageProps) {
   const smallImageClass = 'group relative h-250 w-full';
 
   return (
-    <div className="hidden pt-10 md:block">
+    <div className="mb-32 mt-40 hidden md:block">
       {subImageUrl && subImageUrl.length === 0 ? (
         <div
           className={`relative flex h-500 w-full items-center justify-center overflow-hidden rounded-xl ${className}`}
@@ -53,9 +53,9 @@ export default function BannerImage(props: ImageProps) {
         </div>
       ) : (
         <div
-          className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className} relative`}
+          className={`grid grid-cols-1 gap-10 md:grid-cols-2 ${className} relative`}
         >
-          <div className={commonContainerClass}>
+          <div className={`h-full ${commonContainerClass}`}>
             <Image
               src={bannerImageUrl}
               alt="banner"
@@ -65,7 +65,7 @@ export default function BannerImage(props: ImageProps) {
           </div>
 
           {subImageUrl && subImageUrl.length === 1 && (
-            <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className="col-span-1 grid grid-cols-1 gap-10">
               <div className={commonContainerClass}>
                 <Image
                   src={subImageUrl[0]}
@@ -78,7 +78,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length === 2 && (
-            <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className="col-span-1 grid grid-cols-1 gap-10">
               <div className={commonContainerClass}>
                 <Image
                   src={subImageUrl[0]}
@@ -91,7 +91,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length === 3 && (
-            <div className="col-span-1 grid grid-cols-2 gap-2">
+            <div className="col-span-1 grid grid-cols-2 gap-10">
               {subImageUrl.slice(0, 3).map((url, index) => (
                 <div key={index} className={smallImageClass}>
                   <Image
@@ -114,7 +114,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length > 3 && (
-            <div className="col-span-1 grid grid-cols-2 gap-2">
+            <div className="col-span-1 grid grid-cols-2 gap-10">
               {subImageUrl.slice(0, 4).map((url, index) => {
                 const roundedClass =
                   index === 1
