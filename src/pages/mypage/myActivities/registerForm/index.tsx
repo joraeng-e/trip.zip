@@ -3,7 +3,7 @@ import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { useDarkMode } from '@/context/DarkModeContext';
-import { postActivities } from '@/libs/api/activities';
+import { postActivities, postActivityImage } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
 import type { ActivitiesFormData } from '@/libs/utils/schemas/activitiesSchema';
@@ -39,6 +39,8 @@ export default function MyActivityForm() {
   const [address, setAddress] = useState<string>('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState('');
+  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
+  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
 
   const { isDarkMode } = useDarkMode();
 
@@ -58,7 +60,23 @@ export default function MyActivityForm() {
   } = methods;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: postActivities,
+    mutationFn: async (data: PostActivitiesRequest) => {
+      if (bannerImageFile) {
+        const bannerResponse = await postActivityImage(bannerImageFile);
+        data.bannerImageUrl = bannerResponse.activityImageUrl;
+      }
+
+      if (subImageFiles.length > 0) {
+        const subImageResponses = await Promise.all(
+          subImageFiles.map((file) => postActivityImage(file)),
+        );
+        data.subImageUrls = subImageResponses.map(
+          (response) => response.activityImageUrl,
+        );
+      }
+
+      return postActivities(data);
+    },
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -75,17 +93,17 @@ export default function MyActivityForm() {
   });
 
   const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
-    subImageUrls,
+    price,
     ...rest
   }) => {
+    const roundedPrice = Math.round(price);
     const requestData: PostActivitiesRequest = {
       ...rest,
+      price: roundedPrice,
       description: markdownValue,
       category: category as Category,
       address,
-      subImageUrls:
-        subImageUrls?.filter((url): url is string => typeof url === 'string') ||
-        null,
+      subImageUrls: [],
     };
     mutate(requestData);
   };
@@ -114,6 +132,16 @@ export default function MyActivityForm() {
   const customCommands = commands
     .getCommands()
     .filter((command) => command.name !== 'image');
+
+  const handleBannerImageSelect = (files: File[]) => {
+    if (files.length > 0) {
+      setBannerImageFile(files[0]);
+    }
+  };
+
+  const handleSubImageSelect = (files: File[]) => {
+    setSubImageFiles((prev) => [...prev, ...files]);
+  };
 
   const {
     title,
@@ -159,6 +187,7 @@ export default function MyActivityForm() {
             />
             <h3>설명</h3>
             <MDEditor
+              className="[&_.w-md-editor-text]:h-400"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
@@ -168,6 +197,7 @@ export default function MyActivityForm() {
                 remarkPlugins: [remarkGfm],
               }}
               commands={customCommands}
+              highlightEnable={false}
               data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
@@ -225,6 +255,7 @@ export default function MyActivityForm() {
               name="bannerImageUrl"
               maxImages={1}
               label="배너 이미지 등록"
+              onFilesSelected={handleBannerImageSelect}
             />
             {bannerImageUrl && (
               <p className="-mt-15 pl-8 text-xs-regular text-custom-red-200">
@@ -237,6 +268,7 @@ export default function MyActivityForm() {
                 name="subImageUrls"
                 maxImages={4}
                 label="소개 이미지 등록"
+                onFilesSelected={handleSubImageSelect}
               />
             </div>
             {subImageUrls && (
@@ -245,7 +277,7 @@ export default function MyActivityForm() {
               </p>
             )}
             <p className="text-custom-gray-800">
-              *이미지는 최대 4개까지 등록 가능합니다.
+              *소개이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
           <div className="flex items-center justify-end gap-10">
