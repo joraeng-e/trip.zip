@@ -1,7 +1,5 @@
-import { postActivityImage } from '@/libs/api/activities';
 import { PlusIcon, XIcon } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
-import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -12,7 +10,13 @@ interface ImageUploadProps {
   label?: string;
   existingImages?: { id: number; imageUrl: string }[];
   onImageRemove?: (imageId: number) => void;
-  onSuccess?: (uploadedUrl: string) => void;
+  onFilesSelected: (files: File[]) => void;
+}
+
+interface ImagePreview {
+  file: File | null;
+  url: string;
+  id?: number;
 }
 
 export default function ImageUploader({
@@ -21,62 +25,62 @@ export default function ImageUploader({
   label = '이미지 등록',
   existingImages = [],
   onImageRemove,
-  onSuccess,
+  onFilesSelected,
 }: ImageUploadProps) {
   const { setValue } = useFormContext();
-  const [imagePreviewUrls, setImagePreviewUrls] = useState<string[]>(
-    existingImages.map((img) => img.imageUrl),
+  const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>(
+    existingImages.map((img) => ({
+      file: null,
+      url: img.imageUrl,
+      id: img.id,
+    })),
   );
-
-  const imageUploadMutation = useMutation({
-    mutationFn: postActivityImage,
-    onSuccess: (data) => {
-      const newUrl = data.activityImageUrl;
-      setImagePreviewUrls((prevUrls) => {
-        const updatedUrls = [...prevUrls, newUrl].slice(0, maxImages);
-        return Array.from(new Set(updatedUrls));
-      });
-      if (onSuccess) {
-        onSuccess(newUrl);
-      }
-    },
-    onError: (error) => {
-      console.error('이미지 업로드 실패:', error);
-    },
-  });
 
   useEffect(() => {
     if (maxImages === 1) {
-      setValue(name, imagePreviewUrls[0] || '');
+      setValue(name, imagePreviews[0]?.url || '');
     } else {
-      setValue(name, imagePreviewUrls);
+      setValue(
+        name,
+        imagePreviews.map((preview) => preview.url),
+      );
     }
-  }, [imagePreviewUrls, name, setValue, maxImages]);
+  }, [imagePreviews, name, setValue, maxImages]);
 
-  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const remainingSlots = maxImages - imagePreviewUrls.length;
-      const filesToUpload = Array.from(files).slice(0, remainingSlots);
+      const remainingSlots = maxImages - imagePreviews.length;
+      const filesToAdd = Array.from(files).slice(0, remainingSlots);
 
-      try {
-        await Promise.all(
-          filesToUpload.map((file) => imageUploadMutation.mutateAsync(file)),
-        );
-      } catch (error) {
-        console.error('이미지 업로드 중 오류 발생:', error);
-      }
+      const newPreviews = filesToAdd.map((file) => ({
+        file,
+        url: URL.createObjectURL(file),
+      }));
+
+      setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+      onFilesSelected(filesToAdd);
     }
   };
 
   const handleDelete = (index: number) => {
-    const imageToDelete = existingImages[index];
-    if (imageToDelete && onImageRemove) {
-      onImageRemove(imageToDelete.id);
+    const previewToDelete = imagePreviews[index];
+
+    if (previewToDelete.id && onImageRemove) {
+      onImageRemove(previewToDelete.id);
     }
 
-    const updatedUrls = imagePreviewUrls.filter((_, i) => i !== index);
-    setImagePreviewUrls(updatedUrls);
+    setImagePreviews((prevPreviews) => {
+      const updatedPreviews = prevPreviews.filter((_, i) => i !== index);
+      onFilesSelected(
+        updatedPreviews
+          .map((preview) => preview.file)
+          .filter((file): file is File => file !== null),
+      );
+      return updatedPreviews;
+    });
+
+    URL.revokeObjectURL(previewToDelete.url);
   };
 
   return (
@@ -87,30 +91,24 @@ export default function ImageUploader({
           className={classNames(
             'flex-center group mb-5 h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
             {
-              'opacity-50': imagePreviewUrls.length >= maxImages,
+              'opacity-50': imagePreviews.length >= maxImages,
               'hover:border-nomad-black dark:hover:border-custom-gray-800':
-                imagePreviewUrls.length < maxImages,
+                imagePreviews.length < maxImages,
             },
           )}
           style={{
             cursor:
-              imagePreviewUrls.length >= maxImages ? 'not-allowed' : 'pointer',
+              imagePreviews.length >= maxImages ? 'not-allowed' : 'pointer',
           }}
           aria-label={label}
         >
-          {imageUploadMutation.isPending ? (
-            <span>업로드 중...</span>
-          ) : (
-            <>
-              <PlusIcon
-                aria-label="등록 아이콘"
-                className="h-48 w-48 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800"
-              />
-              <span className="mt-1 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800">
-                {label}
-              </span>
-            </>
-          )}
+          <PlusIcon
+            aria-label="등록 아이콘"
+            className="h-48 w-48 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800"
+          />
+          <span className="mt-1 text-gray-400 group-hover:text-nomad-black dark:group-hover:text-custom-gray-800">
+            {label}
+          </span>
         </label>
 
         <input
@@ -120,16 +118,13 @@ export default function ImageUploader({
           accept="image/*"
           className="hidden"
           multiple={maxImages > 1}
-          disabled={
-            imagePreviewUrls.length >= maxImages ||
-            imageUploadMutation.isPending
-          }
+          disabled={imagePreviews.length >= maxImages}
         />
 
-        {imagePreviewUrls.map((url, index) => (
+        {imagePreviews.map((preview, index) => (
           <div key={index} className="relative size-[206px] p-4">
             <Image
-              src={url}
+              src={preview.url}
               alt="미리보기 이미지"
               fill
               sizes="206px"

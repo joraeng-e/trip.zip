@@ -34,8 +34,10 @@ export default function Title(props: TitleProps) {
 
   return (
     <div className="mx-16 mt-16 flex-col">
-      <div className="text-md-regular text-nomad-black">{category}</div>
-      <div className="relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
+      <div className="text-md-regular text-nomad-black dark:text-white">
+        {category}
+      </div>
+      <div className="relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black dark:text-white">
         {title}
         {isSameUser && (
           <Dropdown
@@ -52,12 +54,12 @@ export default function Title(props: TitleProps) {
             </Dropdown.Button>
             <Dropdown.Body>
               <Dropdown.Item value="edit">
-                <span className="text-14 text-custom-gray-800">
+                <span className="text-14 text-custom-gray-800 dark:text-white">
                   체험 수정하기
                 </span>
               </Dropdown.Item>
               <Dropdown.Item value="delete">
-                <span className="text-14 text-custom-gray-800">
+                <span className="text-14 text-custom-gray-800 dark:text-white">
                   체험 삭제하기
                 </span>
               </Dropdown.Item>
@@ -65,14 +67,14 @@ export default function Title(props: TitleProps) {
           </Dropdown>
         )}
       </div>
-      <div className="flex gap-12 text-md-regular text-custom-black">
+      <div className="flex gap-12 text-md-regular text-custom-black dark:text-white">
         <FaStar className="mt-4 text-yellow-500" />
         {rating}({reviewCount})
         <div
           className="flex cursor-pointer items-center gap-12"
           onClick={handleClickClipboard}
         >
-          <LocationIcon />
+          <LocationIcon className="fill-nomad-black dark:fill-white" />
           <div>{address}</div>
         </div>
       </div>

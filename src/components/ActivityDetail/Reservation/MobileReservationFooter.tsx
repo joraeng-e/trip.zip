@@ -26,7 +26,7 @@ export default function MobileReservationFooter(
   return (
     <>
       <div className="md:hidden">
-        <div className="fixed bottom-0 left-0 right-0 h-70 border-t-2 bg-white p-10 shadow-lg">
+        <div className="dark-base fixed bottom-0 left-0 right-0 h-70 border-t-2 bg-white p-10 shadow-lg">
           <Button
             variant="activeButton"
             className="h-36 rounded-md text-md-bold"
