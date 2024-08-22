@@ -55,15 +55,15 @@ export default function EmblaCarousel(props: EmblaCarouselProps) {
                     <div className="absolute inset-0 rounded-lg bg-black opacity-0 transition-opacity duration-300 group-hover:opacity-30"></div>
                   </div>
                   <div className="h-160 flex-col items-center justify-center rounded-md text-2xl-bold text-nomad-black">
-                    <div className="mt-10 text-lg-medium text-custom-gray-700">
+                    <div className="dark-base mt-10 text-lg-medium text-custom-gray-700">
                       {data[index].category}
                     </div>
-                    <div className="text-xl-bold">
+                    <div className="dark-base text-xl-semibold">
                       {data[index].title.length > 16
                         ? `${data[index].title.substring(0, 16)}...`
                         : data[index].title}
                     </div>
-                    <div className="mt-4 text-lg-medium text-custom-gray-700">
+                    <div className="dark-base mt-4 text-lg-medium text-custom-gray-700">
                       {data[index].address}
                     </div>
                     <div className="mt-4 flex items-center">
@@ -80,9 +80,12 @@ export default function EmblaCarousel(props: EmblaCarouselProps) {
                       </div>
                     </div>
 
-                    <div className="mt-10 text-xl-bold">
+                    <div className="dark-base mt-10 text-xl-bold dark:text-xl-medium">
                       {data[index].price.toLocaleString()}
-                      <span className="text-md-medium"> 원</span>
+                      <span className="dark-base text-md-medium dark:text-md-medium">
+                        {' '}
+                        원
+                      </span>
                     </div>
                   </div>
                 </Link>
