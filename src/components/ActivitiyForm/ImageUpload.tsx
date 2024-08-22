@@ -72,11 +72,6 @@ export default function ImageUploader({
 
     setImagePreviews((prevPreviews) => {
       const updatedPreviews = prevPreviews.filter((_, i) => i !== index);
-      const removedFiles = prevPreviews
-        .filter((_, i) => i === index)
-        .map((preview) => preview.file)
-        .filter((file): file is File => file !== null);
-
       onFilesSelected(
         updatedPreviews
           .map((preview) => preview.file)
@@ -85,7 +80,6 @@ export default function ImageUploader({
       return updatedPreviews;
     });
 
-    // Revoke the object URL to free up memory
     URL.revokeObjectURL(previewToDelete.url);
   };
 
