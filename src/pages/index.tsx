@@ -84,14 +84,16 @@ export default function Index() {
           >
             여행 계획을 쉽고 빠르게 -
           </motion.span>
+
           <Lottie
             animationData={RouteLottie}
-            className="absoulte ml-25 max-w-176 md:ml-30 md:max-w-210"
+            className="absoulte ml-25 hidden max-w-176 md:ml-30 md:block md:max-w-210 lg:block"
+            loop={false}
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="-ml-5 -mt-87 px-10 drop-shadow-lg md:-mt-105"
+            className="-ml-5 -mt-50 px-10 drop-shadow-lg md:-mt-105"
           >
             <Image
               src={Tripzip}
@@ -128,7 +130,7 @@ export default function Index() {
             animate={isInView ? 'visible' : 'hidden'}
             variants={rightToLeftVariants}
             transition={{ duration: 0.5 }}
-            className="mb-200 flex flex-col items-center justify-between gap-12 md:flex-row"
+            className="my-200 flex flex-col items-center justify-between gap-12 md:flex-row"
           >
             <div className="md:w-1/2">
               <Lottie
@@ -151,7 +153,7 @@ export default function Index() {
             animate={isLeftToRightInView ? 'visible' : 'hidden'}
             variants={leftToRightVariants}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-200 flex flex-col items-center justify-between gap-12 md:flex-row-reverse"
+            className="my-200 flex flex-col items-center justify-between gap-12 md:flex-row-reverse"
           >
             <div className="md:w-1/2">
               <Lottie
@@ -178,7 +180,7 @@ export default function Index() {
                 : { opacity: 0, y: 50 }
             }
             transition={{ duration: 0.8 }}
-            className="mt-200 flex flex-col items-center justify-center text-center"
+            className="my-200 flex flex-col items-center justify-center text-center"
           >
             <Lottie
               animationData={TravelLottie}

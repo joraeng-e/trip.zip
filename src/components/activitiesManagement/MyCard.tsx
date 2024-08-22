@@ -5,9 +5,7 @@ import { AxiosError } from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { useState } from 'react';
 
 import Modal from '../commons/Modal';
 import { notify } from '../commons/Toast';
@@ -34,7 +32,6 @@ export default function MyCard({
   price,
 }: MyCardProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -90,7 +87,7 @@ export default function MyCard({
             </div>
             <Link
               href={`/activity/${id}`}
-              className="text-2lg-bold lg:text-xl-bold"
+              className="text-lg-bold lg:text-xl-bold"
             >
               {title}
             </Link>
@@ -100,10 +97,7 @@ export default function MyCard({
               <KebabIcon className="md:h-40 md:w-40" />
             </button>
             {isDropdownOpen && (
-              <div
-                ref={dropdownRef}
-                className="dark-base absolute right-0 top-full z-50 mt-2 w-110 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-2 shadow-md md:w-140"
-              >
+              <div className="dark-base absolute right-0 top-full z-50 mt-2 w-110 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-2 shadow-md md:w-140">
                 <div className="absolute -top-2 right-20 rotate-90">
                   <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-b-[11px] border-l-[11px] border-b-custom-gray-200 border-l-transparent" />
                   <div className="pointer-events-none -translate-x-15 -translate-y-1/2 transform border-l-[11px] border-t-[11px] border-l-transparent border-t-custom-gray-200" />

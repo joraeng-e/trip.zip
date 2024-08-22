@@ -18,7 +18,7 @@ export default function ExpandableText(props: ExpandableTextProps) {
 
   return (
     <div>
-      <div>
+      <div className="dark:text-white">
         {isLoading ? (
           <>
             <div className="relative h-30"></div>

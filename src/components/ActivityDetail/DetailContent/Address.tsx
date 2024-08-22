@@ -26,7 +26,7 @@ export default function Address({ address }: AddressProps) {
       <KakaoMap address={address} className="h-450 w-full" />
       <div className="m-16">
         <div
-          className="flex cursor-pointer items-center gap-12 text-md-regular text-custom-black"
+          className="flex cursor-pointer items-center gap-12 text-md-regular text-custom-black dark:text-white"
           onClick={handleClickClipboard}
         >
           <FaLocationDot className="dark:text-white" />

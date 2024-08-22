@@ -35,10 +35,10 @@ export default function Title(props: TitleProps) {
 
   return (
     <div className="mx-16 mt-16 flex-col">
-      <div className="dark-base text-md-regular text-nomad-black">
+      <div className="text-md-regular text-nomad-black dark:text-white">
         {category}
       </div>
-      <div className="dark-base relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
+      <div className="relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black dark:text-white">
         {title}
         {isSameUser && (
           <Dropdown
@@ -68,14 +68,14 @@ export default function Title(props: TitleProps) {
           </Dropdown>
         )}
       </div>
-      <div className="dark-base flex gap-12 text-md-regular text-custom-black">
+      <div className="flex gap-12 text-md-regular text-custom-black dark:text-white">
         <FaStar className="mt-4 text-yellow-500" />
         {rating}({reviewCount})
         <div
           className="dark-base flex cursor-pointer items-center gap-12"
           onClick={handleClickClipboard}
         >
-          <FaLocationDot className="dark:text-white" />
+          <LocationIcon className="fill-nomad-black dark:fill-white" />
           <div>{address}</div>
         </div>
       </div>
