@@ -122,7 +122,11 @@ export default function BookingDetailModal({
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ id, title: 'trip.zip', body: text }),
+          body: JSON.stringify({
+            id,
+            title: '예약 정보에 변경 사항이 있습니다.',
+            body: text,
+          }),
         },
       );
 
@@ -148,7 +152,7 @@ export default function BookingDetailModal({
       );
       fetchBookingDetails();
 
-      await sendNotification(reservationId, 'confirmed');
+      await sendNotification(reservationId, '예약이 승인 되었습니다.');
     } catch (error) {
       console.error('Failed to confirm reservation', error);
     }
@@ -168,7 +172,7 @@ export default function BookingDetailModal({
       );
       fetchBookingDetails();
 
-      await sendNotification(reservationId, 'declined');
+      await sendNotification(reservationId, '예약이 거절 되었습니다.');
     } catch (error) {
       console.error('Failed to decline reservation', error);
     }
