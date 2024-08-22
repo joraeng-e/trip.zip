@@ -1,5 +1,6 @@
 import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { GetActivityDetailResponse, GetUserInfoResponse } from '@trip.zip-api';
 
 import ReservationCard from './ReservationCard';
@@ -29,12 +30,19 @@ export default function ReservationModal(props: ReservationModalProps) {
     handleSubmitReservation,
   } = props;
 
+  const handleTriggerClick = () => {
+    if (selectedScheduleId === null) {
+      notify('warning', '스케쥴을 선택해주세요.');
+    }
+  };
+
   return (
     <Modal.Root>
       <Modal.Trigger disabled={selectedScheduleId === null}>
         <Button
           variant="activeButton"
           className={`mt-4 h-36 rounded-md text-md-bold ${isSameUser ? 'hidden' : ''}`}
+          onClick={handleTriggerClick}
         >
           예약하기
         </Button>
