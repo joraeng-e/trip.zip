@@ -2,6 +2,7 @@ import NoImage from '@/../public/imgs/no-img.png';
 import Image from 'next/image';
 import { useState } from 'react';
 
+import BannerButton from './BannerButton';
 import ImageModal from './BannerImageModal';
 import BlurBannerImage from './BlurBannerImage';
 
@@ -123,12 +124,7 @@ export default function BannerImage(props: ImageProps) {
             </div>
           )}
 
-          <button
-            onClick={handleOpenModal}
-            className="dark-base dark-border absolute bottom-20 right-20 h-40 w-120 rounded-3xl border border-custom-gray-400 bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
-          >
-            사진 전체 보기
-          </button>
+          <BannerButton onClick={handleOpenModal} />
           <div className="max-w-1200">
             <ImageModal
               isOpen={isModalOpen}
