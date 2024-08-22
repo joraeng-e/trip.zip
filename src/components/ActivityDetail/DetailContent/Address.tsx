@@ -18,9 +18,7 @@ export default function Address({ address }: AddressProps) {
     <>
       <hr className="contour" />
       <div className="m-16">
-        <h2 className="dark-base mb-16 mt-20 text-xl-bold text-nomad-black">
-          위치
-        </h2>
+        <h2 className="detail-title mb-16 mt-20">위치</h2>
       </div>
 
       <KakaoMap address={address} className="h-450 w-full" />

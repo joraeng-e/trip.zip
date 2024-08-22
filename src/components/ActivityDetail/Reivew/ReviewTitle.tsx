@@ -40,10 +40,8 @@ export default function ReviewTitle(props: ReviewTitleProps) {
         <>
           <div className="flex items-center gap-10">
             <FaStar className="h-24 w-24 text-yellow-500" />
-            <h2 className="text-xl-bold text-nomad-black dark:text-white">
-              {averageRating}
-            </h2>
-            <div className="text-2lg-bold text-nomad-black dark:text-white">
+            <h2 className="detail-title">{averageRating}</h2>
+            <div className="detail-title">
               {getSatisfactionText(averageRating)}
             </div>
           </div>
