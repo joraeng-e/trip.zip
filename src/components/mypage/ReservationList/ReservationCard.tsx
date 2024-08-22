@@ -88,7 +88,7 @@ export default function ReservationCard({
                   마감 완료
                 </Button>
               ) : (
-                <Modal.Trigger>
+                <Modal.Trigger className="flex w-full items-center justify-end">
                   <Button
                     variant="inactiveButton"
                     className="max-w-120 rounded-md px-16 py-10"

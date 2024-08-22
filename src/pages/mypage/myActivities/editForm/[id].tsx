@@ -6,6 +6,7 @@ import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { getActivityDetail } from '@/libs/api/activities';
 import { postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
@@ -85,6 +86,8 @@ export default function EditActivityForm({
   );
   const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
   const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
+
+  const { isDarkMode } = useDarkMode();
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -248,8 +251,8 @@ export default function EditActivityForm({
                 remarkPlugins: [remarkGfm],
               }}
               commands={customCommands}
-              data-color-mode="light"
               highlightEnable={false}
+              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -290,7 +293,7 @@ export default function EditActivityForm({
               name="detailAddress"
               type="text"
               placeholder="상세 주소"
-              className="basic-input max-w-792"
+              className="dark-base basic-input max-w-792"
             />
             <BaseModal
               isOpen={isAddressModalOpen}

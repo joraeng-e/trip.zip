@@ -123,7 +123,9 @@ export default function Schedule(props: ScheduleProps) {
   return (
     <>
       <hr className="contour mx-0" />
-      <div className="text-lg-bold text-nomad-black">예약 가능 시간</div>
+      <div className="text-lg-bold text-nomad-black dark:text-white">
+        예약 가능 시간
+      </div>
 
       {selectedSchedules.length === 0 ||
       !selectedSchedules.some((schedule) => bookableIds.has(schedule.id)) ? (
@@ -137,7 +139,7 @@ export default function Schedule(props: ScheduleProps) {
               return (
                 <button
                   key={index}
-                  className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 ${
+                  className={`min-x-100 max-x-140 h-40 w-full rounded-md border text-md-regular hover:bg-custom-gray-300 dark:text-white dark:hover:bg-custom-gray-800 ${
                     isSelected
                       ? 'bg-custom-active tran bg-custom-green-200 text-white hover:bg-custom-green-200'
                       : isBookable
@@ -190,10 +192,15 @@ export default function Schedule(props: ScheduleProps) {
         <div className="w-800">
           <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
 
-          <div className="mt-4 rounded-lg bg-white p-4 shadow-lg">
+          <div className="mt-4 rounded-lg border-2 border-custom-gray-400 bg-white">
             <div className="flex">
               <div className="relative mr-4 h-200 w-200">
-                <Image src={bannerImageUrl} alt={title} fill />
+                <Image
+                  src={bannerImageUrl}
+                  alt={title}
+                  fill
+                  className="rounded-l-lg"
+                />
               </div>
 
               <div className="relative mx-20 my-10 flex-1">
@@ -213,7 +220,7 @@ export default function Schedule(props: ScheduleProps) {
           </div>
 
           <div className="">
-            <div className="my-20 rounded-lg py-20 shadow-lg">
+            <div className="my-20 rounded-lg border-2 border-custom-gray-400 py-20">
               <h4 className="ml-20 text-xl-bold">예약자 정보</h4>
               <div className="my-10 ml-20">
                 <div className="mb-4 text-lg-medium">
@@ -223,7 +230,7 @@ export default function Schedule(props: ScheduleProps) {
               </div>
             </div>
 
-            <div className="my-20 rounded-lg py-20 shadow-lg">
+            <div className="my-20 rounded-lg border-2 border-custom-gray-400 py-20">
               <h4 className="ml-20 text-xl-bold">예약 내용</h4>
               <div className="mt-2 flex justify-between">
                 <div className="my-10 ml-20">

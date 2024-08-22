@@ -2,6 +2,7 @@ import DateTime from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -41,6 +42,8 @@ export default function MyActivityForm() {
   const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
   const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
 
+  const { isDarkMode } = useDarkMode();
+
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -58,13 +61,11 @@ export default function MyActivityForm() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: PostActivitiesRequest) => {
-      // Upload banner image
       if (bannerImageFile) {
         const bannerResponse = await postActivityImage(bannerImageFile);
         data.bannerImageUrl = bannerResponse.activityImageUrl;
       }
 
-      // Upload sub images
       if (subImageFiles.length > 0) {
         const subImageResponses = await Promise.all(
           subImageFiles.map((file) => postActivityImage(file)),
@@ -102,7 +103,7 @@ export default function MyActivityForm() {
       description: markdownValue,
       category: category as Category,
       address,
-      subImageUrls: [], // This will be populated in the mutation function
+      subImageUrls: [],
     };
     mutate(requestData);
   };
@@ -196,8 +197,8 @@ export default function MyActivityForm() {
                 remarkPlugins: [remarkGfm],
               }}
               commands={customCommands}
-              data-color-mode="light"
               highlightEnable={false}
+              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
