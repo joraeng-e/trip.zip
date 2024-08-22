@@ -10,13 +10,16 @@ function App() {
     if (!id || !token) return;
 
     try {
-      const response = await fetch('http://localhost:3000/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'https://trip-zip-notification.vercel.app/subscribe',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id, token }),
         },
-        body: JSON.stringify({ id, token }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to send subscription to server');
@@ -28,13 +31,16 @@ function App() {
 
   const sendNotification = async () => {
     try {
-      const response = await fetch('http://localhost:3000/send-notification', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'https://trip-zip-notification.vercel.app/send-notification',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: adminId, title: 'fuck', body: 'you' }),
         },
-        body: JSON.stringify({ id: adminId, title: 'fuck', body: 'you' }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to send subscription to server');

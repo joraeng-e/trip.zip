@@ -115,13 +115,16 @@ export default function BookingDetailModal({
 
   const sendNotification = async (id: number, text: string) => {
     try {
-      const response = await fetch('http://localhost:3000/send-notification', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        'https://trip-zip-notification.vercel.app/send-notification',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id, title: 'trip.zip', body: text }),
         },
-        body: JSON.stringify({ id, title: 'trip.zip', body: text }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to send subscription to server');
