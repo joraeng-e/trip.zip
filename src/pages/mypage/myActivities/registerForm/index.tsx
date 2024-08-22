@@ -2,6 +2,7 @@ import DateTime from '@/components/ActivitiyForm/DateTime';
 import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -38,6 +39,8 @@ export default function MyActivityForm() {
   const [address, setAddress] = useState<string>('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState('');
+
+  const { isDarkMode } = useDarkMode();
 
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
@@ -165,7 +168,7 @@ export default function MyActivityForm() {
                 remarkPlugins: [remarkGfm],
               }}
               commands={customCommands}
-              data-color-mode="light"
+              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">

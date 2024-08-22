@@ -44,7 +44,7 @@ function ReviewCard(props: ReviewCardProps) {
               />
             </div>
             <div>
-              <div className="text-lg-bold text-nomad-black">
+              <div className="text-lg-bold text-nomad-black dark:text-white">
                 {data.user.nickname}
               </div>
               <div className="text-lg-regular text-custom-gray-500">
