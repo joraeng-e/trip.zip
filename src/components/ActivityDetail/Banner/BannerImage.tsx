@@ -1,10 +1,11 @@
 import NoImage from '@/../public/imgs/no-img.png';
+import Modal from '@/components/commons/Modal';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import BannerButton from './BannerButton';
-import ImageModal from './BannerImageModal';
 import BlurBannerImage from './BlurBannerImage';
+import ImageGallery from './ImageGallery';
 
 interface ImageProps {
   bannerImageUrl: string;
@@ -14,17 +15,28 @@ interface ImageProps {
 
 export default function BannerImage(props: ImageProps) {
   const { bannerImageUrl, subImageUrl, className } = props;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   const Images = [bannerImageUrl, ...(subImageUrl || [])];
+
+  const totalImages = Images.length;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
+
+  const nextImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+  };
+
+  useEffect(() => {
+    if (thumbnailRef.current) {
+      const thumbnailWidth = thumbnailRef.current.clientWidth / totalImages;
+      const offset = currentIndex * thumbnailWidth - thumbnailWidth / 2;
+      thumbnailRef.current.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+  }, [currentIndex, totalImages]);
 
   const commonImageClass =
     'object-cover transition duration-300 group-hover:brightness-75';
@@ -124,14 +136,20 @@ export default function BannerImage(props: ImageProps) {
             </div>
           )}
 
-          <BannerButton onClick={handleOpenModal} />
-          <div className="max-w-1200">
-            <ImageModal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              images={Images}
-            />
-          </div>
+          <Modal.Root>
+            <Modal.Trigger>
+              <BannerButton />
+            </Modal.Trigger>
+            <Modal.Content>
+              <ImageGallery
+                images={Images}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+                nextImage={nextImage}
+                prevImage={prevImage}
+              />
+            </Modal.Content>
+          </Modal.Root>
         </div>
       )}
     </div>
