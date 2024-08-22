@@ -44,7 +44,7 @@ export default function Recommend(props: RecommendProps) {
 
   return (
     <>
-      <div className="dark-base relative mb-16 mt-10 flex items-center justify-between text-2xl-bold text-nomad-black">
+      <div className="dark-base relative my-40 flex items-center justify-between text-xl-bold text-nomad-black">
         {category}과 관련된 다른 체험을 보고 싶다면?
       </div>
       {filteredActivities.length > 0 && (
