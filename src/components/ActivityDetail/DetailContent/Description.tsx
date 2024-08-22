@@ -3,11 +3,10 @@ import remarkGfm from 'remark-gfm';
 
 interface DescriptionProps {
   description: string;
-  maxLength?: number;
 }
 
 export default function Description(props: DescriptionProps) {
-  const { description, maxLength = 100 } = props;
+  const { description } = props;
 
   return (
     <>
