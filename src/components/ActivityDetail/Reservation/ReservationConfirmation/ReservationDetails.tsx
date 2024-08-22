@@ -13,7 +13,7 @@ export default function ReservationDetails(props: ReservationDetailsProps) {
     props;
   return (
     <div className="dark-border my-20 rounded-lg py-20 shadow-lg">
-      <h4 className="ml-20 text-xl-bold">예약 내용</h4>
+      <div className="ml-20 text-xl-bold">예약 내용</div>
       <div className="mt-2 flex justify-between">
         <div className="my-10 ml-20">
           <div className="mb-4 text-lg-medium">인원 수: {guestCount}</div>
