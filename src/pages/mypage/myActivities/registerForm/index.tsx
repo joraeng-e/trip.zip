@@ -1,6 +1,10 @@
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import DateTime from '@/components/activitiyForm/DateTime';
 import ImageUploader from '@/components/activitiyForm/ImageUpload';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input/Input';
+import Modal from '@/components/commons/Modal';
+import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
@@ -23,11 +27,6 @@ import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
 import remarkGfm from 'remark-gfm';
-
-import Button from '../../../../components/commons/Button';
-import Input from '../../../../components/commons/Input/Input';
-import Modal from '../../../../components/commons/Modal';
-import Select from '../../../../components/commons/Select';
 
 export default function MyActivityForm() {
   const router = useRouter();

@@ -1,17 +1,17 @@
-import Plane from '@/../../public/imgs/plane-7206856_1920.jpg';
-import Tripzip from '@/../../public/imgs/tripzip.png';
-import PlaneLottie from '@/../../public/lottie/plane.json';
-import RouteLottie from '@/../../public/lottie/route.json';
-import TravelLottie from '@/../../public/lottie/travel.json';
-import TravellingLottie from '@/../../public/lottie/travelling.json';
 import Button from '@/components/commons/Button';
-import StartButton from '@/components/commons/Button/StartButton';
 import CarouselInfinity from '@/components/landing/InfiniteCarousel';
+import StartButton from '@/components/landing/StartButton';
 import { motion, useInView } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import Plane from 'public/imgs/plane-7206856_1920.jpg';
+import Tripzip from 'public/imgs/tripzip.png';
+import PlaneLottie from 'public/lottie/plane.json';
+import RouteLottie from 'public/lottie/route.json';
+import TravelLottie from 'public/lottie/travel.json';
+import TravellingLottie from 'public/lottie/travelling.json';
 import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 
