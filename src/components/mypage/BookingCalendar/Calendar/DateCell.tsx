@@ -1,6 +1,6 @@
 import { getLocalDateString, isPastDate } from '@/libs/utils/dateUtils';
 
-import StatusTag from './BookingStatusTag';
+import StatusTag from '../BookingDetailModal.tsx/BookingStatusTag';
 import { DateObject } from './generateCalendar';
 
 type DateCellProps = {

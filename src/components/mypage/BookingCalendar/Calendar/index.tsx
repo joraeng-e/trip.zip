@@ -7,7 +7,7 @@ import {
 import { ReactNode, useRef, useState } from 'react';
 
 import BookingDetailModal from '../BookingDetailModal.tsx/BookingDetailModal';
-import StatusTag from './BookingStatusTag';
+import StatusTag from '../BookingDetailModal.tsx/BookingStatusTag';
 import ControlBar from './ControlBar';
 import DateCell from './DateCell';
 import { generateCalendar } from './generateCalendar';
@@ -17,22 +17,23 @@ type CalendarProps = {
   month: number;
   onChangeYear: (year: number) => void;
   onChangeMonth: (month: number) => void;
-  days: string[];
+  dayFormat?: 'kor' | 'eng';
   dataMap: Map<string, Record<string, string>>;
-  activityId: number;
   onRefresh: () => void;
   prevIcon?: ReactNode;
   nextIcon?: ReactNode;
 };
+
+const DAYS_KOR = ['일', '월', '화', '수', '목', '금', '토'];
+const DAYS_ENG = ['SUN', 'MON', 'TUE', 'WED', 'THUR', 'FRI', 'SAT'];
 
 export default function Calendar({
   year,
   month,
   onChangeYear,
   onChangeMonth,
-  days,
+  dayFormat,
   dataMap,
-  activityId,
   onRefresh,
   prevIcon,
   nextIcon,
@@ -59,6 +60,7 @@ export default function Calendar({
   const [selectedDate, setSelectedDate] = useState<string>('');
 
   const today = removeTime(new Date());
+  const days = dayFormat === 'kor' ? DAYS_KOR : DAYS_ENG;
 
   // 캘린더 생성
   const calendar = generateCalendar({
@@ -72,9 +74,6 @@ export default function Calendar({
     setSelectedDate('');
     onRefresh();
   };
-
-  const modalRef = useRef<HTMLDivElement>(null);
-  useClickOutside(modalRef, handleCloseModal);
 
   return (
     <>
@@ -106,18 +105,6 @@ export default function Calendar({
               />
             );
           }),
-        )}
-        {selectedDate && (
-          <div className="flex-center absolute left-0 top-0 flex h-full w-full backdrop-blur-sm">
-            <div ref={modalRef}>
-              <BookingDetailModal
-                activityId={activityId}
-                date={selectedDate}
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-              />
-            </div>
-          </div>
         )}
       </div>
     </>

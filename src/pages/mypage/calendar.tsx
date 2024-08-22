@@ -12,7 +12,7 @@ import {
 } from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
-import Calendar from '../../components/mypage/BookingCalendar/Calendar/BookingCalendar';
+import Calendar from '../../components/mypage/BookingCalendar/Calendar';
 
 type ActivityListItem = {
   id: number;
@@ -20,7 +20,6 @@ type ActivityListItem = {
 };
 
 export default function ReservationStatus() {
-  const days = ['일', '월', '화', '수', '목', '금', '토'];
   const prevIcon = (
     <DoubleArrowPrev aria-label="이전 달" className="size-24 dark:invert" />
   );
@@ -107,33 +106,31 @@ export default function ReservationStatus() {
       {activityList.length > 0 ? (
         <>
           <div className="flex h-full w-full min-w-342 flex-col gap-24">
-            <section className="flex flex-col gap-32">
-              <Dropdown
-                selected={activityTitle}
-                setSelected={setActivityTitle}
-                maxWidth={792}
-                height={56}
+            <Dropdown
+              selected={activityTitle}
+              setSelected={setActivityTitle}
+              maxWidth={792}
+              height={56}
+            >
+              <Dropdown.Button
+                className="basic-input flex w-full items-center justify-between"
+                showArrow={true}
               >
-                <Dropdown.Button
-                  className="basic-input flex w-full items-center justify-between"
-                  showArrow={true}
-                >
-                  {activityTitle}
-                </Dropdown.Button>
-                <Dropdown.Body>
-                  {activityList?.map((activity, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      value={activity.title}
-                      // 첫번째 option 기본값으로 지정
-                      {...(index === 0 && { selected: true })}
-                    >
-                      {activity.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Body>
-              </Dropdown>
-            </section>
+                {activityTitle}
+              </Dropdown.Button>
+              <Dropdown.Body>
+                {activityList?.map((activity, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    value={activity.title}
+                    // 첫번째 option 기본값으로 지정
+                    {...(index === 0 && { selected: true })}
+                  >
+                    {activity.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Body>
+            </Dropdown>
           </div>
           <div className="relative mb-100 mt-24">
             <Calendar
@@ -141,9 +138,8 @@ export default function ReservationStatus() {
               month={currentMonth}
               onChangeYear={setCurrentYear}
               onChangeMonth={setCurrentMonth}
-              days={days}
+              dayFormat={'eng'}
               dataMap={bookingMap}
-              activityId={activityId}
               onRefresh={fetchBookingStatus}
               prevIcon={prevIcon}
               nextIcon={nextIcon}
