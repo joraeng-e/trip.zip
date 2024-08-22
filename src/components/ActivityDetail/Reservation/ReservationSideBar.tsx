@@ -70,9 +70,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
         filteredSchedules.length > 0 ? filteredSchedules : null,
       );
       setDate(dateValue);
-      console.log(Date, 'data 변경됨 ');
     }
-    console.log('호출되었음');
   };
 
   const tileClassName = ({ date }: { date: Date }) => {
@@ -92,7 +90,6 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     schedule: { startTime: string; endTime: string; id: number },
   ) => {
     setActiveIndex(index);
-    console.log(`선택한 스케줄 ID: ${schedule.id}`);
   };
 
   const totalPrice = price * guestCount;
