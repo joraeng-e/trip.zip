@@ -1,9 +1,7 @@
-import EmptyReview from '@/../public/lottie/emptyReview.json';
-import dynamic from 'next/dynamic';
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+import NoReview from './NoReview';
 
 interface ReviewTitleProps {
   averageRating: number;
@@ -25,17 +23,9 @@ export default function ReviewTitle(props: ReviewTitleProps) {
   return (
     <div className="mx-16">
       {totalCount === 0 ? (
-        <div className="my-100 flex flex-col items-center text-center text-md-bold text-custom-gray-600 dark:text-white">
-          <div className="text-grayscale-400 mb-8 text-xl-medium sm:text-2lg-medium">
-            리뷰가 없습니다.
-          </div>
-          <div className="ml-40">
-            <Lottie
-              animationData={EmptyReview}
-              style={{ width: '280px', height: '280px' }}
-            />
-          </div>
-        </div>
+        <>
+          <NoReview />
+        </>
       ) : (
         <>
           <div className="flex items-center gap-10">
