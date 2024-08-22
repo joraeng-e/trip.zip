@@ -56,11 +56,7 @@ export const PrevButton: React.FC<PropType> = (props) => {
   const { children, ...restProps } = props;
 
   return (
-    <button
-      className="z-50 m-0 flex h-40 w-40 cursor-pointer touch-manipulation items-center justify-center rounded-xl border-0 bg-transparent bg-white p-0 shadow-md"
-      type="button"
-      {...restProps}
-    >
+    <button className="recommend-arrow-button" type="button" {...restProps}>
       <ArrowLeft className="h-30 w-30" />
       {children}
     </button>
@@ -71,11 +67,7 @@ export const NextButton: React.FC<PropType> = (props) => {
   const { children, ...restProps } = props;
 
   return (
-    <button
-      className="z-50 m-0 flex h-40 w-40 cursor-pointer touch-manipulation items-center justify-center rounded-xl border-0 bg-transparent bg-white p-0 shadow-md"
-      type="button"
-      {...restProps}
-    >
+    <button className="recommend-arrow-button" type="button" {...restProps}>
       <ArrowRight className="h-30 w-30" />
       {children}
     </button>
