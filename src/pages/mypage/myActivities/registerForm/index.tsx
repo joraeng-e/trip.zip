@@ -1,6 +1,6 @@
-import DateTime from '@/components/ActivitiyForm/DateTime';
-import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
 import BaseModal from '@/components/ActivityDetail/BaseModal';
+import DateTime from '@/components/activitiyForm/DateTime';
+import ImageUploader from '@/components/activitiyForm/ImageUpload';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
