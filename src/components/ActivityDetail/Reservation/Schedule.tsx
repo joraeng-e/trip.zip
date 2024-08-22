@@ -2,6 +2,7 @@ import Button from '@/components/commons/Button';
 import { notify } from '@/components/commons/Toast';
 import { postReservations } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
+import { requestForToken } from '@/libs/firebase';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   GetActivityDetailResponse,
@@ -87,9 +88,33 @@ export default function Schedule(props: ScheduleProps) {
     }
   };
 
+  const sendSubscriptionToServer = async (id: number, token: string) => {
+    try {
+      const response = await fetch('http://localhost:3000/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, token }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send subscription to server');
+      }
+    } catch (error) {
+      console.error('Error sending subscription to server:', error);
+    }
+  };
+
   const mutation = useMutation({
     mutationFn: postReservations,
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const token = await requestForToken();
+        await sendSubscriptionToServer(data.id, token as string);
+      }
+
       setIsModalOpen(false);
       if (onReservationComplete) {
         onReservationComplete();

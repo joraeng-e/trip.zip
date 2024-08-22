@@ -128,6 +128,24 @@ export default function BookingDetailModal({
     setSelectedSchedule(selected || null);
   };
 
+  const sendNotification = async (id: number, text: string) => {
+    try {
+      const response = await fetch('http://localhost:3000/send-notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id, title: 'trip.zip', body: text }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send subscription to server');
+      }
+    } catch (error) {
+      console.error('Error sending subscription to server:', error);
+    }
+  };
+
   const confirmReservation = async (reservationId: number) => {
     try {
       await patchMyActivitiesReservation({
@@ -141,6 +159,8 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+
+      await sendNotification(reservationId, 'confirmed');
     } catch (error) {
       console.error('Failed to confirm reservation', error);
     }
@@ -159,6 +179,8 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+
+      await sendNotification(reservationId, 'declined');
     } catch (error) {
       console.error('Failed to decline reservation', error);
     }

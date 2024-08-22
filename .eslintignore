@@ -7,3 +7,5 @@ dist
 *.css
 coverage
 next.config.js
+src/libs/firebase.js
+public/firebase-messaging-sw.js

@@ -19,6 +19,7 @@
     "@uiw/react-md-editor": "^4.0.4",
     "axios": "^1.7.2",
     "cookies-next": "^4.2.1",
+    "firebase": "^10.13.0",
     "framer-motion": "^11.3.18",
     "lottie-react": "^2.4.0",
     "moment": "^2.30.1",
