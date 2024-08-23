@@ -51,6 +51,13 @@ export default function Calendar({
 
   const today = removeTime(new Date());
   const days = dayFormat === 'kor' ? DAYS_KOR : DAYS_ENG;
+  const weekend = (day: string) => {
+    if (day === 'SUN' || day === '일') {
+      return 'text-red-400';
+    } else if (day === 'SAT' || day === '토') {
+      return 'text-blue-400';
+    } else return;
+  };
 
   // 캘린더 생성
   const calendar = generateCalendar({
@@ -73,7 +80,7 @@ export default function Calendar({
         {days.map((day) => (
           <div
             key={day}
-            className="flex h-43 items-center border-b-1 border-custom-gray-400 pl-6 text-13 md:text-17"
+            className={`flex h-43 items-center border-b-1 border-custom-gray-400 pl-6 text-13 md:text-17 ${weekend(day)}`}
           >
             <span>{day}</span>
           </div>

@@ -1,4 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
+import { notify } from '@/components/commons/Toast';
 import useClickOutside from '@/hooks/useClickOutside';
 import useDeviceState from '@/hooks/useDeviceState';
 import {
@@ -143,8 +144,10 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+      notify('success', '승인되었습니다.');
+      setSelectedTab('confirmed');
     } catch (error) {
-      console.error('Failed to confirm reservation', error);
+      notify('error', '예약 승인 중 오류가 발생했습니다.');
     }
   };
 
@@ -161,8 +164,10 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+      notify('success', '거절되었습니다.');
+      setSelectedTab('declined');
     } catch (error) {
-      console.error('Failed to decline reservation', error);
+      notify('error', '예약 거절 중 오류가 발생했습니다.');
     }
   };
 
@@ -272,7 +277,7 @@ export default function BookingDetailModal({
                 />
               ))
             ) : (
-              <span className="opacity-80">해당 일정에 예약이 없습니다</span>
+              <span className="opacity-80">해당 일정에 예약이 없습니다.</span>
             )}
           </div>
         </div>

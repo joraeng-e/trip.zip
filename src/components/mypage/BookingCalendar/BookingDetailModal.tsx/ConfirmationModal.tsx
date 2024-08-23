@@ -28,13 +28,13 @@ export default function ConfirmationModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20"
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 dark:bg-opacity-60"
     >
       <div
         ref={modalRef}
-        className="flex h-140 w-280 flex-col justify-between rounded-lg bg-white p-28 pb-15 shadow-lg"
+        className="dark-base dark-border flex h-140 w-280 flex-col justify-between rounded-lg bg-white p-28 pb-15 shadow-lg"
       >
-        <p className="text-lg mb-4 text-center font-medium text-gray-800">
+        <p className="text-lg mb-4 text-center font-medium text-gray-800 dark:text-white">
           {message}
         </p>
         <div className="flex gap-6">
