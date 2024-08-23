@@ -18,16 +18,18 @@ export default function Address({ address }: AddressProps) {
     <>
       <hr className="contour" />
       <div className="m-16">
-        <h2 className="mb-16 mt-20 text-xl-bold text-nomad-black">위치</h2>
+        <h2 className="mb-16 mt-20 text-xl-bold text-nomad-black dark:text-white">
+          위치
+        </h2>
       </div>
 
       <KakaoMap address={address} className="h-450 w-full" />
       <div className="m-16">
         <div
-          className="flex cursor-pointer items-center gap-12 text-md-regular text-custom-black"
+          className="flex cursor-pointer items-center gap-12 text-md-regular text-custom-black dark:text-white"
           onClick={handleClickClipboard}
         >
-          <LocationIcon />
+          <LocationIcon className="fill-nomad-black dark:fill-white" />
           <div>{address}</div>
         </div>
       </div>

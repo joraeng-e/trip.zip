@@ -6,7 +6,9 @@ import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import { useDarkMode } from '@/context/DarkModeContext';
 import { getActivityDetail } from '@/libs/api/activities';
+import { postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import {
@@ -76,13 +78,16 @@ export default function EditActivityForm({
   const [scheduleIdsToRemove, setScheduleIdsToRemove] = useState<number[]>([]);
   const [schedulesToAdd, setSchedulesToAdd] = useState<DateTimeInput[]>([]);
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
-  const [subImageUrlsToAdd, setSubImageUrlsToAdd] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState(
     activityData?.description || '',
   );
+  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
+  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
+
+  const { isDarkMode } = useDarkMode();
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -104,8 +109,23 @@ export default function EditActivityForm({
   } = methods;
 
   const updateActivityMutation = useMutation({
-    mutationFn: (data: PatchMyActivityRequest) =>
-      patchMyActivity({ activityId, data }),
+    mutationFn: async (data: PatchMyActivityRequest) => {
+      if (bannerImageFile) {
+        const bannerResponse = await postActivityImage(bannerImageFile);
+        data.bannerImageUrl = bannerResponse.activityImageUrl;
+      }
+
+      if (subImageFiles.length > 0) {
+        const subImageResponses = await Promise.all(
+          subImageFiles.map((file) => postActivityImage(file)),
+        );
+        data.subImageUrlsToAdd = subImageResponses.map(
+          (response) => response.activityImageUrl,
+        );
+      }
+
+      return patchMyActivity({ activityId, data });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -146,7 +166,7 @@ export default function EditActivityForm({
       address: data.address,
       bannerImageUrl: data.bannerImageUrl,
       subImageIdsToRemove,
-      subImageUrlsToAdd,
+      subImageUrlsToAdd: [],
       scheduleIdsToRemove,
       schedulesToAdd,
     };
@@ -161,12 +181,18 @@ export default function EditActivityForm({
     setSchedulesToAdd((prev) => [...prev, newSchedule]);
   };
 
-  const handleImageRemove = (imageId: number) => {
-    setSubImageIdsToRemove((prev) => [...prev, imageId]);
+  const handleBannerImageSelect = (files: File[]) => {
+    if (files.length > 0) {
+      setBannerImageFile(files[0]);
+    }
   };
 
-  const handleImageUrlAdd = (uploadedUrl: string) => {
-    setSubImageUrlsToAdd((prevUrls) => [...prevUrls, uploadedUrl]);
+  const handleSubImageSelect = (files: File[]) => {
+    setSubImageFiles((prev) => [...prev, ...files]);
+  };
+
+  const handleImageRemove = (imageId: number) => {
+    setSubImageIdsToRemove((prev) => [...prev, imageId]);
   };
 
   const resetModalMessage = () => {
@@ -195,14 +221,6 @@ export default function EditActivityForm({
                 </Modal.Content>
               </Modal.Root>
             )}
-            <Button
-              type="submit"
-              className="max-w-120 rounded-md"
-              hasICon={true}
-              disabled={updateActivityMutation.isPending}
-            >
-              {updateActivityMutation.isPending ? '수정 중...' : '수정하기'}
-            </Button>
           </div>
           <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
             <Input
@@ -223,6 +241,7 @@ export default function EditActivityForm({
             />
             <h3>설명</h3>
             <MDEditor
+              className="[&_.w-md-editor-text]:h-400"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
@@ -232,7 +251,8 @@ export default function EditActivityForm({
                 remarkPlugins: [remarkGfm],
               }}
               commands={customCommands}
-              data-color-mode="light"
+              highlightEnable={false}
+              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -259,19 +279,21 @@ export default function EditActivityForm({
                 disabled={true}
                 maxWidth="765px"
               />
-              <Button
-                className="ml-10 mt-3 h-[56px] max-w-80 rounded-md"
-                type="button"
-                onClick={() => setIsAddressModalOpen(true)}
-              >
-                검색
-              </Button>
+              <div className="mt-4 h-58 w-80">
+                <Button
+                  className="ml-10 h-full rounded-md"
+                  type="button"
+                  onClick={() => setIsAddressModalOpen(true)}
+                >
+                  검색
+                </Button>
+              </div>
             </div>
             <input
               name="detailAddress"
               type="text"
               placeholder="상세 주소"
-              className="basic-input max-w-792"
+              className="dark-base basic-input max-w-792"
             />
             <BaseModal
               isOpen={isAddressModalOpen}
@@ -297,6 +319,7 @@ export default function EditActivityForm({
                   ? [{ id: 0, imageUrl: activityData.bannerImageUrl }]
                   : []
               }
+              onFilesSelected={handleBannerImageSelect}
             />
             <h3>소개 이미지</h3>
             <div className="flex flex-wrap">
@@ -306,12 +329,30 @@ export default function EditActivityForm({
                 label="소개 이미지 등록"
                 existingImages={activityData?.subImages || []}
                 onImageRemove={handleImageRemove}
-                onSuccess={handleImageUrlAdd}
+                onFilesSelected={handleSubImageSelect}
               />
             </div>
             <p className="text-custom-gray-800">
               *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
+          </div>
+          <div className="flex items-center justify-end gap-10">
+            <Button
+              type="button"
+              className="mt-20 max-w-120 rounded-md"
+              variant="inactiveButton"
+              onClick={() => router.back()}
+            >
+              취소
+            </Button>
+            <Button
+              type="submit"
+              className="mt-20 max-w-120 rounded-md"
+              hasICon={true}
+              disabled={updateActivityMutation.isPending}
+            >
+              {updateActivityMutation.isPending ? '수정 중...' : '수정'}
+            </Button>
           </div>
         </form>
       </FormProvider>
