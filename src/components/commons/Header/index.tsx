@@ -43,10 +43,14 @@ export default function Header() {
 
   return (
     <header
-      className={`dark-base sticky top-0 z-20 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'} dark:shadow-custom-gray-700`}
+      className={`dark-base sticky top-0 z-20 h-50 w-full bg-white transition-all duration-500 md:h-70 ${isHeaderScrollValid || 'shadow-lg'} dark:shadow-custom-gray-700`}
     >
       <div className="basic-container flex items-center justify-between">
-        <Link href="/activities" aria-label="메인페이지로 이동">
+        <Link
+          href="/activities"
+          aria-label="메인페이지로 이동"
+          className="w-90 md:w-130"
+        >
           <Image
             src={tripZip}
             alt="trip.zip"
