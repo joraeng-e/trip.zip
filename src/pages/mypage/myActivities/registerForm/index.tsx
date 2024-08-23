@@ -1,10 +1,10 @@
 import BaseModal from '@/components/ActivityDetail/BaseModal';
 import DateTime from '@/components/activitiyForm/DateTime';
 import ImageUploader from '@/components/activitiyForm/ImageUpload';
+import Select from '@/components/activitiyForm/Select';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
-import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
@@ -159,7 +159,7 @@ export default function MyActivityForm() {
               </Modal.Root>
             )}
           </div>
-          <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
+          <div className="flex flex-col gap-20 [&>h3]:mt-20 [&>h3]:text-2xl-bold">
             <Input
               name="title"
               type="text"
@@ -234,7 +234,7 @@ export default function MyActivityForm() {
               name="detailAddress"
               type="text"
               placeholder="상세 주소"
-              className="dark-base basic-input max-w-792"
+              className="dark-base basic-input -mt-10 mb-30 max-w-792"
             />
             <BaseModal
               isOpen={isAddressModalOpen}
@@ -271,11 +271,11 @@ export default function MyActivityForm() {
                 {subImageUrls.message}
               </p>
             )}
-            <p className="text-custom-gray-800">
+            <p className="mb-20 text-custom-gray-800">
               *소개이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          <div className="flex items-center justify-end gap-10">
+          <div className="flex items-center justify-center gap-10 md:justify-end">
             <Button
               type="button"
               className="mt-20 max-w-120 rounded-md"

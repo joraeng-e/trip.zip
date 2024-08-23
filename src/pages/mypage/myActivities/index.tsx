@@ -62,12 +62,9 @@ export default function MyActivities() {
     router.push('myActivities/registerForm');
   };
 
-  if (status === 'pending') return <div>로딩 중...</div>;
-  if (status === 'error') return <div>에러가 발생했습니다.</div>;
-
   return (
     <MyPageLayout>
-      <div className="z-50 mb-50 ml-10">
+      <div className="z-50 mb-100 ml-10">
         <div className="mb-24 flex items-center justify-between">
           <h1 className="text-3xl-bold">내 체험 관리</h1>
           <Modal.Root>

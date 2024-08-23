@@ -60,7 +60,7 @@ export default function Select({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
-          className="dark-border absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg"
+          className="dark-border base-input absolute z-10 mt-1 w-full rounded-md border-2 bg-white"
           role="listbox"
         >
           {options.map((option) => (
@@ -69,7 +69,7 @@ export default function Select({
               role="option"
               aria-selected={option.value === value}
               className={`dark-base cursor-pointer p-10 pl-12 ${
-                option.value === value ? 'font-bold' : ''
+                option.value === value ? 'bg-gray-100 font-bold' : ''
               } hover:bg-gray-100 hover:dark:bg-custom-gray-800`}
               onClick={() => handleSelect(option.value)}
             >
