@@ -1,5 +1,5 @@
-import { LocationIcon, PaperPlaneIcon } from '@/libs/utils/Icon';
 import React from 'react';
+import { FaLocationDot } from 'react-icons/fa6';
 
 import KakaoMap from '../../commons/KakaoMap';
 
@@ -18,7 +18,7 @@ export default function Address({ address }: AddressProps) {
     <>
       <hr className="contour" />
       <div className="m-16">
-        <h2 className="mb-16 mt-20 text-xl-bold text-nomad-black dark:text-white">
+        <h2 className="dark-base mb-16 mt-20 text-xl-bold text-nomad-black">
           위치
         </h2>
       </div>
@@ -29,8 +29,8 @@ export default function Address({ address }: AddressProps) {
           className="flex cursor-pointer items-center gap-12 text-md-regular text-custom-black dark:text-white"
           onClick={handleClickClipboard}
         >
-          <LocationIcon className="fill-nomad-black dark:fill-white" />
-          <div>{address}</div>
+          <FaLocationDot className="dark:text-white" />
+          <div className="dark-base">{address}</div>
         </div>
       </div>
     </>
