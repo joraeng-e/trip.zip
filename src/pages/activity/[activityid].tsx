@@ -2,12 +2,14 @@ import BannerImage from '@/components/ActivityDetail/Banner/BannerImage';
 import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerImage';
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
-import MobileReservationFooter from '@/components/ActivityDetail/Reservation/MobileReservationFooter';
+import Recommend from '@/components/ActivityDetail/Recommend';
+import MobileReservation from '@/components/ActivityDetail/Reservation/MobileReservation';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Loading from '@/components/commons/Loading';
 import { getActivityDetail } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
+import { getCookie } from 'cookies-next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -27,9 +29,11 @@ export default function ActivityDetail() {
     enabled: !!ActivityId,
   });
 
-  const { data: userData, error: userError } = useQuery({
-    queryKey: ['user'],
+  const { data: userData } = useQuery({
+    queryKey: ['userInfo'],
     queryFn: getUser,
+    staleTime: 0,
+    enabled: !!getCookie('refreshToken'),
   });
 
   useEffect(() => {
@@ -143,11 +147,12 @@ export default function ActivityDetail() {
               detailData={data}
               isSameUser={isSameUser}
             />
-            <div className="relative ml-16 hidden w-3/12 min-w-300 md:block">
+            <div className="relative mx-10 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
-          <MobileReservationFooter data={data} isSameUser={isSameUser} />
+          <Recommend category={data.category} />
+          <MobileReservation data={data} isSameUser={isSameUser} />
         </div>
       </div>
     </>
