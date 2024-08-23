@@ -7,7 +7,7 @@ import NoActivity from '@/components/mypage/NoActivity';
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const useMyActivities = (size = 10) => {
   return useInfiniteQuery({
@@ -26,15 +26,14 @@ export default function MyActivities() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useMyActivities();
 
-  const sortedActivities = useMemo(() => {
-    if (!data) return [];
-    return data.pages
-      .flatMap((page) => page.activities)
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-  }, [data]);
+  const sortedActivities = data
+    ? data.pages
+        .flatMap((page) => page.activities)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+    : [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -237,7 +237,7 @@ export default function EditActivityForm({
             />
             <h3>설명</h3>
             <MDEditor
-              className="[&_.w-md-editor-text]:h-400"
+              className="[&_.w-md-editor-text]:h-full"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
