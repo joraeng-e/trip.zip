@@ -119,7 +119,7 @@ export default function Index() {
         </span>
       </div>
 
-      <div className="bg-gray-100 pb-200 pt-100">
+      <div className="overflow-x-hidden bg-gray-100 pb-100 pt-100">
         <div className="mb-200 flex h-300 flex-col items-center justify-center gap-40">
           <CarouselInfinity />
         </div>

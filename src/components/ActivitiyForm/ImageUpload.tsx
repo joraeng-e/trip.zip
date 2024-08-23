@@ -89,7 +89,7 @@ export default function ImageUploader({
         <label
           htmlFor={`image-upload-${label}`}
           className={classNames(
-            'flex-center group mb-5 h-206 w-206 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none',
+            'flex-center group mb-5 h-140 w-140 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none md:h-206 md:w-206',
             {
               'opacity-50': imagePreviews.length >= maxImages,
               'hover:border-nomad-black dark:hover:border-custom-gray-800':
@@ -122,7 +122,10 @@ export default function ImageUploader({
         />
 
         {imagePreviews.map((preview, index) => (
-          <div key={index} className="relative size-[206px] p-4">
+          <div
+            key={index}
+            className="relative size-[140px] p-4 md:size-[206px]"
+          >
             <Image
               src={preview.url}
               alt="미리보기 이미지"
@@ -133,11 +136,11 @@ export default function ImageUploader({
             <button
               type="button"
               onClick={() => handleDelete(index)}
-              className="absolute right-3 top-3 flex h-25 w-25 items-center justify-center place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
+              className="absolute right-3 top-3 flex h-24 w-24 items-center justify-center place-self-center rounded-full bg-green-100 hover:bg-green-200 hover:shadow-md focus:outline-none"
             >
               <XIcon
                 aria-label="삭제 아이콘"
-                className="size-24 fill-current text-green-950"
+                className="size-20 fill-current text-green-950"
               />
             </button>
           </div>
