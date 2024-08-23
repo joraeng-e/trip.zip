@@ -1,7 +1,8 @@
 import { useDarkMode } from '@/context/DarkModeContext';
 import React from 'react';
 
-export default function DarkMode() {
+
+export default function DarkModeToggleButton() {
   const { isDarkMode, toggleMode } = useDarkMode();
 
   return (
