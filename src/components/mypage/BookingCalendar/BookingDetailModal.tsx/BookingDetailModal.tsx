@@ -172,7 +172,7 @@ export default function BookingDetailModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="dark-base dark-border inset-0 z-50 flex h-full flex-col gap-39 overflow-hidden rounded-lg border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:h-697 md:w-429 md:border-1"
+      className="dark-base dark-border inset-0 z-50 flex h-full flex-col gap-39 overflow-hidden border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:h-697 md:w-429 md:rounded-lg md:border-1"
       ref={modalRef}
     >
       <div className="flex h-48 w-full flex-col items-center">
