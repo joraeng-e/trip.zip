@@ -20,6 +20,7 @@ if (typeof window !== 'undefined') {
   onMessage(messaging, (payload) => {
     new Notification(payload.data.title, {
       body: payload.data.body,
+      icon: '/logo/logo192.png',
     });
   });
 }

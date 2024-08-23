@@ -4,6 +4,7 @@ import {
   getMyActivitiesReservedSchedule,
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
+import { sendNotification } from '@/libs/api/myNotifications';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -113,31 +114,6 @@ export default function BookingDetailModal({
     setSelectedSchedule(selected || null);
   };
 
-  const sendNotification = async (id: number, text: string) => {
-    try {
-      const response = await fetch(
-        'https://trip-zip-notification.vercel.app/send-notification',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            id,
-            title: '예약 정보에 변경 사항이 있습니다.',
-            body: text,
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to send subscription to server');
-      }
-    } catch (error) {
-      console.error('Error sending subscription to server:', error);
-    }
-  };
-
   const confirmReservation = async (reservationId: number) => {
     try {
       await patchMyActivitiesReservation({
@@ -152,7 +128,11 @@ export default function BookingDetailModal({
       );
       fetchBookingDetails();
 
-      await sendNotification(reservationId, '예약이 승인 되었습니다.');
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'confirmed',
+      });
     } catch (error) {
       console.error('Failed to confirm reservation', error);
     }
@@ -172,7 +152,11 @@ export default function BookingDetailModal({
       );
       fetchBookingDetails();
 
-      await sendNotification(reservationId, '예약이 거절 되었습니다.');
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'declined',
+      });
     } catch (error) {
       console.error('Failed to decline reservation', error);
     }
