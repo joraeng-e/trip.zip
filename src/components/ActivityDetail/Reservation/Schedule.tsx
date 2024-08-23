@@ -69,7 +69,7 @@ export default function Schedule(props: ScheduleProps) {
   });
 
   const handleReservationClick = () => {
-    if (!loggedIn) {
+    if (!getCookie('refreshToken')) {
       notify('warning', '로그인이 필요한 서비스입니다.');
       router.push('/login');
     } else if (isSameUser) {
