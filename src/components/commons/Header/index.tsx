@@ -3,9 +3,9 @@ import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import DarkMode from './_components/DarkMode';
+import DarkModeToggleButton from './_components/DarkModeToggleButton';
 import LoggedInHeader from './_components/LoggedInHeader';
 import LoggedOutHeader from './_components/LoggedOutHeader';
 
@@ -15,10 +15,11 @@ export default function Header() {
 
   const router = useRouter();
 
+  const handleScroll = useCallback(() => {
+    setScrollPosition(window.scrollY);
+  }, []);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -26,7 +27,9 @@ export default function Header() {
     };
   }, []);
 
-  const isHeaderScrollValid = scrollPosition === 0;
+  const isHeaderScrollValid = useMemo(() => {
+    return scrollPosition === 0;
+  }, [scrollPosition]);
 
   const checkLoginState = () => {
     // 쿠키에서 accessToken을 확인해 로그인 상태 결정
@@ -53,7 +56,7 @@ export default function Header() {
           />
         </Link>
         <div className="flex items-center gap-20">
-          <DarkMode />
+          <DarkModeToggleButton />
           {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
         </div>
       </div>
