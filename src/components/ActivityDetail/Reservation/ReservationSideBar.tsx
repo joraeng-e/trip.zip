@@ -31,6 +31,8 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
   const { data } = useQuery({
     queryKey: ['availableSchedule', date],
     queryFn: () => {
+      if (!date) return undefined;
+
       const year = moment(date).year().toString();
       const month = (moment(date).month() + 1).toString().padStart(2, '0');
 
@@ -107,9 +109,9 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     <div
       className={`z-20 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black dark:text-white ${className || 'sticky top-160'}`}
     >
-      <div className="relative my-20 flex items-center justify-center text-center text-2xl-bold">
-        {totalPrice} /
-        <span className="ml-10 mt-4 text-lg-regular text-custom-gray-700">
+      <div className="dark-base relative my-20 flex items-center justify-center text-center text-2xl-bold">
+        {totalPrice.toLocaleString()} /
+        <span className="dark-base ml-10 mt-4 text-lg-regular text-custom-gray-700">
           {guestCount}명
         </span>
         <div className="ml-10 flex-col items-center justify-center">

@@ -47,7 +47,7 @@ export default function ReviewTitle(props: ReviewTitleProps) {
               {getSatisfactionText(averageRating)}
             </div>
           </div>
-          <div className="mt-10 text-2lg-semibold text-custom-gray-500">
+          <div className="dark-base mt-10 text-2lg-semibold text-custom-gray-500">
             {totalCount}개 후기
           </div>
         </>
