@@ -51,11 +51,16 @@ export default function Layout({
 
   useAuthBoundary();
 
+  console.log(pathname);
+
   if (pathname === '/') {
     showHeader = false;
   }
 
-  if (pathname.startsWith('/signup') || pathname.startsWith('/login')) {
+  if (
+    (pathname && pathname.startsWith('/signup')) ||
+    (pathname && pathname.startsWith('/login'))
+  ) {
     showHeader = false;
     showFooter = false;
   }

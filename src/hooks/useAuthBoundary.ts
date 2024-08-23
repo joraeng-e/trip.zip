@@ -8,7 +8,7 @@ export const useAuthBoundary = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith('/mypage')) {
+    if (pathname && pathname.startsWith('/mypage')) {
       const token = getCookie('accessToken');
       if (!token) {
         notify('warning', '로그인이 필요한 서비스입니다.');
