@@ -147,7 +147,7 @@ export default function ReservationStatus() {
               </Dropdown.Body>
             </Dropdown>
           </div>
-          <div className="relative mb-100 mt-24">
+          <div className="mb-100 mt-24 md:relative">
             <Calendar
               year={currentYear}
               month={currentMonth}
@@ -160,7 +160,7 @@ export default function ReservationStatus() {
               onClickDate={handleDateClick}
             />
             {isModalOpen && (
-              <div className="md:flex-center absolute inset-0 md:backdrop-blur-sm">
+              <div className="md:flex-center fixed inset-0 top-70 backdrop-blur-sm md:absolute md:top-0">
                 <BookingDetailModal
                   activityId={activityId}
                   date={selectedDate}

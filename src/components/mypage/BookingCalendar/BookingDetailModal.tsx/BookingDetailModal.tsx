@@ -1,4 +1,6 @@
 import Dropdown from '@/components/commons/Dropdown';
+import useClickOutside from '@/hooks/useClickOutside';
+import useDeviceState from '@/hooks/useDeviceState';
 import {
   getMyActivitiesReservations,
   getMyActivitiesReservedSchedule,
@@ -6,7 +8,7 @@ import {
 } from '@/libs/api/myActivities';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import BookingDetailCard from './BookingDetailCard';
 
@@ -61,6 +63,11 @@ export default function BookingDetailModal({
   );
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
+  const modalRef = useRef<HTMLDivElement>(null);
+  useClickOutside(modalRef, onClose);
+
+  const deviceState = useDeviceState();
+
   const fetchBookingDetails = async () => {
     try {
       const response = await getMyActivitiesReservedSchedule({
@@ -77,10 +84,20 @@ export default function BookingDetailModal({
   };
 
   useEffect(() => {
-    if (isOpen) {
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    if (isOpen && deviceState === 'MOBILE') {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
       fetchBookingDetails();
+    } else {
+      document.body.style.overflow = '';
     }
-  }, [isOpen]);
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen, activityId, date, deviceState]);
 
   useEffect(() => {
     if (selectedSchedule !== null) {
@@ -155,7 +172,8 @@ export default function BookingDetailModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
-      className="dark-base dark-border inset-0 z-50 flex h-full max-h-screen flex-col gap-39 overflow-hidden rounded-lg border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:h-697 md:w-429 md:border-1"
+      className="dark-base dark-border inset-0 z-50 flex h-full flex-col gap-39 overflow-hidden rounded-lg border-custom-gray-300 bg-white p-24 pb-30 shadow-lg md:h-697 md:w-429 md:border-1"
+      ref={modalRef}
     >
       <div className="flex h-48 w-full flex-col items-center">
         <div className="flex w-full items-center justify-between">
