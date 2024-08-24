@@ -36,27 +36,23 @@ export default function ActivityTags(props: ActivityTagsProps) {
   const { extractedTags, isLoading } = props;
 
   return (
-    <div className="">
+    <div className="relative min-w-0">
       {isLoading ? (
-        <div className="relative h-40"></div>
+        <div className="relative h-30"></div>
       ) : (
-        <div className="mb-10 mt-30 flex flex-wrap gap-12">
+        <div className="no-scrollbar flex w-full gap-8 overflow-x-auto">
           {tags
             .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
             .map(({ name, emoji }) => (
-              <motion.div
+              <div
                 key={name}
-                className="dark-border flex items-center rounded-lg border border-custom-gray-400 p-12"
-                whileHover={{
-                  scale: 1.05,
-                  transition: { duration: 0.3 },
-                }}
+                className="dark-border dark-base flex flex-shrink-0 items-center justify-between rounded-lg border border-custom-gray-400 px-6 py-4"
               >
                 {emoji}
-                <span className="text-lg-medium text-nomad-black dark:text-white">
+                <span className="ml-6 text-lg-medium text-nomad-black dark:text-white">
                   {name}
                 </span>
-              </motion.div>
+              </div>
             ))}
         </div>
       )}
