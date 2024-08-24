@@ -1,5 +1,6 @@
 import ActivityGuide from '@/components/recommend/ActivityGuide';
 import BannerImage from '@/components/recommend/BannerImage';
+import GoBackButton from '@/components/recommend/GoBackButton';
 import Introduction from '@/components/recommend/Introduction';
 import RecommendLayout from '@/components/recommend/Layout';
 import RelatedInfo from '@/components/recommend/RelatedInfo';
@@ -29,36 +30,31 @@ const RELATED_INFO = [
 export default function SeoulRecommend() {
   return (
     <>
-      <BannerImage src="/imgs/carousel/seoul.png" />
+      <BannerImage src="/imgs/carousel/seoul.png">
+        <Introduction>
+          <h1 className="text-28 font-bold leading-32">서울 도심 탐험하기</h1>
+
+          <div className="hidden md:block">
+            <br />
+            <br />
+            서울은 수천 년의 역사와 문화를 간직한 도시입니다. 이곳은 전통과
+            현대가 조화롭게 어우러져 있으며, 다양한 문화 체험과 관광 명소가
+            가득합니다.
+            <br />
+            특히 북촌은 서울의 대표적인 관광지 중 하나로, 한옥마을과 문화재가
+            밀집해 있어 많은 이들이 찾는 곳입니다.
+            <br />
+            <br />
+            이번 나들이에서는 3호선을 타고 북촌으로 가는 특별한 여정을
+            소개하겠습니다.
+            <br />
+            <strong>서울나들이.zip</strong>을 통해, 여러분의 기억에 남을 소중한
+            추억을 만들어보세요!
+          </div>
+        </Introduction>
+      </BannerImage>
 
       <RecommendLayout>
-        <Introduction>
-          서울은 수천 년의 역사와 문화를 간직한 도시입니다. 이곳은 전통과 현대가
-          조화롭게 어우러져 있으며, 다양한 문화 체험과 관광 명소가 가득합니다.
-          <br />
-          특히 북촌은 서울의 대표적인 관광지 중 하나로, 한옥마을과 문화재가
-          밀집해 있어 많은 이들이 찾는 곳입니다.
-          <br />
-          북촌은 조선 시대의 전통 건축물들이 잘 보존되어 있어, 한국의 역사와
-          문화를 깊이 느낄 수 있는 특별한 장소입니다.
-          <br />
-          <br />
-          북촌 한옥마을은 고즈넉한 골목길과 아름다운 한옥들이 어우러져 있어,
-          마치 시간 여행을 하는 듯한 기분을 선사합니다. 좁은 골목을 따라 걷다
-          보면 아기자기한 카페와 공방이 눈에 띄며, 전통 공예품을 만드는 과정도
-          직접 체험할 수 있습니다.
-          <br />
-          이곳에서는 한국의 전통 문화를 생생하게 느끼고, 예술적인 감각을
-          자극받을 수 있습니다.
-          <br />
-          <br />
-          이번 나들이에서는 3호선을 타고 북촌으로 가는 특별한 여정을
-          소개하겠습니다.
-          <br />
-          <strong>서울나들이.zip</strong>을 통해, 여러분의 기억에 남을 소중한
-          추억을 만들어보세요!
-        </Introduction>
-
         <ActivityGuide
           id={2455}
           description="전통 한옥이 모여 있는 북촌 한옥마을은 한국의 전통 문화를 체험할 수 있는 최적의 장소입니다. 한옥 거리를 거닐며 아기자기한 카페와 공방을 찾아보세요.
@@ -82,6 +78,8 @@ export default function SeoulRecommend() {
         />
 
         <RelatedInfo data={RELATED_INFO} />
+
+        <GoBackButton />
       </RecommendLayout>
     </>
   );

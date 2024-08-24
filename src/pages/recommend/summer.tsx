@@ -1,5 +1,6 @@
 import ActivityGuide from '@/components/recommend/ActivityGuide';
 import BannerImage from '@/components/recommend/BannerImage';
+import GoBackButton from '@/components/recommend/GoBackButton';
 import Introduction from '@/components/recommend/Introduction';
 import RecommendLayout from '@/components/recommend/Layout';
 import RelatedInfo from '@/components/recommend/RelatedInfo';
@@ -31,29 +32,31 @@ const RELATED_INFO = [
 export default function SummerRecommend() {
   return (
     <>
-      <BannerImage src="/imgs/carousel/summer.png" />
+      <BannerImage src="/imgs/carousel/summer.png">
+        <Introduction>
+          <h1 className="text-28 font-bold leading-32">
+            여름 휴가의 완벽한 시작
+          </h1>
+          <div className="hidden md:block">
+            <br />
+            <br />
+            여름은 가족, 친구들과 함께 소중한 추억을 만들기 가장 좋은
+            계절입니다.
+            <br />
+            뜨거운 태양 아래에서 즐길 수 있는 다양한 나들이 활동들이 여러분을
+            기다리고 있습니다.
+            <br />
+            시원한 바다의 파도 소리, 짜릿한 물놀이의 즐거움, 그리고 아름다운
+            자연 속에서의 산책을 경험해 보세요.
+            <br />
+            <br />
+            <strong>여름휴가.zip</strong>과 함께 이 여름을 잊지 못할 추억으로
+            가득 채워보세요!
+          </div>
+        </Introduction>
+      </BannerImage>
 
       <RecommendLayout>
-        <Introduction>
-          여름은 가족, 친구들과 함께 소중한 추억을 만들기 가장 좋은 계절입니다.
-          <br />
-          뜨거운 태양 아래에서 즐길 수 있는 다양한 나들이 활동들이 여러분을
-          기다리고 있습니다.
-          <br />
-          <br />
-          시원한 바다의 파도 소리, 짜릿한 물놀이의 즐거움, 그리고 아름다운 자연
-          속에서의 산책을 경험해 보세요.
-          <br />
-          또한, 여름 동안만 즐길 수 있는 특별한 이벤트와 페스티벌 정보도 담고
-          있어 여러분의 여름 나들이 계획을 한층 더 풍성하게 만들어 줄 것입니다.
-          <br />
-          <br />
-          더위를 피해 시원한 여름을 만끽할 수 있는 완벽한 장소와 팁을 제공하니,
-          <br />
-          <strong>여름휴가.zip</strong>과 함께 이 여름을 잊지 못할 추억으로 가득
-          채워보세요!
-        </Introduction>
-
         <ActivityGuide
           id={2451}
           description="맑고 푸른 바다에서 수영과 해변 활동을 즐길 수 있는 최고의 장소입니다."
@@ -75,6 +78,8 @@ export default function SummerRecommend() {
         />
 
         <RelatedInfo data={RELATED_INFO} />
+
+        <GoBackButton />
       </RecommendLayout>
     </>
   );
