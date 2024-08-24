@@ -149,3 +149,18 @@ declare module '@trip.zip-api' {
     updatedAt: string;
   };
 }
+
+export type ActivityData = {
+  id: number;
+  userId: number;
+  title: string;
+  description: string;
+  category: Category;
+  price: number;
+  address: string;
+  bannerImageUrl: string;
+  rating: number;
+  reviewCount: number;
+  createdAt: string;
+  updatedAt: string;
+};

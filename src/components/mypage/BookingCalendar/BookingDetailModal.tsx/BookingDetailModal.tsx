@@ -7,6 +7,7 @@ import {
   getMyActivitiesReservedSchedule,
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
+import { sendNotification } from '@/libs/api/myNotifications';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
@@ -146,6 +147,11 @@ export default function BookingDetailModal({
       fetchBookingDetails();
       notify('success', '승인되었습니다.');
       setSelectedTab('confirmed');
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'confirmed',
+      });
     } catch (error) {
       notify('error', '예약 승인 중 오류가 발생했습니다.');
     }
@@ -166,6 +172,11 @@ export default function BookingDetailModal({
       fetchBookingDetails();
       notify('success', '거절되었습니다.');
       setSelectedTab('declined');
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'declined',
+      });
     } catch (error) {
       notify('error', '예약 거절 중 오류가 발생했습니다.');
     }

@@ -1,24 +1,12 @@
 import { Cloud } from '@/libs/utils/Icon';
 import React from 'react';
 
-type LoadingProps = {
-  width?: number;
-};
-
-/**
- * Loading 컴포넌트는 비행기가 비행 경로를 따라 이동하는 로딩 애니메이션을 표시합니다.
- *
- * @param {LoadingProps} props - props로 width를 써주세요. 안 쓰면 기본값
- * @param {number} [props.width=1000] - 로딩 애니메이션의 너비(기본값 1000)
- * @author 김보미
- */
-
-export default function Loading({ width = 1000 }: LoadingProps) {
+export default function Loading() {
   return (
     <div className="flex items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width={width}
+        width="1000"
         viewBox="0 0 400 200"
       >
         <defs>

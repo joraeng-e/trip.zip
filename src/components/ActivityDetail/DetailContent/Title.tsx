@@ -3,6 +3,7 @@ import { KebabIcon, LocationIcon } from '@/libs/utils/Icon';
 import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import { FaLocationDot } from 'react-icons/fa6';
 
 interface TitleProps {
   title: string;
@@ -48,7 +49,7 @@ export default function Title(props: TitleProps) {
           >
             <Dropdown.Button
               showArrow={false}
-              className="relative flex w-130 items-center md:h-59"
+              className="relative flex w-130 items-center border-none md:h-59"
             >
               <KebabIcon className="absolute left-106" />
             </Dropdown.Button>
@@ -71,7 +72,7 @@ export default function Title(props: TitleProps) {
         <FaStar className="mt-4 text-yellow-500" />
         {rating}({reviewCount})
         <div
-          className="flex cursor-pointer items-center gap-12"
+          className="dark-base flex cursor-pointer items-center gap-12"
           onClick={handleClickClipboard}
         >
           <LocationIcon className="fill-nomad-black dark:fill-white" />

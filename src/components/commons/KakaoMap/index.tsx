@@ -69,11 +69,15 @@ export default function KakaoMap({ address, className }: KakaoMapProps) {
     kakao.maps.load(() => {
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
+
         level: 3,
       };
 
       const map = new kakao.maps.Map(mapRef.current, options);
       const geocoder = new kakao.maps.services.Geocoder();
+
+      const zoomControl = new kakao.maps.ZoomControl();
+      map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
       if (!address) {
         const marker = new kakao.maps.Marker({

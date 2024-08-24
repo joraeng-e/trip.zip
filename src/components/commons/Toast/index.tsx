@@ -3,7 +3,7 @@ import ErrorLottie from '@/../public/lottie/error.json';
 import { StyledToastContainer } from '@/styles/ToastStyle';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { ToastOptions, ToastPosition, Zoom, toast } from 'react-toastify';
+import { ToastOptions, ToastPosition, toast } from 'react-toastify';
 
 // Lottie 컴포넌트를 클라이언트에서만 렌더링하도록 설정
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
@@ -34,31 +34,27 @@ const option: ToastOptions = {
 export const notify = (
   type: 'success' | 'error' | 'info' | 'warning',
   message: string,
-  onClose?: () => void,
 ) => {
   switch (type) {
     case 'success':
       toast.success(message, {
         ...option,
-        onClose,
         icon: <Lottie animationData={CheckLottie} />,
       });
       break;
     case 'error':
       toast.error(message, {
         ...option,
-        onClose,
         icon: <Lottie animationData={ErrorLottie} />,
       });
       break;
     case 'info':
       toast.info(message, {
         ...option,
-        onClose,
       });
       break;
     case 'warning':
-      toast.warn(message, { ...option, onClose });
+      toast.warn(message, { ...option });
       break;
     default:
       break;
@@ -69,7 +65,6 @@ export const notify = (
  * type에 따른 알림 메시지를 표시하는 함수
  * @param {string} type - 알림 유형 (success, error, info, warning).
  * @param {string} message - 표시할 메시지 내용.
- * @param {void} onClose - 닫힐 떄 원하는 함수 추가해주세요
  * @example
  * - 함수명은 자유입니다.
  * - !필수) notify('타입', '메세지')를 적어주세요.
