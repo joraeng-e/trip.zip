@@ -212,7 +212,7 @@ export default function EditActivityForm({
   return (
     <MyPageLayout>
       <FormProvider {...methods}>
-        <form className="mb-60 px-10" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-60 w-full px-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 수정</h1>
             {modalMessage && (

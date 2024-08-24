@@ -113,7 +113,7 @@ export default function DateTime({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="max-w-800 space-y-4">
       <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
         <div className="flex w-full flex-col">
           <label htmlFor="date" className="mb-1">
@@ -123,7 +123,7 @@ export default function DateTime({
             id="date"
             type="date"
             className={classNames(
-              'dark-base basic-input cursor-pointer md:w-380',
+              'dark-base basic-input cursor-pointer md:max-w-380',
               {
                 'border-red-500': !!errors.schedules?.message,
               },
@@ -133,7 +133,7 @@ export default function DateTime({
             onChange={handleDateTimeInputChange}
           />
         </div>
-        <div className="flex-center w-full gap-3">
+        <div className="flex-center w-full gap-3 md:ml-4">
           <div className="flex w-full flex-col">
             <label htmlFor="startTime" className="mb-1 whitespace-nowrap">
               시작 시간
