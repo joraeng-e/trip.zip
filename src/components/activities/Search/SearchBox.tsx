@@ -1,5 +1,5 @@
 import Button from '@/components/commons/Button';
-import { BedIcon } from '@/libs/utils/Icon';
+import { BedIcon, SearchIcon } from '@/libs/utils/Icon';
 import { ChangeEvent, FormEvent, useState } from 'react';
 
 export default function SearchBox({
@@ -28,7 +28,10 @@ export default function SearchBox({
         무엇을 체험하고 싶으신가요?
       </h1>
 
-      <form onSubmit={handleSubmit} className="mt-15 flex h-56 gap-12 md:mt-20">
+      <form
+        onSubmit={handleSubmit}
+        className="relative mt-15 flex h-56 gap-12 md:mt-20"
+      >
         <div className="group relative flex-grow">
           <label
             htmlFor="activity-search"
@@ -51,10 +54,17 @@ export default function SearchBox({
 
         <Button
           type="submit"
-          className="block h-full max-w-96 rounded-md bg-nomad-black leading-26 text-white hover:bg-custom-green-200 md:max-w-136"
+          className="hidden h-full max-w-96 rounded-md bg-nomad-black leading-26 text-white hover:bg-custom-green-200 md:block md:max-w-136"
         >
           검색하기
         </Button>
+
+        <button
+          type="submit"
+          className="absolute right-0 top-1/2 -translate-y-1/2 transform p-12 md:hidden"
+        >
+          <SearchIcon />
+        </button>
       </form>
     </div>
   );
