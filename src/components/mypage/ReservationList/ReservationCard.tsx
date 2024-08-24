@@ -83,7 +83,7 @@ export default function ReservationCard({
               {isExpired ? (
                 <Button
                   variant="disabledButton"
-                  className="max-w-120 rounded-md px-16 py-10"
+                  className="max-w-80 rounded-md px-16 py-10 text-xs-medium md:max-w-120 md:text-lg-bold"
                 >
                   마감 완료
                 </Button>
@@ -91,7 +91,7 @@ export default function ReservationCard({
                 <Modal.Trigger className="flex w-full items-center justify-end">
                   <Button
                     variant="inactiveButton"
-                    className="max-w-120 rounded-md px-16 py-10"
+                    className="max-w-80 rounded-md px-16 py-10 text-xs-medium md:max-w-120 md:text-lg-bold"
                   >
                     예약 취소
                   </Button>
@@ -127,7 +127,7 @@ export default function ReservationCard({
       <div className="dark-border mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
         <Link
           href={`/activity/${id}`}
-          className="relative h-full w-128 flex-shrink-0 md:w-156 lg:w-204"
+          className="relative h-full w-120 flex-shrink-0 md:w-156 lg:w-204"
         >
           <Image
             src={bannerImageUrl}
@@ -137,19 +137,21 @@ export default function ReservationCard({
           />
         </Link>
         <div className="flex w-full flex-col justify-between py-10">
-          <p className="mb-2 text-gray-600">{statusValue(status)}</p>
+          <p className="mb-2 text-sm-semibold text-gray-600 md:text-lg-bold">
+            {statusValue(status)}
+          </p>
           <Link
             href={`/activity/${id}`}
             className="text-2lg-bold lg:text-xl-bold"
           >
             {title}
           </Link>
-          <p className="text-gray-600">
+          <p className="text-xs-medium text-gray-600 md:text-md-medium">
             {date} {startTime} - {endTime} ({headCount}명)
           </p>
-          <div className="flex items-baseline justify-between pb-10 pr-10 md:pr-20">
-            <p className="mb-2 text-md-semibold md:text-xl-semibold">
-              ₩{totalPrice.toLocaleString()}
+          <div className="flex items-baseline justify-between pr-15 md:pr-20">
+            <p className="whitespace-nowrap pb-2 text-md-semibold md:pb-20 md:text-xl-semibold">
+              ₩ {totalPrice.toLocaleString()}
             </p>
             {statusButton(status)}
           </div>
