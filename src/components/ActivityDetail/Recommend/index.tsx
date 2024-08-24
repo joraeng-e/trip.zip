@@ -44,7 +44,7 @@ export default function Recommend(props: RecommendProps) {
 
   return (
     <>
-      <div className="dark-base relative my-40 flex items-center justify-between text-xl-bold text-nomad-black">
+      <div className="dark-base relative my-40 flex items-center justify-between overflow-hidden text-xl-bold text-nomad-black md:overflow-auto">
         {category}과 관련된 다른 체험을 보고 싶다면?
       </div>
       {filteredActivities.length > 0 && (
