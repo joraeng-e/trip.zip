@@ -38,22 +38,14 @@ export default function CarouselRoot({
   children: ReactNode;
   autoPlay?: boolean;
 }) {
-  const _children = useMemo(
-    () => Children.toArray(children) as ReactElement[],
-    [children],
-  );
-  const carouselSlides = useMemo(
-    () => _children.filter((child) => child.type === CarouselSlide),
-    [_children],
-  );
-  const carouselNavigator = useMemo(
-    () => _children.find((child) => child.type === CarouselNavigator),
-    [_children],
-  );
-  const carouselIndicator = useMemo(
-    () => _children.find((child) => child.type === CarouselIndicator),
-    [_children],
-  );
+  const [carouselSlides, carouselNavigator, carouselIndicator] = useMemo(() => {
+    const childrenArray = Children.toArray(children) as ReactElement[];
+    const slides = childrenArray.filter((child) => child.type === CarouselSlide);
+    const navigator = childrenArray.find((child) => child.type === CarouselNavigator);
+    const indicator = childrenArray.find((child) => child.type === CarouselIndicator);
+  
+    return [slides, navigator, indicator];
+  }, [children]);
 
   const hasMultipleSlides = carouselSlides.length > 1;
   const totalSlides = hasMultipleSlides
