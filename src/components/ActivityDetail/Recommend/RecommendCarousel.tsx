@@ -27,11 +27,11 @@ export default function RecommendCarousel(props: RecommendCarouselProps) {
 
   return (
     <>
-      <section className="relative m-auto mb-120 mt-30 max-w-1200">
-        <div className="absolute -left-12 top-60 z-50">
+      <section className="relative mb-120 mt-30 max-w-1200 px-10">
+        <div className="absolute -left-0 top-60 z-50">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
         </div>
-        <div className="absolute -right-12 top-60 z-50">
+        <div className="absolute -right-0 top-60 z-50">
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
 
