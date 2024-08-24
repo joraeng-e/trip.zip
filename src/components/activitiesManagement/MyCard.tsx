@@ -71,9 +71,11 @@ export default function MyCard({
         <Image
           src={bannerImageUrl}
           alt={title}
-          layout="fill"
-          sizes="153px"
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 204px"
           className="object-cover"
+          priority
         />
       </Link>
       <div className="flex flex-1 flex-col justify-between p-13 transition-all hover:bg-gray-100 dark:hover:bg-custom-gray-800 md:p-16">

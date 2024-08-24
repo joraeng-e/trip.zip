@@ -41,6 +41,8 @@ export default function Select({
         onClick={() => setIsOpen(!isOpen)}
         tabIndex={0}
         role="combobox"
+        aria-controls="combobox-options"
+        aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <span>
@@ -62,6 +64,7 @@ export default function Select({
           transition={{ duration: 0.2 }}
           className="dark-border base-input absolute z-10 mt-1 w-full rounded-md border-2 bg-white"
           role="listbox"
+          id="combobox-options"
         >
           {options.map((option) => (
             <div

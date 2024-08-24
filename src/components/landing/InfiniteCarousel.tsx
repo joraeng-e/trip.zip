@@ -35,9 +35,10 @@ function Card({ data }: { data: Activity }) {
       <Image
         src={bannerImageUrl}
         alt="banner"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: 'cover' }}
         className="brightness-75"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
       <div className="absolute inset-0 flex h-full flex-col justify-end p-15">
         <div className="flex items-center gap-2 text-xs-semibold text-white sm:text-sm-semibold">

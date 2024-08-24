@@ -69,8 +69,9 @@ export default function Index() {
         <Image
           src={Plane}
           alt="배경 하늘"
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
           quality={100}
           priority
           className="z-0"
@@ -98,8 +99,9 @@ export default function Index() {
             <Image
               src={Tripzip}
               alt="trip.zip 로고"
-              height={125}
               width={400}
+              height={125}
+              priority
               className="relative"
             />
           </motion.div>
