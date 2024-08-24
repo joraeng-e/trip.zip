@@ -7,4 +7,5 @@ dist
 *.css
 coverage
 next.config.js
-public
+src/libs/firebase.js
+public/**/*.js
