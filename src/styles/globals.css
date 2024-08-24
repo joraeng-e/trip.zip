@@ -186,3 +186,7 @@ input:-webkit-autofill:active {
   margin-bottom: 8px;
   color: #112211;
 }
+
+.custom-editor {
+  height: 350px !important;
+}

@@ -7,8 +7,7 @@ import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import { useDarkMode } from '@/context/DarkModeContext';
-import { getActivityDetail } from '@/libs/api/activities';
-import { postActivityImage } from '@/libs/api/activities';
+import { getActivityDetail, postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import {
@@ -84,10 +83,9 @@ export default function EditActivityForm({
   const [markdownValue, setMarkdownValue] = useState(
     activityData?.description || '',
   );
-  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
-  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
-
   const { isDarkMode } = useDarkMode();
+  const [bannerImage, setBannerImage] = useState<File | null>(null);
+  const [subImages, setSubImages] = useState<File[]>([]);
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -98,6 +96,7 @@ export default function EditActivityForm({
       description: activityData?.description || '',
       price: activityData?.price || 0,
       address: activityData?.address || '',
+      bannerImageUrl: activityData?.bannerImageUrl || '',
     },
   });
 
@@ -106,26 +105,12 @@ export default function EditActivityForm({
     handleSubmit,
     setValue,
     formState: { errors },
+    trigger,
   } = methods;
 
   const updateActivityMutation = useMutation({
-    mutationFn: async (data: PatchMyActivityRequest) => {
-      if (bannerImageFile) {
-        const bannerResponse = await postActivityImage(bannerImageFile);
-        data.bannerImageUrl = bannerResponse.activityImageUrl;
-      }
-
-      if (subImageFiles.length > 0) {
-        const subImageResponses = await Promise.all(
-          subImageFiles.map((file) => postActivityImage(file)),
-        );
-        data.subImageUrlsToAdd = subImageResponses.map(
-          (response) => response.activityImageUrl,
-        );
-      }
-
-      return patchMyActivity({ activityId, data });
-    },
+    mutationFn: (data: PatchMyActivityRequest) =>
+      patchMyActivity({ activityId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -147,22 +132,44 @@ export default function EditActivityForm({
     .getCommands()
     .filter((command) => command.name !== 'image');
 
-  const onSubmit = (data: ActivitiesFormData) => {
-    const roundedPrice = Math.round(data.price);
+  const uploadImages = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      const { activityImageUrl } = await postActivityImage(file);
+      uploadedUrls.push(activityImageUrl);
+    }
+    return uploadedUrls;
+  };
 
-    const formData: PatchMyActivityRequest = {
-      title: data.title,
-      category: data.category,
-      description: data.description,
-      price: roundedPrice,
-      address: data.address,
-      bannerImageUrl: data.bannerImageUrl,
-      subImageIdsToRemove,
-      subImageUrlsToAdd: [],
-      scheduleIdsToRemove,
-      schedulesToAdd,
-    };
-    updateActivityMutation.mutate(formData);
+  const onSubmit = async (data: ActivitiesFormData) => {
+    try {
+      let bannerImageUrl = data.bannerImageUrl;
+      if (bannerImage) {
+        [bannerImageUrl] = await uploadImages([bannerImage]);
+      }
+
+      const newSubImageUrls = await uploadImages(subImages);
+
+      const roundedPrice = Math.round(data.price);
+
+      const formData: PatchMyActivityRequest = {
+        title: data.title,
+        category: data.category,
+        description: markdownValue,
+        price: roundedPrice,
+        address: data.address,
+        bannerImageUrl,
+        subImageIdsToRemove,
+        subImageUrlsToAdd: newSubImageUrls,
+        scheduleIdsToRemove,
+        schedulesToAdd,
+      };
+      updateActivityMutation.mutate(formData);
+    } catch (error) {
+      console.error('이미지 업로드 중 오류 발생:', error);
+      setModalMessage('이미지 업로드 중 오류가 발생했습니다.');
+      setIsModalOpen(true);
+    }
   };
 
   const handleScheduleRemove = (scheduleId: number) => {
@@ -173,18 +180,23 @@ export default function EditActivityForm({
     setSchedulesToAdd((prev) => [...prev, newSchedule]);
   };
 
-  const handleBannerImageSelect = (files: File[]) => {
+  const handleBannerImageChange = (files: File[]) => {
     if (files.length > 0) {
-      setBannerImageFile(files[0]);
+      setBannerImage(files[0]);
+      setValue('bannerImageUrl', 'temp', { shouldValidate: true });
+    } else {
+      setBannerImage(null);
+      setValue('bannerImageUrl', '', { shouldValidate: true });
     }
   };
 
-  const handleSubImageSelect = (files: File[]) => {
-    setSubImageFiles((prev) => [...prev, ...files]);
+  const handleSubImagesChange = (files: File[]) => {
+    setSubImages(files);
   };
 
   const handleImageRemove = (imageId: number) => {
     setSubImageIdsToRemove((prev) => [...prev, imageId]);
+    setSubImages((prev) => prev.filter((_, index) => index !== imageId));
   };
 
   const resetModalMessage = () => {
@@ -229,6 +241,7 @@ export default function EditActivityForm({
                 const selectedCategory = value as Category;
                 setCategory(selectedCategory);
                 setValue('category', selectedCategory);
+                trigger('category');
               }}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
@@ -237,11 +250,12 @@ export default function EditActivityForm({
             />
             <h3>설명</h3>
             <MDEditor
-              className="[&_.w-md-editor-text]:h-full"
+              className="custom-editor [&_.w-md-editor-text]:h-full"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
+                trigger('description');
               }}
               previewOptions={{
                 remarkPlugins: [remarkGfm],
@@ -315,7 +329,7 @@ export default function EditActivityForm({
                   ? [{ id: 0, imageUrl: activityData.bannerImageUrl }]
                   : []
               }
-              onFilesSelected={handleBannerImageSelect}
+              onImageChange={handleBannerImageChange}
             />
             <h3>소개 이미지</h3>
             <div className="flex flex-wrap">
@@ -325,10 +339,10 @@ export default function EditActivityForm({
                 label="소개 이미지 등록"
                 existingImages={activityData?.subImages || []}
                 onImageRemove={handleImageRemove}
-                onFilesSelected={handleSubImageSelect}
+                onImageChange={handleSubImagesChange}
               />
             </div>
-            <p className="mb-20 text-custom-gray-800">
+            <p className="text-custom-gray-800">
               *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>

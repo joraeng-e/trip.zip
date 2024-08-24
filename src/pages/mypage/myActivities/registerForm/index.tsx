@@ -38,11 +38,9 @@ export default function MyActivityForm() {
   const [address, setAddress] = useState<string>('');
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState('');
-  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
-  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
-
+  const [bannerImage, setBannerImage] = useState<File | null>(null);
+  const [subImages, setSubImages] = useState<File[]>([]);
   const { isDarkMode } = useDarkMode();
-
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -59,23 +57,7 @@ export default function MyActivityForm() {
   } = methods;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: PostActivitiesRequest) => {
-      if (bannerImageFile) {
-        const bannerResponse = await postActivityImage(bannerImageFile);
-        data.bannerImageUrl = bannerResponse.activityImageUrl;
-      }
-
-      if (subImageFiles.length > 0) {
-        const subImageResponses = await Promise.all(
-          subImageFiles.map((file) => postActivityImage(file)),
-        );
-        data.subImageUrls = subImageResponses.map(
-          (response) => response.activityImageUrl,
-        );
-      }
-
-      return postActivities(data);
-    },
+    mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -91,20 +73,39 @@ export default function MyActivityForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
-    price,
-    ...rest
-  }) => {
-    const roundedPrice = Math.round(price);
-    const requestData: PostActivitiesRequest = {
-      ...rest,
-      price: roundedPrice,
-      description: markdownValue,
-      category: category as Category,
-      address,
-      subImageUrls: [],
-    };
-    mutate(requestData);
+  const uploadImages = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      const { activityImageUrl } = await postActivityImage(file);
+      uploadedUrls.push(activityImageUrl);
+    }
+    return uploadedUrls;
+  };
+
+  const onSubmit: SubmitHandler<ActivitiesFormData> = async (formData) => {
+    try {
+      let bannerImageUrl = '';
+      if (bannerImage) {
+        [bannerImageUrl] = await uploadImages([bannerImage]);
+      }
+
+      const subImageUrls = await uploadImages(subImages);
+      const roundedPrice = Math.round(formData.price);
+      const requestData: PostActivitiesRequest = {
+        ...formData,
+        price: roundedPrice,
+        description: markdownValue,
+        category: category as Category,
+        address,
+        bannerImageUrl,
+        subImageUrls,
+      };
+      mutate(requestData);
+    } catch (error) {
+      console.error('이미지 업로드 중 오류 발생:', error);
+      setModalMessage('이미지 업로드 중 오류가 발생했습니다.');
+      setIsModalOpen(true);
+    }
   };
 
   const handleAddressSelect = (data: Address) => {
@@ -124,21 +125,25 @@ export default function MyActivityForm() {
     .getCommands()
     .filter((command) => command.name !== 'image');
 
-  const handleBannerImageSelect = (files: File[]) => {
+  const handleBannerImageChange = (files: File[]) => {
     if (files.length > 0) {
-      setBannerImageFile(files[0]);
+      setBannerImage(files[0]);
+      setValue('bannerImageUrl', 'selected', { shouldValidate: true });
+    } else {
+      setBannerImage(null);
+      setValue('bannerImageUrl', '', { shouldValidate: true });
     }
   };
 
-  const handleSubImageSelect = (files: File[]) => {
-    setSubImageFiles((prev) => [...prev, ...files]);
+  const handleSubImagesChange = (files: File[]) => {
+    setSubImages(files);
   };
 
   const {
     title,
     category: categoryError,
     price,
-    bannerImageUrl,
+    bannerImageUrl: bannerImageError,
     subImageUrls,
   } = errors;
 
@@ -182,11 +187,12 @@ export default function MyActivityForm() {
             />
             <h3>설명</h3>
             <MDEditor
-              className="[&_.w-md-editor-text]:h-full"
+              className="custom-editor [&_.w-md-editor-text]:h-full"
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
+                trigger('description');
               }}
               previewOptions={{
                 remarkPlugins: [remarkGfm],
@@ -250,11 +256,11 @@ export default function MyActivityForm() {
               name="bannerImageUrl"
               maxImages={1}
               label="배너 이미지 등록"
-              onFilesSelected={handleBannerImageSelect}
+              onImageChange={handleBannerImageChange}
             />
-            {bannerImageUrl && (
+            {bannerImageError && (
               <p className="-mt-15 pl-8 text-xs-regular text-custom-red-200">
-                {bannerImageUrl.message}
+                {bannerImageError.message}
               </p>
             )}
             <h3>소개 이미지</h3>
@@ -263,7 +269,7 @@ export default function MyActivityForm() {
                 name="subImageUrls"
                 maxImages={4}
                 label="소개 이미지 등록"
-                onFilesSelected={handleSubImageSelect}
+                onImageChange={handleSubImagesChange}
               />
             </div>
             {subImageUrls && (

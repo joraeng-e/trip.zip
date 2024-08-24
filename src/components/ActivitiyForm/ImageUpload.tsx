@@ -1,22 +1,21 @@
 import { PlusIcon, XIcon } from '@/libs/utils/Icon';
 import classNames from '@/libs/utils/classNames';
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { ChangeEvent, useState } from 'react';
 
-interface ImageUploadProps {
+interface ImageFile {
+  file: File | null;
+  previewUrl: string;
+  id?: number;
+}
+
+interface ImageUploaderProps {
   name: string;
   maxImages?: number;
   label?: string;
   existingImages?: { id: number; imageUrl: string }[];
+  onImageChange: (files: File[]) => void;
   onImageRemove?: (imageId: number) => void;
-  onFilesSelected: (files: File[]) => void;
-}
-
-interface ImagePreview {
-  file: File | null;
-  url: string;
-  id?: number;
 }
 
 export default function ImageUploader({
@@ -24,81 +23,62 @@ export default function ImageUploader({
   maxImages = 1,
   label = '이미지 등록',
   existingImages = [],
+  onImageChange,
   onImageRemove,
-  onFilesSelected,
-}: ImageUploadProps) {
-  const { setValue } = useFormContext();
-  const [imagePreviews, setImagePreviews] = useState<ImagePreview[]>(
+}: ImageUploaderProps) {
+  const [images, setImages] = useState<ImageFile[]>(
     existingImages.map((img) => ({
       file: null,
-      url: img.imageUrl,
+      previewUrl: img.imageUrl,
       id: img.id,
     })),
   );
 
-  useEffect(() => {
-    if (maxImages === 1) {
-      setValue(name, imagePreviews[0]?.url || '');
-    } else {
-      setValue(
-        name,
-        imagePreviews.map((preview) => preview.url),
-      );
-    }
-  }, [imagePreviews, name, setValue, maxImages]);
-
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const remainingSlots = maxImages - imagePreviews.length;
-      const filesToAdd = Array.from(files).slice(0, remainingSlots);
+      const remainingSlots = maxImages - images.length;
+      const newFiles = Array.from(files).slice(0, remainingSlots);
 
-      const newPreviews = filesToAdd.map((file) => ({
+      const newImages = newFiles.map((file) => ({
         file,
-        url: URL.createObjectURL(file),
+        previewUrl: URL.createObjectURL(file),
       }));
 
-      setImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
-      onFilesSelected(filesToAdd);
+      setImages((prev) => [...prev, ...newImages]);
+
+      onImageChange(newFiles);
     }
   };
 
   const handleDelete = (index: number) => {
-    const previewToDelete = imagePreviews[index];
-
-    if (previewToDelete.id && onImageRemove) {
-      onImageRemove(previewToDelete.id);
-    }
-
-    setImagePreviews((prevPreviews) => {
-      const updatedPreviews = prevPreviews.filter((_, i) => i !== index);
-      onFilesSelected(
-        updatedPreviews
-          .map((preview) => preview.file)
-          .filter((file): file is File => file !== null),
+    const imageToDelete = images[index];
+    if (imageToDelete.id && onImageRemove) {
+      onImageRemove(imageToDelete.id);
+    } else if (imageToDelete.file) {
+      URL.revokeObjectURL(imageToDelete.previewUrl);
+      onImageChange(
+        images.filter((_, i) => i !== index).map((img) => img.file!),
       );
-      return updatedPreviews;
-    });
-
-    URL.revokeObjectURL(previewToDelete.url);
+    }
+    setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
     <div className="p-4">
       <div className="flex flex-wrap space-x-4">
         <label
-          htmlFor={`image-upload-${label}`}
+          htmlFor={`image-upload-${name}`}
           className={classNames(
             'flex-center group mb-5 h-140 w-140 flex-shrink-0 flex-col rounded-md border-2 border-dashed border-gray-300 focus:outline-none md:h-206 md:w-206',
             {
-              'opacity-50': imagePreviews.length >= maxImages,
+              'opacity-50': images.length >= maxImages,
               'hover:border-nomad-black dark:hover:border-custom-gray-800':
-                imagePreviews.length < maxImages,
+                images.length < maxImages,
             },
           )}
           style={{
-            cursor:
-              imagePreviews.length >= maxImages ? 'not-allowed' : 'pointer',
+            cursor: images.length >= maxImages ? 'not-allowed' : 'pointer',
           }}
           aria-label={label}
         >
@@ -112,22 +92,22 @@ export default function ImageUploader({
         </label>
 
         <input
-          id={`image-upload-${label}`}
+          id={`image-upload-${name}`}
           type="file"
           onChange={handleImageChange}
           accept="image/*"
           className="hidden"
           multiple={maxImages > 1}
-          disabled={imagePreviews.length >= maxImages}
+          disabled={images.length >= maxImages}
         />
 
-        {imagePreviews.map((preview, index) => (
+        {images.map((image, index) => (
           <div
             key={index}
             className="relative size-[140px] p-4 md:size-[206px]"
           >
             <Image
-              src={preview.url}
+              src={image.previewUrl}
               alt="미리보기 이미지"
               fill
               sizes="206px"
