@@ -1,4 +1,4 @@
-import EmptyReview from '@/../public/lottie/emptyReview.json';
+import EmptyLottie from '@/../public/lottie/empty.json';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { FaStar } from 'react-icons/fa';
@@ -25,14 +25,14 @@ export default function ReviewTitle(props: ReviewTitleProps) {
   return (
     <div className="mx-16">
       {totalCount === 0 ? (
-        <div className="my-100 flex flex-col items-center text-center text-md-bold text-custom-gray-600 dark:text-white">
+        <div className="my-100 flex h-800 flex-col items-center justify-center text-center text-md-bold text-custom-gray-600 dark:text-white">
           <div className="text-grayscale-400 mb-8 text-xl-medium sm:text-2lg-medium">
             리뷰가 없습니다.
           </div>
           <div className="ml-40">
             <Lottie
-              animationData={EmptyReview}
-              style={{ width: '280px', height: '280px' }}
+              animationData={EmptyLottie}
+              className="mb-120 mt-100 fill-white dark:fill-custom-black"
             />
           </div>
         </div>
