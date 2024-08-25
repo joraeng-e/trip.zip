@@ -13,7 +13,7 @@ import {
 } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 
-const tags = [
+export const Tags = [
   { name: '스포츠', emoji: <SoccerBallEmoji /> },
   { name: '파티룸', emoji: <PartyEmoji /> },
   { name: '연인추천', emoji: <HeartEmoji /> },
@@ -41,8 +41,7 @@ export default function ActivityTags(props: ActivityTagsProps) {
         <div className="relative my-4 h-40"></div>
       ) : (
         <div className="flex flex-wrap gap-10">
-          {tags
-            .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
+          {Tags.filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
             .map(({ name, emoji }) => (
               <motion.div
                 key={name}
