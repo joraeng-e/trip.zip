@@ -41,8 +41,8 @@ export default function ActivityTags(props: ActivityTagsProps) {
         <div className="relative my-4 h-40"></div>
       ) : (
         <div className="flex flex-wrap gap-10">
-          {Tags.filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
-            .map(({ name, emoji }) => (
+          {Tags.filter((tag) => extractedTags.includes(tag.name)).map(
+            ({ name, emoji }) => (
               <motion.div
                 key={name}
                 className="dark-border flex items-center rounded-lg border border-custom-gray-400 p-12"
@@ -56,7 +56,8 @@ export default function ActivityTags(props: ActivityTagsProps) {
                   {name}
                 </span>
               </motion.div>
-            ))}
+            ),
+          )}
         </div>
       )}
     </div>

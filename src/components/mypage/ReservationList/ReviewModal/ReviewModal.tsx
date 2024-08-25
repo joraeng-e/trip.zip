@@ -88,43 +88,21 @@ export default function ReviewModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex-center fixed left-0 top-0 z-50 h-full w-full min-w-800 backdrop-blur-sm"
+        className="flex-center fixed left-0 top-0 z-50 h-full w-full backdrop-blur-sm"
       >
         <div
           ref={modalRef}
-          className="flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-697 lg:w-429"
+          className="relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-auto lg:min-h-800 lg:w-600"
         >
           <div className="flex items-center justify-between">
             <span className="text-2xl-bold text-custom-black">후기작성</span>
             <button type="button" onClick={onClose}>
-              <XIcon className="size-48" />
+              <XIcon className="size-48 fill-custom-gray-700" />
             </button>
           </div>
 
-          <div className="my-4">
-            <span className="text-2xl-bold text-nomad-black">태그 선택</span>
-            <div className="mt-2 flex flex-wrap gap-10">
-              {Tags.map(({ name, emoji }) => (
-                <motion.div
-                  key={name}
-                  className={`dark-border flex cursor-pointer items-center rounded-lg border border-custom-gray-400 p-4 ${selectedTags.includes(name) ? 'bg-custom-gray-200' : ''}`}
-                  onClick={() => handleTagClick(name)}
-                  whileHover={{
-                    scale: 1.05,
-                    transition: { duration: 0.3 },
-                  }}
-                >
-                  {emoji}
-                  <span className="mx-2 text-lg-medium text-nomad-black dark:text-white">
-                    {name}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
           <form className="flex h-full flex-col gap-12" onSubmit={handleSubmit}>
-            <div className="flex gap-8">
+            <div className="flex justify-center gap-30">
               <div className="relative size-100 overflow-hidden rounded-xl border-none bg-custom-gray-300 md:size-120">
                 <Image
                   className="object-cover"
@@ -134,15 +112,15 @@ export default function ReviewModal({
                 />
               </div>
               <div className="flex flex-col gap-6">
-                <span className="text-16 font-bold text-nomad-black md:text-20">
+                <span className="text-16 font-bold text-nomad-black md:text-2xl-bold">
                   {reservation.activity.title}
                 </span>
-                <span className="text-14 font-normal text-nomad-black md:text-16">
+                <span className="text-14 font-normal text-custom-gray-700 md:text-lg-bold">
                   {reservation.date} / {reservation.startTime}-
                   {reservation.endTime} / {reservation.headCount}명
                 </span>
                 <hr />
-                <span className="text-20 font-bold text-nomad-black md:text-32">
+                <span className="text-20 font-bold text-nomad-black md:text-xl-bold">
                   ₩ {formatNumber(reservation.totalPrice)}
                 </span>
               </div>
@@ -150,7 +128,34 @@ export default function ReviewModal({
             <div className="flex-center h-100 w-full">
               <Rating starSize={50} onClick={handleChangeRating} />
             </div>
-            <div className="relative h-full w-full">
+
+            <div className="my-4">
+              <span className="text-2xl-bold text-nomad-black">태그 선택</span>
+              <p className="text-lg mt-10 text-nomad-black">
+                태그는 총 5개 선택 가능합니다.
+              </p>
+              <div className="my-20 flex flex-wrap gap-10">
+                {Tags.map(({ name, emoji }) => (
+                  <motion.div
+                    key={name}
+                    className={`dark-border flex cursor-pointer items-center rounded-lg border border-custom-gray-400 p-6 ${selectedTags.includes(name) ? 'border-custom-blue-200 bg-custom-blue-100 text-custom-blue-200' : ''}`}
+                    onClick={() => handleTagClick(name)}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.3 },
+                    }}
+                  >
+                    <div>{emoji}</div>
+                    <span
+                      className={`mx-2 text-lg-medium ${selectedTags.includes(name) ? 'text-lg-bold text-custom-blue-300' : 'text-nomad-black'}`}
+                    >
+                      {name}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            <div className="relative h-full w-full lg:mb-60 lg:h-300">
               <textarea
                 className="relative h-full w-full flex-1 resize-none overflow-y-auto rounded-md border-1 border-custom-gray-500 p-10 pb-20"
                 value={content}
@@ -161,7 +166,7 @@ export default function ReviewModal({
                 {content.length}
               </span>
             </div>
-            <div className="mt-12 h-54 md:h-56">
+            <div className="lg:pa mt-12 h-54 md:h-56 lg:absolute lg:bottom-20 lg:w-550">
               <Button
                 type="submit"
                 variant="activeButton"
