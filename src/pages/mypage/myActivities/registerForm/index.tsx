@@ -1,12 +1,12 @@
-import BaseModal from '@/components/ActivityDetail/BaseModal';
+import AddressInput from '@/components/activityform/AddressInput';
 import DateTime from '@/components/activityform/DateTime';
 import ImageUploader from '@/components/activityform/ImageUpload';
+import MarkdownEditor from '@/components/activityform/MarkdownEditor';
 import Select from '@/components/activityform/Select';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
-import { useDarkMode } from '@/context/DarkModeContext';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -18,15 +18,10 @@ import {
   PostActivitiesRequest,
   PostActivitiesResponse,
 } from '@trip.zip-api';
-import '@uiw/react-markdown-preview/markdown.css';
-import MDEditor, { commands } from '@uiw/react-md-editor';
-import '@uiw/react-md-editor/markdown-editor.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
-import remarkGfm from 'remark-gfm';
 
 export default function MyActivityForm() {
   const router = useRouter();
@@ -35,12 +30,9 @@ export default function MyActivityForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [category, setCategory] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState('');
   const [bannerImage, setBannerImage] = useState<File | null>(null);
   const [subImages, setSubImages] = useState<File[]>([]);
-  const { isDarkMode } = useDarkMode();
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -96,7 +88,6 @@ export default function MyActivityForm() {
         price: roundedPrice,
         description: markdownValue,
         category: category as Category,
-        address,
         bannerImageUrl,
         subImageUrls,
       };
@@ -108,22 +99,11 @@ export default function MyActivityForm() {
     }
   };
 
-  const handleAddressSelect = (data: Address) => {
-    setAddress(data.address);
-    setValue('address', data.address);
-    trigger('address');
-    setIsAddressModalOpen(false);
-  };
-
   const resetModalMessage = () => {
     setModalMessage('');
     setIsModalOpen(false);
     if (isSuccessMessage) router.push('/mypage/myActivities');
   };
-
-  const customCommands = commands
-    .getCommands()
-    .filter((command) => command.name !== 'image');
 
   const handleBannerImageChange = (files: File[]) => {
     if (files.length > 0) {
@@ -143,7 +123,7 @@ export default function MyActivityForm() {
     title,
     category: categoryError,
     price,
-    bannerImageUrl: bannerImageError,
+    bannerImageUrl,
     subImageUrls,
   } = errors;
 
@@ -186,20 +166,13 @@ export default function MyActivityForm() {
               maxWidth="792px"
             />
             <h3>설명</h3>
-            <MDEditor
-              className="custom-editor [&_.w-md-editor-text]:h-full"
+            <MarkdownEditor
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
                 trigger('description');
               }}
-              previewOptions={{
-                remarkPlugins: [remarkGfm],
-              }}
-              commands={customCommands}
-              highlightEnable={false}
-              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -216,39 +189,12 @@ export default function MyActivityForm() {
               error={price}
             />
             <h3>주소</h3>
-            <div className="flex">
-              <Input
-                name="address"
-                type="text"
-                placeholder="주소"
-                register={register('address')}
-                error={errors.address}
-                disabled={true}
-                maxWidth="765px"
-              />
-              <div className="mt-4 h-58 w-80">
-                <Button
-                  className="ml-10 h-full rounded-md"
-                  type="button"
-                  onClick={() => setIsAddressModalOpen(true)}
-                >
-                  검색
-                </Button>
-              </div>
-            </div>
-            <input
-              name="detailAddress"
-              type="text"
-              placeholder="상세 주소"
-              className="dark-base basic-input -mt-10 mb-30 max-w-792"
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              trigger={trigger}
+              errors={errors}
             />
-            <BaseModal
-              isOpen={isAddressModalOpen}
-              onClose={() => setIsAddressModalOpen(false)}
-              className="w-full max-w-600 px-24 py-45"
-            >
-              <DaumPostcode onComplete={handleAddressSelect} />
-            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime />
             <h3>배너 이미지</h3>
@@ -258,9 +204,9 @@ export default function MyActivityForm() {
               label="배너 이미지 등록"
               onImageChange={handleBannerImageChange}
             />
-            {bannerImageError && (
+            {bannerImageUrl && (
               <p className="-mt-15 pl-8 text-xs-regular text-custom-red-200">
-                {bannerImageError.message}
+                {bannerImageUrl.message}
               </p>
             )}
             <h3>소개 이미지</h3>

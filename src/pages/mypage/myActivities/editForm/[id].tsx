@@ -1,12 +1,12 @@
-import BaseModal from '@/components/ActivityDetail/BaseModal';
+import AddressInput from '@/components/activityform/AddressInput';
 import DateTime from '@/components/activityform/DateTime';
 import ImageUploader from '@/components/activityform/ImageUpload';
+import MarkdownEditor from '@/components/activityform/MarkdownEditor';
 import Select from '@/components/activityform/Select';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
-import { useDarkMode } from '@/context/DarkModeContext';
 import { getActivityDetail, postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
@@ -23,14 +23,11 @@ import {
   PatchMyActivityRequest,
 } from '@trip.zip-api';
 import '@uiw/react-markdown-preview/markdown.css';
-import MDEditor, { commands } from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, useForm } from 'react-hook-form';
-import remarkGfm from 'remark-gfm';
 
 interface EditActivityFormProps {
   activityData: GetActivityDetailResponse;
@@ -79,11 +76,9 @@ export default function EditActivityForm({
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState(
     activityData?.description || '',
   );
-  const { isDarkMode } = useDarkMode();
   const [bannerImage, setBannerImage] = useState<File | null>(null);
   const [subImages, setSubImages] = useState<File[]>([]);
 
@@ -122,15 +117,6 @@ export default function EditActivityForm({
       setIsModalOpen(true);
     },
   });
-
-  const handleAddressSelect = (data: Address) => {
-    setValue('address', data.address, { shouldValidate: true });
-    setIsAddressModalOpen(false);
-  };
-
-  const customCommands = commands
-    .getCommands()
-    .filter((command) => command.name !== 'image');
 
   const uploadImages = async (files: File[]) => {
     const uploadedUrls: string[] = [];
@@ -205,10 +191,6 @@ export default function EditActivityForm({
     router.push('/mypage/myActivities');
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <MyPageLayout>
       <FormProvider {...methods}>
@@ -249,20 +231,13 @@ export default function EditActivityForm({
               maxWidth="792px"
             />
             <h3>설명</h3>
-            <MDEditor
-              className="custom-editor [&_.w-md-editor-text]:h-full"
+            <MarkdownEditor
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
                 trigger('description');
               }}
-              previewOptions={{
-                remarkPlugins: [remarkGfm],
-              }}
-              commands={customCommands}
-              highlightEnable={false}
-              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -279,39 +254,12 @@ export default function EditActivityForm({
               error={errors.price}
             />
             <h3>주소</h3>
-            <div className="flex items-center">
-              <Input
-                name="address"
-                type="text"
-                placeholder="주소"
-                register={register('address')}
-                error={errors.address}
-                disabled={true}
-                maxWidth="765px"
-              />
-              <div className="mt-4 h-58 w-80">
-                <Button
-                  className="ml-10 h-full rounded-md"
-                  type="button"
-                  onClick={() => setIsAddressModalOpen(true)}
-                >
-                  검색
-                </Button>
-              </div>
-            </div>
-            <input
-              name="detailAddress"
-              type="text"
-              placeholder="상세 주소"
-              className="dark-base basic-input -mt-10 max-w-792"
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              trigger={trigger}
+              errors={errors}
             />
-            <BaseModal
-              isOpen={isAddressModalOpen}
-              onClose={() => setIsAddressModalOpen(false)}
-              className="w-full max-w-600 px-24 py-45"
-            >
-              <DaumPostcode onComplete={handleAddressSelect} />
-            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime
               isEditMode={true}
