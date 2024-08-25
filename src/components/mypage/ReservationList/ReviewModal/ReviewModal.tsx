@@ -92,12 +92,14 @@ export default function ReviewModal({
       >
         <div
           ref={modalRef}
-          className="relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-auto lg:min-h-800 lg:w-600"
+          className="dark-base relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-auto lg:min-h-800 lg:w-600"
         >
           <div className="flex items-center justify-between">
-            <span className="text-2xl-bold text-custom-black">후기작성</span>
+            <span className="dark-base text-2xl-bold text-custom-black">
+              후기작성
+            </span>
             <button type="button" onClick={onClose}>
-              <XIcon className="size-48 fill-custom-gray-700" />
+              <XIcon className="size-48 fill-custom-gray-700 dark:fill-white" />
             </button>
           </div>
 
@@ -112,15 +114,15 @@ export default function ReviewModal({
                 />
               </div>
               <div className="flex flex-col gap-6">
-                <span className="text-16 font-bold text-nomad-black md:text-2xl-bold">
+                <span className="dark-base text-16 font-bold text-nomad-black md:text-2xl-bold">
                   {reservation.activity.title}
                 </span>
-                <span className="text-14 font-normal text-custom-gray-700 md:text-lg-bold">
+                <span className="text-14 font-normal text-custom-gray-700 dark:text-white md:text-lg-bold">
                   {reservation.date} / {reservation.startTime}-
                   {reservation.endTime} / {reservation.headCount}명
                 </span>
                 <hr />
-                <span className="text-20 font-bold text-nomad-black md:text-xl-bold">
+                <span className="dark-base text-20 font-bold text-nomad-black md:text-xl-bold">
                   ₩ {formatNumber(reservation.totalPrice)}
                 </span>
               </div>
@@ -130,8 +132,10 @@ export default function ReviewModal({
             </div>
 
             <div className="my-4">
-              <span className="text-2xl-bold text-nomad-black">태그 선택</span>
-              <p className="text-lg mt-10 text-nomad-black">
+              <span className="dark-base text-2xl-bold text-nomad-black">
+                태그 선택
+              </span>
+              <p className="text-lg dark-base mt-10 text-nomad-black">
                 태그는 총 5개 선택 가능합니다.
               </p>
               <div className="my-20 flex flex-wrap gap-10">
@@ -147,7 +151,7 @@ export default function ReviewModal({
                   >
                     <div>{emoji}</div>
                     <span
-                      className={`mx-2 text-lg-medium ${selectedTags.includes(name) ? 'text-lg-bold text-custom-blue-300' : 'text-nomad-black'}`}
+                      className={`mx-2 text-lg-medium ${selectedTags.includes(name) ? 'text-lg-bold text-custom-blue-300' : 'text-nomad-black dark:text-white'}`}
                     >
                       {name}
                     </span>
