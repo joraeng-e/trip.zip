@@ -23,7 +23,7 @@ export default function MyActivities() {
   const lastCardRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyActivities();
 
   const sortedActivities = data

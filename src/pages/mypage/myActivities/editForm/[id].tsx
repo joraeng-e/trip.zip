@@ -65,7 +65,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function EditActivityForm({
   activityData,
   activityId,
-  error,
 }: EditActivityFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
