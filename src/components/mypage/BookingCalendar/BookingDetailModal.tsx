@@ -4,6 +4,7 @@ import {
   getMyActivitiesReservedSchedule,
   patchMyActivitiesReservation,
 } from '@/libs/api/myActivities';
+import { sendNotification } from '@/libs/api/myNotifications';
 import { PaperPlaneIcon, XIcon } from '@/libs/utils/Icon';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -126,6 +127,12 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'confirmed',
+      });
     } catch (error) {
       console.error('Failed to confirm reservation', error);
     }
@@ -144,6 +151,12 @@ export default function BookingDetailModal({
         ),
       );
       fetchBookingDetails();
+
+      await sendNotification({
+        reservationId,
+        activityId,
+        status: 'declined',
+      });
     } catch (error) {
       console.error('Failed to decline reservation', error);
     }

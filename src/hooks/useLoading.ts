@@ -9,7 +9,11 @@ export const useLoading = () => {
   useEffect(() => {
     const start = (url: string) => {
       // 쿼리 스트링이 포함된 URL은 로딩 화면을 보이지 않도록 처리
-      if (!hasLoadedPages.has(url) && !url.includes('?')) {
+      if (
+        !hasLoadedPages.has(url) &&
+        !url.includes('?') &&
+        !url.includes('#')
+      ) {
         setShowLoading(true);
       }
     };
@@ -26,7 +30,11 @@ export const useLoading = () => {
     // 쿼리 파라미터 변경 감지
     const handleQueryChange = (url: string) => {
       // 쿼리 스트링이 포함된 URL은 로딩 화면을 보이지 않도록 처리
-      if (!hasLoadedPages.has(url) && !url.includes('?')) {
+      if (
+        !hasLoadedPages.has(url) &&
+        !url.includes('?') &&
+        !url.includes('#')
+      ) {
         setShowLoading(false);
       }
     };

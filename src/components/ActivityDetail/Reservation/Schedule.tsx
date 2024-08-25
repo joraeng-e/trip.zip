@@ -2,7 +2,9 @@ import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
 import { notify } from '@/components/commons/Toast';
 import { postReservations } from '@/libs/api/activities';
+import { sendSubscriptionToServer } from '@/libs/api/myNotifications';
 import { getUser } from '@/libs/api/user';
+import { requestForToken } from '@/libs/firebase';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   GetActivityDetailResponse,
@@ -70,9 +72,8 @@ export default function Schedule(props: ScheduleProps) {
 
   const handleReservationClick = () => {
     if (!getCookie('refreshToken')) {
-      notify('warning', '로그인이 필요한 서비스입니다.', () => {
-        router.push('/login');
-      });
+      notify('warning', '로그인이 필요한 서비스입니다.');
+      router.push('/login');
     } else if (isSameUser) {
       router.push('/mypage/myActivities');
     }
@@ -82,12 +83,18 @@ export default function Schedule(props: ScheduleProps) {
 
   const mutation = useMutation({
     mutationFn: postReservations,
-    onSuccess: () => {
+    onSuccess: async (data) => {
       if (onReservationComplete) {
         onReservationComplete();
         queryClient.invalidateQueries({ queryKey: ['reservations'] });
       }
       notify('success', '예약이 성공적으로 완료되었습니다.');
+
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const token = await requestForToken();
+        await sendSubscriptionToServer({ id: data.id, token: token as string });
+      }
     },
     onError: (error: Error) => {
       if (onReservationComplete) {

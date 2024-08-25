@@ -1,14 +1,13 @@
+import { useAuthBoundary } from '@/hooks/useAuthBoundary';
 import { useLoading } from '@/hooks/useLoading';
-import { getCookie } from 'cookies-next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 
 import Footer from '../Footer';
 import Header from '../Header';
 import Loading from '../Loading';
-import { notify } from '../Toast';
 
 type LayoutProps = {
   children: ReactNode;
@@ -46,33 +45,27 @@ export default function Layout({
   showHeader = true,
   showFooter = true,
 }: LayoutProps) {
-  const pathname = usePathname();
   const router = useRouter();
+  const pathname = usePathname();
+  const loading = useLoading();
 
-  useEffect(() => {
-    if (MYPAGE_PATHS.includes(pathname)) {
-      const token = getCookie('accessToken');
-      if (!token) {
-        notify('warning', '로그인이 필요한 서비스입니다.');
-        router.push('/login');
-      }
-    }
-  }, [pathname, router]);
+  useAuthBoundary();
+
+  console.log(pathname);
 
   if (pathname === '/') {
     showHeader = false;
   }
 
-  if (AUTH_PATHS.includes(pathname)) {
+  if (
+    (pathname && pathname.startsWith('/signup')) ||
+    (pathname && pathname.startsWith('/login'))
+  ) {
     showHeader = false;
     showFooter = false;
   }
 
-  const isMyPage = pathname
-    ? MYPAGE_PATHS.some((path) => pathname.startsWith(path))
-    : false;
-
-  const loading = useLoading();
+  const isMyPage = pathname ? pathname.startsWith('/mypage') : false;
 
   return (
     <>
