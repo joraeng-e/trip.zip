@@ -1,12 +1,12 @@
-import AddressInput from '@/components/activityform/AddressInput';
-import DateTime from '@/components/activityform/DateTime';
-import ImageUploader from '@/components/activityform/ImageUpload';
-import MarkdownEditor from '@/components/activityform/MarkdownEditor';
-import Select from '@/components/activityform/Select';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
+import AddressInput from '@/components/mypage/activityform/AddressInput';
+import DateTime from '@/components/mypage/activityform/DateTime';
+import ImageUploader from '@/components/mypage/activityform/ImageUpload';
+import MarkdownEditor from '@/components/mypage/activityform/MarkdownEditor';
+import Select from '@/components/mypage/activityform/Select';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';

@@ -1,9 +1,9 @@
-import MyCard from '@/components/activitiesManagement/MyCard';
 import Button from '@/components/commons/Button';
 import DotLoading from '@/components/commons/Loading/DotLoading';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
+import MyCard from '@/components/mypage/activitiesManagement/MyCard';
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

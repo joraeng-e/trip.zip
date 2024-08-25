@@ -1,3 +1,5 @@
+import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { deleteMyActivity } from '@/libs/api/myActivities';
 import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -6,9 +8,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-
-import Modal from '../commons/Modal';
-import { notify } from '../commons/Toast';
 
 interface MyCardProps {
   id: number;
