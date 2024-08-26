@@ -62,6 +62,18 @@ export default function ModalRoot(props: ModalRootProps) {
     };
   }, [open]); // open 값이 변경될 때마다 리스너를 업데이트
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [open]);
+
   const contextValue: ModalContextProps = {
     open,
     handleOpenChange,
