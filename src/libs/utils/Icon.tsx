@@ -1,10 +1,9 @@
 import TimeSeparatorIcon from '@/../../public/icon/timeSeparatoricon.svg';
 
-
-
 import ArrowDown from '/public/icon/arrowDown.svg';
 import ArrowLeft from '/public/icon/arrowLeft.svg';
 import ArrowRight from '/public/icon/arrowRight.svg';
+import BackIcon from '/public/icon/backIcon.svg';
 import BedIcon from '/public/icon/bedIcon.svg';
 import CalendarIcon from '/public/icon/calendarIcon.svg';
 import Cloud from '/public/icon/cloud.svg';
@@ -42,13 +41,13 @@ import ProfileCalendarIcon from '/public/icon/profileCalendarIcon.svg';
 import ProfileChecklistIcon from '/public/icon/profileChecklistICon.svg';
 import ProfileCogIcon from '/public/icon/profileCogIcon.svg';
 import RoundStar from '/public/icon/roundStar.svg';
+import SearchIcon from '/public/icon/searchIcon.svg';
 import StarOffIcon from '/public/icon/starOffIcon.svg';
 import StarOnIcon from '/public/icon/starOnIcon.svg';
 import TwitterIcon from '/public/icon/twitterIcon.svg';
 import XIcon from '/public/icon/xIcon.svg';
 import YoutubeIcon from '/public/icon/youtubeIcon.svg';
 import BaseProfile from '/public/imgs/baseProfile.svg';
-
 
 export {
   BedIcon,
@@ -97,5 +96,7 @@ export {
   StarEmoji,
   DoubleArrowPrev,
   DoubleArrowNext,
-  Cloud
+  Cloud,
+  SearchIcon,
+  BackIcon,
 };

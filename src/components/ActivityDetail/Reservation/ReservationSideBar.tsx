@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 
-import Schedule from './Schedule';
+import Schedule from './Schedule/Schedule';
 
 interface ReservationSideBarProps {
   detailData: GetActivityDetailResponse;
@@ -70,9 +70,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
         filteredSchedules.length > 0 ? filteredSchedules : null,
       );
       setDate(dateValue);
-      console.log(Date, 'data 변경됨 ');
     }
-    console.log('호출되었음');
   };
 
   const tileClassName = ({ date }: { date: Date }) => {
@@ -92,7 +90,6 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
     schedule: { startTime: string; endTime: string; id: number },
   ) => {
     setActiveIndex(index);
-    console.log(`선택한 스케줄 ID: ${schedule.id}`);
   };
 
   const totalPrice = price * guestCount;
@@ -107,7 +104,7 @@ export default function ReservationSideBar(props: ReservationSideBarProps) {
 
   return (
     <div
-      className={`z-20 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black dark:text-white ${className || 'sticky top-160'}`}
+      className={`z-12 w-full rounded-lg border-2 border-custom-gray-400 p-16 text-nomad-black dark:text-white ${className || 'sticky top-160'}`}
     >
       <div className="dark-base relative my-20 flex items-center justify-center text-center text-2xl-bold">
         {totalPrice.toLocaleString()} /

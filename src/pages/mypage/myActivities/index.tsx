@@ -1,13 +1,13 @@
-import MyCard from '@/components/activitiesManagement/MyCard';
 import Button from '@/components/commons/Button';
 import DotLoading from '@/components/commons/Loading/DotLoading';
 import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
+import MyCard from '@/components/mypage/activitiesManagement/MyCard';
 import { getMyActivities } from '@/libs/api/myActivities';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const useMyActivities = (size = 10) => {
   return useInfiniteQuery({
@@ -23,18 +23,17 @@ export default function MyActivities() {
   const lastCardRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMyActivities();
 
-  const sortedActivities = useMemo(() => {
-    if (!data) return [];
-    return data.pages
-      .flatMap((page) => page.activities)
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-  }, [data]);
+  const sortedActivities = data
+    ? data.pages
+        .flatMap((page) => page.activities)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+    : [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -60,15 +59,12 @@ export default function MyActivities() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const handleConfirm = () => {
-    router.push('myActivities/registerForm');
+    router.push('myActivities/register');
   };
-
-  if (status === 'pending') return <div>로딩 중...</div>;
-  if (status === 'error') return <div>에러가 발생했습니다.</div>;
 
   return (
     <MyPageLayout>
-      <div className="z-50 mb-50 ml-10">
+      <div className="z-50 mb-100 ml-10">
         <div className="mb-24 flex items-center justify-between">
           <h1 className="text-3xl-bold">내 체험 관리</h1>
           <Modal.Root>

@@ -169,7 +169,7 @@ export default function Activites() {
               />
               <DropdownContainer value={sort} setValue={setSort} />
             </div>
-            <h1 className="my-24 text-18 font-semibold text-nomad-black md:mb-32 md:mt-35 md:text-36 dark:text-white">
+            <h1 className="my-24 text-18 font-semibold text-nomad-black dark:text-white md:mb-32 md:mt-35 md:text-36">
               {category || <>🛼 모든 체험</>}
             </h1>
           </div>

@@ -4,7 +4,7 @@ import { Category } from '@trip.zip-api';
 import { EmblaOptionsType } from 'embla-carousel';
 import router from 'next/router';
 
-import EmblaCarousel from './EmblaCarousel';
+import RecommendCarousel from './RecommendCarousel';
 
 interface RecommendProps {
   category: Category;
@@ -44,21 +44,22 @@ export default function Recommend(props: RecommendProps) {
 
   return (
     <>
-      <div className="dark-base relative my-40 flex items-center justify-between text-xl-bold text-nomad-black">
+      <div className="dark-base relative my-40 flex items-center justify-between overflow-hidden text-xl-bold text-nomad-black md:overflow-auto">
         {category}과 관련된 다른 체험을 보고 싶다면?
       </div>
-      {filteredActivities.length > 0 ? (
-        <EmblaCarousel
+      {filteredActivities.length > 0 && (
+        <RecommendCarousel
           slides={SLIDES}
           options={OPTIONS}
           data={filteredActivities}
           id={activityId}
         />
-      ) : (
-        <div className="dark-base flex h-400 items-center justify-center text-center text-2lg-regular text-nomad-black">
-          다른 체험이 없습니다.
-        </div>
-      )}
+      )}{' '}
+      : (
+      <div className="dark-base flex h-400 items-center justify-center text-center text-2lg-regular text-nomad-black">
+        다른 체험이 없습니다.
+      </div>
+      )
     </>
   );
 }

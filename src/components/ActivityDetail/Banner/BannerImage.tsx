@@ -1,9 +1,11 @@
 import NoImage from '@/../public/imgs/no-img.png';
+import Modal from '@/components/commons/Modal';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import ImageModal from './BannerImageModal';
+import BannerButton from './BannerButton';
 import BlurBannerImage from './BlurBannerImage';
+import ImageGallery from './ImageGallery';
 
 interface ImageProps {
   bannerImageUrl: string;
@@ -13,17 +15,28 @@ interface ImageProps {
 
 export default function BannerImage(props: ImageProps) {
   const { bannerImageUrl, subImageUrl, className } = props;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   const Images = [bannerImageUrl, ...(subImageUrl || [])];
+
+  const totalImages = Images.length;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
+
+  const nextImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
+  };
+
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
+  };
+
+  useEffect(() => {
+    if (thumbnailRef.current) {
+      const thumbnailWidth = thumbnailRef.current.clientWidth / totalImages;
+      const offset = currentIndex * thumbnailWidth - thumbnailWidth / 2;
+      thumbnailRef.current.scrollTo({ left: offset, behavior: 'smooth' });
+    }
+  }, [currentIndex, totalImages]);
 
   const commonImageClass =
     'object-cover transition duration-300 group-hover:brightness-75';
@@ -31,7 +44,7 @@ export default function BannerImage(props: ImageProps) {
   const smallImageClass = 'group relative h-250 w-full';
 
   return (
-    <div className="hidden pt-10 md:block">
+    <div className="mb-32 mt-40 hidden md:block">
       {subImageUrl && subImageUrl.length === 0 ? (
         <div
           className={`relative flex h-500 w-full items-center justify-center overflow-hidden rounded-xl ${className}`}
@@ -40,9 +53,9 @@ export default function BannerImage(props: ImageProps) {
         </div>
       ) : (
         <div
-          className={`grid grid-cols-1 gap-2 md:grid-cols-2 ${className} relative`}
+          className={`grid grid-cols-1 gap-10 md:grid-cols-2 ${className} relative`}
         >
-          <div className={commonContainerClass}>
+          <div className={`h-full ${commonContainerClass}`}>
             <Image
               src={bannerImageUrl}
               alt="banner"
@@ -52,7 +65,7 @@ export default function BannerImage(props: ImageProps) {
           </div>
 
           {subImageUrl && subImageUrl.length === 1 && (
-            <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className="col-span-1 grid grid-cols-1 gap-10">
               <div className={commonContainerClass}>
                 <Image
                   src={subImageUrl[0]}
@@ -65,7 +78,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length === 2 && (
-            <div className="col-span-1 grid grid-cols-1 gap-2">
+            <div className="col-span-1 grid grid-cols-1 gap-10">
               <div className={commonContainerClass}>
                 <Image
                   src={subImageUrl[0]}
@@ -78,7 +91,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length === 3 && (
-            <div className="col-span-1 grid grid-cols-2 gap-2">
+            <div className="col-span-1 grid grid-cols-2 gap-10">
               {subImageUrl.slice(0, 3).map((url, index) => (
                 <div key={index} className={smallImageClass}>
                   <Image
@@ -101,7 +114,7 @@ export default function BannerImage(props: ImageProps) {
           )}
 
           {subImageUrl && subImageUrl.length > 3 && (
-            <div className="col-span-1 grid grid-cols-2 gap-2">
+            <div className="col-span-1 grid grid-cols-2 gap-10">
               {subImageUrl.slice(0, 4).map((url, index) => {
                 const roundedClass =
                   index === 1
@@ -123,19 +136,20 @@ export default function BannerImage(props: ImageProps) {
             </div>
           )}
 
-          <button
-            onClick={handleOpenModal}
-            className="dark-base dark-border absolute bottom-20 right-20 h-40 w-120 rounded-3xl border border-custom-gray-400 bg-white text-md-regular transition hover:bg-custom-gray-800 hover:text-white"
-          >
-            사진 전체 보기
-          </button>
-          <div className="max-w-1200">
-            <ImageModal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              images={Images}
-            />
-          </div>
+          <Modal.Root>
+            <Modal.Trigger>
+              <BannerButton />
+            </Modal.Trigger>
+            <Modal.Content>
+              <ImageGallery
+                images={Images}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+                nextImage={nextImage}
+                prevImage={prevImage}
+              />
+            </Modal.Content>
+          </Modal.Root>
         </div>
       )}
     </div>
