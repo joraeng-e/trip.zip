@@ -26,7 +26,7 @@ export default function ReviewModal({
 }: ReviewModalProps) {
   const [rating, setRating] = useState<number>(0);
   const [content, setContent] = useState<string>('');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]); // 선택된 태그 상태
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const modalRef = useRef<HTMLDivElement>(null);
   useClickOutside(modalRef, onClose);
@@ -77,8 +77,12 @@ export default function ReviewModal({
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = 'unset';
     }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [isOpen]);
 
   return (
