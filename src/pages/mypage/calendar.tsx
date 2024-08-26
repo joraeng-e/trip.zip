@@ -1,4 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
+import BookingDetailModal from '@/components/mypage/BookingCalendar/BookingDetailModal.tsx/BookingDetailModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
 import {
@@ -12,7 +13,7 @@ import {
 } from '@trip.zip-api';
 import React, { useEffect, useState } from 'react';
 
-import Calendar from '../../components/mypage/BookingCalendar/BookingCalendar';
+import Calendar from '../../components/mypage/BookingCalendar/Calendar';
 
 type ActivityListItem = {
   id: number;
@@ -20,7 +21,12 @@ type ActivityListItem = {
 };
 
 export default function ReservationStatus() {
-  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  const prevIcon = (
+    <DoubleArrowPrev aria-label="이전 달" className="size-24 dark:invert" />
+  );
+  const nextIcon = (
+    <DoubleArrowNext aria-label="다음 달" className="size-24 dark:invert" />
+  );
 
   const today = new Date();
   const yearNow = today.getFullYear();
@@ -29,27 +35,12 @@ export default function ReservationStatus() {
   const [currentYear, setCurrentYear] = useState(yearNow);
   const [currentMonth, setCurrentMonth] = useState(monthNow);
 
-  const handleMonthPrev = () => {
-    if (currentMonth === 0) {
-      setCurrentYear(currentYear - 1);
-      setCurrentMonth(11); // 12월로 설정
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
-  };
-
-  const handleMonthNext = () => {
-    if (currentMonth === 11) {
-      setCurrentYear(currentYear + 1);
-      setCurrentMonth(0); // 1월로 설정
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
-  };
-
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
   const [activityId, setActivityId] = useState<number>(0);
   const [activityTitle, setActivityTitle] = useState<string>('');
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
 
   const [monthlyData, setMonthlyData] =
     useState<GetMyActivitiesReservationDashboardResponse>([]);
@@ -89,7 +80,7 @@ export default function ReservationStatus() {
   };
   useEffect(() => {
     fetchBookingStatus();
-  }, [activityId, currentMonth, currentYear]);
+  }, [activityId, currentYear, currentMonth]);
 
   useEffect(() => {
     const selectedActivity = activityList.find(
@@ -100,87 +91,84 @@ export default function ReservationStatus() {
     }
   }, [activityTitle, activityList]);
 
+  // 날짜 별 예약정보 리스트업
+  const bookingMap = new Map<string, Record<string, string>>();
+
+  monthlyData.forEach((booking) => {
+    const transformedReservations = {
+      completed: String(booking.reservations.completed),
+      confirmed: String(booking.reservations.confirmed),
+      pending: String(booking.reservations.pending),
+    };
+
+    bookingMap.set(booking.date, transformedReservations);
+  });
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDate('');
+    fetchBookingStatus();
+  };
+
+  const handleDateClick = (date: string) => {
+    setSelectedDate(date);
+    setIsModalOpen(true);
+  };
+
   return (
     <MyPageLayout>
       <h1 className="mb-24 text-3xl-bold">예약 현황</h1>
       {activityList.length > 0 ? (
         <>
           <div className="flex h-full w-full min-w-342 flex-col gap-24">
-            <section className="flex flex-col gap-32">
-              <Dropdown
-                selected={activityTitle}
-                setSelected={setActivityTitle}
-                maxWidth={792}
-                height={56}
+            <Dropdown
+              selected={activityTitle}
+              setSelected={setActivityTitle}
+              maxWidth={792}
+              height={56}
+            >
+              <Dropdown.Button
+                className="basic-input flex w-full items-center justify-between"
+                showArrow={true}
               >
-                <Dropdown.Button
-                  className="basic-input flex w-full items-center justify-between"
-                  showArrow={true}
-                >
-                  {activityTitle}
-                </Dropdown.Button>
-                <Dropdown.Body>
-                  {activityList?.map((activity, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      value={activity.title}
-                      // 첫번째 option 기본값으로 지정
-                      {...(index === 0 && { selected: true })}
-                    >
-                      {activity.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Body>
-              </Dropdown>
-            </section>
+                {activityTitle}
+              </Dropdown.Button>
+              <Dropdown.Body>
+                {activityList?.map((activity, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    value={activity.title}
+                    // 첫번째 option 기본값으로 지정
+                    {...(index === 0 && { selected: true })}
+                  >
+                    {activity.title}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Body>
+            </Dropdown>
           </div>
-          <div className="mb-100 mt-24 flex flex-col gap-17">
-            {/* control bar */}
-            <div className="flex h-42 justify-center gap-10">
-              <button
-                type="button"
-                onClick={handleMonthPrev}
-                className="outline-none hover:opacity-40"
-              >
-                <DoubleArrowPrev
-                  aria-label="이전 달"
-                  className="size-24 dark:invert"
+          <div className="mb-100 mt-24 md:relative">
+            <Calendar
+              year={currentYear}
+              month={currentMonth}
+              onChangeYear={setCurrentYear}
+              onChangeMonth={setCurrentMonth}
+              dayFormat={'eng'}
+              dataMap={bookingMap}
+              prevIcon={prevIcon}
+              nextIcon={nextIcon}
+              onClickDate={handleDateClick}
+            />
+            {isModalOpen && (
+              <div className="md:flex-center fixed inset-0 top-70 backdrop-blur-sm md:absolute md:top-0">
+                <BookingDetailModal
+                  activityId={activityId}
+                  date={selectedDate}
+                  isOpen={isModalOpen}
+                  onClose={handleCloseModal}
                 />
-              </button>
-              {/* todo: 연도, 날짜 드롭다운 추가 */}
-              <button
-                type="button"
-                className="text-20 font-bold outline-none hover:opacity-40"
-              >
-                {currentYear}년
-              </button>
-              <button
-                type="button"
-                className="text-20 font-bold outline-none hover:opacity-40"
-              >
-                {currentMonth + 1}월
-              </button>
-              <button
-                type="button"
-                onClick={handleMonthNext}
-                className="outline-none hover:opacity-40"
-              >
-                <DoubleArrowNext
-                  aria-label="다음 달"
-                  className="size-24 dark:invert"
-                />
-              </button>
-            </div>
-            <div className="relative">
-              <Calendar
-                currentYear={currentYear}
-                currentMonth={currentMonth}
-                days={days}
-                monthlyData={monthlyData}
-                activityId={activityId}
-                onRefresh={fetchBookingStatus}
-              />
-            </div>
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -189,3 +177,5 @@ export default function ReservationStatus() {
     </MyPageLayout>
   );
 }
+
+// ${isModalOpen ? 'border-custom-gray-100' : 'border-custom-gray-400'}

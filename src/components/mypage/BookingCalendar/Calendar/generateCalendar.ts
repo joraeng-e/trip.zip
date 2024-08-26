@@ -4,7 +4,7 @@ import {
   getLocalDateString,
 } from '@/libs/utils/dateUtils';
 
-type DateObject = {
+export type DateObject = {
   date: Date;
   day: number;
   isCurrentMonth: boolean;
