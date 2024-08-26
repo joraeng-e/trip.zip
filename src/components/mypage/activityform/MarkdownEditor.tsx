@@ -3,6 +3,7 @@ import '@uiw/react-markdown-preview/markdown.css';
 import MDEditor, { commands } from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
 import React from 'react';
+import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 interface MarkdownEditorProps {
@@ -27,6 +28,7 @@ export default function MarkdownEditor({
       onChange={(val) => onChange(val || '')}
       previewOptions={{
         remarkPlugins: [remarkGfm],
+        rehypePlugins: [rehypeRaw],
       }}
       commands={customCommands}
       highlightEnable={false}
