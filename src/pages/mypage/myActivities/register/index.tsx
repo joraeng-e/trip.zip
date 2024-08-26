@@ -1,8 +1,12 @@
-import DateTime from '@/components/ActivitiyForm/DateTime';
-import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
-import BaseModal from '@/components/ActivityDetail/BaseModal';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input/Input';
+import Modal from '@/components/commons/Modal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
-import { useDarkMode } from '@/context/DarkModeContext';
+import AddressInput from '@/components/mypage/activityform/AddressInput';
+import DateTime from '@/components/mypage/activityform/DateTime';
+import ImageUploader from '@/components/mypage/activityform/ImageUpload';
+import MarkdownEditor from '@/components/mypage/activityform/MarkdownEditor';
+import Select from '@/components/mypage/activityform/Select';
 import { postActivities, postActivityImage } from '@/libs/api/activities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import { activitiesSchema } from '@/libs/utils/schemas/activitiesSchema';
@@ -14,20 +18,10 @@ import {
   PostActivitiesRequest,
   PostActivitiesResponse,
 } from '@trip.zip-api';
-import '@uiw/react-markdown-preview/markdown.css';
-import MDEditor, { commands } from '@uiw/react-md-editor';
-import '@uiw/react-md-editor/markdown-editor.css';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { UseFormProps } from 'react-hook-form';
-import remarkGfm from 'remark-gfm';
-
-import Button from '../../../../components/commons/Button';
-import Input from '../../../../components/commons/Input/Input';
-import Modal from '../../../../components/commons/Modal';
-import Select from '../../../../components/commons/Select';
 
 export default function MyActivityForm() {
   const router = useRouter();
@@ -36,14 +30,9 @@ export default function MyActivityForm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [category, setCategory] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState('');
-  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
-  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
-
-  const { isDarkMode } = useDarkMode();
-
+  const [bannerImage, setBannerImage] = useState<File | null>(null);
+  const [subImages, setSubImages] = useState<File[]>([]);
   const formOptions: UseFormProps<ActivitiesFormData> = {
     resolver: yupResolver(activitiesSchema),
     mode: 'onChange',
@@ -60,23 +49,7 @@ export default function MyActivityForm() {
   } = methods;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: PostActivitiesRequest) => {
-      if (bannerImageFile) {
-        const bannerResponse = await postActivityImage(bannerImageFile);
-        data.bannerImageUrl = bannerResponse.activityImageUrl;
-      }
-
-      if (subImageFiles.length > 0) {
-        const subImageResponses = await Promise.all(
-          subImageFiles.map((file) => postActivityImage(file)),
-        );
-        data.subImageUrls = subImageResponses.map(
-          (response) => response.activityImageUrl,
-        );
-      }
-
-      return postActivities(data);
-    },
+    mutationFn: postActivities,
     onSuccess: (data: PostActivitiesResponse) => {
       console.log('등록 성공', data);
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -92,35 +65,38 @@ export default function MyActivityForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<ActivitiesFormData> = async ({
-    price,
-    ...rest
-  }) => {
-    const roundedPrice = Math.round(price);
-    const requestData: PostActivitiesRequest = {
-      ...rest,
-      price: roundedPrice,
-      description: markdownValue,
-      category: category as Category,
-      address,
-      subImageUrls: [],
-    };
-    mutate(requestData);
+  const uploadImages = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      const { activityImageUrl } = await postActivityImage(file);
+      uploadedUrls.push(activityImageUrl);
+    }
+    return uploadedUrls;
   };
 
-  const handleCategoryChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(value as Category);
-    setValue('category', value as Category);
-    trigger('category');
-  };
+  const onSubmit: SubmitHandler<ActivitiesFormData> = async (formData) => {
+    try {
+      let bannerImageUrl = '';
+      if (bannerImage) {
+        [bannerImageUrl] = await uploadImages([bannerImage]);
+      }
 
-  const handleAddressSelect = (data: Address) => {
-    setAddress(data.address);
-    setValue('address', data.address);
-    trigger('address');
-    setIsAddressModalOpen(false);
+      const subImageUrls = await uploadImages(subImages);
+      const roundedPrice = Math.round(formData.price);
+      const requestData: PostActivitiesRequest = {
+        ...formData,
+        price: roundedPrice,
+        description: markdownValue,
+        category: category as Category,
+        bannerImageUrl,
+        subImageUrls,
+      };
+      mutate(requestData);
+    } catch (error) {
+      console.error('이미지 업로드 중 오류 발생:', error);
+      setModalMessage('이미지 업로드 중 오류가 발생했습니다.');
+      setIsModalOpen(true);
+    }
   };
 
   const resetModalMessage = () => {
@@ -129,18 +105,18 @@ export default function MyActivityForm() {
     if (isSuccessMessage) router.push('/mypage/myActivities');
   };
 
-  const customCommands = commands
-    .getCommands()
-    .filter((command) => command.name !== 'image');
-
-  const handleBannerImageSelect = (files: File[]) => {
+  const handleBannerImageChange = (files: File[]) => {
     if (files.length > 0) {
-      setBannerImageFile(files[0]);
+      setBannerImage(files[0]);
+      setValue('bannerImageUrl', 'selected', { shouldValidate: true });
+    } else {
+      setBannerImage(null);
+      setValue('bannerImageUrl', '', { shouldValidate: true });
     }
   };
 
-  const handleSubImageSelect = (files: File[]) => {
-    setSubImageFiles((prev) => [...prev, ...files]);
+  const handleSubImagesChange = (files: File[]) => {
+    setSubImages(files);
   };
 
   const {
@@ -154,7 +130,7 @@ export default function MyActivityForm() {
   return (
     <MyPageLayout>
       <FormProvider {...methods}>
-        <form className="mb-60 px-10" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-60" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 등록</h1>
             {modalMessage && (
@@ -168,7 +144,7 @@ export default function MyActivityForm() {
               </Modal.Root>
             )}
           </div>
-          <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
+          <div className="flex flex-col gap-20 [&>h3]:mt-20 [&>h3]:text-2xl-bold">
             <Input
               name="title"
               type="text"
@@ -179,26 +155,24 @@ export default function MyActivityForm() {
             />
             <Select
               value={category}
-              onChange={handleCategoryChange}
+              onChange={(value) => {
+                setCategory(value as Category);
+                setValue('category', value as Category);
+                trigger('category');
+              }}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
               error={categoryError?.message}
               maxWidth="792px"
             />
             <h3>설명</h3>
-            <MDEditor
-              className="[&_.w-md-editor-text]:h-400"
+            <MarkdownEditor
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
+                trigger('description');
               }}
-              previewOptions={{
-                remarkPlugins: [remarkGfm],
-              }}
-              commands={customCommands}
-              highlightEnable={false}
-              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -215,39 +189,12 @@ export default function MyActivityForm() {
               error={price}
             />
             <h3>주소</h3>
-            <div className="flex">
-              <Input
-                name="address"
-                type="text"
-                placeholder="주소"
-                register={register('address')}
-                error={errors.address}
-                disabled={true}
-                maxWidth="765px"
-              />
-              <div className="mt-4 h-58 w-80">
-                <Button
-                  className="ml-10 h-full rounded-md"
-                  type="button"
-                  onClick={() => setIsAddressModalOpen(true)}
-                >
-                  검색
-                </Button>
-              </div>
-            </div>
-            <input
-              name="detailAddress"
-              type="text"
-              placeholder="상세 주소"
-              className="dark-base basic-input max-w-792"
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              trigger={trigger}
+              errors={errors}
             />
-            <BaseModal
-              isOpen={isAddressModalOpen}
-              onClose={() => setIsAddressModalOpen(false)}
-              className="w-full max-w-600 px-24 py-45"
-            >
-              <DaumPostcode onComplete={handleAddressSelect} />
-            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime />
             <h3>배너 이미지</h3>
@@ -255,7 +202,7 @@ export default function MyActivityForm() {
               name="bannerImageUrl"
               maxImages={1}
               label="배너 이미지 등록"
-              onFilesSelected={handleBannerImageSelect}
+              onImageChange={handleBannerImageChange}
             />
             {bannerImageUrl && (
               <p className="-mt-15 pl-8 text-xs-regular text-custom-red-200">
@@ -268,7 +215,7 @@ export default function MyActivityForm() {
                 name="subImageUrls"
                 maxImages={4}
                 label="소개 이미지 등록"
-                onFilesSelected={handleSubImageSelect}
+                onImageChange={handleSubImagesChange}
               />
             </div>
             {subImageUrls && (
@@ -276,11 +223,11 @@ export default function MyActivityForm() {
                 {subImageUrls.message}
               </p>
             )}
-            <p className="text-custom-gray-800">
+            <p className="mb-20 text-custom-gray-800">
               *소개이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          <div className="flex items-center justify-end gap-10">
+          <div className="flex items-center justify-center gap-10 md:justify-end">
             <Button
               type="button"
               className="mt-20 max-w-120 rounded-md"

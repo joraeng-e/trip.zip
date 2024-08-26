@@ -113,9 +113,9 @@ export default function DateTime({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex max-w-792 items-center justify-between gap-5">
-        <div className="flex w-full min-w-50 max-w-380 flex-col">
+    <div className="max-w-800 space-y-4">
+      <div className="flex flex-col items-center justify-between gap-5 md:flex-row">
+        <div className="flex w-full flex-col">
           <label htmlFor="date" className="mb-1">
             날짜
           </label>
@@ -123,7 +123,7 @@ export default function DateTime({
             id="date"
             type="date"
             className={classNames(
-              'dark-base basic-input max-w-380 cursor-pointer',
+              'dark-base basic-input cursor-pointer md:max-w-380',
               {
                 'border-red-500': !!errors.schedules?.message,
               },
@@ -133,56 +133,61 @@ export default function DateTime({
             onChange={handleDateTimeInputChange}
           />
         </div>
-        <div className="flex min-w-50 flex-col">
-          <label htmlFor="startTime" className="mb-1 whitespace-nowrap">
-            시작 시간
-          </label>
-          <input
-            id="startTime"
-            type="time"
+        <div className="flex-center w-full gap-3 md:ml-4">
+          <div className="flex w-full flex-col">
+            <label htmlFor="startTime" className="mb-1 whitespace-nowrap">
+              시작 시간
+            </label>
+            <input
+              id="startTime"
+              type="time"
+              className={classNames(
+                'dark-base basic-input cursor-pointer p-10',
+                {
+                  'border-red-500': !!errors.schedules?.message,
+                },
+              )}
+              value={entry.startTime}
+              onChange={handleDateTimeInputChange}
+            />
+          </div>
+          <div className="flex-center mt-20">
+            <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
+          </div>
+          <div className="flex w-full flex-col">
+            <label htmlFor="endTime" className="mb-1 whitespace-nowrap">
+              종료 시간
+            </label>
+            <input
+              id="endTime"
+              type="time"
+              className={classNames(
+                'dark-base basic-input cursor-pointer p-10',
+                {
+                  'border-red-500': !!errors.schedules?.message,
+                },
+              )}
+              value={entry.endTime}
+              onChange={handleDateTimeInputChange}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleAddEntry}
             className={classNames(
-              'dark-base basic-input max-w-150 cursor-pointer p-10',
+              'mt-23 h-56 w-56 max-w-56 rounded-md md:ml-10',
               {
-                'border-red-500': !!errors.schedules?.message,
+                'cursor-not-allowed text-gray-400': !isValidEntry,
+                'text-green-700 hover:text-green-900 hover:shadow-lg':
+                  !!isValidEntry,
               },
             )}
-            value={entry.startTime}
-            onChange={handleDateTimeInputChange}
-          />
+            disabled={!isValidEntry}
+            aria-label="일정 추가"
+          >
+            <PlusTimeIcon />
+          </button>
         </div>
-        <div className="mt-20 hidden md:block">
-          <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
-        </div>
-        <div className="flex min-w-50 flex-col">
-          <label htmlFor="endTime" className="mb-1 whitespace-nowrap">
-            종료 시간
-          </label>
-          <input
-            id="endTime"
-            type="time"
-            className={classNames(
-              'dark-base basic-input max-w-150 cursor-pointer p-10',
-              {
-                'border-red-500': !!errors.schedules?.message,
-              },
-            )}
-            value={entry.endTime}
-            onChange={handleDateTimeInputChange}
-          />
-        </div>
-        <button
-          type="button"
-          onClick={handleAddEntry}
-          className={classNames('mt-20 h-56 w-56 max-w-56 rounded-md', {
-            'cursor-not-allowed text-gray-400': !isValidEntry,
-            'text-green-700 hover:text-green-900 hover:shadow-lg':
-              !!isValidEntry,
-          })}
-          disabled={!isValidEntry}
-          aria-label="일정 추가"
-        >
-          <PlusTimeIcon />
-        </button>
       </div>
       {errors.schedules && (
         <div className="pl-8 text-xs-regular text-custom-red-200" role="alert">
@@ -193,36 +198,38 @@ export default function DateTime({
         {schedules.map((schedule) => (
           <div
             key={schedule.id}
-            className="flex max-w-792 items-center justify-between gap-5"
+            className="flex w-full flex-col items-center justify-between gap-5 md:flex-row"
           >
             <input
               type="text"
               readOnly
-              className="dark-base basic-input w-full max-w-380"
+              className="dark-base basic-input mt-10 w-full bg-gray-50 md:mr-9 md:mt-0 md:max-w-380"
               value={schedule.date}
             />
-            <input
-              type="text"
-              readOnly
-              className="dark-base basic-input w-full max-w-136"
-              value={schedule.startTime}
-            />
-            <div className="hidden md:block">
-              <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
+            <div className="flex-center w-full">
+              <input
+                type="text"
+                readOnly
+                className="dark-base basic-input w-full bg-gray-50"
+                value={schedule.startTime}
+              />
+              <div className="mx-3">
+                <TimeSeparatorIcon className="fill-custom-gray-400 dark:fill-white" />
+              </div>
+              <input
+                type="text"
+                readOnly
+                className="dark-base basic-input w-full bg-gray-50"
+                value={schedule.endTime}
+              />
+              <button
+                type="button"
+                onClick={() => handleRemoveEntry(schedule.id)}
+                aria-label="일정 제거"
+              >
+                <MinusTimeIcon className="ml-3 text-white hover:text-gray-200 md:ml-10" />
+              </button>
             </div>
-            <input
-              type="text"
-              readOnly
-              className="dark-base basic-input w-full max-w-136"
-              value={schedule.endTime}
-            />
-            <button
-              type="button"
-              onClick={() => handleRemoveEntry(schedule.id)}
-              aria-label="일정 제거"
-            >
-              <MinusTimeIcon className="text-white hover:text-gray-200" />
-            </button>
           </div>
         ))}
       </div>

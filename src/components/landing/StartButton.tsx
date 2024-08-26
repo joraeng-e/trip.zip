@@ -93,7 +93,7 @@ const StartButton = () => {
               height="50"
               viewBox="0 0 24 24"
               style={{
-                left: '50%',
+                left: '55%',
                 bottom: 0,
                 x: '-50%',
               }}

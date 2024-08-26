@@ -1,14 +1,13 @@
-import DateTime from '@/components/ActivitiyForm/DateTime';
-import ImageUploader from '@/components/ActivitiyForm/ImageUpload';
-import BaseModal from '@/components/ActivityDetail/BaseModal';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input/Input';
 import Modal from '@/components/commons/Modal';
-import Select from '@/components/commons/Select';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
-import { useDarkMode } from '@/context/DarkModeContext';
-import { getActivityDetail } from '@/libs/api/activities';
-import { postActivityImage } from '@/libs/api/activities';
+import AddressInput from '@/components/mypage/activityform/AddressInput';
+import DateTime from '@/components/mypage/activityform/DateTime';
+import ImageUploader from '@/components/mypage/activityform/ImageUpload';
+import MarkdownEditor from '@/components/mypage/activityform/MarkdownEditor';
+import Select from '@/components/mypage/activityform/Select';
+import { getActivityDetail, postActivityImage } from '@/libs/api/activities';
 import { patchMyActivity } from '@/libs/api/myActivities';
 import { CATEGORY_OPTIONS } from '@/libs/constants/categories';
 import {
@@ -24,14 +23,11 @@ import {
   PatchMyActivityRequest,
 } from '@trip.zip-api';
 import '@uiw/react-markdown-preview/markdown.css';
-import MDEditor, { commands } from '@uiw/react-md-editor';
 import '@uiw/react-md-editor/markdown-editor.css';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import DaumPostcode, { Address } from 'react-daum-postcode';
 import { FormProvider, useForm } from 'react-hook-form';
-import remarkGfm from 'remark-gfm';
 
 interface EditActivityFormProps {
   activityData: GetActivityDetailResponse;
@@ -69,7 +65,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function EditActivityForm({
   activityData,
   activityId,
-  error,
 }: EditActivityFormProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -80,14 +75,11 @@ export default function EditActivityForm({
   const [subImageIdsToRemove, setSubImageIdsToRemove] = useState<number[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [markdownValue, setMarkdownValue] = useState(
     activityData?.description || '',
   );
-  const [bannerImageFile, setBannerImageFile] = useState<File | null>(null);
-  const [subImageFiles, setSubImageFiles] = useState<File[]>([]);
-
-  const { isDarkMode } = useDarkMode();
+  const [bannerImage, setBannerImage] = useState<File | null>(null);
+  const [subImages, setSubImages] = useState<File[]>([]);
 
   const methods = useForm<ActivitiesFormData>({
     resolver: yupResolver(activitiesSchema),
@@ -98,6 +90,7 @@ export default function EditActivityForm({
       description: activityData?.description || '',
       price: activityData?.price || 0,
       address: activityData?.address || '',
+      bannerImageUrl: activityData?.bannerImageUrl || '',
     },
   });
 
@@ -106,26 +99,12 @@ export default function EditActivityForm({
     handleSubmit,
     setValue,
     formState: { errors },
+    trigger,
   } = methods;
 
   const updateActivityMutation = useMutation({
-    mutationFn: async (data: PatchMyActivityRequest) => {
-      if (bannerImageFile) {
-        const bannerResponse = await postActivityImage(bannerImageFile);
-        data.bannerImageUrl = bannerResponse.activityImageUrl;
-      }
-
-      if (subImageFiles.length > 0) {
-        const subImageResponses = await Promise.all(
-          subImageFiles.map((file) => postActivityImage(file)),
-        );
-        data.subImageUrlsToAdd = subImageResponses.map(
-          (response) => response.activityImageUrl,
-        );
-      }
-
-      return patchMyActivity({ activityId, data });
-    },
+    mutationFn: (data: PatchMyActivityRequest) =>
+      patchMyActivity({ activityId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activity', activityId] });
       queryClient.invalidateQueries({ queryKey: ['myActivities'] });
@@ -138,39 +117,44 @@ export default function EditActivityForm({
     },
   });
 
-  const handleCategoryChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const selectedCategory = event.target.value as Category;
-    setCategory(selectedCategory);
-    setValue('category', selectedCategory);
+  const uploadImages = async (files: File[]) => {
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      const { activityImageUrl } = await postActivityImage(file);
+      uploadedUrls.push(activityImageUrl);
+    }
+    return uploadedUrls;
   };
 
-  const handleAddressSelect = (data: Address) => {
-    setValue('address', data.address, { shouldValidate: true });
-    setIsAddressModalOpen(false);
-  };
+  const onSubmit = async (data: ActivitiesFormData) => {
+    try {
+      let bannerImageUrl = data.bannerImageUrl;
+      if (bannerImage) {
+        [bannerImageUrl] = await uploadImages([bannerImage]);
+      }
 
-  const customCommands = commands
-    .getCommands()
-    .filter((command) => command.name !== 'image');
+      const newSubImageUrls = await uploadImages(subImages);
 
-  const onSubmit = (data: ActivitiesFormData) => {
-    const roundedPrice = Math.round(data.price);
+      const roundedPrice = Math.round(data.price);
 
-    const formData: PatchMyActivityRequest = {
-      title: data.title,
-      category: data.category,
-      description: data.description,
-      price: roundedPrice,
-      address: data.address,
-      bannerImageUrl: data.bannerImageUrl,
-      subImageIdsToRemove,
-      subImageUrlsToAdd: [],
-      scheduleIdsToRemove,
-      schedulesToAdd,
-    };
-    updateActivityMutation.mutate(formData);
+      const formData: PatchMyActivityRequest = {
+        title: data.title,
+        category: data.category,
+        description: markdownValue,
+        price: roundedPrice,
+        address: data.address,
+        bannerImageUrl,
+        subImageIdsToRemove,
+        subImageUrlsToAdd: newSubImageUrls,
+        scheduleIdsToRemove,
+        schedulesToAdd,
+      };
+      updateActivityMutation.mutate(formData);
+    } catch (error) {
+      console.error('이미지 업로드 중 오류 발생:', error);
+      setModalMessage('이미지 업로드 중 오류가 발생했습니다.');
+      setIsModalOpen(true);
+    }
   };
 
   const handleScheduleRemove = (scheduleId: number) => {
@@ -181,18 +165,23 @@ export default function EditActivityForm({
     setSchedulesToAdd((prev) => [...prev, newSchedule]);
   };
 
-  const handleBannerImageSelect = (files: File[]) => {
+  const handleBannerImageChange = (files: File[]) => {
     if (files.length > 0) {
-      setBannerImageFile(files[0]);
+      setBannerImage(files[0]);
+      setValue('bannerImageUrl', 'temp', { shouldValidate: true });
+    } else {
+      setBannerImage(null);
+      setValue('bannerImageUrl', '', { shouldValidate: true });
     }
   };
 
-  const handleSubImageSelect = (files: File[]) => {
-    setSubImageFiles((prev) => [...prev, ...files]);
+  const handleSubImagesChange = (files: File[]) => {
+    setSubImages(files);
   };
 
   const handleImageRemove = (imageId: number) => {
     setSubImageIdsToRemove((prev) => [...prev, imageId]);
+    setSubImages((prev) => prev.filter((_, index) => index !== imageId));
   };
 
   const resetModalMessage = () => {
@@ -201,14 +190,10 @@ export default function EditActivityForm({
     router.push('/mypage/myActivities');
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <MyPageLayout>
       <FormProvider {...methods}>
-        <form className="mb-60 px-10" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mb-60" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-24 flex items-center justify-between">
             <h1 className="text-3xl-bold">내 체험 수정</h1>
             {modalMessage && (
@@ -222,7 +207,7 @@ export default function EditActivityForm({
               </Modal.Root>
             )}
           </div>
-          <div className="flex flex-col gap-20 [&>h3]:text-2xl-bold">
+          <div className="flex flex-col gap-20 [&>h3]:mt-20 [&>h3]:text-2xl-bold">
             <Input
               name="title"
               type="text"
@@ -233,26 +218,25 @@ export default function EditActivityForm({
             />
             <Select
               value={category}
-              onChange={handleCategoryChange}
+              onChange={(value) => {
+                const selectedCategory = value as Category;
+                setCategory(selectedCategory);
+                setValue('category', selectedCategory);
+                trigger('category');
+              }}
               options={CATEGORY_OPTIONS}
               placeholder="카테고리"
               error={errors.category?.message}
               maxWidth="792px"
             />
             <h3>설명</h3>
-            <MDEditor
-              className="[&_.w-md-editor-text]:h-400"
+            <MarkdownEditor
               value={markdownValue}
               onChange={(val) => {
                 setMarkdownValue(val || '');
                 setValue('description', val || '');
+                trigger('description');
               }}
-              previewOptions={{
-                remarkPlugins: [remarkGfm],
-              }}
-              commands={customCommands}
-              highlightEnable={false}
-              data-color-mode={isDarkMode ? 'dark' : 'light'}
             />
             {errors.description && (
               <p className="mt-2 text-xs-regular text-custom-red-200">
@@ -269,39 +253,12 @@ export default function EditActivityForm({
               error={errors.price}
             />
             <h3>주소</h3>
-            <div className="flex items-center">
-              <Input
-                name="address"
-                type="text"
-                placeholder="주소"
-                register={register('address')}
-                error={errors.address}
-                disabled={true}
-                maxWidth="765px"
-              />
-              <div className="mt-4 h-58 w-80">
-                <Button
-                  className="ml-10 h-full rounded-md"
-                  type="button"
-                  onClick={() => setIsAddressModalOpen(true)}
-                >
-                  검색
-                </Button>
-              </div>
-            </div>
-            <input
-              name="detailAddress"
-              type="text"
-              placeholder="상세 주소"
-              className="dark-base basic-input max-w-792"
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              trigger={trigger}
+              errors={errors}
             />
-            <BaseModal
-              isOpen={isAddressModalOpen}
-              onClose={() => setIsAddressModalOpen(false)}
-              className="w-full max-w-600 px-24 py-45"
-            >
-              <DaumPostcode onComplete={handleAddressSelect} />
-            </BaseModal>
             <h3>예약 가능한 시간대</h3>
             <DateTime
               isEditMode={true}
@@ -319,7 +276,7 @@ export default function EditActivityForm({
                   ? [{ id: 0, imageUrl: activityData.bannerImageUrl }]
                   : []
               }
-              onFilesSelected={handleBannerImageSelect}
+              onImageChange={handleBannerImageChange}
             />
             <h3>소개 이미지</h3>
             <div className="flex flex-wrap">
@@ -329,14 +286,14 @@ export default function EditActivityForm({
                 label="소개 이미지 등록"
                 existingImages={activityData?.subImages || []}
                 onImageRemove={handleImageRemove}
-                onFilesSelected={handleSubImageSelect}
+                onImageChange={handleSubImagesChange}
               />
             </div>
             <p className="text-custom-gray-800">
               *소개 이미지는 최대 4개까지 등록 가능합니다.
             </p>
           </div>
-          <div className="flex items-center justify-end gap-10">
+          <div className="flex items-center justify-center gap-10 md:justify-end">
             <Button
               type="button"
               className="mt-20 max-w-120 rounded-md"

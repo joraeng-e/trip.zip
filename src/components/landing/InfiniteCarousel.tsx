@@ -10,6 +10,24 @@ import { Activity } from '../activities/type';
 
 type ActivityWithPosition = Activity & { position: number };
 
+const CARD_STYLE = {
+  pc: {
+    center: { scale: 1, opacity: 1, zIndex: 30, width: 300, height: 300 },
+    adjacent: {
+      scale: 0.85,
+      opacity: 0.7,
+      zIndex: 20,
+      width: 270,
+      height: 270,
+    },
+    outer: { scale: 0.7, opacity: 0.5, zIndex: 10, width: 240, height: 240 },
+  },
+  mobile: {
+    center: { scale: 1, opacity: 1, zIndex: 20, width: 300, height: 300 },
+    other: { scale: 0.9, opacity: 0.5, zIndex: 10, width: 240, height: 240 },
+  },
+};
+
 function Card({ data }: { data: Activity }) {
   const { title, price, rating, reviewCount, bannerImageUrl } = data;
   return (
@@ -17,25 +35,28 @@ function Card({ data }: { data: Activity }) {
       <Image
         src={bannerImageUrl}
         alt="banner"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: 'cover' }}
         className="brightness-75"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
       <div className="absolute inset-0 flex h-full flex-col justify-end p-15">
-        <div className="text-xs sm:text-sm flex items-center gap-2 font-semibold text-white">
+        <div className="flex items-center gap-2 text-xs-semibold text-white sm:text-sm-semibold">
           <RoundStar />
           <span>
             {rating} ({reviewCount})
           </span>
         </div>
-        <h1 className="text-sm sm:text-base md:text-lg mt-1 line-clamp-2 font-bold text-white sm:mt-2">
+        <h1 className="text-sm-bold mt-1 line-clamp-2 text-white sm:mt-2 sm:text-md-bold md:text-lg-bold">
           {title}
         </h1>
         <div className="mt-1 sm:mt-2">
           <span className="font-bold text-white">
             ₩ {price.toLocaleString()}
           </span>
-          <span className="text-xs sm:text-sm text-[#a1a1a1]">/ 인</span>
+          <span className="text-xs-semibold text-[#a1a1a1] sm:text-sm-semibold">
+            / 인
+          </span>
         </div>
       </div>
     </div>
@@ -84,31 +105,22 @@ export default function CarouselInfinity() {
 
   const getVisibleActivities = (): ActivityWithPosition[] => {
     const positions = isPc ? [-2, -1, 0, 1, 2] : [-1, 0, 1];
-    return positions.map((offset) => {
+    return positions.map((position) => {
       const index =
-        (currentIndex + offset + activities.length) % activities.length;
-      return { ...activities[index], position: offset };
+        (currentIndex + position + activities.length) % activities.length;
+      return { ...activities[index], position };
     });
   };
 
   const getCardStyle = (position: number, isPc: boolean) => {
-    if (!isPc) {
-      return {
-        scale: position === 0 ? 1 : 0.9,
-        opacity: position === 0 ? 1 : 0.5,
-        zIndex: position === 0 ? 20 : 10,
-        width: position === 0 ? 300 : 240,
-        height: position === 0 ? 300 : 240,
-      };
-    }
-
-    // PC version
-    if (position === 0) {
-      return { scale: 1, opacity: 1, zIndex: 30, width: 300, height: 300 };
-    } else if (Math.abs(position) === 1) {
-      return { scale: 0.85, opacity: 0.7, zIndex: 20, width: 270, height: 270 };
+    if (isPc) {
+      if (position === 0) return CARD_STYLE.pc.center;
+      if (Math.abs(position) === 1) return CARD_STYLE.pc.adjacent;
+      return CARD_STYLE.pc.outer;
     } else {
-      return { scale: 0.7, opacity: 0.5, zIndex: 10, width: 240, height: 240 };
+      return position === 0
+        ? CARD_STYLE.mobile.center
+        : CARD_STYLE.mobile.other;
     }
   };
 
