@@ -62,7 +62,7 @@ export default function Textarea({
         placeholder={placeholder}
         {...register}
         onBlur={onBlur}
-        className={`dark-base resize-none rounded-md border-2 p-16 outline-none focus:border-custom-green-200 ${error ? 'border-red-400' : ''}`}
+        className={`dark:focus:border-custom-green-100 dark-base resize-none rounded-md border-2 p-16 outline-none focus:border-custom-green-200 ${error ? 'border-red-400' : ''}`}
         style={{ height }}
         {...props}
       />
