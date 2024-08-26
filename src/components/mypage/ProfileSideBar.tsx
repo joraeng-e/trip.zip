@@ -117,11 +117,11 @@ const ProfileSideBar = ({ toggleOpen }: ProfileSideBarProps) => {
         </Link>
         <Link href="/mypage/calendar">
           <div
-            className={`${baseTextStyle} ${activeTab === 'reservationStatus' ? activeStyle : textGroupStyle}`}
-            onClick={() => handleTabClick('reservationStatus')}
+            className={`${baseTextStyle} ${activeTab === 'calendar' ? activeStyle : textGroupStyle}`}
+            onClick={() => handleTabClick('calendar')}
           >
             <ProfileCalendarIcon
-              className={`${activeTab === 'reservationStatus' ? svgActiveStyle : svgStyle}`}
+              className={`${activeTab === 'calendar' ? svgActiveStyle : svgStyle}`}
             />
             <p>예약 현황</p>
           </div>

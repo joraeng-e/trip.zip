@@ -3,9 +3,9 @@ import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import DarkMode from './_components/DarkMode';
+import DarkModeToggleButton from './_components/DarkModeToggleButton';
 import LoggedInHeader from './_components/LoggedInHeader';
 import LoggedOutHeader from './_components/LoggedOutHeader';
 
@@ -15,10 +15,11 @@ export default function Header() {
 
   const router = useRouter();
 
+  const handleScroll = useCallback(() => {
+    setScrollPosition(window.scrollY);
+  }, []);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -26,7 +27,9 @@ export default function Header() {
     };
   }, []);
 
-  const isHeaderScrollValid = scrollPosition === 0;
+  const isHeaderScrollValid = useMemo(() => {
+    return scrollPosition === 0;
+  }, [scrollPosition]);
 
   const checkLoginState = () => {
     // 쿠키에서 accessToken을 확인해 로그인 상태 결정
@@ -40,10 +43,14 @@ export default function Header() {
 
   return (
     <header
-      className={`dark-base sticky top-0 z-20 h-70 w-full bg-white transition-all duration-500 ${isHeaderScrollValid || 'shadow-lg'} dark:shadow-custom-gray-700`}
+      className={`dark-base sticky top-0 z-20 h-50 w-full bg-white transition-all duration-500 md:h-70 ${isHeaderScrollValid || 'shadow-lg'} dark:shadow-custom-gray-700`}
     >
       <div className="basic-container flex items-center justify-between">
-        <Link href="/activities" aria-label="메인페이지로 이동">
+        <Link
+          href="/activities"
+          aria-label="메인페이지로 이동"
+          className="w-90 md:w-130"
+        >
           <Image
             src={tripZip}
             alt="trip.zip"
@@ -53,7 +60,7 @@ export default function Header() {
           />
         </Link>
         <div className="flex items-center gap-20">
-          <DarkMode />
+          <DarkModeToggleButton />
           {loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />}
         </div>
       </div>

@@ -1,3 +1,5 @@
+import Modal from '@/components/commons/Modal';
+import { notify } from '@/components/commons/Toast';
 import { deleteMyActivity } from '@/libs/api/myActivities';
 import { KebabIcon, StarOnIcon } from '@/libs/utils/Icon';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -6,9 +8,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-
-import Modal from '../commons/Modal';
-import { notify } from '../commons/Toast';
 
 interface MyCardProps {
   id: number;
@@ -55,7 +54,7 @@ export default function MyCard({
   };
 
   const handleEdit = () => {
-    router.push(`myActivities/editForm/${id}`);
+    router.push(`myActivities/edit/${id}`);
   };
 
   const handleDelete = () => {
@@ -63,20 +62,22 @@ export default function MyCard({
   };
 
   return (
-    <div className="dark-border mb-16 flex h-[153px] max-w-[800px] overflow-hidden rounded-lg shadow-md lg:h-[204px]">
+    <div className="dark-border mb-16 flex h-130 max-w-800 overflow-hidden rounded-lg shadow-md md:h-153 lg:h-204">
       <Link
         href={`/activity/${id}`}
-        className="relative size-[153px] h-full flex-shrink-0 lg:size-[204px]"
+        className="relative size-[130px] h-full flex-shrink-0 md:size-[153px] lg:size-[204px]"
       >
         <Image
           src={bannerImageUrl}
           alt={title}
-          layout="fill"
-          sizes="153px"
+          fill
+          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 204px"
           className="object-cover"
+          priority
         />
       </Link>
-      <div className="flex flex-1 flex-col justify-between p-16 transition-all hover:bg-gray-100 dark:hover:bg-custom-gray-800">
+      <div className="flex flex-1 flex-col justify-between p-13 transition-all hover:bg-gray-100 dark:hover:bg-custom-gray-800 md:p-16">
         <div className="flex items-center justify-between">
           <div>
             <div className="mb-4 flex items-center">
@@ -94,7 +95,7 @@ export default function MyCard({
           </div>
           <div className="relative">
             <button onClick={toggleDropdown}>
-              <KebabIcon className="md:h-40 md:w-40" />
+              <KebabIcon className="-mr-10 md:mr-0 md:h-40 md:w-40" />
             </button>
             {isDropdownOpen && (
               <div className="dark-base absolute right-0 top-full z-50 mt-2 w-110 cursor-pointer rounded-md border-2 border-custom-gray-200 bg-white p-2 shadow-md md:w-140">
@@ -139,7 +140,7 @@ export default function MyCard({
         </div>
         <div className="flex items-center">
           <p className="text-xl-medium font-bold text-gray-900 dark:text-white">
-            ₩{price.toLocaleString()}
+            ₩ {price.toLocaleString()}
           </p>
           <span className="ml-4 text-lg-medium text-custom-gray-800">/인</span>
         </div>

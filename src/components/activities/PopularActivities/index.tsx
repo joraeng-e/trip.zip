@@ -10,9 +10,11 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Activity } from '../type';
 import PopularActivityCard, { PopularActivityCardSkeleton } from './Card';
 
+const TOTAL_PAGES = 2;
+const MAX_ACTIVITIES_COUNT = 9;
+
 function PopularActivities() {
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(Number.POSITIVE_INFINITY);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const isIntersecting = useIntersectionObserver(sentinelRef);
   const deviceState = useDeviceState();
@@ -45,7 +47,7 @@ function PopularActivities() {
 
   const handleNextPage = () => {
     if (hasNextPage) fetchNextPage();
-    if (totalPages > currentPage) setCurrentPage((prevPage) => prevPage + 1);
+    if (TOTAL_PAGES > currentPage) setCurrentPage((prevPage) => prevPage + 1);
   };
 
   const currentActivities = useMemo(() => {
@@ -57,31 +59,16 @@ function PopularActivities() {
   }, [deviceState, data, currentPage]);
 
   useEffect(
-    function updateTotalPages() {
-      if (isError) {
-        setTotalPages(0);
-        return;
-      }
-      if (!data) return;
-      const totalCount = data.pages[0].totalCount;
-      const newTotalPages =
-        totalCount % 3 === 0 && totalCount !== 0
-          ? Math.floor(totalCount / 3) - 1
-          : Math.floor(totalCount / 3);
-      setTotalPages(newTotalPages);
-    },
-    [data, isError],
-  );
-
-  useEffect(
     function handleScrollFetch() {
       if (deviceState === Device.PC) return;
-      if (isIntersecting && hasNextPage) {
-        fetchNextPage();
-        setCurrentPage((prevPage) => prevPage + 1);
-      }
+
+      const totalActivities =
+        data?.pages.flatMap((page) => page.activities).length || 0;
+      if (totalActivities >= MAX_ACTIVITIES_COUNT) return;
+
+      if (isIntersecting && hasNextPage) fetchNextPage();
     },
-    [isIntersecting, hasNextPage, deviceState],
+    [isIntersecting, hasNextPage, deviceState, data],
   );
 
   return (
@@ -94,7 +81,7 @@ function PopularActivities() {
           <button
             type="button"
             onClick={handlePrevPage}
-            disabled={currentPage === 0}
+            disabled={currentPage === 0 || isError}
             className="disabled:opacity-50"
           >
             <ArrowLeft width="44" height="44" />
@@ -102,7 +89,7 @@ function PopularActivities() {
           <button
             type="button"
             onClick={handleNextPage}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === TOTAL_PAGES || isError}
             className="disabled:opacity-50"
           >
             <ArrowRight width="44" height="44" />
@@ -170,9 +157,11 @@ function Content({
 
   return (
     <>
-      {data?.map((activity) => (
-        <PopularActivityCard key={activity.id} data={activity} />
-      ))}
+      {data
+        ?.slice(0, MAX_ACTIVITIES_COUNT)
+        .map((activity) => (
+          <PopularActivityCard key={activity.id} data={activity} />
+        ))}
       {isFetchingNextPage && (
         <>
           {Array.from({ length: 3 }).map((_, index) => (
