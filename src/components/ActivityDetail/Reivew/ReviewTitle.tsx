@@ -1,9 +1,6 @@
-import EmptyReview from '@/../public/lottie/emptyReview.json';
-import dynamic from 'next/dynamic';
-import React from 'react';
 import { FaStar } from 'react-icons/fa';
 
-const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+import NoReview from './NoReview';
 
 interface ReviewTitleProps {
   averageRating: number;
@@ -24,34 +21,27 @@ export default function ReviewTitle(props: ReviewTitleProps) {
 
   return (
     <div className="mx-16">
-      {totalCount === 0 ? (
-        <div className="my-100 flex flex-col items-center text-center text-md-bold text-custom-gray-600 dark:text-white">
-          <div className="text-grayscale-400 mb-8 text-xl-medium sm:text-2lg-medium">
-            리뷰가 없습니다.
-          </div>
-          <div className="ml-40">
-            <Lottie
-              animationData={EmptyReview}
-              style={{ width: '280px', height: '280px' }}
-            />
+      <>
+        <div className="flex items-center gap-10">
+          <FaStar className="h-24 w-24 text-yellow-500" />
+          <h2 className="detail-title">
+            {averageRating > 0 ? `${averageRating}` : ``}
+          </h2>
+          <div className="detail-title">
+            {getSatisfactionText(averageRating)}
           </div>
         </div>
-      ) : (
-        <>
-          <div className="flex items-center gap-10">
-            <FaStar className="h-24 w-24 text-yellow-500" />
-            <h2 className="text-xl-bold text-nomad-black dark:text-white">
-              {averageRating}
-            </h2>
-            <div className="text-2lg-bold text-nomad-black dark:text-white">
-              {getSatisfactionText(averageRating)}
-            </div>
-          </div>
-          <div className="dark-base mt-10 text-2lg-semibold text-custom-gray-500">
-            {totalCount}개 후기
-          </div>
-        </>
-      )}
+        <div className="dark-base mt-10 text-2lg-semibold text-custom-gray-500">
+          {totalCount > 0 ? `${totalCount}개 후기` : '후기 없음'}
+        </div>
+        {totalCount === 0 ? (
+          <>
+            <NoReview />
+          </>
+        ) : (
+          <></>
+        )}
+      </>
     </div>
   );
 }

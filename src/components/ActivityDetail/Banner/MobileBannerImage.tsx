@@ -49,7 +49,7 @@ export default function MobileBannerImage(props: MobileImageProps) {
       </div>
       <div
         ref={thumbnailRef}
-        className="mx-16 mt-16 flex cursor-pointer space-x-8 overflow-x-hidden"
+        className="mt-16 flex cursor-pointer space-x-8 overflow-x-hidden px-10"
       >
         {images.map((img, index) => (
           <div className="mt-10 h-80 w-60 flex-none" key={index}>

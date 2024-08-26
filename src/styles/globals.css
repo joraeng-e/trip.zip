@@ -54,6 +54,15 @@ body.dark input:-webkit-autofill {
   .dark-border {
     @apply dark:border-[1.5px] dark:border-white;
   }
+
+  .detail-title {
+    @apply dark-base text-xl-bold text-nomad-black;
+  }
+
+  .recommend-arrow-button {
+    @apply z-50 m-0 flex h-40 w-40 cursor-pointer touch-manipulation items-center justify-center rounded-xl border-0 bg-transparent bg-white p-0 shadow-md;
+  }
+
   .markdown-content h1,
   .markdown-content h2,
   .markdown-content h3,

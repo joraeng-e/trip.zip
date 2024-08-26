@@ -3,6 +3,7 @@ import MobileBannerImage from '@/components/ActivityDetail/Banner/MobileBannerIm
 import DetailContent from '@/components/ActivityDetail/DetailContent';
 import ActivityTabs from '@/components/ActivityDetail/DetailContent/ActivityTabs';
 import Recommend from '@/components/ActivityDetail/Recommend';
+import Review from '@/components/ActivityDetail/Reivew';
 import MobileReservation from '@/components/ActivityDetail/Reservation/MobileReservation';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Loading from '@/components/commons/Loading';
@@ -141,16 +142,18 @@ export default function ActivityDetail() {
             bannerImageUrl={data.bannerImageUrl}
             subImageUrl={subImageUrls}
           />
-          <div className="mt-10 flex">
+          <div className="flex">
             <DetailContent
               sectionRefs={sectionRefs}
               detailData={data}
               isSameUser={isSameUser}
             />
-            <div className="relative mx-10 hidden w-3/12 min-w-300 md:block">
+            <div className="relative mx-10 mb-30 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
+          <div ref={sectionRefs.review} className="mt-40" />
+          <Review sectionRefs={sectionRefs} />
           <Recommend category={data.category} />
           <MobileReservation data={data} isSameUser={isSameUser} />
         </div>

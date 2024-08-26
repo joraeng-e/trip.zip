@@ -1,53 +1,37 @@
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
-import BaseModal from '../BaseModal';
 import ImageCounter from './ImageCounter';
 import ImageNavButton from './ImageNavButton';
 import ThumbnailImage from './ThumbnailImage';
 
-interface BannerImageModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface ImageGalleryProps {
   images: string[];
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
+  nextImage: () => void;
+  prevImage: () => void;
 }
 
-export default function BannerImageModal(props: BannerImageModalProps) {
-  const { isOpen, onClose, images } = props;
-  const totalImages = images.length;
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function ImageGallery(props: ImageGalleryProps) {
+  const { images, currentIndex, setCurrentIndex, nextImage, prevImage } = props;
+
   const thumbnailRef = useRef<HTMLDivElement>(null);
 
-  const nextImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalImages);
-  };
-
-  const prevImage = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
-  };
-
-  useEffect(() => {
-    if (thumbnailRef.current) {
-      const thumbnailWidth = thumbnailRef.current.clientWidth / totalImages;
-      const offset = currentIndex * thumbnailWidth - thumbnailWidth / 2;
-      thumbnailRef.current.scrollTo({ left: offset, behavior: 'smooth' });
-    }
-  }, [currentIndex, totalImages]);
-
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} className="mx-40 h-820">
+    <>
       <div className="relative mt-80 flex h-700 w-auto items-center justify-center overflow-hidden">
         <div className="h-700 w-1200">
           <Image
             src={images[currentIndex]}
-            alt={`image-${currentIndex}`}
+            alt={`Image-${currentIndex}`}
             fill
             className="relative rounded-lg object-contain"
           />
           <ImageNavButton direction="left" onClick={prevImage} />
           <ImageNavButton direction="right" onClick={nextImage} />
         </div>
-        <ImageCounter currentIndex={currentIndex} totalImages={totalImages} />
+        <ImageCounter currentIndex={currentIndex} totalImages={images.length} />
       </div>
 
       <div
@@ -65,6 +49,6 @@ export default function BannerImageModal(props: BannerImageModalProps) {
           </div>
         ))}
       </div>
-    </BaseModal>
+    </>
   );
 }
