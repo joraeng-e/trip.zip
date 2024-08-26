@@ -23,7 +23,7 @@ export default function ReservationCard(props: ReservationCardProps) {
     selectedSchedules,
   } = props;
   return (
-    <div className="h-auto">
+    <div className="h-500 overflow-y-auto md:h-auto">
       <h2 className="ml-10 text-2xl-bold">예약 확인</h2>
       <ActivityDetail detailData={detailData} />
       <ReservationUser userData={userData} />
