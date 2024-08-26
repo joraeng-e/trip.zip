@@ -62,7 +62,7 @@ export default function MyCard({
   };
 
   return (
-    <div className="dark-border mb-16 flex h-[130px] max-w-[800px] overflow-hidden rounded-lg shadow-md md:h-[153px] lg:h-[204px]">
+    <div className="dark-border mb-16 flex h-130 max-w-800 overflow-hidden rounded-lg shadow-md md:h-153 lg:h-204">
       <Link
         href={`/activity/${id}`}
         className="relative size-[130px] h-full flex-shrink-0 md:size-[153px] lg:size-[204px]"
