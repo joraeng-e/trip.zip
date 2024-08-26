@@ -96,7 +96,7 @@ export default function ReviewModal({
       >
         <div
           ref={modalRef}
-          className="dark-base relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:rounded-lg md:border-1 lg:h-auto lg:min-h-800 lg:w-600"
+          className="dark-base relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:h-auto md:min-h-800 md:w-600 md:rounded-lg md:border-1"
         >
           <div className="flex items-center justify-between">
             <span className="dark-base text-2xl-bold text-custom-black">
@@ -165,7 +165,7 @@ export default function ReviewModal({
             </div>
             <div className="relative h-full w-full lg:mb-60 lg:h-300">
               <textarea
-                className="relative h-full w-full flex-1 resize-none overflow-y-auto rounded-md border-1 border-custom-gray-500 p-10 pb-20"
+                className="dark-base relative h-full w-full flex-1 resize-none overflow-y-auto rounded-md border-1 border-custom-gray-500 p-10 pb-20"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="후기를 작성해주세요"
