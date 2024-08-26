@@ -1,15 +1,20 @@
 import { useDarkMode } from '@/context/DarkModeContext';
 import React from 'react';
 
-export default function DarkMode() {
+export default function DarkModeToggleButton() {
   const { isDarkMode, toggleMode } = useDarkMode();
 
   return (
     <div
-      className="toggle-button cursor-pointer rounded-md border-[1.5px] border-custom-black bg-white p-2 transition-transform duration-500 dark:border-white dark:bg-custom-black"
+      className="toggle-button cursor-pointer rounded-md border-[1.5px] border-custom-black bg-white p-1 transition-transform duration-500 dark:border-white dark:bg-custom-black md:p-2"
       onClick={toggleMode}
     >
-      <svg width="30" height="30" viewBox="0 0 100 100" className="relative">
+      <svg
+        width="30"
+        height="30"
+        viewBox="0 0 100 100"
+        className="relative size-24 transition-all duration-700 md:size-30"
+      >
         <path
           id="moon"
           d="M50 15A35 35 0 1 0 85 50A35 45 0 0 1 50 15Z"
