@@ -148,7 +148,7 @@ export default function ActivityDetail() {
               detailData={data}
               isSameUser={isSameUser}
             />
-            <div className="relative mx-10 mb-30 hidden w-3/12 min-w-300 md:block">
+            <div className="relative mx-10 mt-20 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>
