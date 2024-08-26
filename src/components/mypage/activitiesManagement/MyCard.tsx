@@ -54,7 +54,7 @@ export default function MyCard({
   };
 
   const handleEdit = () => {
-    router.push(`myActivities/editForm/${id}`);
+    router.push(`myActivities/edit/${id}`);
   };
 
   const handleDelete = () => {

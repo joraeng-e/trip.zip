@@ -59,7 +59,7 @@ export default function MyActivities() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const handleConfirm = () => {
-    router.push('myActivities/registerForm');
+    router.push('myActivities/register');
   };
 
   return (
