@@ -1,11 +1,13 @@
 import Button from '@/components/commons/Button';
 import Modal from '@/components/commons/Modal';
 import { notify } from '@/components/commons/Toast';
+import { getActivityDetail } from '@/libs/api/activities';
 import { patchMyReservationStatus } from '@/libs/api/myReservations';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Reservation } from '@trip.zip-api';
 import Image from 'next/image';
 import Link from 'next/link';
+import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 type ReservationCardProps = {
@@ -38,6 +40,12 @@ export default function ReservationCard({
     onError: (error: Error) => {
       alert(`예약 취소 중 오류 발생: ${error.message}`);
     },
+  });
+
+  const { data, error } = useQuery({
+    queryKey: ['details', id],
+    queryFn: () => getActivityDetail(id),
+    enabled: !id, // error가 있을 경우 쿼리를 비활성화
   });
 
   const [isExpired, setIsExpired] = useState(false);
@@ -125,27 +133,47 @@ export default function ReservationCard({
   return (
     <div className="relative">
       <div className="dark-border mb-16 flex h-153 max-w-800 gap-20 overflow-hidden rounded-xl shadow-md lg:h-204">
-        <Link
-          href={`/activity/${id}`}
-          className="relative h-full w-120 flex-shrink-0 md:w-156 lg:w-204"
-        >
-          <Image
-            src={bannerImageUrl}
-            alt={title}
-            layout="fill"
-            objectFit="cover"
-          />
-        </Link>
+        {data ? (
+          <Link
+            href={`/activity/${id}`}
+            className="relative h-full w-120 flex-shrink-0 cursor-pointer md:w-156 lg:w-204"
+          >
+            <Image
+              src={bannerImageUrl}
+              alt={title}
+              layout="fill"
+              objectFit="cover"
+            />
+          </Link>
+        ) : (
+          <div className="relative h-full w-120 flex-shrink-0 cursor-default md:w-156 lg:w-204">
+            <Image
+              src={bannerImageUrl}
+              alt={title}
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+        )}
         <div className="flex w-full flex-col justify-between py-10">
           <p className="mb-2 text-sm-semibold text-gray-600 md:text-lg-bold">
             {statusValue(status)}
           </p>
-          <Link
-            href={`/activity/${id}`}
-            className="text-2lg-bold lg:text-xl-bold"
-          >
-            {title}
-          </Link>
+          {data ? (
+            <Link
+              href={`/activity/${id}`}
+              className="text-2lg-bold lg:text-xl-bold"
+            >
+              {title}
+            </Link>
+          ) : (
+            <>
+              <div className="text-2lg-bold lg:text-xl-bold">{title}</div>
+              <p className="mt-4 text-md-medium text-custom-gray-700">
+                삭제된 체험
+              </p>
+            </>
+          )}
           <p className="text-xs-medium text-gray-600 md:text-md-medium">
             {date} {startTime} - {endTime} ({headCount}명)
           </p>
@@ -153,7 +181,7 @@ export default function ReservationCard({
             <p className="whitespace-nowrap pb-2 text-md-semibold md:pb-20 md:text-xl-semibold">
               ₩ {totalPrice.toLocaleString()}
             </p>
-            {statusButton(status)}
+            {data ? statusButton(status) : null}
           </div>
         </div>
       </div>
