@@ -5,12 +5,10 @@ const useExtractTags = (content: string) => {
   const [textWithoutTags, setTextWithoutTags] = useState<string>('');
 
   useEffect(() => {
-    // 문자열에서 태그를 추출 (다음 #가 나타나기 전까지의 문자열)
     const extractedTags =
-      content.match(/#([^\s#]+)/g)?.map((tag) => tag.substring(1)) || [];
+      content.match(/tag:([^\s]+)/g)?.map((tag) => tag.substring(4)) || [];
 
-    // 태그가 없는 문자열 생성
-    const text = content.replace(/#([^\s#]+)/g, '').trim();
+    const text = content.replace(/tag:[^\s]+/g, '').trim();
 
     setTags(extractedTags);
     setTextWithoutTags(text);

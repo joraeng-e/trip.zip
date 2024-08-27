@@ -49,11 +49,13 @@ export default function ReviewModal({
       notify('error', '별점을 선택해주세요');
       return;
     }
-    const tagsString = selectedTags.map((tag) => `#${tag}`).join(' ');
+
+    const tagsString = selectedTags.map((tag) => `tag:${tag}`).join(' ');
     const reviewData = {
       rating: rating,
       content: content + (tagsString ? ' ' + tagsString : ''),
     };
+
     try {
       const response = await postReview({
         reservationId: reservation.id,
