@@ -94,11 +94,11 @@ export default function ReviewModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex-center fixed left-0 top-0 z-50 h-full w-full backdrop-blur-sm"
+        className="flex-center fixed left-0 top-0 z-50 h-full w-full backdrop-blur-sm md:py-100"
       >
         <div
           ref={modalRef}
-          className="dark-base relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 pb-30 shadow-lg md:h-auto md:min-h-800 md:w-600 md:rounded-lg md:border-1"
+          className="dark-base relative flex h-full w-full flex-col gap-35 overflow-y-auto border-custom-gray-300 bg-white px-24 py-35 shadow-lg md:w-600 md:rounded-lg md:border-1"
         >
           <div className="flex items-center justify-between">
             <span className="dark-base text-2xl-bold text-custom-black">
@@ -165,7 +165,7 @@ export default function ReviewModal({
                 ))}
               </div>
             </div>
-            <div className="relative h-full w-full lg:mb-60 lg:h-300">
+            <div className="relative h-full w-full">
               <textarea
                 className="dark-base relative h-full w-full flex-1 resize-none overflow-y-auto rounded-md border-1 border-custom-gray-500 p-10 pb-20"
                 value={content}
@@ -176,7 +176,7 @@ export default function ReviewModal({
                 {content.length}
               </span>
             </div>
-            <div className="lg:pa mt-12 h-54 md:h-56 lg:absolute lg:bottom-20 lg:w-550">
+            <div className="mt-12 h-100 w-full bg-white md:h-56">
               <Button
                 type="submit"
                 variant="activeButton"
