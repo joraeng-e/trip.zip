@@ -1,5 +1,4 @@
-import { removeTime } from '@/libs/utils/dateUtils';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import ControlBar from './ControlBar';
 import DateCell from './DateCell';
@@ -49,7 +48,6 @@ export default function Calendar({
     }
   };
 
-  const today = removeTime(new Date());
   const days = dayFormat === 'kor' ? DAYS_KOR : DAYS_ENG;
   const weekend = (day: string) => {
     if (day === 'SUN' || day === '일') {

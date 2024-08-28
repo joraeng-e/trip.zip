@@ -83,15 +83,15 @@ export default function ReservationCard({
               {isExpired ? (
                 <Button
                   variant="disabledButton"
-                  className="max-w-80 rounded-md px-16 py-10 text-xs-medium md:max-w-120 md:text-lg-bold"
+                  className="max-w-80 rounded-md text-xs-medium md:h-48 md:max-w-120 md:text-lg-bold"
                 >
                   마감 완료
                 </Button>
               ) : (
-                <Modal.Trigger className="flex w-full items-center justify-end">
+                <Modal.Trigger className="w-full max-w-80 md:max-w-120">
                   <Button
                     variant="inactiveButton"
-                    className="max-w-80 rounded-md px-16 py-10 text-xs-medium md:max-w-120 md:text-lg-bold"
+                    className="rounded-md text-xs-medium md:h-48 md:text-lg-bold"
                   >
                     예약 취소
                   </Button>
@@ -111,7 +111,7 @@ export default function ReservationCard({
       case 'completed':
         return (
           <Button
-            className="max-w-100 rounded-md"
+            className="max-w-80 rounded-md text-xs-medium md:h-48 md:max-w-120 md:text-lg-bold"
             onClick={() => onReviewClick(reservation)}
           >
             후기 작성

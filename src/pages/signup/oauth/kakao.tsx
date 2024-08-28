@@ -1,14 +1,12 @@
 import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import { SignUpUser } from '@/libs/api/oauth';
+import { KAKAO_SIGNUP_REDIRECT_URI } from '@/libs/constants/auth';
 import { randomNickname } from '@/libs/utils/randomNickname';
 import { SignInResponse, SignUpRequest } from '@trip.zip-api';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-const KAKAO_SIGNUP_REDIRECT_URI =
-  process.env.NEXT_PUBLIC_KAKAO_SIGNUP_REDIRECT_URI;
 
 export default function Kakao() {
   const router = useRouter();

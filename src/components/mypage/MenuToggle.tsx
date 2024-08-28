@@ -20,7 +20,7 @@ type MenuToggleProps = {
 export const MenuToggle = ({ toggle }: MenuToggleProps) => (
   <button
     onClick={toggle}
-    className="absolute left-11 top-82 flex h-60 w-60 cursor-pointer items-center justify-center rounded-full"
+    className="absolute left-11 top-60 flex h-60 w-60 cursor-pointer items-center justify-center rounded-full"
     aria-label="프로필 열기"
   >
     <svg width="23" height="23" viewBox="0 0 23 23">

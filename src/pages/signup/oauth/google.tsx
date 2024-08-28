@@ -1,18 +1,16 @@
 import Loading from '@/components/commons/Loading';
 import { notify } from '@/components/commons/Toast';
 import { SignUpUser } from '@/libs/api/oauth';
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_SECRET,
+  GOOGLE_SIGNUP_REDIRECT_URI,
+} from '@/libs/constants/auth';
 import { randomNickname } from '@/libs/utils/randomNickname';
 import { SignInResponse, SignUpRequest } from '@trip.zip-api';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-
-const GOOGLE_SIGNUP_REDIRECT_URI =
-  process.env.NEXT_PUBLIC_GOOGLE_SIGNUP_REDIRECT_URI;
-
-const GOOGLE_SECRET = process.env.NEXT_PUBLIC_GOOGLE_SECRET;
 
 export default function Google() {
   const router = useRouter();

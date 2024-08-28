@@ -1,4 +1,5 @@
 import Dropdown from '@/components/commons/Dropdown';
+import { notify } from '@/components/commons/Toast';
 import BookingDetailModal from '@/components/mypage/BookingCalendar/BookingDetailModal.tsx/BookingDetailModal';
 import MyPageLayout from '@/components/mypage/MyPageLayout';
 import NoActivity from '@/components/mypage/NoActivity';
@@ -20,6 +21,10 @@ type ActivityListItem = {
   title: string;
 };
 
+const TODAY = new Date();
+const YEAR_NOW = TODAY.getFullYear();
+const MONTH_NOW = TODAY.getMonth();
+
 export default function ReservationStatus() {
   const prevIcon = (
     <DoubleArrowPrev aria-label="이전 달" className="size-24 dark:invert" />
@@ -28,12 +33,8 @@ export default function ReservationStatus() {
     <DoubleArrowNext aria-label="다음 달" className="size-24 dark:invert" />
   );
 
-  const today = new Date();
-  const yearNow = today.getFullYear();
-  const monthNow = today.getMonth();
-
-  const [currentYear, setCurrentYear] = useState(yearNow);
-  const [currentMonth, setCurrentMonth] = useState(monthNow);
+  const [currentYear, setCurrentYear] = useState(YEAR_NOW);
+  const [currentMonth, setCurrentMonth] = useState(MONTH_NOW);
 
   const [activityList, setActivityList] = useState<ActivityListItem[]>([]);
   const [activityId, setActivityId] = useState<number>(0);
@@ -49,17 +50,16 @@ export default function ReservationStatus() {
     const fetchActivities = async () => {
       try {
         const response = await getMyAllActivities();
-        const activityList = response.activities.map(
-          (activity: Activities) => ({
-            id: activity.id,
-            title: activity.title,
-          }),
-        );
-        setActivityList(activityList);
+        const temp = response.activities || [];
+        const activityList = temp.map((activity: Activities) => ({
+          id: activity.id,
+          title: activity.title,
+        }));
+        setActivityList(Array.isArray(temp) && temp.length ? activityList : []);
         setActivityId(activityList[0].id);
         setActivityTitle(activityList[0].title);
       } catch (error) {
-        console.error('Failed to fetch activities:', error);
+        notify('error', '활동을 불러오는데 실패했습니다.');
       }
     };
     fetchActivities();
@@ -75,7 +75,7 @@ export default function ReservationStatus() {
       });
       setMonthlyData(response);
     } catch (error) {
-      console.error('Failed to fetch Monthly Booking Info', error);
+      notify('error', '예약정보를 불러오는데 실패했습니다.');
     }
   };
   useEffect(() => {
@@ -160,7 +160,7 @@ export default function ReservationStatus() {
               onClickDate={handleDateClick}
             />
             {isModalOpen && (
-              <div className="md:flex-center fixed inset-0 top-70 backdrop-blur-sm md:absolute md:top-0">
+              <div className="md:flex-center fixed inset-0 top-50 backdrop-blur-sm md:absolute md:top-0">
                 <BookingDetailModal
                   activityId={activityId}
                   date={selectedDate}

@@ -56,7 +56,12 @@ export default function Signup() {
       if (error.response && error.response.data) {
         if (error.response.data.message === '중복된 이메일입니다.') {
           notify('error', '이미 사용중인 이메일입니다.');
+          trigger('email');
         } else {
+          notify(
+            'error',
+            '알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.',
+          );
           console.error('회원가입 실패', error);
         }
       }

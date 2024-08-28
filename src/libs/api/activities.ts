@@ -183,11 +183,6 @@ export async function postActivityImage(
     const response = await axiosInstance.post<PostActivitiesImageResponse>(
       `/activities/image`,
       formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      },
     );
 
     return response.data;
