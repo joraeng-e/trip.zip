@@ -11,9 +11,8 @@ import {
   SpongeEmoji,
   StarEmoji,
 } from '@/libs/utils/Icon';
-import { motion } from 'framer-motion';
 
-const tags = [
+export const Tags = [
   { name: '스포츠', emoji: <SoccerBallEmoji /> },
   { name: '파티룸', emoji: <PartyEmoji /> },
   { name: '연인추천', emoji: <HeartEmoji /> },
@@ -41,9 +40,8 @@ export default function ActivityTags(props: ActivityTagsProps) {
         <div className="relative h-30"></div>
       ) : (
         <div className="no-scrollbar flex w-full gap-8 overflow-x-auto">
-          {tags
-            .filter((tag) => extractedTags.includes(tag.name)) // 선택된 태그만 표시
-            .map(({ name, emoji }) => (
+          {Tags.filter((tag) => extractedTags.includes(tag.name)).map(
+            ({ name, emoji }) => (
               <div
                 key={name}
                 className="dark-border dark-base flex flex-shrink-0 items-center justify-between rounded-lg border border-custom-gray-400 px-6 py-4"
@@ -53,7 +51,8 @@ export default function ActivityTags(props: ActivityTagsProps) {
                   {name}
                 </span>
               </div>
-            ))}
+            ),
+          )}
         </div>
       )}
     </div>

@@ -16,7 +16,7 @@ export default function ActivityDetail(props: ActivityDetailProps) {
   return (
     <div className="dark-base dark-border mt-20 rounded-lg bg-white shadow-lg">
       <div className="flex">
-        <div className="relative mr-4 h-200 w-200">
+        <div className="relative mr-4 w-100 md:h-200 md:w-200">
           <Image
             src={detailData.bannerImageUrl}
             alt={detailData.title}

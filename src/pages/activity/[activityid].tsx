@@ -7,6 +7,7 @@ import Review from '@/components/ActivityDetail/Reivew';
 import MobileReservation from '@/components/ActivityDetail/Reservation/MobileReservation';
 import ReservationSideBar from '@/components/ActivityDetail/Reservation/ReservationSideBar';
 import Loading from '@/components/commons/Loading';
+import { notify } from '@/components/commons/Toast';
 import { getActivityDetail } from '@/libs/api/activities';
 import { getUser } from '@/libs/api/user';
 import { useQuery } from '@tanstack/react-query';
@@ -29,6 +30,13 @@ export default function ActivityDetail() {
     queryFn: () => getActivityDetail(ActivityId),
     enabled: !!ActivityId,
   });
+
+  useEffect(() => {
+    if (error) {
+      notify('error', '해당 체험이 존재하지 않습니다.');
+      router.push('/404');
+    }
+  }, [error]);
 
   const { data: userData } = useQuery({
     queryKey: ['userInfo'],
@@ -105,12 +113,8 @@ export default function ActivityDetail() {
     return <Loading />;
   }
 
-  if (error) {
-    return <div>오류가 발생했습니다: {error.message}</div>;
-  }
-
   if (!data) {
-    return <div>데이터를 찾을 수 없습니다. {ActivityId}</div>;
+    return <div className="h-1000"></div>;
   }
 
   return (
@@ -148,7 +152,7 @@ export default function ActivityDetail() {
               detailData={data}
               isSameUser={isSameUser}
             />
-            <div className="relative mx-10 mb-30 hidden w-3/12 min-w-300 md:block">
+            <div className="relative mx-10 mt-20 hidden w-3/12 min-w-300 md:block">
               <ReservationSideBar detailData={data} isSameUser={isSameUser} />
             </div>
           </div>

@@ -3,7 +3,7 @@ import { CalendarStyle } from '@/styles/CalendarStyle';
 import { useQuery } from '@tanstack/react-query';
 import { GetActivityDetailResponse } from '@trip.zip-api';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 

@@ -15,6 +15,7 @@ interface ReservationModalProps {
   activeIndex: number | null;
   selectedSchedules: { startTime: string; endTime: string; id: number }[];
   handleSubmitReservation: () => void;
+  isFullyBooked: boolean;
 }
 
 export default function ReservationModal(props: ReservationModalProps) {
@@ -28,6 +29,7 @@ export default function ReservationModal(props: ReservationModalProps) {
     activeIndex,
     selectedSchedules,
     handleSubmitReservation,
+    isFullyBooked,
   } = props;
 
   const handleTriggerClick = () => {
@@ -38,15 +40,17 @@ export default function ReservationModal(props: ReservationModalProps) {
 
   return (
     <Modal.Root>
-      <Modal.Trigger disabled={selectedScheduleId === null}>
-        <Button
-          variant="activeButton"
-          className={`mt-4 h-36 rounded-md text-md-bold ${isSameUser ? 'hidden' : ''}`}
-          onClick={handleTriggerClick}
-        >
-          예약하기
-        </Button>
-      </Modal.Trigger>
+      {!isFullyBooked && (
+        <Modal.Trigger disabled={selectedScheduleId === null}>
+          <Button
+            variant="activeButton"
+            className={`mt-4 h-36 rounded-md text-md-bold ${isSameUser ? 'hidden' : ''}`}
+            onClick={handleTriggerClick}
+          >
+            예약하기
+          </Button>
+        </Modal.Trigger>
+      )}
 
       <Modal.Content className="mx-20 w-full max-w-800">
         <Modal.Description>

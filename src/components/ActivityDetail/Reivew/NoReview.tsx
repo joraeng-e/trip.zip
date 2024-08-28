@@ -1,4 +1,4 @@
-import EmptyReview from '@/../public/lottie/emptyReview.json';
+import EmptyReview from '@/../public/lottie/empty.json';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
@@ -13,7 +13,7 @@ export default function NoReview() {
       <div className="ml-40">
         <Lottie
           animationData={EmptyReview}
-          style={{ width: '280px', height: '280px' }}
+          className="mb-120 mt-100 fill-white dark:fill-custom-black"
         />
       </div>
     </div>

@@ -102,6 +102,10 @@ export default function Schedule(props: ScheduleProps) {
     }
   };
 
+  const isFullyBooked =
+    selectedSchedules.length === 0 ||
+    !selectedSchedules.some((schedule) => bookableIds.has(schedule.id));
+
   return (
     <>
       <hr className="contour mx-0" />
@@ -151,6 +155,7 @@ export default function Schedule(props: ScheduleProps) {
           activeIndex={activeIndex}
           selectedSchedules={selectedSchedules}
           handleSubmitReservation={handleSubmitReservation}
+          isFullyBooked={isFullyBooked}
         />
       )}
     </>
